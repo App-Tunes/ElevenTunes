@@ -1,0 +1,594 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		80AD6952258825FA00192BED /* ElevenTunesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AD6951258825FA00192BED /* ElevenTunesApp.swift */; };
+		80AD6954258825FA00192BED /* ElevenTunesDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AD6953258825FA00192BED /* ElevenTunesDocument.swift */; };
+		80AD6956258825FA00192BED /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AD6955258825FA00192BED /* ContentView.swift */; };
+		80AD6958258825FD00192BED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80AD6957258825FD00192BED /* Assets.xcassets */; };
+		80AD695B258825FD00192BED /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80AD695A258825FD00192BED /* Preview Assets.xcassets */; };
+		80AD6967258825FD00192BED /* ElevenTunesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AD6966258825FD00192BED /* ElevenTunesTests.swift */; };
+		80AD6972258825FD00192BED /* ElevenTunesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AD6971258825FD00192BED /* ElevenTunesUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		80AD6963258825FD00192BED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 80AD6946258825FA00192BED /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 80AD694D258825FA00192BED;
+			remoteInfo = ElevenTunes;
+		};
+		80AD696E258825FD00192BED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 80AD6946258825FA00192BED /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 80AD694D258825FA00192BED;
+			remoteInfo = ElevenTunes;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		80AD694E258825FA00192BED /* ElevenTunes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ElevenTunes.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		80AD6951258825FA00192BED /* ElevenTunesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevenTunesApp.swift; sourceTree = "<group>"; };
+		80AD6953258825FA00192BED /* ElevenTunesDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevenTunesDocument.swift; sourceTree = "<group>"; };
+		80AD6955258825FA00192BED /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		80AD6957258825FD00192BED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		80AD695A258825FD00192BED /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		80AD695C258825FD00192BED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		80AD695D258825FD00192BED /* ElevenTunes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ElevenTunes.entitlements; sourceTree = "<group>"; };
+		80AD6962258825FD00192BED /* ElevenTunesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ElevenTunesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		80AD6966258825FD00192BED /* ElevenTunesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevenTunesTests.swift; sourceTree = "<group>"; };
+		80AD6968258825FD00192BED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		80AD696D258825FD00192BED /* ElevenTunesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ElevenTunesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		80AD6971258825FD00192BED /* ElevenTunesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevenTunesUITests.swift; sourceTree = "<group>"; };
+		80AD6973258825FD00192BED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		80AD694B258825FA00192BED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		80AD695F258825FD00192BED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		80AD696A258825FD00192BED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		80AD6945258825FA00192BED = {
+			isa = PBXGroup;
+			children = (
+				80AD6950258825FA00192BED /* ElevenTunes */,
+				80AD6965258825FD00192BED /* ElevenTunesTests */,
+				80AD6970258825FD00192BED /* ElevenTunesUITests */,
+				80AD694F258825FA00192BED /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		80AD694F258825FA00192BED /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				80AD694E258825FA00192BED /* ElevenTunes.app */,
+				80AD6962258825FD00192BED /* ElevenTunesTests.xctest */,
+				80AD696D258825FD00192BED /* ElevenTunesUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		80AD6950258825FA00192BED /* ElevenTunes */ = {
+			isa = PBXGroup;
+			children = (
+				80AD6951258825FA00192BED /* ElevenTunesApp.swift */,
+				80AD6953258825FA00192BED /* ElevenTunesDocument.swift */,
+				80AD6955258825FA00192BED /* ContentView.swift */,
+				80AD6957258825FD00192BED /* Assets.xcassets */,
+				80AD695C258825FD00192BED /* Info.plist */,
+				80AD695D258825FD00192BED /* ElevenTunes.entitlements */,
+				80AD6959258825FD00192BED /* Preview Content */,
+			);
+			path = ElevenTunes;
+			sourceTree = "<group>";
+		};
+		80AD6959258825FD00192BED /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				80AD695A258825FD00192BED /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		80AD6965258825FD00192BED /* ElevenTunesTests */ = {
+			isa = PBXGroup;
+			children = (
+				80AD6966258825FD00192BED /* ElevenTunesTests.swift */,
+				80AD6968258825FD00192BED /* Info.plist */,
+			);
+			path = ElevenTunesTests;
+			sourceTree = "<group>";
+		};
+		80AD6970258825FD00192BED /* ElevenTunesUITests */ = {
+			isa = PBXGroup;
+			children = (
+				80AD6971258825FD00192BED /* ElevenTunesUITests.swift */,
+				80AD6973258825FD00192BED /* Info.plist */,
+			);
+			path = ElevenTunesUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		80AD694D258825FA00192BED /* ElevenTunes */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 80AD6976258825FD00192BED /* Build configuration list for PBXNativeTarget "ElevenTunes" */;
+			buildPhases = (
+				80AD694A258825FA00192BED /* Sources */,
+				80AD694B258825FA00192BED /* Frameworks */,
+				80AD694C258825FA00192BED /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ElevenTunes;
+			productName = ElevenTunes;
+			productReference = 80AD694E258825FA00192BED /* ElevenTunes.app */;
+			productType = "com.apple.product-type.application";
+		};
+		80AD6961258825FD00192BED /* ElevenTunesTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 80AD6979258825FD00192BED /* Build configuration list for PBXNativeTarget "ElevenTunesTests" */;
+			buildPhases = (
+				80AD695E258825FD00192BED /* Sources */,
+				80AD695F258825FD00192BED /* Frameworks */,
+				80AD6960258825FD00192BED /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				80AD6964258825FD00192BED /* PBXTargetDependency */,
+			);
+			name = ElevenTunesTests;
+			productName = ElevenTunesTests;
+			productReference = 80AD6962258825FD00192BED /* ElevenTunesTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		80AD696C258825FD00192BED /* ElevenTunesUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 80AD697C258825FD00192BED /* Build configuration list for PBXNativeTarget "ElevenTunesUITests" */;
+			buildPhases = (
+				80AD6969258825FD00192BED /* Sources */,
+				80AD696A258825FD00192BED /* Frameworks */,
+				80AD696B258825FD00192BED /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				80AD696F258825FD00192BED /* PBXTargetDependency */,
+			);
+			name = ElevenTunesUITests;
+			productName = ElevenTunesUITests;
+			productReference = 80AD696D258825FD00192BED /* ElevenTunesUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		80AD6946258825FA00192BED /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1220;
+				LastUpgradeCheck = 1220;
+				TargetAttributes = {
+					80AD694D258825FA00192BED = {
+						CreatedOnToolsVersion = 12.2;
+					};
+					80AD6961258825FD00192BED = {
+						CreatedOnToolsVersion = 12.2;
+						TestTargetID = 80AD694D258825FA00192BED;
+					};
+					80AD696C258825FD00192BED = {
+						CreatedOnToolsVersion = 12.2;
+						TestTargetID = 80AD694D258825FA00192BED;
+					};
+				};
+			};
+			buildConfigurationList = 80AD6949258825FA00192BED /* Build configuration list for PBXProject "ElevenTunes" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 80AD6945258825FA00192BED;
+			productRefGroup = 80AD694F258825FA00192BED /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				80AD694D258825FA00192BED /* ElevenTunes */,
+				80AD6961258825FD00192BED /* ElevenTunesTests */,
+				80AD696C258825FD00192BED /* ElevenTunesUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		80AD694C258825FA00192BED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				80AD695B258825FD00192BED /* Preview Assets.xcassets in Resources */,
+				80AD6958258825FD00192BED /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		80AD6960258825FD00192BED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		80AD696B258825FD00192BED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		80AD694A258825FA00192BED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				80AD6952258825FA00192BED /* ElevenTunesApp.swift in Sources */,
+				80AD6954258825FA00192BED /* ElevenTunesDocument.swift in Sources */,
+				80AD6956258825FA00192BED /* ContentView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		80AD695E258825FD00192BED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				80AD6967258825FD00192BED /* ElevenTunesTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		80AD6969258825FD00192BED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				80AD6972258825FD00192BED /* ElevenTunesUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		80AD6964258825FD00192BED /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 80AD694D258825FA00192BED /* ElevenTunes */;
+			targetProxy = 80AD6963258825FD00192BED /* PBXContainerItemProxy */;
+		};
+		80AD696F258825FD00192BED /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 80AD694D258825FA00192BED /* ElevenTunes */;
+			targetProxy = 80AD696E258825FD00192BED /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		80AD6974258825FD00192BED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		80AD6975258825FD00192BED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		80AD6977258825FD00192BED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ElevenTunes/ElevenTunes.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"ElevenTunes/Preview Content\"";
+				DEVELOPMENT_TEAM = 5GU22J823J;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = ElevenTunes/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ivorius.ElevenTunes;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		80AD6978258825FD00192BED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ElevenTunes/ElevenTunes.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"ElevenTunes/Preview Content\"";
+				DEVELOPMENT_TEAM = 5GU22J823J;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = ElevenTunes/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ivorius.ElevenTunes;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		80AD697A258825FD00192BED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 5GU22J823J;
+				INFOPLIST_FILE = ElevenTunesTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ivorius.ElevenTunesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ElevenTunes.app/Contents/MacOS/ElevenTunes";
+			};
+			name = Debug;
+		};
+		80AD697B258825FD00192BED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 5GU22J823J;
+				INFOPLIST_FILE = ElevenTunesTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ivorius.ElevenTunesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ElevenTunes.app/Contents/MacOS/ElevenTunes";
+			};
+			name = Release;
+		};
+		80AD697D258825FD00192BED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 5GU22J823J;
+				INFOPLIST_FILE = ElevenTunesUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = ivorius.ElevenTunesUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = ElevenTunes;
+			};
+			name = Debug;
+		};
+		80AD697E258825FD00192BED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 5GU22J823J;
+				INFOPLIST_FILE = ElevenTunesUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = ivorius.ElevenTunesUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = ElevenTunes;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		80AD6949258825FA00192BED /* Build configuration list for PBXProject "ElevenTunes" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				80AD6974258825FD00192BED /* Debug */,
+				80AD6975258825FD00192BED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		80AD6976258825FD00192BED /* Build configuration list for PBXNativeTarget "ElevenTunes" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				80AD6977258825FD00192BED /* Debug */,
+				80AD6978258825FD00192BED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		80AD6979258825FD00192BED /* Build configuration list for PBXNativeTarget "ElevenTunesTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				80AD697A258825FD00192BED /* Debug */,
+				80AD697B258825FD00192BED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		80AD697C258825FD00192BED /* Build configuration list for PBXNativeTarget "ElevenTunesUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				80AD697D258825FD00192BED /* Debug */,
+				80AD697E258825FD00192BED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 80AD6946258825FA00192BED /* Project object */;
+}
