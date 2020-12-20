@@ -9,22 +9,33 @@ import Foundation
 import Combine
 
 class Player {
-    @Published var previous: Track?
+    @Published var previous: Track? {
+        didSet {
+            // Re-use last played if possible
+            previousEmitter =
+                oldValue == previous ? previousEmitter
+                : previous == current ? currentEmitter
+                : previous?.backend?.emitter()
+        }
+    }
     
     @Published var current: Track? {
         didSet {
-            // Did we move forwards?
-            currentEmitter = current == next
-                ? nextEmitter
-                : current?.backend?.audio()
+            // If possible, use prepared caches
+            currentEmitter =
+                oldValue == current ? currentEmitter
+                : current == next ? nextEmitter
+                : current == previous ? previousEmitter
+                : current?.backend?.emitter()
         }
     }
     @Published var next: Track? {
         didSet {
-            // Did we move backwards?
-            nextEmitter = next == current
-                ? currentEmitter
-                : next?.backend?.audio()
+            // Re-use last played if possible
+            nextEmitter =
+                oldValue == next ? nextEmitter
+                : next == current ? currentEmitter
+                : next?.backend?.emitter()
         }
     }
 
@@ -50,11 +61,12 @@ class Player {
         didSet {
             historyObservers = []
             
+            // Assign current first, in the low offchance we can re-use a cache
             history.$current.assignWeak(to: \Player.current, on: self)
                 .store(in: &historyObservers)
-            history.$previous.assignWeak(to: \Player.previous, on: self)
-                .store(in: &historyObservers)
             history.$next.assignWeak(to: \Player.next, on: self)
+                .store(in: &historyObservers)
+            history.$previous.assignWeak(to: \Player.previous, on: self)
                 .store(in: &historyObservers)
         }
     }

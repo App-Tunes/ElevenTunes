@@ -52,7 +52,7 @@ class SpotifyTrack: TrackBackend {
     
     var icon: Image? { nil }
     
-    func audio() -> AnyPublisher<AnyAudioEmitter, Error> {
+    func emitter() -> AnyPublisher<AnyAudioEmitter, Error> {
         let spotify = self.spotify
         
         let spotifyTrack = spotify.api.track(uri)

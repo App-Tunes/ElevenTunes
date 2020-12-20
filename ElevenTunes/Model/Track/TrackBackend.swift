@@ -13,5 +13,5 @@ import SwiftUI
 protocol TrackBackend {
     var icon: Image? { get }
     
-    func audio() -> AnyPublisher<AnyAudioEmitter, Error>
+    func emitter() -> AnyPublisher<AnyAudioEmitter, Error>
 }

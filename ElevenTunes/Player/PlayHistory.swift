@@ -35,12 +35,13 @@ class PlayHistory {
         
         self.init(Array(tracks[idx...]), history: Array(tracks[..<idx]))
     }
-    
+        
     @discardableResult
     func forwards() -> Track? {
         // Move forwards in replacements so that no value is missing at any point
         if let current = current { history.append(current) }
-        current = queue.popFirst()
+        current = queue.first
+        _ = queue.popFirst()
         
         return current
     }
@@ -49,7 +50,8 @@ class PlayHistory {
     func backwards() -> Track? {
         // Move backwards in replacements so that no value is missing at any point
         if let current = current { queue.prepend(current) }
-        current = history.popLast()
+        current = history.last
+        _ = history.popLast()
         
         return current
     }

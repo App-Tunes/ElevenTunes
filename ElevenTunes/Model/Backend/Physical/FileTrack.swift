@@ -27,7 +27,7 @@ class FileTrack: TrackBackend {
     
     var icon: Image? { nil }
     
-    func audio() -> AnyPublisher<AnyAudioEmitter, Error> {
+    func emitter() -> AnyPublisher<AnyAudioEmitter, Error> {
         let url = self.url
         return Future {
             let player = try AVAudioPlayer(contentsOf: url)
