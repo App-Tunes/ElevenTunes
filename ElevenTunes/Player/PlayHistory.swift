@@ -45,7 +45,6 @@ class PlayHistory {
     @discardableResult
     func forwards() -> Track? {
         // Move forwards in replacements so that no value is missing at any point
-        
         if let current = current { history.append(current) }
         current = queue.popFirst()
         
@@ -55,7 +54,6 @@ class PlayHistory {
     @discardableResult
     func backwards() -> Track? {
         // Move backwards in replacements so that no value is missing at any point
-
         if let current = current { queue.prepend(current) }
         current = history.popLast()
         
