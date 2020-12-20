@@ -19,7 +19,7 @@ class Track {
         self.attributes = attributes
     }
     
-    subscript<T>(_ attribute: TypedKey<AttributeKey, T>) -> T {
+    subscript<T>(_ attribute: TypedKey<AttributeKey, T>) -> T? {
         return self.attributes[attribute]
     }
     
@@ -60,4 +60,10 @@ extension Track: Hashable, Identifiable {
 
 extension Track: ObservableObject {
     
+}
+
+extension Track: CustomStringConvertible {
+    var description: String {
+        self[.ttitle] ?? "Unknown Track"
+    }
 }

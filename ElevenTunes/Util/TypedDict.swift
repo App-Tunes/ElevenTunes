@@ -27,9 +27,9 @@ class TypedDict<K: Hashable> {
         self.contents = dict
     }
     
-    subscript<V>(_ key: TypedKey<K, V>) -> V {
+    subscript<V>(_ key: TypedKey<K, V>) -> V? {
         get {
-            return contents[key.id] as! V
+            return contents[key.id] as? V
         }
         
         set {

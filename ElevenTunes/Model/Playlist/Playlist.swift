@@ -24,7 +24,7 @@ class Playlist {
         self.attributes = attributes
     }
     
-    subscript<T>(_ attribute: TypedKey<AttributeKey, T>) -> T {
+    subscript<T>(_ attribute: TypedKey<AttributeKey, T>) -> T? {
         return self.attributes[attribute]
     }
     

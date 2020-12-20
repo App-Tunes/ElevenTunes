@@ -18,7 +18,7 @@ struct PlayerBarView: View {
             }
                 .layoutPriority(2)
             
-            PlayPositionView(player: player.soundPlayer)
+            PlayPositionView(player: player.singlePlayer)
         }
     }
 }

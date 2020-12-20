@@ -53,6 +53,7 @@
 		80ED7676258FD2B200B8B9C3 /* DirectoryPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80ED7675258FD2B200B8B9C3 /* DirectoryPlaylist.swift */; };
 		80ED767B258FD5B600B8B9C3 /* PlaylistInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80ED767A258FD5B600B8B9C3 /* PlaylistInterpreter.swift */; };
 		80ED7680258FD7E300B8B9C3 /* SpotifyPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80ED767F258FD7E300B8B9C3 /* SpotifyPlaylist.swift */; };
+		80ED7691258FF41200B8B9C3 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80ED7690258FF41200B8B9C3 /* Array.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -125,6 +126,7 @@
 		80ED767A258FD5B600B8B9C3 /* PlaylistInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistInterpreter.swift; sourceTree = "<group>"; };
 		80ED767F258FD7E300B8B9C3 /* SpotifyPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyPlaylist.swift; sourceTree = "<group>"; };
 		80ED7688258FDFD700B8B9C3 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		80ED7690258FF41200B8B9C3 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,6 +209,7 @@
 		806B27D5258D6D7A0091EA4D /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				80ED768F258FF40A00B8B9C3 /* Foundation */,
 				806B281D258D8E020091EA4D /* Combine */,
 				806B27D0258D6ADB0091EA4D /* TypedDict.swift */,
 			);
@@ -363,6 +366,14 @@
 				80AD699F258828F400192BED /* TrackInfoView.swift */,
 			);
 			path = Playlist;
+			sourceTree = "<group>";
+		};
+		80ED768F258FF40A00B8B9C3 /* Foundation */ = {
+			isa = PBXGroup;
+			children = (
+				80ED7690258FF41200B8B9C3 /* Array.swift */,
+			);
+			path = Foundation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -527,6 +538,7 @@
 				806B28D8258FB4F50091EA4D /* NSItemProvider+Combine.swift in Sources */,
 				806B27EE258D7D880091EA4D /* Player.swift in Sources */,
 				806B2796258D5D540091EA4D /* PlaylistsView.swift in Sources */,
+				80ED7691258FF41200B8B9C3 /* Array.swift in Sources */,
 				80AD69892588285F00192BED /* PlayerBarView.swift in Sources */,
 				806B2899258ED0CA0091EA4D /* AnyAudioEmitter.swift in Sources */,
 				806B27F7258D7F910091EA4D /* PlayHistory.swift in Sources */,

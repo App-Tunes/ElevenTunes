@@ -21,10 +21,10 @@ struct TracksView: View {
                 HStack {
                     Image(systemName: "music.note")
                     
-                    Text(track[.ttitle])
+                    Text(track[.ttitle] ?? "Unknown Track")
                         .tag(track)
                         .onTapGesture(count: 2) {
-                            player.play(track)
+                            player.play(PlayHistory(playlist, at: track))
                         }
                 }
             }

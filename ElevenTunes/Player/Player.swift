@@ -12,16 +12,17 @@ class Player {
     @Published var playing: Track?
     @Published var state: PlayerState = .init(isPlaying: false, currentTime: nil)
 
-    let soundPlayer = SinglePlayer()
+    let singlePlayer = SinglePlayer()
 
-    private var currentFile: AnyCancellable?
-    private var nextFile: AnyPublisher<AnyAudioEmitter, Error>?
+    private var currentEmitterTask: AnyCancellable?
+    private var nextEmitter: AnyPublisher<AnyAudioEmitter, Error>?
     
     private var nextObserver: AnyCancellable?
     private var stateObserver: AnyCancellable?
 
     init() {
-        stateObserver = soundPlayer.$state.assign(to: \.state, on: self)
+        stateObserver = singlePlayer.$state.assign(to: \.state, on: self)
+        singlePlayer.delegate = self
     }
     
     var history: PlayHistory = PlayHistory() {
@@ -29,6 +30,7 @@ class Player {
             nextObserver?.cancel()
             preload(history.next)
             nextObserver = history.$next.sink { [unowned self] next in
+                print("Preload \(next)")
                 self.preload(next)
             }
         }
@@ -36,15 +38,15 @@ class Player {
         
     private func preload(_ track: Track?) {
         guard let track = track, let backend = track.backend else {
-            nextFile = nil
+            nextEmitter = nil
             return
         }
 
-        nextFile = backend.audio()
+        nextEmitter = backend.audio()
     }
     
     func toggle() {
-        soundPlayer.toggle()
+        singlePlayer.toggle()
     }
     
     func play(_ track: Track?) {
@@ -52,32 +54,37 @@ class Player {
         next()
     }
     
+    func play(_ history: PlayHistory) {
+        self.history = history
+        next()
+    }
+    
     @discardableResult
     func next() -> Bool {
         // if that's still loading... don't need it anymore
-        currentFile?.cancel()
-        soundPlayer.stop()
+        currentEmitterTask?.cancel()
+        singlePlayer.stop()
                 
-        guard let nextFile = self.nextFile else {
+        guard let nextEmitter = self.nextEmitter else {
             // No track was scheduled. Nothing to play
-            self.currentFile = nil
+            self.currentEmitterTask = nil
             // It might have been nothing because the file was a mock file
             playing = history.pop()
             return false
         }
         
-        currentFile = nextFile
+        currentEmitterTask = nextEmitter
         .receive(on: RunLoop.main)
         .sink(receiveCompletion: { completion in
             switch completion {
             case .failure(let error):
                 appLogger.error("Play Failure: \(error)")
-                self.soundPlayer.play(nil)
+                self.singlePlayer.play(nil)
             default:
                 break
             }
-        }) { player in
-            self.soundPlayer.play(player)
+        }) { emitter in
+            self.singlePlayer.play(emitter)
         }
         // Update our playing state
         // Auto-triggers next track load
@@ -85,5 +92,11 @@ class Player {
 
         // TODO Play
         return true
+    }
+}
+
+extension Player: SinglePlayerDelegate {
+    func playerDidStop(_ player: SinglePlayer) {
+        next()
     }
 }

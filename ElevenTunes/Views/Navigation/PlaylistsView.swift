@@ -17,7 +17,7 @@ struct PlaylistsView: View {
             ForEach(directory.children) { playlist in
                 NavigationLink(destination: PlaylistView(playlist: playlist)) {
                     playlist.icon
-                    Text(playlist[.ptitle])
+                    Text(playlist[.ptitle] ?? "Unknown Playlist")
                 }
             }
         }
