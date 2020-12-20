@@ -44,6 +44,24 @@ class Playlist {
         
         return true
     }
+    
+    @discardableResult
+    func add(children: [Playlist]) -> Bool {
+        guard !children.isEmpty else {
+            return false
+        }
+        
+        if let backend = backend, !backend.add(children: children) {
+            return false
+        }
+
+        DispatchQueue.main.async {
+            self.objectWillChange.send()
+            self.children += children
+        }
+        
+        return true
+    }
 }
 
 extension Playlist {

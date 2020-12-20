@@ -8,8 +8,6 @@
 import Foundation
 
 protocol PlaylistBackend {
-    var tracks: [Track] { get }
-    var children: [Playlist] { get }
-
     func add(tracks: [Track]) -> Bool
+    func add(children: [Playlist]) -> Bool
 }

@@ -13,8 +13,6 @@ import SpotifyWebAPI
 class SpotifyTrack: TrackBackend {
     enum SpotifyError: Error {
         case noURI
-        case noTrack
-        case unknownTrack
     }
 
     let spotify: Spotify
@@ -41,14 +39,16 @@ class SpotifyTrack: TrackBackend {
             .flatMap { uri in
                 spotify.api.track(uri).compactMap(ExistingSpotifyTrack.init)
             }
-            .map { spotifyTrack in
-                return Track(SpotifyTrack(spotify, uri: spotifyTrack.uri), attributes: .init([
-                    AnyTypedKey.ttitle.id: spotifyTrack.info.name
-                ]))
-            }
+            .map { convert(spotify, from: $0) }
             .eraseToAnyPublisher()
     }
 
+    static func convert(_ spotify: Spotify, from track: ExistingSpotifyTrack) -> Track {
+        Track(SpotifyTrack(spotify, uri: track.uri), attributes: .init([
+            AnyTypedKey.ttitle.id: track.info.name
+        ]))
+    }
+    
     func audio(for track: Track) -> AnyPublisher<AnyAudioEmitter, Error> {
         let spotify = self.spotify
         
