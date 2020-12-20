@@ -17,18 +17,12 @@ class PlayHistory {
     @Published private(set) var current: Track?
     @Published private(set) var next: Track?
         
-    private var cancellables: Set<AnyCancellable> = []
-
     init(_ queue: [Track] = [], history: [Track] = []) {
         self.queue = queue
         self.history = history
         
-        $queue.sink { [unowned self] newValue in
-            self.next = newValue.first
-        }.store(in: &cancellables)
-        $history.sink { [unowned self] newValue in
-            self.previous = newValue.dropLast().last
-        }.store(in: &cancellables)
+        $queue.map(\.first).assign(to: &$next)
+        $history.map(\.last).assign(to: &$previous)
     }
     
     convenience init(_ playlist: Playlist, at track: Track) {

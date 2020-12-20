@@ -40,10 +40,9 @@ class Player {
     private var nextEmitter: AnyPublisher<AnyAudioEmitter, Error>?
 
     private var historyObservers = Set<AnyCancellable>()
-    private var stateObserver: AnyCancellable?
 
     init() {
-        stateObserver = singlePlayer.$state.assign(to: \.state, on: self)
+        singlePlayer.$state.assign(to: &$state)
         singlePlayer.delegate = self
     }
     
@@ -51,11 +50,11 @@ class Player {
         didSet {
             historyObservers = []
             
-            history.$current.assign(to: \Player.current, on: self)
+            history.$current.assignWeak(to: \Player.current, on: self)
                 .store(in: &historyObservers)
-            history.$previous.assign(to: \Player.previous, on: self)
+            history.$previous.assignWeak(to: \Player.previous, on: self)
                 .store(in: &historyObservers)
-            history.$next.assign(to: \Player.next, on: self)
+            history.$next.assignWeak(to: \Player.next, on: self)
                 .store(in: &historyObservers)
         }
     }
