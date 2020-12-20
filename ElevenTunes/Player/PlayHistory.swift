@@ -10,18 +10,25 @@ import Combine
 
 class PlayHistory {
     @Published private(set) var queue: [Track]
+    @Published private(set) var history: [Track] = []
+
+    // previous = history.last, next = queue.first
+    @Published private(set) var previous: Track?
+    @Published private(set) var current: Track?
     @Published private(set) var next: Track?
-    private(set) var history: [Track] = []
         
-    private var nextObserver: AnyCancellable?
-    
+    private var cancellables: Set<AnyCancellable> = []
+
     init(_ queue: [Track] = [], history: [Track] = []) {
         self.queue = queue
         self.history = history
         
-        nextObserver = $queue.sink { [unowned self] newValue in
+        $queue.sink { [unowned self] newValue in
             self.next = newValue.first
-        }
+        }.store(in: &cancellables)
+        $history.sink { [unowned self] newValue in
+            self.previous = newValue.dropLast().last
+        }.store(in: &cancellables)
     }
     
     convenience init(_ playlist: Playlist, at track: Track) {
@@ -36,12 +43,22 @@ class PlayHistory {
     }
     
     @discardableResult
-    func pop() -> Track? {
-        guard let track = queue.popFirst() else {
-            return nil
-        }
+    func forwards() -> Track? {
+        // Move forwards in replacements so that no value is missing at any point
         
-        history.append(track)
-        return track
+        if let current = current { history.append(current) }
+        current = queue.popFirst()
+        
+        return current
+    }
+    
+    @discardableResult
+    func backwards() -> Track? {
+        // Move backwards in replacements so that no value is missing at any point
+
+        if let current = current { queue.prepend(current) }
+        current = history.popLast()
+        
+        return current
     }
 }

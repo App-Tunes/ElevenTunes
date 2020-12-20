@@ -31,9 +31,10 @@ class SinglePlayer {
     }
     
     func play(_ emitter: AnyAudioEmitter?) {
-        self.playing = emitter // Will toggle stop()
+        self.playing = emitter // Will toggle stop() on previous
         
         guard let emitter = emitter else {
+            _updateState()
             return
         }
         

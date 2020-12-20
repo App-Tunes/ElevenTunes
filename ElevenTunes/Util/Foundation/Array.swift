@@ -12,4 +12,8 @@ extension Array {
         if isEmpty { return nil}
         return removeFirst()
     }
+    
+    mutating func prepend(_ element: Element) {
+        self = [element] + self
+    }
 }

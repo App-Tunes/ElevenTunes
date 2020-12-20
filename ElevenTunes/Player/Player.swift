@@ -9,15 +9,37 @@ import Foundation
 import Combine
 
 class Player {
-    @Published var playing: Track?
+    @Published var previous: Track?
+    
+    @Published var current: Track? {
+        didSet {
+            // Did we move forwards?
+            currentEmitter = current == next
+                ? nextEmitter
+                : current?.backend?.audio()
+        }
+    }
+    @Published var next: Track? {
+        didSet {
+            // Did we move backwards?
+            nextEmitter = next == current
+                ? currentEmitter
+                : next?.backend?.audio()
+        }
+    }
+
     @Published var state: PlayerState = .init(isPlaying: false, currentTime: nil)
 
     let singlePlayer = SinglePlayer()
 
     private var currentEmitterTask: AnyCancellable?
+    private var currentEmitter: AnyPublisher<AnyAudioEmitter, Error>? {
+        didSet { load() }
+    }
+    private var previousEmitter: AnyPublisher<AnyAudioEmitter, Error>?
     private var nextEmitter: AnyPublisher<AnyAudioEmitter, Error>?
-    
-    private var nextObserver: AnyCancellable?
+
+    private var historyObservers = Set<AnyCancellable>()
     private var stateObserver: AnyCancellable?
 
     init() {
@@ -27,76 +49,72 @@ class Player {
     
     var history: PlayHistory = PlayHistory() {
         didSet {
-            nextObserver?.cancel()
-            preload(history.next)
-            nextObserver = history.$next.sink { [unowned self] next in
-                print("Preload \(next)")
-                self.preload(next)
-            }
+            historyObservers = []
+            
+            history.$current.assign(to: \Player.current, on: self)
+                .store(in: &historyObservers)
+            history.$previous.assign(to: \Player.previous, on: self)
+                .store(in: &historyObservers)
+            history.$next.assign(to: \Player.next, on: self)
+                .store(in: &historyObservers)
         }
     }
-        
-    private func preload(_ track: Track?) {
-        guard let track = track, let backend = track.backend else {
-            nextEmitter = nil
-            return
-        }
-
-        nextEmitter = backend.audio()
-    }
-    
+            
     func toggle() {
         singlePlayer.toggle()
     }
     
     func play(_ track: Track?) {
         history = PlayHistory(track != nil ? [track!] : [])
-        next()
+        forwards()
     }
     
     func play(_ history: PlayHistory) {
         self.history = history
-        next()
+        forwards()
+    }
+    
+    private func load() {
+        let player = singlePlayer
+        player.stop()
+
+        currentEmitterTask = currentEmitter?
+            .receive(on: RunLoop.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .failure(let error):
+                    appLogger.error("Play Failure: \(error)")
+                    player.play(nil)
+                default:
+                    break
+                }
+            }) { emitter in
+                // Start from beginning
+                try? emitter.move(to: 0)
+                player.play(emitter)
+            }
+        
+        if currentEmitter == nil {
+            player.play(nil)
+        }
     }
     
     @discardableResult
-    func next() -> Bool {
-        // if that's still loading... don't need it anymore
+    func forwards() -> Bool {
         currentEmitterTask?.cancel()
-        singlePlayer.stop()
-                
-        guard let nextEmitter = self.nextEmitter else {
-            // No track was scheduled. Nothing to play
-            self.currentEmitterTask = nil
-            // It might have been nothing because the file was a mock file
-            playing = history.pop()
-            return false
-        }
-        
-        currentEmitterTask = nextEmitter
-        .receive(on: RunLoop.main)
-        .sink(receiveCompletion: { completion in
-            switch completion {
-            case .failure(let error):
-                appLogger.error("Play Failure: \(error)")
-                self.singlePlayer.play(nil)
-            default:
-                break
-            }
-        }) { emitter in
-            self.singlePlayer.play(emitter)
-        }
-        // Update our playing state
-        // Auto-triggers next track load
-        playing = history.pop()
-
-        // TODO Play
+        history.forwards()
+        return true
+    }
+    
+    @discardableResult
+    func backwards() -> Bool {
+        history.backwards()
         return true
     }
 }
 
 extension Player: SinglePlayerDelegate {
     func playerDidStop(_ player: SinglePlayer) {
-        next()
+        forwards()
     }
 }

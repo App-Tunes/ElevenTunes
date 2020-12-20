@@ -9,32 +9,53 @@ import SwiftUI
 
 struct PlayerControlsView: View {
     @State var player: Player
-    @State var playing: Track?
+    
+    @State var previous: Track?
+    @State var current: Track?
+    @State var next: Track?
+
     @State var isPlaying: Bool = false
 
     var body: some View {
-        HStack {
-            Text(playing?[.ttitle] ?? "Nothing Playing")
+        VStack {
+            Text(current?[.ttitle] ?? "Nothing Playing")
             
-            Button(action: {
-                player.toggle()
-            }) {
-                if isPlaying {
-                    Image(systemName: "pause.fill")
+            HStack {
+                Button(action: {
+                    player.backwards()
+                }) {
+                    Image(systemName: "backward.end.fill")
                 }
-                else {
-                    Image(systemName: "play.fill")
+                    .buttonStyle(BorderlessButtonStyle())
+                    .disabled(previous == nil && current == nil)
+
+                Button(action: {
+                    player.toggle()
+                }) {
+                    if isPlaying {
+                        Image(systemName: "pause.fill")
+                    }
+                    else {
+                        Image(systemName: "play.fill")
+                    }
                 }
+                    .buttonStyle(BorderlessButtonStyle())
+                    .keyboardShortcut(.space, modifiers: [])
+                
+                Button(action: {
+                    player.forwards()
+                }) {
+                    Image(systemName: "forward.end.fill")
+                }
+                    .buttonStyle(BorderlessButtonStyle())
+                    .disabled(next == nil && current == nil)
             }
-                .buttonStyle(BorderlessButtonStyle())
-                .keyboardShortcut(.space, modifiers: [])
         }
-        .onReceive(player.$playing) { track in
-            self.playing = track
-        }
-        .onReceive(player.$state) { state in
-            self.isPlaying = state.isPlaying
-        }
+        .onReceive(player.$previous) { self.previous = $0 }
+        .onReceive(player.$current) { self.current = $0 }
+        .onReceive(player.$next) { self.next = $0 }
+        .onReceive(player.$state) { self.isPlaying = $0.isPlaying }
+
         .frame(minWidth: 500)
         .frame(height: 50)
     }
