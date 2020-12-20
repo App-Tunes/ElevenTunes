@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class Track {
     var backend: TrackBackend?
@@ -20,7 +21,9 @@ class Track {
     
     subscript<T>(_ attribute: TypedKey<AttributeKey, T>) -> T {
         return self.attributes[attribute]
-    }    
+    }
+    
+    var icon: Image { backend?.icon ?? Image(systemName: "music.note") }
 }
 
 extension Track {

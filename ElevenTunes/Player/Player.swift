@@ -40,7 +40,7 @@ class Player {
             return
         }
 
-        nextFile = backend.audio(for: track)
+        nextFile = backend.audio()
     }
     
     func toggle() {

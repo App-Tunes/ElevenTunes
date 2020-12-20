@@ -18,11 +18,15 @@ struct TracksView: View {
     var body: some View {
         List(selection: $selected) {
             ForEach(playlist.tracks) { track in
-                Text(track[.ttitle])
-                    .tag(track)
-                    .onTapGesture(count: 2) {
-                        player.play(track)
-                    }
+                HStack {
+                    Image(systemName: "music.note")
+                    
+                    Text(track[.ttitle])
+                        .tag(track)
+                        .onTapGesture(count: 2) {
+                            player.play(track)
+                        }
+                }
             }
         }
             .frame(minWidth: 200, maxWidth: .infinity, minHeight: 50, maxHeight: .infinity)

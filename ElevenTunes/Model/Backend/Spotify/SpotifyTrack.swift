@@ -9,6 +9,7 @@ import Foundation
 import Combine
 import AVFoundation
 import SpotifyWebAPI
+import SwiftUI
 
 class SpotifyTrack: TrackBackend {
     enum SpotifyError: Error {
@@ -49,7 +50,9 @@ class SpotifyTrack: TrackBackend {
         ]))
     }
     
-    func audio(for track: Track) -> AnyPublisher<AnyAudioEmitter, Error> {
+    var icon: Image? { nil }
+    
+    func audio() -> AnyPublisher<AnyAudioEmitter, Error> {
         let spotify = self.spotify
         
         let spotifyTrack = spotify.api.track(uri)

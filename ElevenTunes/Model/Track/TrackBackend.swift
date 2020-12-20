@@ -8,7 +8,10 @@
 import Foundation
 import AVFoundation
 import Combine
+import SwiftUI
 
 protocol TrackBackend {
-    func audio(for track: Track) -> AnyPublisher<AnyAudioEmitter, Error>
+    var icon: Image? { get }
+    
+    func audio() -> AnyPublisher<AnyAudioEmitter, Error>
 }

@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import AVFoundation
+import SwiftUI
 
 class FileTrack: TrackBackend {
     var url: URL
@@ -24,7 +25,9 @@ class FileTrack: TrackBackend {
         return track
     }
     
-    func audio(for track: Track) -> AnyPublisher<AnyAudioEmitter, Error> {
+    var icon: Image? { nil }
+    
+    func audio() -> AnyPublisher<AnyAudioEmitter, Error> {
         let url = self.url
         return Future {
             let player = try AVAudioPlayer(contentsOf: url)
