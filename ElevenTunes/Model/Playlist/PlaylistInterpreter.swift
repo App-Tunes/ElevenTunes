@@ -11,8 +11,10 @@ import UniformTypeIdentifiers
 import Combine
 
 class PlaylistInterpreter {
-    class UnknownType: Error { }
-    
+    enum InterpretationError: Error {
+        case unknownType(_ type: UTType)
+    }
+
     static let types: [UTType] = [.fileURL, .url]
     let spotify: Spotify
 
@@ -55,19 +57,27 @@ class PlaylistInterpreter {
 
     func loadPlaylist(_ item: NSSecureCoding, type: UTType) throws -> AnyPublisher<Playlist, Error> {
         if type == .fileURL {
-            guard let data = item as? Data, let url = URL(dataRepresentation: data, relativeTo: nil) else { throw UnknownType() }
+            guard let data = item as? Data, let url = URL(dataRepresentation: data, relativeTo: nil) else { throw InterpretationError.unknownType(type) }
 
-            return Future { try DirectoryPlaylist.create(fromURL: url) }
-                .eraseToAnyPublisher()
+            let isDirectory = try url.resourceValues(forKeys: [.isDirectoryKey]).isDirectory!
+            
+            if isDirectory {
+                return Future { try DirectoryPlaylist.create(fromURL: url) }
+                    .eraseToAnyPublisher()
+            }
+            else {
+                return Future { try M3UPlaylist.create(fromURL: url) }
+                    .eraseToAnyPublisher()
+            }
         }
         else if type == .url {
-            guard let data = item as? Data, let url = URL(dataRepresentation: data, relativeTo: nil) else { throw UnknownType() }
+            guard let data = item as? Data, let url = URL(dataRepresentation: data, relativeTo: nil) else { throw InterpretationError.unknownType(type) }
 
             return SpotifyPlaylist.create(spotify, fromURL: url)
                 .eraseToAnyPublisher()
         }
         else {
-            throw UnknownType()
+            throw InterpretationError.unknownType(type)
         }
     }
 }
