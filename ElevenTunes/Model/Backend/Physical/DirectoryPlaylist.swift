@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 import Combine
 
 class DirectoryPlaylist: PlaylistBackend {
@@ -31,6 +32,8 @@ class DirectoryPlaylist: PlaylistBackend {
         ]), tracks: tracks)
     }
     
+    var icon: Image? { Image(systemName: "folder.fill") }
+
     func add(tracks: [Track]) -> Bool {
         // TODO
         return false

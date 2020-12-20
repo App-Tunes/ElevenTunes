@@ -7,7 +7,7 @@
 
 import Foundation
 
-import Foundation
+import SwiftUI
 import Combine
 import AVFoundation
 import SpotifyWebAPI
@@ -63,6 +63,8 @@ class SpotifyPlaylist: PlaylistBackend {
             }
             .eraseToAnyPublisher()
     }
+    
+    var icon: Image? { nil }
     
     func add(children: [Playlist]) -> Bool {
         return false

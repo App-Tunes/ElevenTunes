@@ -124,6 +124,7 @@
 		80ED7675258FD2B200B8B9C3 /* DirectoryPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryPlaylist.swift; sourceTree = "<group>"; };
 		80ED767A258FD5B600B8B9C3 /* PlaylistInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistInterpreter.swift; sourceTree = "<group>"; };
 		80ED767F258FD7E300B8B9C3 /* SpotifyPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyPlaylist.swift; sourceTree = "<group>"; };
+		80ED7688258FDFD700B8B9C3 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -268,6 +269,7 @@
 		80AD6945258825FA00192BED = {
 			isa = PBXGroup;
 			children = (
+				80ED7688258FDFD700B8B9C3 /* README.md */,
 				80AD6950258825FA00192BED /* ElevenTunes */,
 				80AD6965258825FD00192BED /* ElevenTunesTests */,
 				80AD6970258825FD00192BED /* ElevenTunesUITests */,

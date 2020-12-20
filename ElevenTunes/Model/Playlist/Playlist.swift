@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class Playlist {
     var backend: PlaylistBackend?
@@ -25,6 +26,10 @@ class Playlist {
     
     subscript<T>(_ attribute: TypedKey<AttributeKey, T>) -> T {
         return self.attributes[attribute]
+    }
+    
+    var icon: Image {
+        return backend?.icon ?? Image(systemName: "music.note.list")
     }
     
     @discardableResult

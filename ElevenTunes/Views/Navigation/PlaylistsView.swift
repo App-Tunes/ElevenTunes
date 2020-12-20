@@ -16,6 +16,7 @@ struct PlaylistsView: View {
         List() {
             ForEach(directory.children) { playlist in
                 NavigationLink(destination: PlaylistView(playlist: playlist)) {
+                    playlist.icon
                     Text(playlist[.ptitle])
                 }
             }
