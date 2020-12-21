@@ -16,7 +16,7 @@ class LibraryMock {
             playlist("\(title) -> 2")
         ]
         
-        return Playlist(nil, attributes: .init([
+        return Playlist(attributes: .init([
             AnyTypedKey.ptitle.id: title
         ]), tracks: children.flatMap { $0.tracks }, children: children)
     }
@@ -26,7 +26,7 @@ class LibraryMock {
             "\(title) -> 1", "\(title) -> 2", "\(title) -> 3"
         ].map(track)
         
-        return Playlist(nil, attributes: .init([
+        return Playlist(attributes: .init([
             AnyTypedKey.ptitle.id: title
         ]), tracks: tracks)
     }

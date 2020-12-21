@@ -11,6 +11,8 @@ import AVFoundation
 import SwiftUI
 
 class FileTrack: TrackBackend {
+    weak var frontend: Track?
+
     var url: URL
     
     init(_ url: URL) {

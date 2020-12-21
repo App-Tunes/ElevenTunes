@@ -12,14 +12,23 @@ import Combine
 import AVFoundation
 import SpotifyWebAPI
 
+struct MinimalSpotifyPlaylist: Codable, Hashable {
+    static let filters = "uri,name"
+    
+    var uri: String
+    var name: String
+}
+
 class SpotifyPlaylist: PlaylistBackend {
     enum SpotifyError: Error {
         case noURI
     }
+    
+    weak var frontend: Playlist?
 
     let spotify: Spotify
     let uri: String
-
+    
     init(_ spotify: Spotify, uri: String) {
         self.spotify = spotify
         self.uri = uri
@@ -39,27 +48,26 @@ class SpotifyPlaylist: PlaylistBackend {
     static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<Playlist, Error> {
         return Future { try spotifyURI(fromURL: url) }
             .flatMap { uri in
-                spotify.api.playlist(uri)
+                spotify.api.filteredPlaylist(uri, filters: MinimalSpotifyPlaylist.filters, additionalTypes: [.track])
             }
-            .map { spotifyPlaylist -> (SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>, [Track]) in
-                // TODO These items things have limits. We need to query all for big ones
-                // TODO Lazily evaluate tracks
-                let tracks = spotifyPlaylist.items.items.compactMap { item -> Track? in
-                    switch item.item {
-                    case .track(let track):
-                        return ExistingSpotifyTrack(track).map { SpotifyTrack.convert(spotify, from: $0) }
-                    default:
-                        return nil
-                    }
-                }
-                return (spotifyPlaylist, tracks)
+            .decodeSpotifyObject(MinimalSpotifyPlaylist.self)
+            .map { playlist in
+                return Playlist(SpotifyPlaylist(spotify, uri: playlist.uri), attributes: .init([
+                    AnyTypedKey.ptitle.id: playlist.name
+                ]))
             }
-            .map { pair in
-                let (spotifyPlaylist, tracks) = pair
-                
-                return Playlist(SpotifyPlaylist(spotify, uri: spotifyPlaylist.uri), attributes: .init([
-                    AnyTypedKey.ptitle.id: spotifyPlaylist.name
-                ]), tracks: tracks)
+            .eraseToAnyPublisher()
+    }
+    
+    func load()  -> AnyPublisher<([Track], [Playlist]), Error> {
+        let spotify = self.spotify
+        
+        // TODO Query more than just 100
+        return spotify.api.playlistTracks(uri, limit: 100, offset: 0)
+            .map {
+                ($0.items.compactMap { item -> Track? in
+                    return ExistingSpotifyTrack(item.item).map { SpotifyTrack.convert(spotify, from: $0) }
+                }, [])
             }
             .eraseToAnyPublisher()
     }

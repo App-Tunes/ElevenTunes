@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 class Playlist {
     var backend: PlaylistBackend?
@@ -14,20 +15,59 @@ class Playlist {
     let id = UUID()
     private let attributes: TypedDict<AttributeKey>
 
-    private(set) var tracks: [Track] = []
-    private(set) var children: [Playlist] = []
+    @Published private(set) var isLoading = false
+    @Published private(set) var isLoaded = false
 
-    init(_ backend: PlaylistBackend?, attributes: TypedDict<AttributeKey>, tracks: [Track] = [], children: [Playlist] = []) {
+    @Published private(set) var tracks: [Track] = []
+    @Published private(set) var children: [Playlist] = []
+
+    private var cancellables = Set<AnyCancellable>()
+    
+    init(_ backend: PlaylistBackend, attributes: TypedDict<AttributeKey>) {
         self.backend = backend
+        self.attributes = attributes
+        
+        backend.frontend = self
+    }
+    
+    init(attributes: TypedDict<AttributeKey>, tracks: [Track] = [], children: [Playlist] = []) {
+        self.attributes = attributes
         self.tracks = tracks
         self.children = children
-        self.attributes = attributes
+        self.isLoaded = true
     }
     
     subscript<T>(_ attribute: TypedKey<AttributeKey, T>) -> T? {
         return self.attributes[attribute]
     }
     
+    @discardableResult
+    func load(force: Bool = false) -> Bool {
+        guard !isLoaded || force else { return false }
+        guard !isLoading else { return false }
+        
+        guard let backend = backend else {
+            isLoaded = true
+            return true
+        }
+        
+        backend.load()
+            .onMain()
+            .sink(receiveCompletion: appLogErrors(_:)) { [weak self] (tracks, children) in
+                guard let self = self else { return }
+                
+                withAnimation {
+                    self.tracks = tracks
+                    self.children = children
+                    self.isLoaded = true
+                    self.isLoading = false
+                }
+            }
+            .store(in: &cancellables)
+        
+        return true
+    }
+
     var icon: Image {
         return backend?.icon ?? Image(systemName: "music.note.list")
     }

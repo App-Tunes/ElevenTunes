@@ -17,16 +17,25 @@ struct PlaylistView: View {
                 
 //                Divider()
                 
-                TracksView(playlist: playlist)
-                
-                Divider()
-                
-                PlaylistBarView(playlist: playlist)
-                    .layoutPriority(2)
+                if !playlist.isLoaded {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle())
+                }
+                else {
+                    TracksView(playlist: playlist)
+                    
+                    Divider()
+                    
+                    PlaylistBarView(playlist: playlist)
+                        .layoutPriority(2)
+                }
             }
                 .layoutPriority(2)
                         
 //            TrackInfoView()
+        }
+        .onAppear() {
+            playlist.load()
         }
     }
 }

@@ -90,7 +90,7 @@ class Player {
         player.stop()
 
         currentEmitterTask = currentEmitter?
-            .receive(on: RunLoop.main)
+            .onMain()
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .failure(let error):

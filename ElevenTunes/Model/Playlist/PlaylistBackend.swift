@@ -7,10 +7,15 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
-protocol PlaylistBackend {
+protocol PlaylistBackend: AnyObject {
+    var frontend: Playlist? { get set }
+        
     var icon: Image? { get }
     
+    func load() -> AnyPublisher<([Track], [Playlist]), Error>
+
     func add(tracks: [Track]) -> Bool
     func add(children: [Playlist]) -> Bool
 }

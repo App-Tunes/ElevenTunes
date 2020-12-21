@@ -7,8 +7,11 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 class M3UPlaylist: PlaylistBackend {
+    weak var frontend: Playlist?
+
     var url: URL
     
     init(_ url: URL) {
@@ -16,26 +19,34 @@ class M3UPlaylist: PlaylistBackend {
     }
     
     static func create(fromURL url: URL) throws -> Playlist {
-        let contents = try String(contentsOf: url)
-        let folder = url.deletingLastPathComponent()
-                
-        print(contents.split(whereSeparator: \.isNewline)
-                .compactMap { URL(fileURLWithPath: String($0), relativeTo: folder).absoluteURL })
-        
-        // TODO M3U Extensions
-        let tracks = contents.split(whereSeparator: \.isNewline)
-            .compactMap { URL(fileURLWithPath: String($0), relativeTo: folder).absoluteURL }
-            .compactMap { try? FileTrack.create(fromURL: $0) }
-        
         let playlistName = url.lastPathComponent
-
+        
         return Playlist(M3UPlaylist(url), attributes: .init([
             AnyTypedKey.ptitle.id: playlistName
-        ]), tracks: tracks)
+        ]))
     }
     
     var icon: Image? { Image(systemName: "doc.text.fill") }
 
+    func load() -> AnyPublisher<([Track], [Playlist]), Error> {
+        let url = self.url
+        
+        return Future {
+            let contents = try String(contentsOf: url)
+            let folder = url.deletingLastPathComponent()
+                    
+            print(contents.split(whereSeparator: \.isNewline)
+                    .compactMap { URL(fileURLWithPath: String($0), relativeTo: folder).absoluteURL })
+            
+            // TODO M3U Extensions
+            let tracks = contents.split(whereSeparator: \.isNewline)
+                .compactMap { URL(fileURLWithPath: String($0), relativeTo: folder).absoluteURL }
+                .compactMap { try? FileTrack.create(fromURL: $0) }
+            
+            return (tracks, [])
+        }.eraseToAnyPublisher()
+    }
+    
     func add(tracks: [Track]) -> Bool {
         // TODO
         return false

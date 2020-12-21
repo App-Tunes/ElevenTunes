@@ -13,8 +13,8 @@ class ExistingSpotifyTrack: SpotifyURIConvertible {
     let info: SpotifyWebAPI.Track
     let uri: String
     
-    init?(_ track: SpotifyWebAPI.Track) {
-        guard let uri = track.uri else {
+    init?(_ track: SpotifyWebAPI.Track?) {
+        guard let track = track, let uri = track.uri else {
             return nil
         }
         self.info = track

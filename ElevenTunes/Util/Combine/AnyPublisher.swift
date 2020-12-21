@@ -9,7 +9,9 @@ import Foundation
 import Combine
 
 extension AnyPublisher {
-    
+    func onMain() -> Publishers.ReceiveOn<AnyPublisher<Output, Failure>, RunLoop> {
+        return receive(on: RunLoop.main)
+    }
 }
 
 extension Publisher where Failure == Never {

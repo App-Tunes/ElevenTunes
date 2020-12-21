@@ -10,7 +10,9 @@ import AVFoundation
 import Combine
 import SwiftUI
 
-protocol TrackBackend {
+protocol TrackBackend: AnyObject {
+    var frontend: Track? { get set }
+    
     var icon: Image? { get }
     
     func emitter() -> AnyPublisher<AnyAudioEmitter, Error>
