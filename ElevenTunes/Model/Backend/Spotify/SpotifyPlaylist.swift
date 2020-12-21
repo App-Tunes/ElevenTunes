@@ -61,11 +61,21 @@ class SpotifyPlaylist: PlaylistBackend {
     
     func load()  -> AnyPublisher<([Track], [Playlist]), Error> {
         let spotify = self.spotify
+        let count = 100
+        let uri = self.uri
         
-        // TODO Query more than just 100
-        return spotify.api.playlistTracks(uri, limit: 100, offset: 0)
-            .map {
-                ($0.items.compactMap { item -> Track? in
+        // There are actually playlists with up to 10.000 items lol
+        let paginationLimit = 100
+
+        return spotify.api.playlistTracks(uri, limit: count, offset: 0)
+            .fold(limit: paginationLimit) {
+                $0.offset + $0.items.count >= $0.total ? nil :
+                spotify.api.playlistTracks(uri, limit: count, offset: $0.offset + count)
+            }
+            .collect()
+            .map { $0.flatMap { $0.items } }
+            .map { items in
+                (items.compactMap { item -> Track? in
                     return ExistingSpotifyTrack(item.item).map { SpotifyTrack.convert(spotify, from: $0) }
                 }, [])
             }
