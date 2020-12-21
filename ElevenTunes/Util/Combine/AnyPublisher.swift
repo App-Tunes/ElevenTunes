@@ -18,11 +18,11 @@ extension AnyPublisher {
     // paginated(0)
     //    .fold { $0.page < $0.total ? paginated($0.page + 1) : nil  }
     //    .collect()
-    func fold(limit: Int = 0, _ fun: @escaping (Output) -> AnyPublisher<Output, Failure>?) -> AnyPublisher<Output, Failure> {
+    func fold(limit: Int = -1, _ fun: @escaping (Output) -> AnyPublisher<Output, Failure>?) -> AnyPublisher<Output, Failure> {
         flatMap { value -> AnyPublisher<Output, Failure> in
             let justPublisher = Just(value).mapError { $0 as! Failure }.eraseToAnyPublisher()
             
-            guard limit > 0, let publisher = fun(value) else {
+            guard limit != 0, let publisher = fun(value) else {
                 return justPublisher
             }
             return justPublisher.append(publisher.fold(limit: limit - 1, fun)).eraseToAnyPublisher()
