@@ -11,11 +11,12 @@ struct PlaylistBarView: View {
     @ObservedObject var playlist: Playlist
 
     var body: some View {
-        HStack {
-            Text("Playlist Bar!")
+        GeometryReader { geo in
+            Text("\(playlist.tracks.count) tracks")
+                .position(x: geo.size.width / 2, y: geo.size.height / 2 - 5)
         }
             .frame(minWidth: 200)
-            .frame(height: 25)
+            .frame(height: 20)
     }
 }
 
