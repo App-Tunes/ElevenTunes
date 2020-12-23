@@ -14,6 +14,7 @@ struct NavigatorView: View {
         NavigationView {
             PlaylistsView(directory: directory)
         }
+        .listStyle(SidebarListStyle())
     }
 }
 

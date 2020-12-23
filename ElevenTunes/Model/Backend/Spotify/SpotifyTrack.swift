@@ -59,9 +59,9 @@ class SpotifyTrack: TrackBackend {
         
         let spotifyTrack = spotify.api.track(uri)
             .compactMap(ExistingSpotifyTrack.init)
-        let device = spotify.api.availableDevices().map { devices in
-            devices[0]  // TODO Which device?
-        }.eraseToAnyPublisher()
+        let device = spotify.devices.$selected
+            .compactMap { $0 }
+            .eraseError()
         
         return spotifyTrack.zip(device)
             .map({ (track, device) -> AnyAudioEmitter in

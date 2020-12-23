@@ -44,6 +44,12 @@ extension AnyPublisher {
     }
 }
 
+extension Publisher {
+    func eraseError() -> Publishers.MapError<Self, Error> {
+        return mapError { $0 as Error }
+    }
+}
+
 extension Publisher where Failure == Never {
     func assignWeak<Root: AnyObject>(to keyPath: ReferenceWritableKeyPath<Root, Output>, on root: Root) -> AnyCancellable {
        sink { [weak root] in

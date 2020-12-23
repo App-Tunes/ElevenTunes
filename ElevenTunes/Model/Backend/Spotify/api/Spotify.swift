@@ -8,6 +8,7 @@
 import Foundation
 import SpotifyWebAPI
 import AppKit
+import Combine
 
 class Spotify {
     private static let clientId: String = {
@@ -47,7 +48,11 @@ class Spotify {
     ]
     
     let api: SpotifyAPI<AuthorizationCodeFlowManager>
+    
     let authenticator: SpotifyAuthenticator
+    let devices: SpotifyDevices
+    
+    var cancellables = Set<AnyCancellable>()
     
     init() {
         let api = SpotifyAPI(
@@ -57,6 +62,7 @@ class Spotify {
         )
         
         self.api = api
+        
         authenticator = SpotifyAuthenticator(
             api: api,
             authManagerKey: "spotify-authorization",
@@ -66,6 +72,16 @@ class Spotify {
                 NSWorkspace.shared.open(url)
             }
         )
+        
+        let devices = SpotifyDevices(api: api)
+        self.devices = devices
+        
+        authenticator.$isAuthorized.sink { isAuthorized in
+            if isAuthorized {
+                devices.query()
+            }
+        }
+        .store(in: &cancellables)
     }
     
     func handleURL(_ url: URL) {

@@ -34,6 +34,7 @@ struct PlaylistView: View {
                         
 //            TrackInfoView()
         }
+        .listStyle(DefaultListStyle())
         .onAppear() {
             playlist.load()
         }
