@@ -40,7 +40,6 @@ func appLogErrors(_ completion: Subscribers.Completion<Error>) {
     }
 }
 
-
 @main
 struct ElevenTunesApp: App {
     // Ewww super hacky
@@ -62,5 +61,11 @@ struct ElevenTunesApp: App {
                     appLogger.warning("onOpenURL finally works \(url)!")
                 }
         }
+        
+        #if os(macOS)
+        Settings {
+            SettingsView()
+        }
+        #endif
     }
 }

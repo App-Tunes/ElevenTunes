@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		80151ED12593C50700D9539A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80151ED02593C50700D9539A /* SettingsView.swift */; };
+		80151EDC2593C53200D9539A /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80151EDB2593C53200D9539A /* GeneralSettingsView.swift */; };
 		806B2790258D5CBD0091EA4D /* TracksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B278F258D5CBD0091EA4D /* TracksView.swift */; };
 		806B2796258D5D540091EA4D /* PlaylistsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B2795258D5D540091EA4D /* PlaylistsView.swift */; };
 		806B27AB258D627D0091EA4D /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B27AA258D627D0091EA4D /* Playlist.swift */; };
@@ -24,7 +26,7 @@
 		806B2840258E5A960091EA4D /* SinglePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B283F258E5A960091EA4D /* SinglePlayer.swift */; };
 		806B286A258E97260091EA4D /* _SpotifyAPITestUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = 806B2869258E97260091EA4D /* _SpotifyAPITestUtilities */; };
 		806B286C258E97260091EA4D /* SpotifyAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 806B286B258E97260091EA4D /* SpotifyAPI */; };
-		806B287A258E9A320091EA4D /* SpotifyAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B2879258E9A320091EA4D /* SpotifyAuthView.swift */; };
+		806B287A258E9A320091EA4D /* SpotifySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B2879258E9A320091EA4D /* SpotifySettingsView.swift */; };
 		806B2883258EA42D0091EA4D /* SpotifyAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B2882258EA42D0091EA4D /* SpotifyAuthenticator.swift */; };
 		806B2891258EC26E0091EA4D /* SpotifyTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B2890258EC26E0091EA4D /* SpotifyTrack.swift */; };
 		806B2899258ED0CA0091EA4D /* AnyAudioEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B2898258ED0CA0091EA4D /* AnyAudioEmitter.swift */; };
@@ -55,9 +57,6 @@
 		80ED7680258FD7E300B8B9C3 /* SpotifyPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80ED767F258FD7E300B8B9C3 /* SpotifyPlaylist.swift */; };
 		80ED7691258FF41200B8B9C3 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80ED7690258FF41200B8B9C3 /* Array.swift */; };
 		80ED769725900B0300B8B9C3 /* M3UPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80ED769625900B0300B8B9C3 /* M3UPlaylist.swift */; };
-		80ED769D2590A98100B8B9C3 /* Preferences in Frameworks */ = {isa = PBXBuildFile; productRef = 80ED769C2590A98100B8B9C3 /* Preferences */; };
-		80ED76AE2590AB5600B8B9C3 /* PreferencesWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80ED76AD2590AB5600B8B9C3 /* PreferencesWindow.swift */; };
-		80ED76B32590ADA200B8B9C3 /* General.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80ED76B22590ADA200B8B9C3 /* General.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +77,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		80151ED02593C50700D9539A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		80151EDB2593C53200D9539A /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		806B278F258D5CBD0091EA4D /* TracksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksView.swift; sourceTree = "<group>"; };
 		806B2795258D5D540091EA4D /* PlaylistsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsView.swift; sourceTree = "<group>"; };
 		806B27AA258D627D0091EA4D /* Playlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
@@ -94,7 +95,7 @@
 		806B283A258E4F480091EA4D /* TrackInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackInterpreter.swift; sourceTree = "<group>"; };
 		806B283F258E5A960091EA4D /* SinglePlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePlayer.swift; sourceTree = "<group>"; };
 		806B284D258E93090091EA4D /* ElevenTunes-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ElevenTunes-Bridging-Header.h"; sourceTree = "<group>"; };
-		806B2879258E9A320091EA4D /* SpotifyAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAuthView.swift; sourceTree = "<group>"; };
+		806B2879258E9A320091EA4D /* SpotifySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifySettingsView.swift; sourceTree = "<group>"; };
 		806B2882258EA42D0091EA4D /* SpotifyAuthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAuthenticator.swift; sourceTree = "<group>"; };
 		806B2890258EC26E0091EA4D /* SpotifyTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyTrack.swift; sourceTree = "<group>"; };
 		806B2898258ED0CA0091EA4D /* AnyAudioEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyAudioEmitter.swift; sourceTree = "<group>"; };
@@ -132,8 +133,6 @@
 		80ED7688258FDFD700B8B9C3 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		80ED7690258FF41200B8B9C3 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		80ED769625900B0300B8B9C3 /* M3UPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = M3UPlaylist.swift; sourceTree = "<group>"; };
-		80ED76AD2590AB5600B8B9C3 /* PreferencesWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesWindow.swift; sourceTree = "<group>"; };
-		80ED76B22590ADA200B8B9C3 /* General.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = General.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,7 +141,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				806B28BB258F91E50091EA4D /* KeychainAccess in Frameworks */,
-				80ED769D2590A98100B8B9C3 /* Preferences in Frameworks */,
 				806B286C258E97260091EA4D /* SpotifyAPI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -251,7 +249,7 @@
 		806B2870258E9A0A0091EA4D /* APIs */ = {
 			isa = PBXGroup;
 			children = (
-				806B2879258E9A320091EA4D /* SpotifyAuthView.swift */,
+				806B2879258E9A320091EA4D /* SpotifySettingsView.swift */,
 			);
 			path = APIs;
 			sourceTree = "<group>";
@@ -397,8 +395,8 @@
 			isa = PBXGroup;
 			children = (
 				806B2870258E9A0A0091EA4D /* APIs */,
-				80ED76AD2590AB5600B8B9C3 /* PreferencesWindow.swift */,
-				80ED76B22590ADA200B8B9C3 /* General.swift */,
+				80151ED02593C50700D9539A /* SettingsView.swift */,
+				80151EDB2593C53200D9539A /* GeneralSettingsView.swift */,
 			);
 			path = Preferences;
 			sourceTree = "<group>";
@@ -422,7 +420,6 @@
 			packageProductDependencies = (
 				806B286B258E97260091EA4D /* SpotifyAPI */,
 				806B28BA258F91E50091EA4D /* KeychainAccess */,
-				80ED769C2590A98100B8B9C3 /* Preferences */,
 			);
 			productName = ElevenTunes;
 			productReference = 80AD694E258825FA00192BED /* ElevenTunes.app */;
@@ -502,7 +499,6 @@
 			packageReferences = (
 				806B2868258E97260091EA4D /* XCRemoteSwiftPackageReference "SpotifyAPI" */,
 				806B28B9258F91E50091EA4D /* XCRemoteSwiftPackageReference "KeychainAccess" */,
-				80ED769B2590A98100B8B9C3 /* XCRemoteSwiftPackageReference "Preferences" */,
 			);
 			productRefGroup = 80AD694F258825FA00192BED /* Products */;
 			projectDirPath = "";
@@ -554,18 +550,19 @@
 				80AD6952258825FA00192BED /* ElevenTunesApp.swift in Sources */,
 				806B283B258E4F480091EA4D /* TrackInterpreter.swift in Sources */,
 				806B2824258E040C0091EA4D /* FileTrack.swift in Sources */,
-				80ED76B32590ADA200B8B9C3 /* General.swift in Sources */,
 				80AD6954258825FA00192BED /* ElevenTunesDocument.swift in Sources */,
+				80151EDC2593C53200D9539A /* GeneralSettingsView.swift in Sources */,
 				806B27C6258D699D0091EA4D /* PlaylistBackend.swift in Sources */,
 				80AD69A5258829C400192BED /* PlaylistBarView.swift in Sources */,
 				806B28D3258FAF1E0091EA4D /* Future.swift in Sources */,
 				80AD69A0258828F400192BED /* TrackInfoView.swift in Sources */,
+				80151ED12593C50700D9539A /* SettingsView.swift in Sources */,
 				80ED767B258FD5B600B8B9C3 /* PlaylistInterpreter.swift in Sources */,
 				80AD6956258825FA00192BED /* ContentView.swift in Sources */,
 				806B28B5258F7AA00091EA4D /* RemoteAudioEmitter.swift in Sources */,
 				806B2790258D5CBD0091EA4D /* TracksView.swift in Sources */,
 				80ED7676258FD2B200B8B9C3 /* DirectoryPlaylist.swift in Sources */,
-				806B287A258E9A320091EA4D /* SpotifyAuthView.swift in Sources */,
+				806B287A258E9A320091EA4D /* SpotifySettingsView.swift in Sources */,
 				806B28D8258FB4F50091EA4D /* NSItemProvider+Combine.swift in Sources */,
 				806B27EE258D7D880091EA4D /* Player.swift in Sources */,
 				806B2796258D5D540091EA4D /* PlaylistsView.swift in Sources */,
@@ -587,7 +584,6 @@
 				806B28A4258ED16C0091EA4D /* AVFoundationAudioEmitter.swift in Sources */,
 				80AD69AA258829EE00192BED /* FilterBarView.swift in Sources */,
 				80AD698E2588287900192BED /* PlaylistView.swift in Sources */,
-				80ED76AE2590AB5600B8B9C3 /* PreferencesWindow.swift in Sources */,
 				806B28E6258FB9A10091EA4D /* AnyPublisher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -944,14 +940,6 @@
 				minimumVersion = 4.2.1;
 			};
 		};
-		80ED769B2590A98100B8B9C3 /* XCRemoteSwiftPackageReference "Preferences" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/sindresorhus/Preferences";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.2.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -969,11 +957,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 806B28B9258F91E50091EA4D /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
-		};
-		80ED769C2590A98100B8B9C3 /* Preferences */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 80ED769B2590A98100B8B9C3 /* XCRemoteSwiftPackageReference "Preferences" */;
-			productName = Preferences;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

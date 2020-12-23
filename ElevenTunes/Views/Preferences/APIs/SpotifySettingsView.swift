@@ -7,6 +7,22 @@
 
 import SwiftUI
 
+struct SpotifySettingsView: View {
+    var body: some View {
+        Form {
+            SpotifyAuthView()
+        }
+        .padding(20)
+        .frame(width: 350, height: 100)
+        .tabItem { Label {
+            Text("Spotify")
+        } icon: {
+            Image("spotify-logo")
+        }
+ }
+    }
+}
+
 struct SpotifyAuthView: View {
     @Environment(\.spotify) private var spotify: Spotify
     @State var isAuthorized = false

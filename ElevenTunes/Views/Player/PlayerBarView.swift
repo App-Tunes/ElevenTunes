@@ -14,7 +14,6 @@ struct PlayerBarView: View {
         VStack {
             HStack {
                 PlayerControlsView(player: player)
-                SpotifyAuthView()
             }
                 .layoutPriority(2)
             
