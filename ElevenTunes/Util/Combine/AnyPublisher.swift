@@ -18,19 +18,19 @@ extension AnyPublisher {
     // paginated(0)
     //    .fold { $0.page < $0.total ? paginated($0.page + 1) : nil  }
     //    .collect()
-    func fold(limit: Int = -1, _ fun: @escaping (Output) -> AnyPublisher<Output, Failure>?) -> Publishers.FlatMap<AnyPublisher<Output, Failure>, AnyPublisher<Output, Failure>> {
+    func unfold(limit: Int = -1, _ fun: @escaping (Output) -> AnyPublisher<Output, Failure>?) -> Publishers.FlatMap<AnyPublisher<Output, Failure>, AnyPublisher<Output, Failure>> {
         flatMap { value -> AnyPublisher<Output, Failure> in
             let justPublisher = Just(value).mapError { $0 as! Failure }
             
             guard limit != 0, let publisher = fun(value) else {
                 return justPublisher.eraseToAnyPublisher()
             }
-            return justPublisher.append(publisher.fold(limit: limit - 1, fun)).eraseToAnyPublisher()
+            return justPublisher.append(publisher.unfold(limit: limit - 1, fun)).eraseToAnyPublisher()
         }
     }
 
     // Like above, but fails on limit breach instead of just terminating.
-    func fold(limit: Int, failure: @escaping @autoclosure () -> Failure, _ fun: @escaping (Output) -> AnyPublisher<Output, Failure>?) -> Publishers.FlatMap<AnyPublisher<Output, Failure>, AnyPublisher<Output, Failure>> {
+    func unfold(limit: Int, failure: @escaping @autoclosure () -> Failure, _ fun: @escaping (Output) -> AnyPublisher<Output, Failure>?) -> Publishers.FlatMap<AnyPublisher<Output, Failure>, AnyPublisher<Output, Failure>> {
         flatMap { value -> AnyPublisher<Output, Failure> in
             let justPublisher = Just(value).mapError { $0 as! Failure }
             
@@ -39,7 +39,7 @@ extension AnyPublisher {
             guard let publisher = fun(value) else {
                 return justPublisher.eraseToAnyPublisher()
             }
-            return justPublisher.append(publisher.fold(limit: limit - 1, fun)).eraseToAnyPublisher()
+            return justPublisher.append(publisher.unfold(limit: limit - 1, fun)).eraseToAnyPublisher()
         }
     }
 }

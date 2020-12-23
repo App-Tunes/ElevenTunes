@@ -68,7 +68,7 @@ class SpotifyPlaylist: PlaylistBackend {
         let paginationLimit = 100
 
         return spotify.api.playlistTracks(uri, limit: count, offset: 0)
-            .fold(limit: paginationLimit) {
+            .unfold(limit: paginationLimit) {
                 $0.offset + $0.items.count >= $0.total ? nil :
                 spotify.api.playlistTracks(uri, limit: count, offset: $0.offset + count)
             }
