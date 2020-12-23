@@ -38,7 +38,6 @@ class SpotifyDevices: ObservableObject {
     }
     
     private func flushFavorite() {
-        print("Flush")
         if alwaysPlayOnFavorite && favorite != selected {
             selected = favorite
         }
