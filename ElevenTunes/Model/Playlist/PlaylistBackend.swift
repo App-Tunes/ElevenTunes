@@ -9,11 +9,10 @@ import Foundation
 import SwiftUI
 import Combine
 
-protocol PlaylistBackend: AnyObject {
-    var frontend: Playlist? { get set }
-        
+protocol PlaylistBackend: AnyObject {        
     var icon: Image? { get }
     
+    // TODO Let all frontends benefit by letting them watch a stream of this
     func load() -> AnyPublisher<([Track], [Playlist]), Error>
 
     func add(tracks: [Track]) -> Bool

@@ -11,12 +11,17 @@ import AVFoundation
 import SwiftUI
 
 class FileTrack: TrackBackend {
-    weak var frontend: Track?
-
     var url: URL
     
     init(_ url: URL) {
         self.url = url
+    }
+    
+    static func understands(url: URL) -> Bool {
+        guard let type = UTType(filenameExtension: url.pathExtension) else {
+            return false
+        }
+        return type.conforms(to: .audio) || type.conforms(to: .audiovisualContent)
     }
 
     static func create(fromURL url: URL) throws -> Track {

@@ -16,8 +16,6 @@ class SpotifyTrack: TrackBackend {
         case noURI
     }
 
-    weak var frontend: Track?
-
     let spotify: Spotify
     let uri: String
 

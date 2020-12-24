@@ -26,8 +26,6 @@ class Playlist {
     init(_ backend: PlaylistBackend, attributes: TypedDict<AttributeKey>) {
         self.backend = backend
         self.attributes = attributes
-        
-        backend.frontend = self
     }
     
     init(attributes: TypedDict<AttributeKey>, tracks: [Track] = [], children: [Playlist] = []) {

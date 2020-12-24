@@ -13,7 +13,7 @@ struct TracksView: View {
     @State var selected: Track?
 
     @Environment(\.player) private var player: Player
-    @Environment(\.trackInterpreter) private var trackInterpreter: TrackInterpreter
+    @Environment(\.interpreter) private var interpreter: ContentInterpreter!
     
     var body: some View {
         List(selection: $selected) {
@@ -30,7 +30,7 @@ struct TracksView: View {
             }
         }
             .frame(minWidth: 200, maxWidth: .infinity, minHeight: 50, maxHeight: .infinity)
-            .onDrop(of: TrackInterpreter.types, delegate: TrackDropInterpreter(trackInterpreter, playlist: playlist))
+            .onDrop(of: ContentInterpreter.types, delegate: PlaylistDropInterpreter(interpreter, parent : playlist))
     }
 }
 

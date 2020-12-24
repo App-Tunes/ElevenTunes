@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct SpotifySettingsView: View {
-    @Environment(\.spotify) var spotify: Spotify
+    @State var spotify: Spotify
     
     var body: some View {
         Form {
-            SpotifyAuthView()
+            SpotifyAuthView(spotify: spotify)
                 .padding(.bottom)
                         
             SpotifyDevicesView(devices: spotify.devices)

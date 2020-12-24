@@ -68,6 +68,7 @@ class Spotify {
             authManagerKey: "spotify-authorization",
             loginCallbackURL: Self.loginCallbackURL,
             scopes: Self.scopes,
+            // TODO Use WKWebView
             authorizeViewer: { url in
                 NSWorkspace.shared.open(url)
             }
@@ -84,7 +85,7 @@ class Spotify {
         .store(in: &cancellables)
     }
     
-    func handleURL(_ url: URL) {
-        authenticator.handleURL(url)
+    func handleURL(_ url: URL) -> Bool {
+        return authenticator.handleURL(url)
     }
 }

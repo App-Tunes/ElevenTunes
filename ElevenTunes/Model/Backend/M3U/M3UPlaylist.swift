@@ -10,8 +10,6 @@ import SwiftUI
 import Combine
 
 class M3UPlaylist: PlaylistBackend {
-    weak var frontend: Playlist?
-
     var url: URL
     
     init(_ url: URL) {

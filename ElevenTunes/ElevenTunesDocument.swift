@@ -8,32 +8,36 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-extension UTType {
-    static var exampleText: UTType {
-        UTType(importedAs: "com.example.plain-text")
-    }
-}
-
 struct ElevenTunesDocument: FileDocument {
-    var text: String
+    var playlist: Playlist
 
-    init(text: String = "Hello, world!") {
-        self.text = text
+    init(playlist: Playlist) {
+        self.playlist = playlist
     }
 
-    static var readableContentTypes: [UTType] { [.exampleText] }
+    static var readableContentTypes: [UTType] {
+        ContentInterpreter.types
+    }
+    
+    static var writableContentTypes: [UTType] {
+        ContentInterpreter.types
+    }
 
     init(configuration: ReadConfiguration) throws {
-        guard let data = configuration.file.regularFileContents,
-              let string = String(data: data, encoding: .utf8)
+        print(configuration)
+        guard
+            configuration.file.regularFileContents != nil
         else {
             throw CocoaError(.fileReadCorruptFile)
         }
-        text = string
+        
+        // TODO
+        throw CocoaError(.fileReadCorruptFile)
     }
     
     func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
-        let data = text.data(using: .utf8)!
-        return .init(regularFileWithContents: data)
+        throw CocoaError(.fileReadCorruptFile)
+        
+//        return .init(regularFileWithContents: data)
     }
 }

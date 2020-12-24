@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SpotifyAuthView: View {
-    @Environment(\.spotify) private var spotify: Spotify
+    @State var spotify: Spotify
     @State var isAuthorized = false
     @State var isLoading = false
 
@@ -41,8 +41,8 @@ struct SpotifyAuthView: View {
     }
 }
 
-struct SpotifyAuthView_Previews: PreviewProvider {
-    static var previews: some View {
-        SpotifyAuthView()
-    }
-}
+//struct SpotifyAuthView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SpotifyAuthView()
+//    }
+//}

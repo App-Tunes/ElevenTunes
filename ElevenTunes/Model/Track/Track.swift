@@ -17,7 +17,6 @@ class Track {
     init(_ backend: TrackBackend?, attributes: TypedDict<Track.AttributeKey>) {
         self.backend = backend
         self.attributes = attributes
-        backend?.frontend = self
     }
     
     subscript<T>(_ attribute: TypedKey<AttributeKey, T>) -> T? {

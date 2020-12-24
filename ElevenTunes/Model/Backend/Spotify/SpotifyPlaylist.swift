@@ -24,8 +24,6 @@ class SpotifyPlaylist: PlaylistBackend {
         case noURI
     }
     
-    weak var frontend: Playlist?
-
     let spotify: Spotify
     let uri: String
     

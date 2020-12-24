@@ -10,15 +10,13 @@ import SwiftUI
 import Combine
 
 class DirectoryPlaylist: PlaylistBackend {
-    weak var frontend: Playlist?
-
     var url: URL
     
     init(_ url: URL) {
         self.url = url
     }
     
-    static func create(fromURL url: URL) throws -> Playlist {
+    static func create(fromURL url: URL) -> Playlist {
         let playlistName = url.lastPathComponent
         
         return Playlist(DirectoryPlaylist(url), attributes: .init([
@@ -46,9 +44,7 @@ class DirectoryPlaylist: PlaylistBackend {
                 }
                 
                 if isDirectory {
-                    if let child = try? DirectoryPlaylist.create(fromURL: url) {
-                        children.append(child)
-                    }
+                    children.append(DirectoryPlaylist.create(fromURL: url))
                 }
                 else {
                     // TODO Interpret children files, e.g. M3U

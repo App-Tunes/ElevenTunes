@@ -229,12 +229,11 @@ final class SpotifyAuthenticator: ObservableObject {
         }
     }
     
-    func handleURL(_ url: URL) {
+    func handleURL(_ url: URL) -> Bool {
         // **Always** validate URLs; they offer a potential attack
         // vector into your app.
         guard url.scheme == loginCallbackURL.scheme else {
-            print("not handling URL: unexpected scheme: '\(url)'")
-            return
+            return false
         }
 
         // This property is used to display an activity indicator in
@@ -284,5 +283,7 @@ final class SpotifyAuthenticator: ObservableObject {
         // MARK: redirect from Spotify was the result of a request made by
         // MARK: this app, and not an attacker.
         authorizationState = String.randomURLSafe(length: 128)
+        
+        return true
     }
 }

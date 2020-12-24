@@ -10,7 +10,7 @@ import SwiftUI
 struct PlaylistsView: View {
     @ObservedObject var directory: Playlist
         
-    @Environment(\.playlistInterpreter) private var playlistInterpreter: PlaylistInterpreter
+    @Environment(\.interpreter) private var interpreter: ContentInterpreter!
 
     var body: some View {
         List() {
@@ -22,7 +22,7 @@ struct PlaylistsView: View {
             }
         }
         .frame(minWidth: 0, maxWidth: 800, maxHeight: .infinity)
-        .onDrop(of: PlaylistInterpreter.types, delegate: PlaylistDropInterpreter(playlistInterpreter, parent: directory))
+        .onDrop(of: ContentInterpreter.types, delegate: PlaylistDropInterpreter(interpreter, parent: directory))
    }
 }
 

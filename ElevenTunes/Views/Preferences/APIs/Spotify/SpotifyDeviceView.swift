@@ -91,8 +91,8 @@ struct SpotifyDevicesView: View {
     }
 }
 
-struct SpotifyDeviceView_Previews: PreviewProvider {
-    static var previews: some View {
-        SpotifyDevicesView(devices: SpotifyDevices(api: SpotifyEnvironmentKey.defaultValue.api))
-    }
-}
+//struct SpotifyDeviceView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SpotifyDevicesView(devices: SpotifyDevices(api: SpotifyEnvironmentKey.defaultValue.api))
+//    }
+//}
