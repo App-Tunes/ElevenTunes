@@ -20,6 +20,9 @@ class TypedDict<K: AnyObject & Hashable> {
         self.contents = dict
     }
     
+    // Type hinting will have to wait for
+    // https://github.com/apple/swift/blob/main/docs/GenericsManifesto.md#generalized-supertype-constraints
+    // to be implemented :(
     subscript<TK>(_ key: TK) -> TK.Value? where TK: TypedKey {
         get {
             let k = key as! K
