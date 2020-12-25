@@ -7,18 +7,11 @@
 
 import Foundation
 
-class AnyTypedKey {
+protocol TypedKey: Hashable {
+    associatedtype Value
 }
 
-class TypedKey<K: Hashable, V>: AnyTypedKey {
-    let id: K
-    
-    init(_ id: K) {
-        self.id = id
-    }
-}
-
-class TypedDict<K: Hashable> {
+class TypedDict<K: AnyObject & Hashable> {
     private var contents: [K: Any] = [:]
     
     init() { }
@@ -27,13 +20,15 @@ class TypedDict<K: Hashable> {
         self.contents = dict
     }
     
-    subscript<V>(_ key: TypedKey<K, V>) -> V? {
+    subscript<TK>(_ key: TK) -> TK.Value? where TK: TypedKey {
         get {
-            return contents[key.id] as? V
+            let k = key as! K
+            return contents[k] as? TK.Value
         }
         
         set {
-            contents[key.id] = newValue
+            let k = key as! K
+            contents[k] = newValue
         }
     }
 

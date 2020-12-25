@@ -100,7 +100,7 @@ class ContentInterpreter {
         
         if !tracks.isEmpty {
             playlists.append(Playlist(attributes: .init([
-                AnyTypedKey.ptitle.id: "Tracks"
+                .title: "Tracks"
             ]), tracks: tracks))
         }
         

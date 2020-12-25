@@ -18,7 +18,7 @@ class SpotifyUserPlaylist: PlaylistBackend {
     
     static func create(_ spotify: Spotify) -> AnyPublisher<Playlist, Error> {
         Future { Playlist(SpotifyUserPlaylist(spotify), attributes: .init([
-            AnyTypedKey.ptitle.id: "Spotify Playlists"
+            .title: "Spotify Playlists"
         ])) }
             .eraseToAnyPublisher()
     }

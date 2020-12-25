@@ -51,7 +51,7 @@ class SpotifyPlaylist: PlaylistBackend {
             .decodeSpotifyObject(MinimalSpotifyPlaylist.self)
             .map { playlist in
                 return Playlist(SpotifyPlaylist(spotify, uri: playlist.uri), attributes: .init([
-                    AnyTypedKey.ptitle.id: playlist.name
+                    .title: playlist.name
                 ]))
             }
             .eraseToAnyPublisher()

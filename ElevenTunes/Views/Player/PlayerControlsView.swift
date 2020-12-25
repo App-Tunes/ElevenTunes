@@ -18,7 +18,7 @@ struct PlayerControlsView: View {
 
     var body: some View {
         VStack {
-            Text(current?[.ttitle] ?? "Nothing Playing")
+            Text(current?[Track.AttributeKey.title] ?? "Nothing Playing")
             
             HStack {
                 Button(action: {

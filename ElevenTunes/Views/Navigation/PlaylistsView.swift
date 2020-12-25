@@ -22,7 +22,7 @@ struct PlaylistsView<Playlist: AnyPlaylist>: View {
                 ForEach(directory.children) { playlist in
                     NavigationLink(destination: PlaylistView(playlist: playlist)) {
                         playlist.icon
-                        Text(playlist[.ptitle] ?? "Unknown Playlist")
+                        Text(playlist[ElevenTunes.Playlist.AttributeKey.title] ?? "Unknown Playlist")
                     }
                 }
             }

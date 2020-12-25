@@ -27,7 +27,7 @@ class FileTrack: TrackBackend {
     static func create(fromURL url: URL) throws -> Track {
         _ = try AVAudioFile(forReading: url) // TODO Use file metadata
         let track = Track(FileTrack(url), attributes: .init([
-            AnyTypedKey.ttitle.id: url.lastPathComponent
+            .title: url.lastPathComponent
         ]))
         return track
     }

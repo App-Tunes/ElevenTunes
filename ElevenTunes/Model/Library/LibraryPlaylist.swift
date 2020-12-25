@@ -50,8 +50,13 @@ class LibraryPlaylist: AnyPlaylist {
         return true
     }
     
-    subscript<T>(attribute: TypedKey<Playlist.AttributeKey, T>) -> T? {
-        nil
+    subscript<T: Playlist.AttributeKey & TypedKey>(_ attribute: T) -> T.Value? {
+        switch attribute {
+        case .title:
+            return "Library" as? T.Value
+        default:
+            return nil
+        }
     }
 
     var icon: Image { Image(systemName: "house.fill" ) }

@@ -20,7 +20,7 @@ class M3UPlaylist: PlaylistBackend {
         let playlistName = url.lastPathComponent
         
         return Playlist(M3UPlaylist(url), attributes: .init([
-            AnyTypedKey.ptitle.id: playlistName
+            .title: playlistName
         ]))
     }
     

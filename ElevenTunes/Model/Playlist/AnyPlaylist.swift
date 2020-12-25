@@ -22,8 +22,8 @@ protocol AnyPlaylist: ObservableObject, Hashable, Identifiable {
     @discardableResult
     func load(force: Bool) -> Bool
 
-    subscript<T>(_ attribute: TypedKey<Playlist.AttributeKey, T>) -> T? { get }
-    
+    subscript<T: Playlist.AttributeKey & TypedKey>(_ attribute: T) -> T.Value? { get }
+
     @discardableResult
     func add(tracks: [Track]) -> Bool
     

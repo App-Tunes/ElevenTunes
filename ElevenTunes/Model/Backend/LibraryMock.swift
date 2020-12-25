@@ -15,9 +15,9 @@ class LibraryMock {
             playlist("\(title) -> 1"),
             playlist("\(title) -> 2")
         ]
-        
+                
         return Playlist(attributes: .init([
-            AnyTypedKey.ptitle.id: title
+            .title: title
         ]), tracks: children.flatMap { $0.tracks }, children: children)
     }
     
@@ -27,13 +27,13 @@ class LibraryMock {
         ].map(track)
         
         return Playlist(attributes: .init([
-            AnyTypedKey.ptitle.id: title
+            .title: title
         ]), tracks: tracks)
     }
     
     static func track(_ title: String) -> Track {
         Track(nil, attributes: .init([
-            AnyTypedKey.ttitle.id: title
+            .title: title
         ]))
     }
 }

@@ -20,7 +20,7 @@ class DirectoryPlaylist: PlaylistBackend {
         let playlistName = url.lastPathComponent
         
         return Playlist(DirectoryPlaylist(url), attributes: .init([
-            AnyTypedKey.ptitle.id: playlistName
+            .title: playlistName
         ]))
     }
     

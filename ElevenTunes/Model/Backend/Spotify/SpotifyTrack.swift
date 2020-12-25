@@ -46,7 +46,7 @@ class SpotifyTrack: TrackBackend {
 
     static func convert(_ spotify: Spotify, from track: ExistingSpotifyTrack) -> Track {
         Track(SpotifyTrack(spotify, uri: track.uri), attributes: .init([
-            AnyTypedKey.ttitle.id: track.info.name
+            .title: track.info.name
         ]))
     }
     

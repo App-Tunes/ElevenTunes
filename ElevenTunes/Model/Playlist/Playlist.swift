@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
-class Playlist: AnyPlaylist {    
+class Playlist: AnyPlaylist {
     var backend: PlaylistBackend?
 
     let id = UUID()
@@ -39,8 +39,8 @@ class Playlist: AnyPlaylist {
         lhs.id == rhs.id
     }
     
-    subscript<T>(_ attribute: TypedKey<AttributeKey, T>) -> T? {
-        return self.attributes[attribute]
+    subscript<T: AttributeKey & TypedKey>(_ attribute: T) -> T.Value? {
+        self.attributes[attribute]
     }
     
     @discardableResult
@@ -112,24 +112,20 @@ class Playlist: AnyPlaylist {
 }
 
 extension Playlist {
-    final class AttributeKey: Hashable {
-        let id: String
+    class AttributeKey: RawRepresentable, Hashable {
+        let rawValue: String
         
-        init(_ id: String) {
-            self.id = id
-        }
-        
-        static func == (lhs: AttributeKey, rhs: AttributeKey) -> Bool {
-            lhs.id == rhs.id
-        }
-        
-        func hash(into hasher: inout Hasher) {
-            hasher.combine(self.id)
+        required init(rawValue: String) {
+            self.rawValue = rawValue
         }
     }
 }
 
-extension AnyTypedKey {
-    static let ptitle = TypedKey<Playlist.AttributeKey, String>(.init("Title"))
+extension Playlist.AttributeKey {
+    class Title: Playlist.AttributeKey, TypedKey {
+        typealias Value = String
+    }
+    
+    static let title = Title(rawValue: "title")
 }
 
