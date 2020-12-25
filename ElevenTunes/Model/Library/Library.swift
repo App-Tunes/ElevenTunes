@@ -19,15 +19,11 @@ struct DirectLibrary: AnyLibrary {
 
 class Library: AnyLibrary {
     let managedObjectContext: NSManagedObjectContext
-    let mainPlaylist: Playlist
+    let mainPlaylist: LibraryPlaylist
     
     init(managedObjectContext: NSManagedObjectContext) {
         self.managedObjectContext = managedObjectContext
-        self.mainPlaylist = Playlist(
-            LibraryPlaylist(managedObjectContext: managedObjectContext),
-            attributes: .init([
-                AnyTypedKey.ptitle.id: "Library"
-            ]))
+        self.mainPlaylist = LibraryPlaylist(managedObjectContext: managedObjectContext)
     }
     
     var allTracks: [Track] {
@@ -35,7 +31,7 @@ class Library: AnyLibrary {
     }
     
     var allPlaylists: [Playlist] {
-        mainPlaylist.children
+        mainPlaylist.playlists
     }
     
     func `import`(library: AnyLibrary) {

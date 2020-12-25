@@ -21,3 +21,10 @@ extension Future where Failure == Error {
     }
 }
 
+extension Future where Failure == Never {
+    convenience init(_ callback: @escaping () -> Output) {
+        self.init { promise in
+            promise(.success(callback()))
+        }
+    }
+}

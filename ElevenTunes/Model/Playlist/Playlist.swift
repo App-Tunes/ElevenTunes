@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
-class Playlist {
+class Playlist: AnyPlaylist {    
     var backend: PlaylistBackend?
 
     let id = UUID()
@@ -35,12 +35,16 @@ class Playlist {
         self.isLoaded = true
     }
     
+    static func == (lhs: Playlist, rhs: Playlist) -> Bool {
+        lhs.id == rhs.id
+    }
+    
     subscript<T>(_ attribute: TypedKey<AttributeKey, T>) -> T? {
         return self.attributes[attribute]
     }
     
     @discardableResult
-    func load(force: Bool = false) -> Bool {
+    func load(force: Bool) -> Bool {
         guard !isLoaded || force else { return false }
         guard !isLoading else { return false }
         
@@ -129,16 +133,3 @@ extension AnyTypedKey {
     static let ptitle = TypedKey<Playlist.AttributeKey, String>(.init("Title"))
 }
 
-extension Playlist: Hashable, Identifiable {
-    static func == (lhs: Playlist, rhs: Playlist) -> Bool {
-        lhs.id == rhs.id
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(self.id)
-    }
-}
-
-extension Playlist: ObservableObject {
-    
-}

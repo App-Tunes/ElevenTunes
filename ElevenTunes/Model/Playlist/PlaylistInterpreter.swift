@@ -10,7 +10,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 import Combine
 
-class PlaylistDropInterpreter: DropDelegate {
+class PlaylistDropInterpreter<Playlist: AnyPlaylist>: DropDelegate {
     let interpreter: ContentInterpreter
     let parent: Playlist
     

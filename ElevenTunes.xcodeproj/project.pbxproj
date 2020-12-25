@@ -22,6 +22,8 @@
 		802E2CC9259602F200CB91EC /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2CC8259602F200CB91EC /* SettingsWindowController.swift */; };
 		802E2CD2259607E300CB91EC /* Library.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2CD1259607E300CB91EC /* Library.swift */; };
 		802E2CD72596082E00CB91EC /* LibraryPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2CD62596082E00CB91EC /* LibraryPlaylist.swift */; };
+		802E2CE025960EC400CB91EC /* Document.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 802E2CDE25960EC300CB91EC /* Document.xcdatamodeld */; };
+		802E2CED259614EC00CB91EC /* AnyPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2CEC259614EC00CB91EC /* AnyPlaylist.swift */; };
 		806B2790258D5CBD0091EA4D /* TracksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B278F258D5CBD0091EA4D /* TracksView.swift */; };
 		806B2796258D5D540091EA4D /* PlaylistsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B2795258D5D540091EA4D /* PlaylistsView.swift */; };
 		806B27AB258D627D0091EA4D /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B27AA258D627D0091EA4D /* Playlist.swift */; };
@@ -108,6 +110,8 @@
 		802E2CC8259602F200CB91EC /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
 		802E2CD1259607E300CB91EC /* Library.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Library.swift; sourceTree = "<group>"; };
 		802E2CD62596082E00CB91EC /* LibraryPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPlaylist.swift; sourceTree = "<group>"; };
+		802E2CDF25960EC300CB91EC /* Document.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Document.xcdatamodel; sourceTree = "<group>"; };
+		802E2CEC259614EC00CB91EC /* AnyPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyPlaylist.swift; sourceTree = "<group>"; };
 		806B278F258D5CBD0091EA4D /* TracksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksView.swift; sourceTree = "<group>"; };
 		806B2795258D5D540091EA4D /* PlaylistsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsView.swift; sourceTree = "<group>"; };
 		806B27AA258D627D0091EA4D /* Playlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
@@ -231,6 +235,7 @@
 				802E2CA62595FEE200CB91EC /* DocumentController.swift */,
 				802E2BC02594DE1F00CB91EC /* LibraryDocument.swift */,
 				80AD6953258825FA00192BED /* ElevenTunesDocument.swift */,
+				802E2CDE25960EC300CB91EC /* Document.xcdatamodeld */,
 			);
 			path = Document;
 			sourceTree = "<group>";
@@ -270,6 +275,7 @@
 		806B27AF258D62B00091EA4D /* Playlist */ = {
 			isa = PBXGroup;
 			children = (
+				802E2CEC259614EC00CB91EC /* AnyPlaylist.swift */,
 				806B27AA258D627D0091EA4D /* Playlist.swift */,
 				806B27C5258D699D0091EA4D /* PlaylistBackend.swift */,
 				80ED767A258FD5B600B8B9C3 /* PlaylistInterpreter.swift */,
@@ -641,6 +647,7 @@
 				806B2883258EA42D0091EA4D /* SpotifyAuthenticator.swift in Sources */,
 				802E2CD72596082E00CB91EC /* LibraryPlaylist.swift in Sources */,
 				80AD6952258825FA00192BED /* ElevenTunesApp.swift in Sources */,
+				802E2CED259614EC00CB91EC /* AnyPlaylist.swift in Sources */,
 				802E2CD2259607E300CB91EC /* Library.swift in Sources */,
 				806B2824258E040C0091EA4D /* FileTrack.swift in Sources */,
 				802E2CC9259602F200CB91EC /* SettingsWindowController.swift in Sources */,
@@ -651,6 +658,7 @@
 				806B27C6258D699D0091EA4D /* PlaylistBackend.swift in Sources */,
 				80AD69A5258829C400192BED /* PlaylistBarView.swift in Sources */,
 				802E2CB9259601DB00CB91EC /* AppLog.swift in Sources */,
+				802E2CE025960EC400CB91EC /* Document.xcdatamodeld in Sources */,
 				802E2CC1259601FE00CB91EC /* Environment.swift in Sources */,
 				806B28D3258FAF1E0091EA4D /* Future.swift in Sources */,
 				80AD69A0258828F400192BED /* TrackInfoView.swift in Sources */,
@@ -1063,6 +1071,19 @@
 			productName = KeychainAccess;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		802E2CDE25960EC300CB91EC /* Document.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				802E2CDF25960EC300CB91EC /* Document.xcdatamodel */,
+			);
+			currentVersion = 802E2CDF25960EC300CB91EC /* Document.xcdatamodel */;
+			path = Document.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 80AD6946258825FA00192BED /* Project object */;
 }

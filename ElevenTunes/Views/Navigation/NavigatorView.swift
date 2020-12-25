@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct NavigatorView: View {
+struct NavigatorView<Playlist: AnyPlaylist>: View {
     @ObservedObject var directory: Playlist
     
     var body: some View {

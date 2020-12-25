@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PlaylistsView: View {
+struct PlaylistsView<Playlist: AnyPlaylist>: View {
     @ObservedObject var directory: Playlist
         
     @Environment(\.interpreter) private var interpreter: ContentInterpreter!
