@@ -110,22 +110,3 @@ class Playlist: AnyPlaylist {
         return true
     }
 }
-
-extension Playlist {
-    class AttributeKey: RawRepresentable, Hashable {
-        let rawValue: String
-        
-        required init(rawValue: String) {
-            self.rawValue = rawValue
-        }
-    }
-}
-
-extension Playlist.AttributeKey {
-    class Title: Playlist.AttributeKey, TypedKey {
-        typealias Value = String
-    }
-    
-    static let title = Title(rawValue: "title")
-}
-

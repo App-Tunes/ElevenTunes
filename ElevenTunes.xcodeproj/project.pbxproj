@@ -24,6 +24,8 @@
 		802E2CD72596082E00CB91EC /* LibraryPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2CD62596082E00CB91EC /* LibraryPlaylist.swift */; };
 		802E2CE025960EC400CB91EC /* Document.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 802E2CDE25960EC300CB91EC /* Document.xcdatamodeld */; };
 		802E2CED259614EC00CB91EC /* AnyPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2CEC259614EC00CB91EC /* AnyPlaylist.swift */; };
+		802E2CF52596359300CB91EC /* Track+Attributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2CF42596359300CB91EC /* Track+Attributes.swift */; };
+		802E2CFA259635A700CB91EC /* Playlist+Attributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2CF9259635A700CB91EC /* Playlist+Attributes.swift */; };
 		806B2790258D5CBD0091EA4D /* TracksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B278F258D5CBD0091EA4D /* TracksView.swift */; };
 		806B2796258D5D540091EA4D /* PlaylistsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B2795258D5D540091EA4D /* PlaylistsView.swift */; };
 		806B27AB258D627D0091EA4D /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B27AA258D627D0091EA4D /* Playlist.swift */; };
@@ -112,6 +114,8 @@
 		802E2CD62596082E00CB91EC /* LibraryPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPlaylist.swift; sourceTree = "<group>"; };
 		802E2CDF25960EC300CB91EC /* Document.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Document.xcdatamodel; sourceTree = "<group>"; };
 		802E2CEC259614EC00CB91EC /* AnyPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyPlaylist.swift; sourceTree = "<group>"; };
+		802E2CF42596359300CB91EC /* Track+Attributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Track+Attributes.swift"; sourceTree = "<group>"; };
+		802E2CF9259635A700CB91EC /* Playlist+Attributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Playlist+Attributes.swift"; sourceTree = "<group>"; };
 		806B278F258D5CBD0091EA4D /* TracksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksView.swift; sourceTree = "<group>"; };
 		806B2795258D5D540091EA4D /* PlaylistsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsView.swift; sourceTree = "<group>"; };
 		806B27AA258D627D0091EA4D /* Playlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
@@ -277,6 +281,7 @@
 			children = (
 				802E2CEC259614EC00CB91EC /* AnyPlaylist.swift */,
 				806B27AA258D627D0091EA4D /* Playlist.swift */,
+				802E2CF9259635A700CB91EC /* Playlist+Attributes.swift */,
 				806B27C5258D699D0091EA4D /* PlaylistBackend.swift */,
 				80ED767A258FD5B600B8B9C3 /* PlaylistInterpreter.swift */,
 			);
@@ -287,6 +292,7 @@
 			isa = PBXGroup;
 			children = (
 				806B27B4258D633A0091EA4D /* Track.swift */,
+				802E2CF42596359300CB91EC /* Track+Attributes.swift */,
 				806B27DC258D6EB60091EA4D /* TrackBackend.swift */,
 			);
 			path = Track;
@@ -650,6 +656,7 @@
 				802E2CED259614EC00CB91EC /* AnyPlaylist.swift in Sources */,
 				802E2CD2259607E300CB91EC /* Library.swift in Sources */,
 				806B2824258E040C0091EA4D /* FileTrack.swift in Sources */,
+				802E2CF52596359300CB91EC /* Track+Attributes.swift in Sources */,
 				802E2CC9259602F200CB91EC /* SettingsWindowController.swift in Sources */,
 				808A7631259405F200B0A9CE /* URL.swift in Sources */,
 				802E2C98259568A200CB91EC /* SpotifyUserPlaylist.swift in Sources */,
@@ -668,6 +675,7 @@
 				806B28B5258F7AA00091EA4D /* RemoteAudioEmitter.swift in Sources */,
 				806B2790258D5CBD0091EA4D /* TracksView.swift in Sources */,
 				80ED7676258FD2B200B8B9C3 /* DirectoryPlaylist.swift in Sources */,
+				802E2CFA259635A700CB91EC /* Playlist+Attributes.swift in Sources */,
 				806B287A258E9A320091EA4D /* SpotifySettingsView.swift in Sources */,
 				802E2BC12594DE1F00CB91EC /* LibraryDocument.swift in Sources */,
 				806B28D8258FB4F50091EA4D /* NSItemProvider+Combine.swift in Sources */,
