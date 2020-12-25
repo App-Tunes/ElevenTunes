@@ -14,13 +14,20 @@ struct PlaylistsView: View {
 
     var body: some View {
         List() {
-            ForEach(directory.children) { playlist in
-                NavigationLink(destination: PlaylistView(playlist: playlist)) {
-                    playlist.icon
-                    Text(playlist[.ptitle] ?? "Unknown Playlist")
+            if !directory.isLoaded {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
+            }
+            else {
+                ForEach(directory.children) { playlist in
+                    NavigationLink(destination: PlaylistView(playlist: playlist)) {
+                        playlist.icon
+                        Text(playlist[.ptitle] ?? "Unknown Playlist")
+                    }
                 }
             }
         }
+        .onAppear { directory.load() }
         .frame(minWidth: 0, maxWidth: 800, maxHeight: .infinity)
         .onDrop(of: ContentInterpreter.types, delegate: PlaylistDropInterpreter(interpreter, parent: directory))
    }

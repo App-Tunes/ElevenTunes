@@ -13,7 +13,6 @@
 		80151EF52593C98500D9539A /* SpotifyDeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80151EF42593C98500D9539A /* SpotifyDeviceView.swift */; };
 		80151EFA2593E1EF00D9539A /* SpotifyDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80151EF92593E1EF00D9539A /* SpotifyDevices.swift */; };
 		802E2BC12594DE1F00CB91EC /* LibraryDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2BC02594DE1F00CB91EC /* LibraryDocument.swift */; };
-		802E2BC72594E02E00CB91EC /* NSDocumentGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2BC62594E02E00CB91EC /* NSDocumentGroup.swift */; };
 		802E2C98259568A200CB91EC /* SpotifyUserPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2C97259568A200CB91EC /* SpotifyUserPlaylist.swift */; };
 		802E2C9D2595FEB900CB91EC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 802E2C9C2595FEB800CB91EC /* Main.storyboard */; };
 		802E2CA22595FEC700CB91EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2CA12595FEC700CB91EC /* AppDelegate.swift */; };
@@ -21,6 +20,8 @@
 		802E2CB9259601DB00CB91EC /* AppLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2CB8259601DB00CB91EC /* AppLog.swift */; };
 		802E2CC1259601FE00CB91EC /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2CC0259601FE00CB91EC /* Environment.swift */; };
 		802E2CC9259602F200CB91EC /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2CC8259602F200CB91EC /* SettingsWindowController.swift */; };
+		802E2CD2259607E300CB91EC /* Library.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2CD1259607E300CB91EC /* Library.swift */; };
+		802E2CD72596082E00CB91EC /* LibraryPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2CD62596082E00CB91EC /* LibraryPlaylist.swift */; };
 		806B2790258D5CBD0091EA4D /* TracksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B278F258D5CBD0091EA4D /* TracksView.swift */; };
 		806B2796258D5D540091EA4D /* PlaylistsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B2795258D5D540091EA4D /* PlaylistsView.swift */; };
 		806B27AB258D627D0091EA4D /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B27AA258D627D0091EA4D /* Playlist.swift */; };
@@ -98,7 +99,6 @@
 		80151EF42593C98500D9539A /* SpotifyDeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyDeviceView.swift; sourceTree = "<group>"; };
 		80151EF92593E1EF00D9539A /* SpotifyDevices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyDevices.swift; sourceTree = "<group>"; };
 		802E2BC02594DE1F00CB91EC /* LibraryDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryDocument.swift; sourceTree = "<group>"; };
-		802E2BC62594E02E00CB91EC /* NSDocumentGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDocumentGroup.swift; sourceTree = "<group>"; };
 		802E2C97259568A200CB91EC /* SpotifyUserPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyUserPlaylist.swift; sourceTree = "<group>"; };
 		802E2C9C2595FEB800CB91EC /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		802E2CA12595FEC700CB91EC /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -106,6 +106,8 @@
 		802E2CB8259601DB00CB91EC /* AppLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLog.swift; sourceTree = "<group>"; };
 		802E2CC0259601FE00CB91EC /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		802E2CC8259602F200CB91EC /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
+		802E2CD1259607E300CB91EC /* Library.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Library.swift; sourceTree = "<group>"; };
+		802E2CD62596082E00CB91EC /* LibraryPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPlaylist.swift; sourceTree = "<group>"; };
 		806B278F258D5CBD0091EA4D /* TracksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksView.swift; sourceTree = "<group>"; };
 		806B2795258D5D540091EA4D /* PlaylistsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsView.swift; sourceTree = "<group>"; };
 		806B27AA258D627D0091EA4D /* Playlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
@@ -213,14 +215,6 @@
 			path = api;
 			sourceTree = "<group>";
 		};
-		802E2BC52594E02600CB91EC /* Document */ = {
-			isa = PBXGroup;
-			children = (
-				802E2BC62594E02E00CB91EC /* NSDocumentGroup.swift */,
-			);
-			path = Document;
-			sourceTree = "<group>";
-		};
 		802E2CB3259601B200CB91EC /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -241,6 +235,15 @@
 			path = Document;
 			sourceTree = "<group>";
 		};
+		802E2CD0259607DC00CB91EC /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				802E2CD1259607E300CB91EC /* Library.swift */,
+				802E2CD62596082E00CB91EC /* LibraryPlaylist.swift */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
 		806B2794258D5D390091EA4D /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
@@ -253,6 +256,7 @@
 		806B279A258D5E9C0091EA4D /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				802E2CD0259607DC00CB91EC /* Library */,
 				806B27BF258D693C0091EA4D /* Backend */,
 				806B27AF258D62B00091EA4D /* Playlist */,
 				806B27B3258D62BA0091EA4D /* Track */,
@@ -266,8 +270,8 @@
 		806B27AF258D62B00091EA4D /* Playlist */ = {
 			isa = PBXGroup;
 			children = (
-				806B27C5258D699D0091EA4D /* PlaylistBackend.swift */,
 				806B27AA258D627D0091EA4D /* Playlist.swift */,
+				806B27C5258D699D0091EA4D /* PlaylistBackend.swift */,
 				80ED767A258FD5B600B8B9C3 /* PlaylistInterpreter.swift */,
 			);
 			path = Playlist;
@@ -276,8 +280,8 @@
 		806B27B3258D62BA0091EA4D /* Track */ = {
 			isa = PBXGroup;
 			children = (
-				806B27DC258D6EB60091EA4D /* TrackBackend.swift */,
 				806B27B4258D633A0091EA4D /* Track.swift */,
+				806B27DC258D6EB60091EA4D /* TrackBackend.swift */,
 			);
 			path = Track;
 			sourceTree = "<group>";
@@ -427,7 +431,6 @@
 				802E2C9C2595FEB800CB91EC /* Main.storyboard */,
 				802E2CC0259601FE00CB91EC /* Environment.swift */,
 				80AD6955258825FA00192BED /* ContentView.swift */,
-				802E2BC52594E02600CB91EC /* Document */,
 				80ED76A12590A9A000B8B9C3 /* Preferences */,
 				80AD69AE25882A2B00192BED /* Player */,
 				806B2794258D5D390091EA4D /* Navigation */,
@@ -636,7 +639,9 @@
 				80ED769725900B0300B8B9C3 /* M3UPlaylist.swift in Sources */,
 				806B2836258E4B4F0091EA4D /* PlayerControlsView.swift in Sources */,
 				806B2883258EA42D0091EA4D /* SpotifyAuthenticator.swift in Sources */,
+				802E2CD72596082E00CB91EC /* LibraryPlaylist.swift in Sources */,
 				80AD6952258825FA00192BED /* ElevenTunesApp.swift in Sources */,
+				802E2CD2259607E300CB91EC /* Library.swift in Sources */,
 				806B2824258E040C0091EA4D /* FileTrack.swift in Sources */,
 				802E2CC9259602F200CB91EC /* SettingsWindowController.swift in Sources */,
 				808A7631259405F200B0A9CE /* URL.swift in Sources */,
@@ -682,7 +687,6 @@
 				806B28A4258ED16C0091EA4D /* AVFoundationAudioEmitter.swift in Sources */,
 				80AD69AA258829EE00192BED /* FilterBarView.swift in Sources */,
 				80AD698E2588287900192BED /* PlaylistView.swift in Sources */,
-				802E2BC72594E02E00CB91EC /* NSDocumentGroup.swift in Sources */,
 				806B28E6258FB9A10091EA4D /* AnyPublisher.swift in Sources */,
 				802E2CA22595FEC700CB91EC /* AppDelegate.swift in Sources */,
 			);

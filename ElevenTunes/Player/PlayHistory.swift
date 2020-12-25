@@ -16,7 +16,7 @@ class PlayHistory {
     @Published private(set) var previous: Track?
     @Published private(set) var current: Track?
     @Published private(set) var next: Track?
-        
+    
     init(_ queue: [Track] = [], history: [Track] = []) {
         self.queue = queue
         self.history = history

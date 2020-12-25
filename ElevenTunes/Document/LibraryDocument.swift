@@ -12,10 +12,11 @@ import SwiftUI
 class LibraryDocument: NSPersistentDocument {
     override init() {
         super.init()
-        // Add your subclass-specific initialization here.
+        _library = Library(managedObjectContext: managedObjectContext!)
     }
     
-    var mainPlaylist: Playlist = LibraryMock.directory()
+    private var _library: Library?
+    var library: Library { _library! }
 
     override class var autosavesInPlace: Bool {
         return true
@@ -24,7 +25,7 @@ class LibraryDocument: NSPersistentDocument {
     override func makeWindowControllers() {
         // Create the SwiftUI view and set the context as the value for the managedObjectContext environment keyPath.
         // Add `@Environment(\.managedObjectContext)` in the views that will need the context.
-        let contentView = ContentView(document: .constant(self))
+        let contentView = ContentView(library: .constant(library))
             .environment(\.managedObjectContext, self.managedObjectContext!)
             .environment(\.interpreter, AppDelegate.shared.interpreter)
             .environment(\.spotify, AppDelegate.shared.spotify)

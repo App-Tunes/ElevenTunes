@@ -19,13 +19,13 @@ extension EnvironmentValues {
 }
 
 struct ContentView: View {
-    @Binding var document: LibraryDocument
+    @Binding var library: Library
     @State var isImporting: Bool = false
 
     let player = Player()
     
-    init(document: Binding<LibraryDocument>) {
-        self._document = document
+    init(library: Binding<Library>) {
+        self._library = library
     }
     
     var body: some View {
@@ -33,7 +33,7 @@ struct ContentView: View {
             PlayerBarView()
                 .frame(maxWidth: .infinity)
 
-            NavigatorView(directory: document.mainPlaylist)
+            NavigatorView(directory: library.mainPlaylist)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .layoutPriority(2)
         }
@@ -42,8 +42,8 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView(document: .constant(LibraryDocument()))
-    }
-}
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView(document: .constant(LibraryD))
+//    }
+//}

@@ -49,7 +49,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             .sink(receiveCompletion: appLogErrors) { library in
                 let doc = LibraryDocument()
-                doc.mainPlaylist = library
+                doc.library.import(library: library)
                 NSDocumentController.shared.addDocument(doc)
             }
             .store(in: &cancellables)

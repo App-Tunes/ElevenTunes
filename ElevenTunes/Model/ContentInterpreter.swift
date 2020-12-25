@@ -95,7 +95,7 @@ class ContentInterpreter {
         return (tracks, playlists)
     }
     
-    static func library(fromContents contents: [Content], name: String) -> Playlist {
+    static func library(fromContents contents: [Content], name: String) -> AnyLibrary {
         var (tracks, playlists) = collect(fromContents: contents)
         
         if !tracks.isEmpty {
@@ -104,9 +104,7 @@ class ContentInterpreter {
             ]), tracks: tracks))
         }
         
-        return Playlist(attributes: .init([
-            AnyTypedKey.ptitle.id: name
-        ]), children: playlists)
+        return DirectLibrary(allTracks: tracks, allPlaylists: playlists)
     }
     
 }
