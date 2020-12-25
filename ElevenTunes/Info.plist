@@ -13,36 +13,10 @@
 			<array>
 				<string>com.example.plain-text</string>
 			</array>
+			<key>NSDocumentClass</key>
+			<string>$(PRODUCT_MODULE_NAME).LibraryDocument</string>
 			<key>NSUbiquitousDocumentUserActivityType</key>
-			<string>$(PRODUCT_BUNDLE_IDENTIFIER).example-document</string>
-		</dict>
-		<dict>
-			<key>CFBundleTypeName</key>
-			<string>Track</string>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>LSHandlerRank</key>
-			<string>Default</string>
-			<key>LSItemContentTypes</key>
-			<array>
-				<string>public.audiovisual-content</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>m3u</string>
-			</array>
-			<key>CFBundleTypeName</key>
-			<string>M3U</string>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>LSHandlerRank</key>
-			<string>Default</string>
-			<key>LSItemContentTypes</key>
-			<array>
-				<string>public.plain-text</string>
-			</array>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).etunes</string>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
@@ -74,6 +48,8 @@
 	<string>1</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+	<key>NSMainStoryboardFile</key>
+	<string>Main</string>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
 		<dict>
