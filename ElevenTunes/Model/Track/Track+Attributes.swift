@@ -9,6 +9,10 @@ import Foundation
 
 extension Track {
     class AttributeKey: RawRepresentable, Hashable {
+        class Typed<K>: AttributeKey, TypedKey {
+            typealias Value = K
+        }
+
         let rawValue: String
         
         required init(rawValue: String) {
@@ -18,10 +22,5 @@ extension Track {
 }
 
 extension Track.AttributeKey {
-    class Title: Track.AttributeKey, TypedKey {
-        typealias Value = String
-    }
-    
-    static let title = Title(rawValue: "title")
+    static let title = Typed<String>(rawValue: "title")
 }
-
