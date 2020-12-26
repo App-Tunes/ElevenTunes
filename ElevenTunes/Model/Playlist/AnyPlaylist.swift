@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
-public enum LoadLevel: Comparable {
+public enum LoadLevel: Int16, Comparable {
     case none, minimal, detailed
 }
 

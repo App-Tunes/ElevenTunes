@@ -41,21 +41,55 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
     }
     
     private func refreshObservation() {
+        guard let context = managedObjectContext else { return }
+
         cancellables = []
         if let backend = backend {
             backend.tracks.sink { [unowned self] tracks in
-                guard let context = managedObjectContext else { return }
-                let (dbTracks, _) = Library.convert(DirectLibrary(allTracks: tracks), context: context)
-
-                self.tracks = NSOrderedSet(array: dbTracks)
+                if indexed {
+                    let old = self.tracks
+                    let (dbTracks, _) = Library.convert(DirectLibrary(allTracks: tracks), context: context)
+                    self.tracks = NSOrderedSet(array: dbTracks)
+                    Library.prune(tracks: old.array as! [DBTrack], context: context)
+                }
+                
+                _anyTracks = tracks
             }.store(in: &cancellables)
             
             backend.children.sink { [unowned self] children in
-                guard let context = managedObjectContext else { return }
-                let (_, dbPlaylists) = Library.convert(DirectLibrary(allPlaylists: children), context: context)
-
-                self.children = NSOrderedSet(array: dbPlaylists)
+                if indexed {
+                    let old = self.children
+                    let (_, dbPlaylists) = Library.convert(DirectLibrary(allPlaylists: children), context: context)
+                    self.children = NSOrderedSet(array: dbPlaylists)
+                    Library.prune(playlists: old.array as! [DBPlaylist], context: context)
+                }
+                
+                _anyChildren = children
             }.store(in: &cancellables)
+            
+            backend.loadLevel.sink { [unowned self] loadLevel in
+                self._loadLevel = loadLevel
+                self.cachedLoadLevel = loadLevel.rawValue
+            }.store(in: &cancellables)
+        }
+        else {
+            do {
+                let tracksFetchRequest = DBTrack.createFetchRequest()
+                tracksFetchRequest.predicate = NSPredicate(format: "ALL references = %@", self)
+                CDPublisher(request: tracksFetchRequest, context: context)
+                    .sink(receiveCompletion: appLogErrors) {
+                        [weak self] in self?._anyTracks = $0
+                    }
+                    .store(in: &cancellables)
+
+                let childrenFetchRequest = Self.createFetchRequest()
+                childrenFetchRequest.predicate = NSPredicate(format: "ALL parent = %@", self)
+                CDPublisher(request: childrenFetchRequest, context: context)
+                    .sink(receiveCompletion: appLogErrors) {
+                        [weak self] in self?._anyChildren = $0
+                    }
+                    .store(in: &cancellables)
+            }
         }
     }
     
@@ -69,10 +103,15 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
         }
         
         guard let backend = backend else {
-            _anyTracks = tracks.map { $0 as! AnyTrack }
-            _anyChildren = children.map { $0 as! AnyPlaylist }
+            // Fetch requests have already set the values
             _loadLevel = .detailed
-
+            return true
+        }
+        
+        let currentLoadLevel = LoadLevel(rawValue: cachedLoadLevel) ?? .none
+        guard level > currentLoadLevel else {
+            // We can use DB cache! Yay!
+            _loadLevel = currentLoadLevel
             return true
         }
         
