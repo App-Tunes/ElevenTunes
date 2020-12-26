@@ -18,6 +18,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var cancellables = Set<AnyCancellable>()
     
     override init() {
+        ValueTransformer.setValueTransformer(PlaylistBackendTransformer(), forName: .playlistBackendName)
+        ValueTransformer.setValueTransformer(TrackBackendTransformer(), forName: .trackBackendName)
+
         let spotify = Spotify()
         self.spotify = spotify
         

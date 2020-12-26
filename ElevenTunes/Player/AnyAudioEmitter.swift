@@ -12,7 +12,7 @@ struct PlayerState {
     var currentTime: TimeInterval?
 }
 
-protocol AudioEmitterDelegate: AnyObject {
+public protocol AudioEmitterDelegate: AnyObject {
     func emitterDidStop(_ emitter: AnyAudioEmitter)
     func emitterUpdatedState(_ emitter: AnyAudioEmitter)
 }
@@ -21,7 +21,7 @@ class InvalidTimeError: Error {
     
 }
 
-protocol AnyAudioEmitter: AnyObject {
+public protocol AnyAudioEmitter: AnyObject {
     var delegate: AudioEmitterDelegate? { get set }
     
     var currentTime: TimeInterval? { get }

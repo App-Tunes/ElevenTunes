@@ -14,8 +14,8 @@ protocol AnyLibrary {
 }
 
 struct DirectLibrary: AnyLibrary {
-    var allTracks: [PersistentTrack]
-    var allPlaylists: [PersistentPlaylist]
+    var allTracks: [PersistentTrack] = []
+    var allPlaylists: [PersistentPlaylist] = []
 }
 
 class Library {

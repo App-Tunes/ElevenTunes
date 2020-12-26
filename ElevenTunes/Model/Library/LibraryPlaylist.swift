@@ -45,25 +45,19 @@ class LibraryPlaylist: AnyPlaylist {
 
     @discardableResult
     func load(atLeast level: LoadLevel, deep: Bool) -> Bool {
-        
-        _loadLevel = .detailed
-        _playlists = [LibraryMock.playlist()]
-        
-        // TODO
-//        let context = self.managedObjectContext
-//
-//        Future<[DBPlaylist], Error> {
-//            let request = DBPlaylist.createFetchRequest()
-//            request.predicate = NSPredicate(format: "parent == nil")
-//            return try context.fetch(request)
-//        }
-//        .sink(receiveCompletion: appLogErrors(_:)) { [weak self] children in
-//            guard let self = self else { return }
-//            self.playlists = children
-//            self.isLoaded = true
-//            self.isLoading = false
-//        }
-//        .store(in: &cancellables)
+        let context = self.managedObjectContext
+
+        Future<[DBPlaylist], Error> {
+            let request = DBPlaylist.createFetchRequest()
+            request.predicate = NSPredicate(format: "parent == nil")
+            return try context.fetch(request)
+        }
+        .sink(receiveCompletion: appLogErrors(_:)) { [weak self] children in
+            guard let self = self else { return }
+            self._playlists = children
+            self._loadLevel = .detailed
+        }
+        .store(in: &cancellables)
         
         return true
     }
@@ -72,35 +66,26 @@ class LibraryPlaylist: AnyPlaylist {
     
     @discardableResult
     func add(tracks: [PersistentTrack]) -> Bool {
-            // TODO Add as DBTrack
-//            tracks.forEach(managedObjectContext.insert)
-//
-//            do {
-//                try managedObjectContext.save()
-//                self.tracks += tracks
-//            }
-//            catch let error {
-//                appLogger.critical("Error adding tracks: \(error)")
-//            }
-        
+        let (dbTracks, _) = Library.convert(
+            DirectLibrary(allTracks: tracks),
+            context: managedObjectContext
+        )
+
+        self._tracks += dbTracks
+
         return true
     }
     
     @discardableResult
     func add(children: [PersistentPlaylist]) -> Bool {
-        // If a user drops a playlist into us, and expects them to appear,
-        // the parent must be nil
-            // TODO Add as DBPlaylists
-//            children.forEach { $0.parent = nil }
-//            children.forEach(managedObjectContext.insert)
-//
-//            do {
-//                try managedObjectContext.save()
-//                self.playlists += children
-//            }
-//            catch let error {
-//                appLogger.critical("Error adding playlists: \(error)")
-//            }
+        let (dbTracks, dbPlaylists) = Library.convert(
+            DirectLibrary(allPlaylists: children),
+            context: managedObjectContext
+        )
+
+        self._tracks += dbTracks
+        self._playlists += dbPlaylists
+
         return true
     }
 }

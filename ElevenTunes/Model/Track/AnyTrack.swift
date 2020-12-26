@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
-protocol AnyTrack: AnyObject {
+public protocol AnyTrack: AnyObject {
     var id: String { get }
     
     var loadLevel: AnyPublisher<LoadLevel, Never> { get }
@@ -22,16 +22,38 @@ protocol AnyTrack: AnyObject {
     func load(atLeast level: LoadLevel) -> Bool
 }
 
-protocol PersistentTrack: AnyTrack, Codable {
+public class PersistentTrack: NSObject, AnyTrack, Codable {
+    public var id: String { fatalError() }
+    
+    public var loadLevel: AnyPublisher<LoadLevel, Never> { fatalError() }
+    
+    public var attributes: AnyPublisher<TypedDict<TrackAttribute>, Never> { fatalError() }
+    
+    public func emitter() -> AnyPublisher<AnyAudioEmitter, Error> {
+        fatalError()
+    }
+    
+    public func load(atLeast level: LoadLevel) -> Bool {
+        fatalError()
+    }
 }
 
 extension AnyTrack {
-    var icon: Image { Image(systemName: "music.note") }
+    public var icon: Image { Image(systemName: "music.note") }
 }
 
-class TrackBackendTransformer: CodableTransformer {
-    override class var classes: [AnyClass] { [
-        FileTrack.self,
-        SpotifyTrack.self
-    ]}
+class TrackBackendTypedCodable: TypedCodable<String> {
+    static let _registry = CodableRegistry<String>()
+        .register(MockTrack.self, for: "mock")
+        .register(FileTrack.self, for: "file")
+        .register(SpotifyTrack.self, for: "spotify")
+
+    override class var registry: CodableRegistry<String> { _registry }
+}
+
+@objc(TrackBackendTransformer)
+class TrackBackendTransformer: TypedJSONCodableTransformer<String, TrackBackendTypedCodable> {}
+
+extension NSValueTransformerName {
+    static let trackBackendName = NSValueTransformerName(rawValue: "TrackBackendTransformer")
 }

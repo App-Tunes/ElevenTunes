@@ -14,12 +14,13 @@ class TransientPlaylist: PersistentPlaylist {
     }
 
     var uuid = UUID()
-    var id: String { uuid.description }
+    override var id: String { uuid.description }
     
     init(attributes: TypedDict<PlaylistAttribute>, children: [PersistentPlaylist] = [], tracks: [PersistentTrack] = []) {
         _attributes = attributes
         _tracks = tracks
         _children = children
+        super.init()
     }
     
     public required init(from decoder: Decoder) throws {
@@ -29,46 +30,46 @@ class TransientPlaylist: PersistentPlaylist {
 //        _children = try container.decode([PersistentPlaylist].self, forKey: .children)
     }
 
-    public func encode(to encoder: Encoder) throws {
+    public override func encode(to encoder: Encoder) throws {
         fatalError()
 //        var container = encoder.container(keyedBy: CodingKeys.self)
 //        try container.encode(_tracks, forKey: .tracks)
 //        try container.encode(_children, forKey: .children)
     }
 
-    var loadLevel: AnyPublisher<LoadLevel, Never> {
+    override var loadLevel: AnyPublisher<LoadLevel, Never> {
         Just(.detailed).eraseToAnyPublisher()
     }
     
     @Published var _attributes: TypedDict<PlaylistAttribute> = .init()
-    var attributes: AnyPublisher<TypedDict<PlaylistAttribute>, Never> {
+    override var attributes: AnyPublisher<TypedDict<PlaylistAttribute>, Never> {
         $_attributes.eraseToAnyPublisher()
     }
 
     @discardableResult
-    func load(atLeast level: LoadLevel, deep: Bool) -> Bool {
+    override func load(atLeast level: LoadLevel, deep: Bool) -> Bool {
         if deep { _children.forEach { $0.load(atLeast: level, deep: true) } }
         return true
     }
 
     @Published var _tracks: [PersistentTrack]
-    var tracks: AnyPublisher<[PersistentTrack], Never> {
+    override var tracks: AnyPublisher<[PersistentTrack], Never> {
         $_tracks.eraseToAnyPublisher()
     }
     
     @Published var _children: [PersistentPlaylist]
-    var children: AnyPublisher<[PersistentPlaylist], Never> {
+    override var children: AnyPublisher<[PersistentPlaylist], Never> {
         $_children.eraseToAnyPublisher()
     }
 
     @discardableResult
-    func add(tracks: [PersistentTrack]) -> Bool {
+    override func add(tracks: [PersistentTrack]) -> Bool {
         _tracks += tracks
         return true
     }
     
     @discardableResult
-    func add(children: [PersistentPlaylist]) -> Bool {
+    override func add(children: [PersistentPlaylist]) -> Bool {
         _children += children
         return true
     }

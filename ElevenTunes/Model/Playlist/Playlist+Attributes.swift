@@ -7,14 +7,14 @@
 
 import Foundation
 
-class PlaylistAttribute: RawRepresentable, Hashable {
+public class PlaylistAttribute: RawRepresentable, Hashable {
     class Typed<K>: PlaylistAttribute, TypedKey {
         typealias Value = K
     }
 
-    let rawValue: String
+    public let rawValue: String
     
-    required init(rawValue: String) {
+    public required init(rawValue: String) {
         self.rawValue = rawValue
     }
 }

@@ -9,10 +9,6 @@ import Foundation
 import Combine
 import SwiftUI
 
-enum EmitterFail: Error {
-    case noBackend
-}
-
 class Track: AnyTrack, ObservableObject {
     var backend: AnyTrack
     

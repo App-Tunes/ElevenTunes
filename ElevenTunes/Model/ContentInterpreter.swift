@@ -85,7 +85,7 @@ class ContentInterpreter {
     }
     
     static func library(fromContents contents: [Content], name: String) -> AnyLibrary {
-        var (tracks, playlists) = collect(fromContents: contents)
+        let (tracks, playlists) = collect(fromContents: contents)
         return DirectLibrary(allTracks: tracks, allPlaylists: playlists)
     }
 }

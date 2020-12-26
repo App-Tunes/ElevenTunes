@@ -7,14 +7,14 @@
 
 import Foundation
 
-class TrackAttribute: RawRepresentable, Hashable {
+public class TrackAttribute: RawRepresentable, Hashable {
     class Typed<K>: TrackAttribute, TypedKey {
         typealias Value = K
     }
 
-    let rawValue: String
+    public let rawValue: String
     
-    required init(rawValue: String) {
+    public required init(rawValue: String) {
         self.rawValue = rawValue
     }
 }

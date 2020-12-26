@@ -24,14 +24,13 @@ public class SpotifyPlaylist: SpotifyPlaylistBackend {
         case noURI
     }
         
-    // FIXME Needs context
     var uri: String
 
     init(_ spotify: Spotify, uri: String) {
         self.uri = uri
         super.init(spotify)
     }
-    
+        
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         uri = try container.decode(String.self, forKey: .uri)
@@ -43,6 +42,8 @@ public class SpotifyPlaylist: SpotifyPlaylistBackend {
         try container.encode(uri, forKey: .uri)
         try super.encode(to: encoder)
     }
+
+    public override var id: String { uri }
 
     static func spotifyURI(fromURL url: URL) throws -> String {
         guard
@@ -65,6 +66,34 @@ public class SpotifyPlaylist: SpotifyPlaylistBackend {
                 SpotifyPlaylist(spotify, uri: playlist.uri)
             }
             .eraseToAnyPublisher()
+    }
+    
+    public override func load(atLeast level: LoadLevel, deep: Bool) -> Bool {
+        let spotify = self.spotify
+        let count = 100
+        let uri = self.uri
+        
+        // There are actually playlists with up to 10.000 items lol
+        let paginationLimit = 100
+
+        spotify.api.playlistTracks(uri, limit: count, offset: 0)
+            .unfold(limit: paginationLimit) {
+                $0.offset + $0.items.count >= $0.total ? nil :
+                spotify.api.playlistTracks(uri, limit: count, offset: $0.offset + count)
+            }
+            .collect()
+            .map { $0.flatMap { $0.items } }
+            .map { items in
+                items.compactMap { item -> SpotifyTrack? in
+                    return ExistingSpotifyTrack(item.item).map { SpotifyTrack.convert(spotify, from: $0) }
+                }
+            }
+            .sink(receiveCompletion: appLogErrors) { tracks in
+                
+            }
+            .store(in: &cancellables)
+        
+        return true
     }
 }
 

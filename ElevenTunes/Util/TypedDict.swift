@@ -11,7 +11,7 @@ protocol TypedKey: Hashable {
     associatedtype Value
 }
 
-class TypedDict<K: AnyObject & Hashable> {
+public class TypedDict<K: AnyObject & Hashable> {
     private var contents: [K: Any] = [:]
     
     init() { }

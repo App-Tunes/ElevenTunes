@@ -9,11 +9,11 @@ import Foundation
 import SwiftUI
 import Combine
 
-enum LoadLevel: Comparable {
+public enum LoadLevel: Comparable {
     case none, minimal, detailed
 }
 
-protocol AnyPlaylist: AnyObject {
+public protocol AnyPlaylist: AnyObject {
     var id: String { get }
     var icon: Image { get }
     
@@ -35,35 +35,61 @@ protocol AnyPlaylist: AnyObject {
 }
 
 extension AnyPlaylist {
-    var icon: Image { Image(systemName: "music.note.list") }
+    public var icon: Image { Image(systemName: "music.note.list") }
     
     @discardableResult
-    func load(atLeast level: LoadLevel) -> Bool {
+    public func load(atLeast level: LoadLevel) -> Bool {
         load(atLeast: level, deep: false)
     }
 }
 
-protocol PersistentPlaylist: AnyPlaylist, Codable {
-    var tracks: AnyPublisher<[PersistentTrack], Never> { get }
-    var children: AnyPublisher<[PersistentPlaylist], Never> { get }
+public class PersistentPlaylist: NSObject, AnyPlaylist, Codable {
+    public var id: String { fatalError() }
+    
+    public var loadLevel: AnyPublisher<LoadLevel, Never> { fatalError() }
+    
+    public var attributes: AnyPublisher<TypedDict<PlaylistAttribute>, Never> { fatalError() }
+    
+    @discardableResult
+    public func add(tracks: [PersistentTrack]) -> Bool { false }
+    
+    @discardableResult
+    public func add(children: [PersistentPlaylist]) -> Bool { false }
+    
+    @discardableResult
+    public func load(atLeast level: LoadLevel, deep: Bool) -> Bool {
+        fatalError()
+    }
+
+    var tracks: AnyPublisher<[PersistentTrack], Never> { fatalError() }
+    var children: AnyPublisher<[PersistentPlaylist], Never> { fatalError() }
 }
 
 extension PersistentPlaylist {
-    var anyTracks: AnyPublisher<[AnyTrack], Never> {
+    public var anyTracks: AnyPublisher<[AnyTrack], Never> {
         tracks.map { $0 as [AnyTrack] }
             .eraseToAnyPublisher()
     }
     
-    var anyChildren: AnyPublisher<[AnyPlaylist], Never> {
+    public var anyChildren: AnyPublisher<[AnyPlaylist], Never> {
         children.map { $0 as [AnyPlaylist] }
             .eraseToAnyPublisher()
     }
 }
 
-class PlaylistBackendTransformer: CodableTransformer {
-    override class var classes: [AnyClass] { [
-        DirectoryPlaylist.self,
-        SpotifyPlaylist.self,
-        M3UPlaylist.self
-    ]}
+class PlaylistBackendTypedCodable: TypedCodable<String> {
+    static let _registry = CodableRegistry<String>()
+        .register(TransientPlaylist.self, for: "transient")
+        .register(DirectoryPlaylist.self, for: "directory")
+        .register(M3UPlaylist.self, for: "m3u")
+        .register(SpotifyPlaylist.self, for: "spotify")
+
+    override class var registry: CodableRegistry<String> { _registry }
 }
+
+extension NSValueTransformerName {
+    static let playlistBackendName = NSValueTransformerName(rawValue: "PlaylistBackendTransformer")
+}
+
+@objc(PlaylistBackendTransformer)
+class PlaylistBackendTransformer: TypedJSONCodableTransformer<String, PlaylistBackendTypedCodable> {}

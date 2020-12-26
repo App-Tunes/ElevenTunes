@@ -11,4 +11,5 @@ import Combine
 import SwiftUI
 
 public class SpotifyUserPlaylist: SpotifyPlaylistBackend {
+    public override var id: String { "spotify::userplaylist" }
 }

@@ -17,34 +17,39 @@ class MockTrack: PersistentTrack {
 
     init(attributes: TypedDict<TrackAttribute>) {
         _attributes = attributes
+        super.init()
     }
     
     public required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        // TODO
+        fatalError()
+//        let container = try decoder.container(keyedBy: CodingKeys.self)
+//        // TODO
+//        try super.init(from: decoder)
     }
 
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        // TODO
+    public override func encode(to encoder: Encoder) throws {
+        fatalError()
+//        var container = encoder.container(keyedBy: CodingKeys.self)
+//        // TODO
+//        try super.encode(to: encoder)
     }
 
     let uuid = UUID()
-    var id: String { uuid.description }
+    override var id: String { uuid.description }
     
-    var loadLevel: AnyPublisher<LoadLevel, Never> {
+    override var loadLevel: AnyPublisher<LoadLevel, Never> {
         Just(.detailed).eraseToAnyPublisher()
     }
     
     @Published var _attributes: TypedDict<TrackAttribute> = .init()
-    var attributes: AnyPublisher<TypedDict<TrackAttribute>, Never> {
+    override var attributes: AnyPublisher<TypedDict<TrackAttribute>, Never> {
         $_attributes.eraseToAnyPublisher()
     }
 
-    func emitter() -> AnyPublisher<AnyAudioEmitter, Error> {
+    override func emitter() -> AnyPublisher<AnyAudioEmitter, Error> {
         Fail(error: MockError()).eraseToAnyPublisher()
     }
     
     @discardableResult
-    func load(atLeast level: LoadLevel) -> Bool { true }
+    override func load(atLeast level: LoadLevel) -> Bool { true }
 }

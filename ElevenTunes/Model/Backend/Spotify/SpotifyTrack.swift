@@ -18,7 +18,6 @@ public class SpotifyTrack: RemoteTrack {
         case noURI
     }
 
-    // FIXME Needs context
     var spotify: Spotify = AppDelegate.shared.spotify
     var uri: String
     
@@ -55,6 +54,8 @@ public class SpotifyTrack: RemoteTrack {
         try super.encode(to: encoder)
     }
 
+    public override var id: String { uri }
+
     static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyTrack, Error> {
         return Future { try spotifyURI(fromURL: url) }
             .flatMap { uri in
@@ -68,7 +69,7 @@ public class SpotifyTrack: RemoteTrack {
         SpotifyTrack(spotify, uri: track.uri)
     }
     
-    override func emitter() -> AnyPublisher<AnyAudioEmitter, Error> {
+    public override func emitter() -> AnyPublisher<AnyAudioEmitter, Error> {
         let spotify = self.spotify
         
         let spotifyTrack = spotify.api.track(uri)
