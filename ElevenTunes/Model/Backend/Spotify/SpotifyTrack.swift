@@ -1,28 +1,26 @@
 //
-//  SpotifyBackend.swift
+//  SpotifyTrack+CoreDataClass.swift
 //  ElevenTunes
 //
-//  Created by Lukas Tenbrink on 20.12.20.
+//  Created by Lukas Tenbrink on 25.12.20.
+//
 //
 
 import Foundation
-import Combine
+import CoreData
 import AVFoundation
 import SpotifyWebAPI
 import SwiftUI
+import Combine
 
-class SpotifyTrack: TrackBackend {
+public class SpotifyTrack: RemoteTrack {
     enum SpotifyError: Error {
         case noURI
     }
 
-    let spotify: Spotify
-    let uri: String
-
-    init(_ spotify: Spotify, uri: String) {
-        self.spotify = spotify
-        self.uri = uri
-    }
+    // FIXME Needs context
+    var spotify: Spotify = AppDelegate.shared.spotify
+    var uri: String
     
     static func spotifyURI(fromURL url: URL) throws -> String {
         guard
@@ -35,7 +33,29 @@ class SpotifyTrack: TrackBackend {
         return "spotify:track:\(id)"
     }
     
-    static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<Track, Error> {
+    init(_ spotify: Spotify, uri: String) {
+        self.spotify = spotify
+        self.uri = uri
+        super.init()
+    }
+
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard let spotify = decoder.userInfo[CodingUserInfoKey.spotify] as? Spotify else {
+            throw SpotifyDecodeError.noSpotify
+        }
+        self.spotify = spotify
+        uri = try container.decode(String.self, forKey: .uri)
+        try super.init(from: decoder)
+    }
+
+    public override func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(uri, forKey: .uri)
+        try super.encode(to: encoder)
+    }
+
+    static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyTrack, Error> {
         return Future { try spotifyURI(fromURL: url) }
             .flatMap { uri in
                 spotify.api.track(uri).compactMap(ExistingSpotifyTrack.init)
@@ -44,15 +64,11 @@ class SpotifyTrack: TrackBackend {
             .eraseToAnyPublisher()
     }
 
-    static func convert(_ spotify: Spotify, from track: ExistingSpotifyTrack) -> Track {
-        Track(SpotifyTrack(spotify, uri: track.uri), attributes: .init([
-            .title: track.info.name
-        ]))
+    static func convert(_ spotify: Spotify, from track: ExistingSpotifyTrack) -> SpotifyTrack {
+        SpotifyTrack(spotify, uri: track.uri)
     }
     
-    var icon: Image? { nil }
-    
-    func emitter() -> AnyPublisher<AnyAudioEmitter, Error> {
+    override func emitter() -> AnyPublisher<AnyAudioEmitter, Error> {
         let spotify = self.spotify
         
         let spotifyTrack = spotify.api.track(uri)
@@ -71,5 +87,11 @@ class SpotifyTrack: TrackBackend {
                 )) as AnyAudioEmitter
             })
             .eraseToAnyPublisher()
+    }
+}
+
+extension SpotifyTrack {
+    enum CodingKeys: String, CodingKey {
+      case uri
     }
 }

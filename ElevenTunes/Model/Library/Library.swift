@@ -6,34 +6,27 @@
 //
 
 import Cocoa
+import Combine
 
 protocol AnyLibrary {
-    var allTracks: [Track] { get }
-    var allPlaylists: [Playlist] { get }
+    var allTracks: [PersistentTrack] { get }
+    var allPlaylists: [PersistentPlaylist] { get }
 }
 
 struct DirectLibrary: AnyLibrary {
-    var allTracks: [Track]
-    var allPlaylists: [Playlist]
+    var allTracks: [PersistentTrack]
+    var allPlaylists: [PersistentPlaylist]
 }
 
-class Library: AnyLibrary {
+class Library {
     let managedObjectContext: NSManagedObjectContext
     let mainPlaylist: LibraryPlaylist
-    
+        
     init(managedObjectContext: NSManagedObjectContext) {
         self.managedObjectContext = managedObjectContext
         self.mainPlaylist = LibraryPlaylist(managedObjectContext: managedObjectContext)
     }
-    
-    var allTracks: [Track] {
-        mainPlaylist.tracks
-    }
-    
-    var allPlaylists: [Playlist] {
-        mainPlaylist.playlists
-    }
-    
+        
     func `import`(library: AnyLibrary) {
         mainPlaylist.add(children: library.allPlaylists)
         mainPlaylist.add(tracks: library.allTracks)

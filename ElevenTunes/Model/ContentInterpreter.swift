@@ -8,22 +8,11 @@
 import Foundation
 import Combine
 import UniformTypeIdentifiers
+import Cocoa
 
 enum Content {
-    case playlist(_ playlist: Playlist)
-    case track(_ track: Track)
-}
-
-protocol ContentConvertible {
-    var asContent: Content { get }
-}
-
-extension Track: ContentConvertible {
-    var asContent: Content { .track(self) }
-}
-
-extension Playlist: ContentConvertible {
-    var asContent: Content { .playlist(self) }
+    case playlist(_ playlist: PersistentPlaylist)
+    case track(_ track: PersistentTrack)
 }
 
 class ContentInterpreter {
@@ -79,9 +68,9 @@ class ContentInterpreter {
         }
     }
     
-    static func collect(fromContents contents: [Content]) -> ([Track], [Playlist]) {
-        var playlists: [Playlist] = []
-        var tracks: [Track] = []
+    static func collect(fromContents contents: [Content]) -> ([PersistentTrack], [PersistentPlaylist]) {
+        var playlists: [PersistentPlaylist] = []
+        var tracks: [PersistentTrack] = []
         
         for content in contents {
             switch content {
@@ -97,14 +86,6 @@ class ContentInterpreter {
     
     static func library(fromContents contents: [Content], name: String) -> AnyLibrary {
         var (tracks, playlists) = collect(fromContents: contents)
-        
-        if !tracks.isEmpty {
-            playlists.append(Playlist(attributes: .init([
-                .title: "Tracks"
-            ]), tracks: tracks))
-        }
-        
         return DirectLibrary(allTracks: tracks, allPlaylists: playlists)
     }
-    
 }

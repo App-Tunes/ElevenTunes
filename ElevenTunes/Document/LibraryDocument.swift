@@ -11,9 +11,16 @@ import SwiftUI
 
 class LibraryDocument: NSPersistentDocument {
     override init() {
+        spotify = AppDelegate.shared.spotify
+
         super.init()
         _library = Library(managedObjectContext: managedObjectContext!)
+        _interpreter = ContentInterpreter.createDefault(spotify: spotify)
     }
+    
+    let spotify: Spotify
+    private var _interpreter: ContentInterpreter?
+    var interpreter: ContentInterpreter { _interpreter! }
     
     private var _library: Library?
     var library: Library { _library! }
@@ -27,7 +34,7 @@ class LibraryDocument: NSPersistentDocument {
         // Add `@Environment(\.managedObjectContext)` in the views that will need the context.
         let contentView = ContentView(library: .constant(library))
             .environment(\.managedObjectContext, self.managedObjectContext!)
-            .environment(\.interpreter, AppDelegate.shared.interpreter)
+            .environment(\.interpreter, interpreter)
             .environment(\.spotify, AppDelegate.shared.spotify)
 
         // Create the window and set the content view.

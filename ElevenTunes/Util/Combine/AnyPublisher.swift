@@ -8,8 +8,8 @@
 import Foundation
 import Combine
 
-extension AnyPublisher {
-    func onMain() -> Publishers.ReceiveOn<AnyPublisher<Output, Failure>, RunLoop> {
+extension Publisher {
+    func onMain() -> Publishers.ReceiveOn<Self, RunLoop> {
         return receive(on: RunLoop.main)
     }
     
@@ -18,7 +18,7 @@ extension AnyPublisher {
     // paginated(0)
     //    .fold { $0.page < $0.total ? paginated($0.page + 1) : nil  }
     //    .collect()
-    func unfold(limit: Int = -1, _ fun: @escaping (Output) -> AnyPublisher<Output, Failure>?) -> Publishers.FlatMap<AnyPublisher<Output, Failure>, AnyPublisher<Output, Failure>> {
+    func unfold(limit: Int = -1, _ fun: @escaping (Output) -> AnyPublisher<Output, Failure>?) -> Publishers.FlatMap<AnyPublisher<Self.Output, Self.Failure>, Self> {
         flatMap { value -> AnyPublisher<Output, Failure> in
             let justPublisher = Just(value).mapError { $0 as! Failure }
             
@@ -30,7 +30,7 @@ extension AnyPublisher {
     }
 
     // Like above, but fails on limit breach instead of just terminating.
-    func unfold(limit: Int, failure: @escaping @autoclosure () -> Failure, _ fun: @escaping (Output) -> AnyPublisher<Output, Failure>?) -> Publishers.FlatMap<AnyPublisher<Output, Failure>, AnyPublisher<Output, Failure>> {
+    func unfold(limit: Int, failure: @escaping @autoclosure () -> Failure, _ fun: @escaping (Output) -> AnyPublisher<Output, Failure>?) -> Publishers.FlatMap<AnyPublisher<Self.Output, Self.Failure>, Self> {
         flatMap { value -> AnyPublisher<Output, Failure> in
             let justPublisher = Just(value).mapError { $0 as! Failure }
             
@@ -42,9 +42,7 @@ extension AnyPublisher {
             return justPublisher.append(publisher.unfold(limit: limit - 1, fun)).eraseToAnyPublisher()
         }
     }
-}
 
-extension Publisher {
     func eraseError() -> Publishers.MapError<Self, Error> {
         return mapError { $0 as Error }
     }

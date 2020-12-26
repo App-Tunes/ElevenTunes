@@ -17,7 +17,7 @@ struct PlaylistView: View {
                 
 //                Divider()
                 
-                if !playlist.isLoaded {
+                if playlist._loadLevel < .minimal {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
                 }
@@ -35,14 +35,12 @@ struct PlaylistView: View {
 //            TrackInfoView()
         }
         .listStyle(DefaultListStyle())
-        .onAppear() {
-            playlist.load()
-        }
+        .onAppear() { playlist.load(atLeast: .detailed) }
     }
 }
 
 struct PlaylistView_Previews: PreviewProvider {
     static var previews: some View {
-        PlaylistView(playlist: LibraryMock.playlist())
+        PlaylistView(playlist: Playlist(LibraryMock.playlist()))
     }
 }

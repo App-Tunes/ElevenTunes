@@ -12,7 +12,6 @@ import Combine
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
     let spotify: Spotify
-    let interpreter: ContentInterpreter
 
     let settingsWC: SettingsWindowController
     
@@ -21,7 +20,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     override init() {
         let spotify = Spotify()
         self.spotify = spotify
-        interpreter = ContentInterpreter.createDefault(spotify: spotify)
         
         let settingsView = SettingsView().environment(\.spotify, spotify)
         self.settingsWC = .init(content: AnyView(settingsView))
@@ -43,16 +41,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         urls = urls.filter { !spotify.handleURL($0) }
 
-        interpreter.interpret(urls: urls)?
-            .map {
-                ContentInterpreter.library(fromContents: $0, name: "New Document")
-            }
-            .sink(receiveCompletion: appLogErrors) { library in
-                let doc = LibraryDocument()
-                doc.library.import(library: library)
-                NSDocumentController.shared.addDocument(doc)
-            }
-            .store(in: &cancellables)
+        // TODO 
+//        interpreter.interpret(urls: urls)?
+//            .map {
+//                ContentInterpreter.library(fromContents: $0, name: "New Document")
+//            }
+//            .sink(receiveCompletion: appLogErrors) { library in
+//                let doc = LibraryDocument()
+//                doc.library.import(library: library)
+//                NSDocumentController.shared.addDocument(doc)
+//            }
+//            .store(in: &cancellables)
     }
 
     @IBAction func showSettings(_ sender: AnyObject?) {

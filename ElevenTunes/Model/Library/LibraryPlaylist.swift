@@ -11,64 +11,96 @@ import Combine
 
 class LibraryPlaylist: AnyPlaylist {
     let managedObjectContext: NSManagedObjectContext
-
-    @Published var id: UUID = UUID()
-    
-    @Published var isLoading: Bool = false
-    @Published var isLoaded: Bool = false
-    
-    @Published var tracks: [Track] = []
-    @Published var playlists: [Playlist] = []
-    
-    var children: [Playlist] { playlists }
-    
+            
     var cancellables = Set<AnyCancellable>()
     
     init(managedObjectContext: NSManagedObjectContext) {
         self.managedObjectContext = managedObjectContext
     }
     
-    static func == (lhs: LibraryPlaylist, rhs: LibraryPlaylist) -> Bool {
-        lhs.id == rhs.id
+    var id: String {
+        "Library" // TODO
+    }
+    
+    @Published var _loadLevel: LoadLevel = .none
+    var loadLevel: AnyPublisher<LoadLevel, Never> {
+        $_loadLevel.eraseToAnyPublisher()
+    }
+    
+    // TODO
+    @Published var _attributes: TypedDict<PlaylistAttribute> = .init()
+    var attributes: AnyPublisher<TypedDict<PlaylistAttribute>, Never> {
+        $_attributes.eraseToAnyPublisher()
+    }
+
+    @Published var _tracks: [AnyTrack] = []
+    var anyTracks: AnyPublisher<[AnyTrack], Never> {
+        $_tracks.eraseToAnyPublisher()
+    }
+
+    @Published var _playlists: [AnyPlaylist] = []
+    var anyChildren: AnyPublisher<[AnyPlaylist], Never> {
+        $_playlists.eraseToAnyPublisher()
     }
 
     @discardableResult
-    func load(force: Bool) -> Bool {
-        guard force || !isLoaded else { return false }
+    func load(atLeast level: LoadLevel, deep: Bool) -> Bool {
         
-        Future {
-            LibraryMock.directory()
-        }
-        .sink { [weak self] dir in
-            guard let self = self else { return }
-            self.tracks = dir.tracks
-            self.playlists = dir.children
-            self.isLoaded = true
-        }
-        .store(in: &cancellables)
+        _loadLevel = .detailed
+        _playlists = [LibraryMock.playlist()]
+        
+        // TODO
+//        let context = self.managedObjectContext
+//
+//        Future<[DBPlaylist], Error> {
+//            let request = DBPlaylist.createFetchRequest()
+//            request.predicate = NSPredicate(format: "parent == nil")
+//            return try context.fetch(request)
+//        }
+//        .sink(receiveCompletion: appLogErrors(_:)) { [weak self] children in
+//            guard let self = self else { return }
+//            self.playlists = children
+//            self.isLoaded = true
+//            self.isLoading = false
+//        }
+//        .store(in: &cancellables)
         
         return true
     }
     
-    subscript<T: Playlist.AttributeKey & TypedKey>(_ attribute: T) -> T.Value? {
-        switch attribute {
-        case .title:
-            return "Library" as? T.Value
-        default:
-            return nil
-        }
-    }
-
     var icon: Image { Image(systemName: "house.fill" ) }
     
-    func add(tracks: [Track]) -> Bool {
-        self.tracks += tracks
+    @discardableResult
+    func add(tracks: [PersistentTrack]) -> Bool {
+            // TODO Add as DBTrack
+//            tracks.forEach(managedObjectContext.insert)
+//
+//            do {
+//                try managedObjectContext.save()
+//                self.tracks += tracks
+//            }
+//            catch let error {
+//                appLogger.critical("Error adding tracks: \(error)")
+//            }
+        
         return true
     }
     
-    func add(children: [Playlist]) -> Bool {
-        self.playlists += children
+    @discardableResult
+    func add(children: [PersistentPlaylist]) -> Bool {
+        // If a user drops a playlist into us, and expects them to appear,
+        // the parent must be nil
+            // TODO Add as DBPlaylists
+//            children.forEach { $0.parent = nil }
+//            children.forEach(managedObjectContext.insert)
+//
+//            do {
+//                try managedObjectContext.save()
+//                self.playlists += children
+//            }
+//            catch let error {
+//                appLogger.critical("Error adding playlists: \(error)")
+//            }
         return true
     }
-
 }

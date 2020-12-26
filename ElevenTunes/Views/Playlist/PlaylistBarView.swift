@@ -12,7 +12,7 @@ struct PlaylistBarView: View {
 
     var body: some View {
         GeometryReader { geo in
-            Text("\(playlist.tracks.count) tracks")
+            Text("\(playlist._tracks.count) tracks")
                 .position(x: geo.size.width / 2, y: geo.size.height / 2 - 5)
         }
             .frame(minWidth: 200)
@@ -20,8 +20,8 @@ struct PlaylistBarView: View {
     }
 }
 
-struct PlaylistBarView_Previews: PreviewProvider {
-    static var previews: some View {
-        PlaylistBarView(playlist: LibraryMock.playlist())
-    }
-}
+//struct PlaylistBarView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PlaylistBarView(playlist: LibraryMock.playlist())
+//    }
+//}

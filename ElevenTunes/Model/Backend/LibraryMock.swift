@@ -8,31 +8,35 @@
 import Foundation
 import AVFoundation
 import Combine
+import Cocoa
 
 class LibraryMock {
-    static func directory(_ title: String = "Mock Directory") -> Playlist {
-        let children = [
+    static func children(_ title: String = "Mock Directory") -> [TransientPlaylist] {
+        [
             playlist("\(title) -> 1"),
             playlist("\(title) -> 2")
         ]
-                
-        return Playlist(attributes: .init([
-            .title: title
-        ]), tracks: children.flatMap { $0.tracks }, children: children)
     }
     
-    static func playlist(_ title: String = "Mock Playlist") -> Playlist {
+    static func directory(_ title: String = "Mock Directory") -> TransientPlaylist {
+        let children = self.children(title)
+        return TransientPlaylist(attributes: .init([
+            .title: title
+        ]), children: children)
+    }
+    
+    static func playlist(_ title: String = "Mock Playlist") -> TransientPlaylist {
         let tracks = [
             "\(title) -> 1", "\(title) -> 2", "\(title) -> 3"
         ].map(track)
         
-        return Playlist(attributes: .init([
+        return TransientPlaylist(attributes: .init([
             .title: title
         ]), tracks: tracks)
     }
     
-    static func track(_ title: String) -> Track {
-        Track(nil, attributes: .init([
+    static func track(_ title: String) -> MockTrack {
+        MockTrack(attributes: .init([
             .title: title
         ]))
     }

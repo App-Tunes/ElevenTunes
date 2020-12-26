@@ -1,70 +1,45 @@
 //
-//  DirectoryPlaylist.swift
+//  DirectoryPlaylist+CoreDataClass.swift
 //  ElevenTunes
 //
-//  Created by Lukas Tenbrink on 20.12.20.
+//  Created by Lukas Tenbrink on 25.12.20.
+//
 //
 
 import Foundation
 import SwiftUI
 import Combine
 
-class DirectoryPlaylist: PlaylistBackend {
+public class DirectoryPlaylist: RemotePlaylist {
     var url: URL
     
     init(_ url: URL) {
         self.url = url
+        super.init()
     }
     
-    static func create(fromURL url: URL) -> Playlist {
-        let playlistName = url.lastPathComponent
-        
-        return Playlist(DirectoryPlaylist(url), attributes: .init([
-            .title: playlistName
-        ]))
+    static func create(fromURL url: URL) throws -> DirectoryPlaylist {
+        // TODO Only if url is directory
+        return DirectoryPlaylist(url)
     }
     
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        url = try container.decode(URL.self, forKey: .url)
+        try super.init(from: decoder)
+    }
+    
+    public override func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(url, forKey: .url)
+        try super.encode(to: encoder)
+    }
+
     var icon: Image? { Image(systemName: "folder.fill") }
+}
 
-    func load() -> AnyPublisher<([Track], [Playlist]), Error> {
-        let url = self.url
-        
-        return Future {
-            let manager = FileManager.default
-            
-            var tracks: [Track] = []
-            var children: [Playlist] = []
-            
-            for url in try manager.contentsOfDirectory(at: url, includingPropertiesForKeys: [.isDirectoryKey]) {
-                guard
-                    let attributes = try? url.resourceValues(forKeys: [.isDirectoryKey]),
-                    let isDirectory = attributes.isDirectory
-                else {
-                    continue
-                }
-                
-                if isDirectory {
-                    children.append(DirectoryPlaylist.create(fromURL: url))
-                }
-                else {
-                    // TODO Interpret children files, e.g. M3U
-                    if let track = try? FileTrack.create(fromURL: url) {
-                        tracks.append(track)
-                    }
-                }
-            }
-
-            return (tracks, children)
-        }.eraseToAnyPublisher()
-    }
-    
-    func add(tracks: [Track]) -> Bool {
-        // TODO
-        return false
-    }
-    
-    func add(children: [Playlist]) -> Bool {
-        // TODO
-        return false
+extension DirectoryPlaylist {
+    enum CodingKeys: String, CodingKey {
+      case url
     }
 }

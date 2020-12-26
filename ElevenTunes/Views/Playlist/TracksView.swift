@@ -17,25 +17,26 @@ struct TracksView: View {
     
     var body: some View {
         List(selection: $selected) {
-            ForEach(playlist.tracks) { track in
+            ForEach(playlist._tracks.map { Track($0) } ) { track in
                 HStack {
                     Image(systemName: "music.note")
                     
-                    Text(track[Track.AttributeKey.title] ?? "Unknown Track")
+                    Text(track[TrackAttribute.title] ?? "Unknown Track")
                         .tag(track)
                         .onTapGesture(count: 2) {
                             player.play(PlayHistory(playlist, at: track))
                         }
                 }
+                .onAppear() { track.load(atLeast: .minimal) }
             }
         }
-            .frame(minWidth: 200, maxWidth: .infinity, minHeight: 50, maxHeight: .infinity)
-            .onDrop(of: ContentInterpreter.types, delegate: PlaylistDropInterpreter(interpreter, parent : playlist))
+        .frame(minWidth: 200, maxWidth: .infinity, minHeight: 50, maxHeight: .infinity)
+        .onDrop(of: ContentInterpreter.types, delegate: PlaylistDropInterpreter(interpreter, parent : playlist))
     }
 }
 
 struct TracksView_Previews: PreviewProvider {
     static var previews: some View {
-        TracksView(playlist: LibraryMock.playlist())
+        TracksView(playlist: Playlist(LibraryMock.playlist()))
     }
 }

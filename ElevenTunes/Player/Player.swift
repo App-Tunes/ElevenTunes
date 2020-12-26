@@ -13,9 +13,9 @@ class Player {
         didSet {
             // Re-use last played if possible
             previousEmitter =
-                oldValue == previous ? previousEmitter
-                : previous == current ? currentEmitter
-                : previous?.backend?.emitter()
+                oldValue?.id == previous?.id ? previousEmitter
+                : previous?.id == current?.id ? currentEmitter
+                : previous?.emitter()
         }
     }
     
@@ -23,19 +23,19 @@ class Player {
         didSet {
             // If possible, use prepared caches
             currentEmitter =
-                oldValue == current ? currentEmitter
-                : current == next ? nextEmitter
-                : current == previous ? previousEmitter
-                : current?.backend?.emitter()
+                oldValue?.id == current?.id ? currentEmitter
+                : current?.id == next?.id ? nextEmitter
+                : current?.id == previous?.id ? previousEmitter
+                : current?.emitter()
         }
     }
     @Published var next: Track? {
         didSet {
             // Re-use last played if possible
             nextEmitter =
-                oldValue == next ? nextEmitter
-                : next == current ? currentEmitter
-                : next?.backend?.emitter()
+                oldValue?.id == next?.id ? nextEmitter
+                : next?.id == current?.id ? currentEmitter
+                : next?.emitter()
         }
     }
 

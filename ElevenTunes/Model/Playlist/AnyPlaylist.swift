@@ -7,36 +7,63 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
-protocol AnyPlaylist: ObservableObject, Hashable, Identifiable {
-    var id: UUID { get }
+enum LoadLevel: Comparable {
+    case none, minimal, detailed
+}
 
-    var isLoading: Bool { get }
-    var isLoaded: Bool { get }
-
-    var tracks: [Track] { get }
-    var children: [Playlist] { get }
-
+protocol AnyPlaylist: AnyObject {
+    var id: String { get }
     var icon: Image { get }
+    
+    var anyTracks: AnyPublisher<[AnyTrack], Never> { get }
+    var anyChildren: AnyPublisher<[AnyPlaylist], Never> { get }
+
+    var loadLevel: AnyPublisher<LoadLevel, Never> { get }
+    
+    var attributes: AnyPublisher<TypedDict<PlaylistAttribute>, Never> { get }
 
     @discardableResult
-    func load(force: Bool) -> Bool
-
-    subscript<T: Playlist.AttributeKey & TypedKey>(_ attribute: T) -> T.Value? { get }
+    func load(atLeast level: LoadLevel, deep: Bool) -> Bool
 
     @discardableResult
-    func add(tracks: [Track]) -> Bool
+    func add(tracks: [PersistentTrack]) -> Bool
     
     @discardableResult
-    func add(children: [Playlist]) -> Bool
+    func add(children: [PersistentPlaylist]) -> Bool
 }
 
 extension AnyPlaylist {
-    func load() {
-        load(force: false)
+    var icon: Image { Image(systemName: "music.note.list") }
+    
+    @discardableResult
+    func load(atLeast level: LoadLevel) -> Bool {
+        load(atLeast: level, deep: false)
     }
+}
 
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(self.id)
+protocol PersistentPlaylist: AnyPlaylist, Codable {
+    var tracks: AnyPublisher<[PersistentTrack], Never> { get }
+    var children: AnyPublisher<[PersistentPlaylist], Never> { get }
+}
+
+extension PersistentPlaylist {
+    var anyTracks: AnyPublisher<[AnyTrack], Never> {
+        tracks.map { $0 as [AnyTrack] }
+            .eraseToAnyPublisher()
     }
+    
+    var anyChildren: AnyPublisher<[AnyPlaylist], Never> {
+        children.map { $0 as [AnyPlaylist] }
+            .eraseToAnyPublisher()
+    }
+}
+
+class PlaylistBackendTransformer: CodableTransformer {
+    override class var classes: [AnyClass] { [
+        DirectoryPlaylist.self,
+        SpotifyPlaylist.self,
+        M3UPlaylist.self
+    ]}
 }

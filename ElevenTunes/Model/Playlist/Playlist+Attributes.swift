@@ -7,20 +7,18 @@
 
 import Foundation
 
-extension Playlist {
-    class AttributeKey: RawRepresentable, Hashable {
-        class Typed<K>: AttributeKey, TypedKey {
-            typealias Value = K
-        }
+class PlaylistAttribute: RawRepresentable, Hashable {
+    class Typed<K>: PlaylistAttribute, TypedKey {
+        typealias Value = K
+    }
 
-        let rawValue: String
-        
-        required init(rawValue: String) {
-            self.rawValue = rawValue
-        }
+    let rawValue: String
+    
+    required init(rawValue: String) {
+        self.rawValue = rawValue
     }
 }
 
-extension Playlist.AttributeKey {
+extension PlaylistAttribute {
     static let title = Typed<String>(rawValue: "title")
 }

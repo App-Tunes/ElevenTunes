@@ -20,6 +20,11 @@ class TypedDict<K: AnyObject & Hashable> {
         self.contents = dict
     }
     
+    func merge(_ dict: TypedDict<K>) {
+        // TODO
+//        contents += dict.contents
+    }
+    
     // Type hinting will have to wait for
     // https://github.com/apple/swift/blob/main/docs/GenericsManifesto.md#generalized-supertype-constraints
     // to be implemented :(

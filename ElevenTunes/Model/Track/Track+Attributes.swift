@@ -7,20 +7,18 @@
 
 import Foundation
 
-extension Track {
-    class AttributeKey: RawRepresentable, Hashable {
-        class Typed<K>: AttributeKey, TypedKey {
-            typealias Value = K
-        }
+class TrackAttribute: RawRepresentable, Hashable {
+    class Typed<K>: TrackAttribute, TypedKey {
+        typealias Value = K
+    }
 
-        let rawValue: String
-        
-        required init(rawValue: String) {
-            self.rawValue = rawValue
-        }
+    let rawValue: String
+    
+    required init(rawValue: String) {
+        self.rawValue = rawValue
     }
 }
 
-extension Track.AttributeKey {
+extension TrackAttribute {
     static let title = Typed<String>(rawValue: "title")
 }

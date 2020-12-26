@@ -10,19 +10,18 @@ import Combine
 import UniformTypeIdentifiers
 
 extension ContentInterpreter {
-    static func simple<T: ContentConvertible>(matches: @escaping (URL) throws -> Bool, interpret: @escaping (URL) -> AnyPublisher<T, Error>) -> ((URL) -> AnyPublisher<Content, Error>?) {
+    static func simple(matches: @escaping (URL) throws -> Bool, interpret: @escaping (URL) -> AnyPublisher<Content, Error>) -> ((URL) -> AnyPublisher<Content, Error>?) {
         return { url in
             if !((try? matches(url)) ?? false) { return nil }
             return interpret(url)
-                .map(\.asContent)
                 .eraseToAnyPublisher()
         }
     }
 
-    static func simple<T: ContentConvertible>(matches: @escaping (URL) throws -> Bool, interpret: @escaping (URL) throws -> T) -> ((URL) -> AnyPublisher<Content, Error>?) {
+    static func simple(matches: @escaping (URL) throws -> Bool, interpret: @escaping (URL) throws -> Content) -> ((URL) -> AnyPublisher<Content, Error>?) {
         return { url in
             if !((try? matches(url)) ?? false) { return nil }
-            return Future { try interpret(url).asContent }
+            return Future { try interpret(url) }
                 .eraseToAnyPublisher()
         }
     }
@@ -34,29 +33,35 @@ extension ContentInterpreter {
         let register = { interpreter.interpreters.append($0) }
         
         register(simple {
-            (try? SpotifyTrack.spotifyURI(fromURL: $0)) != nil
+            _ = try SpotifyTrack.spotifyURI(fromURL: $0)
+            return true
         } interpret: {
             SpotifyTrack.create(spotify, fromURL: $0)
+                .map { Content.track($0) }
+                .eraseToAnyPublisher()
         })
         
         register(simple {
-            (try? SpotifyPlaylist.spotifyURI(fromURL: $0)) != nil
-        } interpret: {
-            SpotifyPlaylist.create(spotify, fromURL: $0)
+            _ = try SpotifyPlaylist.spotifyURI(fromURL: $0)
+            return true
+        } interpret: { (url: URL) -> AnyPublisher<Content, Error> in
+            SpotifyPlaylist.create(spotify, fromURL: url)
+                .map { Content.playlist($0) }
+                .eraseToAnyPublisher()
         })
         
         register(simple { $0.pathExtension == "m3u" } interpret: {
-            try M3UPlaylist.create(fromURL: $0)
+            .playlist(try M3UPlaylist.create(fromURL: $0))
         })
         
         register(simple {
             try $0.isFileDirectory()
         } interpret: {
-            DirectoryPlaylist.create(fromURL: $0)
+            .playlist(try DirectoryPlaylist.create(fromURL: $0))
         })
         
         register(simple(matches: FileTrack.understands) {
-            try FileTrack.create(fromURL: $0)
+            .track(try FileTrack.create(fromURL: $0))
         })
         
         return interpreter
