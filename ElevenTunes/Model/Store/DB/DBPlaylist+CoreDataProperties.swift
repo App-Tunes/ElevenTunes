@@ -31,7 +31,6 @@ extension DBPlaylist {
             return value
         }
     }
-
     
     @NSManaged public var indexed: Bool
     @NSManaged public var cachedLoadLevel: Int16
@@ -39,7 +38,6 @@ extension DBPlaylist {
     @NSManaged public var children: NSOrderedSet
     @NSManaged public var parent: DBPlaylist?
     @NSManaged public var tracks: NSOrderedSet
-
 }
 
 // MARK: Generated accessors for children

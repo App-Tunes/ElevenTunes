@@ -38,7 +38,6 @@ class CDPublisher<Entity>: NSObject, NSFetchedResultsControllerDelegate, Publish
         lock.lock()
         subscriptions += 1
         start = subscriptions == 1
-        lock.unlock()
 
         if start {
             let controller = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context,
@@ -54,6 +53,8 @@ class CDPublisher<Entity>: NSObject, NSFetchedResultsControllerDelegate, Publish
             }
             resultController = controller as? NSFetchedResultsController<NSManagedObject>
         }
+        lock.unlock()
+        
         CDSubscription(fetchPublisher: self, subscriber: AnySubscriber(subscriber))
     }
 
@@ -63,15 +64,15 @@ class CDPublisher<Entity>: NSObject, NSFetchedResultsControllerDelegate, Publish
     }
 
     private func dropSubscription() {
-        objc_sync_enter(self)
+        lock.lock()
         subscriptions -= 1
         let stop = subscriptions == 0
-        objc_sync_exit(self)
 
         if stop {
             resultController?.delegate = nil
             resultController = nil
         }
+        lock.unlock()
     }
 
     private class CDSubscription: Subscription {
@@ -84,9 +85,12 @@ class CDPublisher<Entity>: NSObject, NSFetchedResultsControllerDelegate, Publish
 
             subscriber.receive(subscription: self)
 
-            cancellable = fetchPublisher.subject.sink(receiveCompletion: { completion in
+            // TODO If not onMain, will crash. Why? Who knows!
+            cancellable = fetchPublisher.subject.onMain().sink(receiveCompletion: { completion in
                 subscriber.receive(completion: completion)
             }, receiveValue: { value in
+                Swift.print(String(describing: subscriber))
+                Swift.print(String(describing: value))
                 _ = subscriber.receive(value)
             })
         }
@@ -94,6 +98,10 @@ class CDPublisher<Entity>: NSObject, NSFetchedResultsControllerDelegate, Publish
         func request(_ demand: Subscribers.Demand) {}
 
         func cancel() {
+            guard cancellable != nil else {
+                return  // Already dead
+            }
+            
             cancellable?.cancel()
             cancellable = nil
             fetchPublisher?.dropSubscription()

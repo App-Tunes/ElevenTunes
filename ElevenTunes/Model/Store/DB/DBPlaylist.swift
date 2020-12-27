@@ -36,8 +36,13 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
         $_loadLevel.eraseToAnyPublisher()
     }
     
+    @Published private var _attributes: TypedDict<PlaylistAttribute> = .init()
     public var attributes: AnyPublisher<TypedDict<PlaylistAttribute>, Never> {
-        backend?.attributes ?? Just(.init()).eraseToAnyPublisher()  // TODO
+        $_attributes.eraseToAnyPublisher()
+    }
+    
+    func pushAttributes() {
+        _attributes = cachedAttributes
     }
     
     func refreshObservation() {
@@ -72,7 +77,14 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
                     _anyChildren = children
                 }
                 .store(in: &cancellables)
-            
+
+            backend.attributes
+                .onMain()
+                .sink { [unowned self] attributes in
+                    merge(attributes: attributes)
+                }
+                .store(in: &cancellables)
+
             backend.loadLevel.sink { [unowned self] loadLevel in
                 self._loadLevel = loadLevel
                 self.cachedLoadLevel = loadLevel.rawValue
@@ -95,6 +107,8 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
                         [weak self] in self?._anyChildren = $0
                     }
                     .store(in: &cancellables)
+                
+                // TODO Attributes stream
             }
         }
     }
@@ -115,7 +129,7 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
         }
         
         let currentLoadLevel = LoadLevel(rawValue: cachedLoadLevel) ?? .none
-        guard level > currentLoadLevel else {
+        if indexed && currentLoadLevel >= level {
             // We can use DB cache! Yay!
             _loadLevel = currentLoadLevel
             return true

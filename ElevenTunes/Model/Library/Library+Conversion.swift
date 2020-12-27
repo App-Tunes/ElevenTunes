@@ -58,6 +58,8 @@ extension Library {
                 playlistsToConvert += children
                 playlistChildren[dbPlaylist] = children.map(\.id)
                 
+                dbPlaylist.merge(attributes: backend._attributes)
+                
                 return dbPlaylist
             }
             
