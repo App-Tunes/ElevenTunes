@@ -6,6 +6,31 @@
 //
 
 import SwiftUI
+import Combine
+
+struct BlinkingImage: View {
+    @State var image: Image
+    @State var opacity: Double
+    @State var animates: Published<Bool>.Publisher
+    
+    @State var animatingOpacity: Double = 1
+    @State var animation: Animation = Animation.linear(duration: 0.6)
+    
+    var body: some View {
+        HStack {
+            image.opacity(animatingOpacity)
+        }
+        .onReceive(animates) {
+            if $0 {
+                withAnimation(animation.repeatForever()) { animatingOpacity = 1 }
+            }
+            else {
+                withAnimation(animation) { animatingOpacity = opacity }
+            }
+        }
+    }
+}
+
 
 struct PlayTrackView: View {
     @State var playlist: Playlist
@@ -20,9 +45,12 @@ struct PlayTrackView: View {
             player.play(PlayHistory(playlist, at: track))
         }) {
             ZStack {
-                if [current, next].contains(track) {
+                if track == next {
+                    BlinkingImage(image: Image(systemName: "play.fill"), opacity: 0.35, animates: player.$isAlmostNext)
+                }
+                else if track == current {
                     Image(systemName: "play.fill")
-                        .opacity(current == track ? 1 : 0.35)
+                        .opacity(track == current ? 1 : 0.35)
                 }
                 
                 Image(systemName: "play")

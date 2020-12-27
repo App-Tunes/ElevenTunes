@@ -13,6 +13,8 @@ protocol SinglePlayerDelegate: AnyObject {
 
 // Player capable of playing one file at a time
 class SinglePlayer {
+    static let timeInAnAlmost: TimeInterval = 5
+    
     // Unfortunately, K/V observation on this doesn't seem to work :(
     @Published private(set) var playing: AnyAudioEmitter? {
         willSet {
@@ -23,11 +25,32 @@ class SinglePlayer {
     }
     
     @Published private(set) var state = PlayerState(isPlaying: false, currentTime: nil)
+    @Published private(set) var isAlmostDone = false
+
+    private var almostDoneTimer: Timer?
     
     weak var delegate: SinglePlayerDelegate?
     
     func _updateState() {
         state = .init(isPlaying: playing?.isPlaying ?? false, currentTime: playing?.currentTime ?? nil)
+        
+        almostDoneTimer?.invalidate()
+        if let duration = playing?.duration, let currentTime = playing?.currentTime {
+            let timeLeft = duration - currentTime
+            
+            if timeLeft > SinglePlayer.timeInAnAlmost {
+                isAlmostDone = false
+                almostDoneTimer = Timer.scheduledTimer(withTimeInterval: duration - currentTime, repeats: false, block: { [unowned self] _ in
+                    self.isAlmostDone = true
+                })
+            }
+            else {
+                isAlmostDone = true
+            }
+        }
+        else {
+            isAlmostDone = false
+        }
     }
     
     func play(_ emitter: AnyAudioEmitter?) {
@@ -66,13 +89,17 @@ class SinglePlayer {
 
 extension SinglePlayer: AudioEmitterDelegate {
     func emitterDidStop(_ emitter: AnyAudioEmitter) {
-        playing = nil
-        _updateState()
-        
-        delegate?.playerDidStop(self)
+        DispatchQueue.main.async {
+            self.playing = nil
+            self._updateState()
+            
+            self.delegate?.playerDidStop(self)
+        }
     }
     
     func emitterUpdatedState(_ emitter: AnyAudioEmitter) {
-        _updateState()
+        DispatchQueue.main.async {
+            self._updateState()
+        }
     }
 }

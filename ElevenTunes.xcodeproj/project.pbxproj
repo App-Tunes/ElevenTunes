@@ -47,6 +47,7 @@
 		805338282598C5B5006F06DC /* DBTrack+Attributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805338272598C5B5006F06DC /* DBTrack+Attributes.swift */; };
 		8053382D2598D5F3006F06DC /* DBPlaylist+Changes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8053382C2598D5F3006F06DC /* DBPlaylist+Changes.swift */; };
 		805338322598D5F9006F06DC /* DBTrack+Changes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805338312598D5F9006F06DC /* DBTrack+Changes.swift */; };
+		805338382598FD2E006F06DC /* Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805338372598FD2E006F06DC /* Animation.swift */; };
 		806B2790258D5CBD0091EA4D /* TracksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B278F258D5CBD0091EA4D /* TracksView.swift */; };
 		806B2796258D5D540091EA4D /* PlaylistsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B2795258D5D540091EA4D /* PlaylistsView.swift */; };
 		806B27C1258D69470091EA4D /* LibraryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B27C0258D69470091EA4D /* LibraryMock.swift */; };
@@ -158,6 +159,7 @@
 		805338272598C5B5006F06DC /* DBTrack+Attributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DBTrack+Attributes.swift"; sourceTree = "<group>"; };
 		8053382C2598D5F3006F06DC /* DBPlaylist+Changes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DBPlaylist+Changes.swift"; sourceTree = "<group>"; };
 		805338312598D5F9006F06DC /* DBTrack+Changes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DBTrack+Changes.swift"; sourceTree = "<group>"; };
+		805338372598FD2E006F06DC /* Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animation.swift; sourceTree = "<group>"; };
 		806B278F258D5CBD0091EA4D /* TracksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksView.swift; sourceTree = "<group>"; };
 		806B2795258D5D540091EA4D /* PlaylistsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsView.swift; sourceTree = "<group>"; };
 		806B27C0258D69470091EA4D /* LibraryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryMock.swift; sourceTree = "<group>"; };
@@ -329,6 +331,14 @@
 			path = "Core Data";
 			sourceTree = "<group>";
 		};
+		805338362598FD28006F06DC /* SwiftUI */ = {
+			isa = PBXGroup;
+			children = (
+				805338372598FD2E006F06DC /* Animation.swift */,
+			);
+			path = SwiftUI;
+			sourceTree = "<group>";
+		};
 		806B2794258D5D390091EA4D /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
@@ -388,6 +398,7 @@
 		806B27D5258D6D7A0091EA4D /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				805338362598FD28006F06DC /* SwiftUI */,
 				8053381425989A73006F06DC /* Core Data */,
 				80ED768F258FF40A00B8B9C3 /* Foundation */,
 				806B281D258D8E020091EA4D /* Combine */,
@@ -836,6 +847,7 @@
 				806E1FFC2596B2AC003EEA83 /* Playlist.swift in Sources */,
 				80AD698E2588287900192BED /* PlaylistView.swift in Sources */,
 				806B28E6258FB9A10091EA4D /* AnyPublisher.swift in Sources */,
+				805338382598FD2E006F06DC /* Animation.swift in Sources */,
 				802E2CA22595FEC700CB91EC /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

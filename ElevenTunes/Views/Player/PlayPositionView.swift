@@ -61,7 +61,7 @@ struct PlayPositionView: View {
             return
         }
         
-        withAnimation(.linear(duration: 0)) {
+        withAnimation(.instant) {
             position = CGFloat(currentTime / duration)
         }
 

@@ -39,6 +39,8 @@ class Player {
         }
     }
 
+    @Published var isAlmostNext: Bool = false
+
     @Published var state: PlayerState = .init(isPlaying: false, currentTime: nil)
 
     let singlePlayer = SinglePlayer()
@@ -54,6 +56,7 @@ class Player {
 
     init() {
         singlePlayer.$state.assign(to: &$state)
+        singlePlayer.$isAlmostDone.assign(to: &$isAlmostNext)
         singlePlayer.delegate = self
     }
     
