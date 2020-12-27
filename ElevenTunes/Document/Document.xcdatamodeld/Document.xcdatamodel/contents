@@ -4,7 +4,7 @@
         <attribute name="backend" optional="YES" attributeType="Transformable" valueTransformerName="PlaylistBackendTransformer" customClassName=".PersistentPlaylist"/>
         <attribute name="cachedLoadLevel" attributeType="Integer 16" valueTransformerName="LoadLevelTransformer" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="indexed" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
-        <attribute name="title" attributeType="String" defaultValueString="" spotlightIndexingEnabled="YES"/>
+        <attribute name="title" attributeType="String" defaultValueString="Unnamed Playlist" spotlightIndexingEnabled="YES"/>
         <relationship name="children" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="DBPlaylist" inverseName="parent" inverseEntity="DBPlaylist"/>
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DBPlaylist" inverseName="children" inverseEntity="DBPlaylist"/>
         <relationship name="tracks" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="DBTrack" inverseName="references" inverseEntity="DBTrack"/>
@@ -12,7 +12,7 @@
     <entity name="DBTrack" representedClassName="DBTrack" syncable="YES">
         <attribute name="backend" optional="YES" attributeType="Transformable" valueTransformerName="TrackBackendTransformer" customClassName=".PersistentTrack"/>
         <attribute name="cachedLoadLevel" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="title" attributeType="String" defaultValueString="" spotlightIndexingEnabled="YES"/>
+        <attribute name="title" attributeType="String" defaultValueString="Unnamed Track" spotlightIndexingEnabled="YES"/>
         <relationship name="references" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DBPlaylist" inverseName="tracks" inverseEntity="DBPlaylist"/>
     </entity>
     <elements>
