@@ -29,7 +29,8 @@ struct PlaylistRowView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 15, height: 15)
-                .foregroundColor((playlist.isTopLevel && playlist.backend.supportsChildren()) ? .secondary : .primary)
+                .foregroundColor(playlist.accentColor)
+                .saturation(0.5)
 
             if playlist._loadLevel < .minimal {
                 ProgressView()

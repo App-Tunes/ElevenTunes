@@ -41,6 +41,8 @@ class LibraryPlaylist: AnyPlaylist {
         "Library" // TODO
     }
     
+    var accentColor: Color { .accentColor }
+    
     var loadLevel: AnyPublisher<LoadLevel, Never> = Just(.detailed).eraseToAnyPublisher()
     
     // TODO

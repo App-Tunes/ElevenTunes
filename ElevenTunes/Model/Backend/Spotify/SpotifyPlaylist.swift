@@ -27,6 +27,8 @@ public class SpotifyPlaylist: RemotePlaylist {
     var uri: String
 
     static var _icon: Image { Image("spotify-logo") }
+    
+    public override var accentColor: Color { .green }
 
     init(uri: String) {
         self.uri = uri

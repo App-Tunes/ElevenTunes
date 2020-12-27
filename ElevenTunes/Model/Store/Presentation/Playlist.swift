@@ -32,6 +32,9 @@ class Playlist: ObservableObject {
     var id: String { backend.id }
     
     var icon: Image { backend.icon }
+    var accentColor: Color {
+        (isTopLevel && backend.supportsChildren()) ? .secondary : backend.accentColor
+    }
 
     @Published var _children: [AnyPlaylist] = []
     var anyChildren: AnyPublisher<[AnyPlaylist], Never>

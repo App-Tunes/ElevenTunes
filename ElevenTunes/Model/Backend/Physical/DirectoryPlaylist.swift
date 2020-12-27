@@ -43,8 +43,9 @@ public class DirectoryPlaylist: RemotePlaylist {
         try super.encode(to: encoder)
     }
 
-    static let _icon: Image = Image(systemName: "folder.fill")
+    static let _icon: Image = Image(systemName: "folder")
     public override var icon: Image { DirectoryPlaylist._icon }
+    public override var accentColor: Color { .accentColor }
     
     public override var id: String { url.absoluteString }
     

@@ -46,7 +46,7 @@ public class M3UPlaylist: RemotePlaylist {
     
     public override var id: String { url.absoluteString }
 
-    public override var icon: Image { Image(systemName: "doc.text.fill") }
+    public override var icon: Image { Image(systemName: "doc.text") }
     
     public static func interpretFile(_ file: String, relativeTo directory: URL) -> [URL] {
         let lines = file.split(whereSeparator: \.isNewline)

@@ -25,6 +25,10 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
         backend?.icon ?? Playlist.defaultIcon
     }
     
+    public var accentColor: Color {
+        backend?.accentColor ?? .secondary
+    }
+    
     @Published var _anyTracks: [AnyTrack] = []
     public var anyTracks: AnyPublisher<[AnyTrack], Never> {
         $_anyTracks.eraseToAnyPublisher()

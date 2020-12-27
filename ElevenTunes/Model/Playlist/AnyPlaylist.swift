@@ -16,7 +16,8 @@ public enum LoadLevel: Int16, Comparable {
 public protocol AnyPlaylist: AnyObject {
     var id: String { get }
     var icon: Image { get }
-    
+    var accentColor: Color { get }
+
     var anyTracks: AnyPublisher<[AnyTrack], Never> { get }
     var anyChildren: AnyPublisher<[AnyPlaylist], Never> { get }
 
