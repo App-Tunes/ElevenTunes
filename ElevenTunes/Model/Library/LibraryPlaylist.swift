@@ -61,10 +61,20 @@ class LibraryPlaylist: AnyPlaylist {
     @discardableResult
     func add(tracks: [PersistentTrack]) -> Bool {
         // Fetch requests auto-update content
-        let _ = Library.convert(
-            DirectLibrary(allTracks: tracks),
-            context: managedObjectContext
-        )
+        let context = managedObjectContext.child(concurrencyType: .privateQueueConcurrencyType)
+        context.perform {
+            let _ = Library.convert(
+                DirectLibrary(allTracks: tracks),
+                context: context
+            )
+            
+            do {
+                try context.save()
+            }
+            catch let error {
+                appLogger.error("Failed to import tracks: \(error)")
+            }
+        }
 
         return true
     }
@@ -72,10 +82,20 @@ class LibraryPlaylist: AnyPlaylist {
     @discardableResult
     func add(children: [PersistentPlaylist]) -> Bool {
         // Fetch requests auto-update content
-        let _ = Library.convert(
-            DirectLibrary(allPlaylists: children),
-            context: managedObjectContext
-        )
+        let context = managedObjectContext.child(concurrencyType: .privateQueueConcurrencyType)
+        context.perform {
+            let _ = Library.convert(
+                DirectLibrary(allPlaylists: children),
+                context: context
+            )
+            
+            do {
+                try context.save()
+            }
+            catch let error {
+                appLogger.error("Failed to import playlists: \(error)")
+            }
+        }
 
         return true
     }

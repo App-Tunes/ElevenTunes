@@ -14,6 +14,11 @@ class LibraryDocument: NSPersistentDocument {
         spotify = AppDelegate.shared.spotify
 
         super.init()
+        let oldContext = managedObjectContext!
+        managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        managedObjectContext!.persistentStoreCoordinator = oldContext.persistentStoreCoordinator
+        managedObjectContext!.name = oldContext.name
+        
         _library = Library(managedObjectContext: managedObjectContext!)
         _interpreter = ContentInterpreter.createDefault(spotify: spotify)
     }
