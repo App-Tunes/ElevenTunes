@@ -26,6 +26,8 @@ public class SpotifyPlaylist: SpotifyPlaylistBackend {
         
     var uri: String
 
+    static var _icon: Image { Image("spotify-logo") }
+
     init(_ spotify: Spotify, uri: String) {
         self.uri = uri
         super.init(spotify)
@@ -51,7 +53,7 @@ public class SpotifyPlaylist: SpotifyPlaylistBackend {
 
     public override var id: String { uri }
     
-    override public var icon: Image { Image("spotify-logo") }
+    override public var icon: Image { SpotifyPlaylist._icon }
 
     static func attributes(of playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>) -> TypedDict<PlaylistAttribute> {
         let attributes = TypedDict<PlaylistAttribute>()
@@ -100,6 +102,7 @@ public class SpotifyPlaylist: SpotifyPlaylistBackend {
             .eraseToAnyPublisher()
             
         spotify.api.playlist(uri).eraseToAnyPublisher().zip(tracks)
+            .onMain()
             .sink(receiveCompletion: appLogErrors) { (info, tracks) in
                 self._attributes = SpotifyPlaylist.attributes(of: info)
                 self._tracks = tracks

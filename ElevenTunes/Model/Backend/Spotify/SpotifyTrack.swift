@@ -17,6 +17,8 @@ public class SpotifyTrack: RemoteTrack {
     enum SpotifyError: Error {
         case noURI
     }
+    
+    static var _icon: Image { Image("spotify-logo") }
 
     var spotify: Spotify
     var uri: String
@@ -64,7 +66,7 @@ public class SpotifyTrack: RemoteTrack {
 
     public override var id: String { uri }
 
-    override public var icon: Image { Image("spotify-logo") }
+    override public var icon: Image { SpotifyTrack._icon }
 
     static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyTrack, Error> {
         return Future { try spotifyURI(fromURL: url) }
@@ -108,6 +110,7 @@ public class SpotifyTrack: RemoteTrack {
         
         spotify.api.track(uri)
             .compactMap(ExistingSpotifyTrack.init)
+            .onMain()
             .sink(receiveCompletion: appLogErrors) { track in
                 self._attributes = SpotifyTrack.extractAttributes(from: track)
                 self._loadLevel = .detailed

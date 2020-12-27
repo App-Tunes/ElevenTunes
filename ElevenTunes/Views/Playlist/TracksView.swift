@@ -7,37 +7,52 @@
 
 import SwiftUI
 
+struct TrackView: View {
+    @ObservedObject var playlist: Playlist
+    @ObservedObject var track: Track
+    
+    @Environment(\.player) private var player: Player
+
+    var body: some View {
+        HStack {
+            Button(action: {
+                player.play(PlayHistory(playlist, at: track))
+            }) {
+                Image(systemName: player.current == track ? "play.fill" : "play")
+            }
+            .buttonStyle(BorderlessButtonStyle())
+            .disabled(track._loadLevel == .none)
+
+            if track._loadLevel == .none {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .scaleEffect(0.5, anchor: .center)
+                
+                Text("...")
+            }
+            else {
+                track.icon.resizable().aspectRatio(contentMode: .fit).frame(width: 15, height: 15)
+                
+                Text(track[TrackAttribute.title] ?? "Unknown Track")
+            }
+        }
+        .tag(track)
+        .onAppear() { track.load(atLeast: .minimal) }
+    }
+}
+
 struct TracksView: View {
     @ObservedObject var playlist: Playlist
     
     @State var selected: Track?
 
-    @Environment(\.player) private var player: Player
     @Environment(\.interpreter) private var interpreter: ContentInterpreter!
     
     var body: some View {
         List(selection: $selected) {
             ForEach(playlist._tracks.map { Track($0) } ) { track in
-                HStack {
-                    if track._loadLevel == .none {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle())
-                            .scaleEffect(0.5, anchor: .center)
-                        
-                        Text("...")
-                    }
-                    else {
-                        track.icon.resizable().aspectRatio(contentMode: .fit).frame(width: 15, height: 15)
-                        
-                        Text(track[TrackAttribute.title] ?? "Unknown Track")
-                            .onTapGesture(count: 2) {
-                                player.play(PlayHistory(playlist, at: track))
-                            }
-                    }
-                }
-                .tag(track)
-                .frame(height: 15)
-                .onAppear() { track.load(atLeast: .minimal) }
+                TrackView(playlist: playlist, track: track)
+                    .frame(height: 15)
             }
         }
         .frame(minWidth: 200, maxWidth: .infinity, minHeight: 50, maxHeight: .infinity)
