@@ -49,6 +49,8 @@
 		805338322598D5F9006F06DC /* DBTrack+Changes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805338312598D5F9006F06DC /* DBTrack+Changes.swift */; };
 		805338382598FD2E006F06DC /* Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805338372598FD2E006F06DC /* Animation.swift */; };
 		8053383E2599002A006F06DC /* BlinkingImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8053383D2599002A006F06DC /* BlinkingImage.swift */; };
+		8053384625991D93006F06DC /* PersistentPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8053384525991D93006F06DC /* PersistentPlaylist.swift */; };
+		8053384B25991DB8006F06DC /* PersistentTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8053384A25991DB8006F06DC /* PersistentTrack.swift */; };
 		806B2790258D5CBD0091EA4D /* TracksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B278F258D5CBD0091EA4D /* TracksView.swift */; };
 		806B2796258D5D540091EA4D /* PlaylistsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B2795258D5D540091EA4D /* PlaylistsView.swift */; };
 		806B27C1258D69470091EA4D /* LibraryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B27C0258D69470091EA4D /* LibraryMock.swift */; };
@@ -161,6 +163,8 @@
 		805338312598D5F9006F06DC /* DBTrack+Changes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DBTrack+Changes.swift"; sourceTree = "<group>"; };
 		805338372598FD2E006F06DC /* Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animation.swift; sourceTree = "<group>"; };
 		8053383D2599002A006F06DC /* BlinkingImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkingImage.swift; sourceTree = "<group>"; };
+		8053384525991D93006F06DC /* PersistentPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentPlaylist.swift; sourceTree = "<group>"; };
+		8053384A25991DB8006F06DC /* PersistentTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentTrack.swift; sourceTree = "<group>"; };
 		806B278F258D5CBD0091EA4D /* TracksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksView.swift; sourceTree = "<group>"; };
 		806B2795258D5D540091EA4D /* PlaylistsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsView.swift; sourceTree = "<group>"; };
 		806B27C0258D69470091EA4D /* LibraryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryMock.swift; sourceTree = "<group>"; };
@@ -376,6 +380,7 @@
 			isa = PBXGroup;
 			children = (
 				802E2CEC259614EC00CB91EC /* AnyPlaylist.swift */,
+				8053384525991D93006F06DC /* PersistentPlaylist.swift */,
 				806E1FD22596A5FA003EEA83 /* Playlist+Attributes.swift */,
 				80ED767A258FD5B600B8B9C3 /* PlaylistInterpreter.swift */,
 				806E20002596B6C3003EEA83 /* RemotePlaylist.swift */,
@@ -387,6 +392,7 @@
 			isa = PBXGroup;
 			children = (
 				806E1FC12596A12C003EEA83 /* AnyTrack.swift */,
+				8053384A25991DB8006F06DC /* PersistentTrack.swift */,
 				802E2CF42596359300CB91EC /* Track+Attributes.swift */,
 				806E20212596C26A003EEA83 /* RemoteTrack.swift */,
 			);
@@ -791,6 +797,7 @@
 				806B2883258EA42D0091EA4D /* SpotifyAuthenticator.swift in Sources */,
 				802E2CD72596082E00CB91EC /* LibraryPlaylist.swift in Sources */,
 				80AD6952258825FA00192BED /* ElevenTunesApp.swift in Sources */,
+				8053384B25991DB8006F06DC /* PersistentTrack.swift in Sources */,
 				802E2CED259614EC00CB91EC /* AnyPlaylist.swift in Sources */,
 				800508632598108A0055FB2D /* DBPlaylist+Attributes.swift in Sources */,
 				8053383E2599002A006F06DC /* BlinkingImage.swift in Sources */,
@@ -846,6 +853,7 @@
 				806B281F258D8E1A0091EA4D /* Preload.swift in Sources */,
 				80151EE82593C92A00D9539A /* SpotifyAuthView.swift in Sources */,
 				80151EFA2593E1EF00D9539A /* SpotifyDevices.swift in Sources */,
+				8053384625991D93006F06DC /* PersistentPlaylist.swift in Sources */,
 				802E2CA82595FEE200CB91EC /* DocumentController.swift in Sources */,
 				806B27C1258D69470091EA4D /* LibraryMock.swift in Sources */,
 				800508592597FEEB0055FB2D /* Library+Prune.swift in Sources */,
