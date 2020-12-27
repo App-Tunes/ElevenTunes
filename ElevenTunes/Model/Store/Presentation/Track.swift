@@ -55,3 +55,7 @@ extension Track: Hashable, Identifiable {
         hasher.combine(id)
     }
 }
+
+extension Track {
+    static let defaultIcon: Image = Image(systemName: "music.note")
+}

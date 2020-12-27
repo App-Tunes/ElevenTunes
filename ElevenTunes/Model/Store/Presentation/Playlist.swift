@@ -82,3 +82,7 @@ extension Playlist: Hashable, Identifiable {
         hasher.combine(id)
     }
 }
+
+extension Playlist {
+    static let defaultIcon: Image = Image(systemName: "music.note.list")
+}

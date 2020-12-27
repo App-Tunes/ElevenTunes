@@ -12,7 +12,7 @@ import SwiftUI
 public class PersistentTrack: NSObject, AnyTrack, Codable {
     public var id: String { fatalError() }
     
-    public var icon: Image { Image(systemName: "music.note") }
+    public var icon: Image { Track.defaultIcon }
     
     public var loadLevel: AnyPublisher<LoadLevel, Never> { fatalError() }
     

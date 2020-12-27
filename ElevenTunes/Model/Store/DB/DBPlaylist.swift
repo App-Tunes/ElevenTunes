@@ -22,7 +22,7 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
     public var id: String { objectID.description }
     
     public var icon: Image {
-        backend?.icon ?? Image(systemName: "music.note.list")
+        backend?.icon ?? Playlist.defaultIcon
     }
     
     @Published var _anyTracks: [AnyTrack] = []

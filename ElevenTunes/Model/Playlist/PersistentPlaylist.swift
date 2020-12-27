@@ -11,7 +11,7 @@ import SwiftUI
 
 public class PersistentPlaylist: NSObject, AnyPlaylist, Codable {
     public var id: String { fatalError() }
-    public var icon: Image { Image(systemName: "music.note.list") }
+    public var icon: Image { Playlist.defaultIcon }
     
     public var loadLevel: AnyPublisher<LoadLevel, Never> { fatalError() }
     

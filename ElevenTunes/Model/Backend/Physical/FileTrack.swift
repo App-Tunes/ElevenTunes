@@ -48,10 +48,7 @@ public class FileTrack: RemoteTrack {
     }
      
     public override var id: String { url.absoluteString }
-    
-    static let _icon: Image = Image(systemName: "doc.fill")
-    public override var icon: Image { FileTrack._icon }
-    
+        
     public override func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
         let url = self.url
         return Future {
