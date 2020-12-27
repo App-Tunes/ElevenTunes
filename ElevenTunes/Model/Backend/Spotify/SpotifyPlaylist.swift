@@ -94,7 +94,7 @@ public class SpotifyPlaylist: SpotifyPlaylistBackend {
             .map { $0.flatMap { $0.items } }
             .map { items in
                 items.compactMap { item -> SpotifyTrack? in
-                    return ExistingSpotifyTrack(item.item).map { SpotifyTrack(spotify, uri: $0.uri) }
+                    return ExistingSpotifyTrack(item.item).map { SpotifyTrack(spotify, track: $0) }
                 }
             }
             .eraseToAnyPublisher()
