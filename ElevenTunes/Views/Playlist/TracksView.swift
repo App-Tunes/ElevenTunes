@@ -22,7 +22,7 @@ struct PlayTrackView: View {
             ZStack {
                 if [current, next].contains(track) {
                     Image(systemName: "play.fill")
-                        .opacity(current == track ? 1 : 0.2)
+                        .opacity(current == track ? 1 : 0.35)
                 }
                 
                 Image(systemName: "play")
