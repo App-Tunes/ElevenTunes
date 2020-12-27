@@ -7,8 +7,9 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
-class Playlist: AnyPlaylist, ObservableObject {
+class Playlist: ObservableObject {
     let backend: AnyPlaylist
     
     init(_ backend: AnyPlaylist) {
@@ -23,10 +24,13 @@ class Playlist: AnyPlaylist, ObservableObject {
         backend.anyTracks.assign(to: &$_tracks)
         backend.loadLevel.assign(to: &$_loadLevel)
         backend.attributes.assign(to: &$_attributes)
+        print(_attributes)
     }
         
     var uuid = UUID()
     var id: String { backend.id }
+    
+    var icon: Image { backend.icon }
 
     @Published var _children: [AnyPlaylist] = []
     var anyChildren: AnyPublisher<[AnyPlaylist], Never>
@@ -44,7 +48,7 @@ class Playlist: AnyPlaylist, ObservableObject {
         _attributes[attribute]
     }
 
-    func load(atLeast level: LoadLevel, deep: Bool) -> Bool {
+    func load(atLeast level: LoadLevel, deep: Bool = false) -> Bool {
         // TODO Deep, must somehow react upon other things having loaded lawl
         guard _loadLevel < level else {
             return false

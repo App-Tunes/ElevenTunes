@@ -8,8 +8,9 @@
 import Foundation
 
 public class TrackAttribute: RawRepresentable, Hashable {
-    class Typed<K>: TrackAttribute, TypedKey {
+    class Typed<K>: TrackAttribute, TypedKey, CustomStringConvertible {
         typealias Value = K
+        var description: String { rawValue }
     }
 
     public let rawValue: String

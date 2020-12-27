@@ -8,8 +8,9 @@
 import Foundation
 
 public class PlaylistAttribute: RawRepresentable, Hashable {
-    class Typed<K>: PlaylistAttribute, TypedKey {
+    class Typed<K>: PlaylistAttribute, TypedKey, CustomStringConvertible {
         typealias Value = K
+        var description: String { rawValue }
     }
 
     public let rawValue: String

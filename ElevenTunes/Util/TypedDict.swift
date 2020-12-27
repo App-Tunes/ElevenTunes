@@ -21,8 +21,9 @@ public class TypedDict<K: AnyObject & Hashable> {
     }
     
     func merge(_ dict: TypedDict<K>) {
-        // TODO
-//        contents += dict.contents
+        for (key, value) in dict.contents {
+            contents[key] = value
+        }
     }
     
     // Type hinting will have to wait for
@@ -39,5 +40,8 @@ public class TypedDict<K: AnyObject & Hashable> {
             contents[k] = newValue
         }
     }
+}
 
+extension TypedDict: CustomStringConvertible {
+    public var description: String { contents.description }
 }

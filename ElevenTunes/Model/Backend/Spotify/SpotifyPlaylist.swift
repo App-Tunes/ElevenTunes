@@ -12,12 +12,12 @@ import Combine
 import AVFoundation
 import SpotifyWebAPI
 
-struct MinimalSpotifyPlaylist: Codable, Hashable {
-    static let filters = "uri,name"
-    
-    var uri: String
-    var name: String
-}
+//struct MinimalSpotifyPlaylist: Codable, Hashable {
+//    static let filters = "uri,name"
+//
+//    var uri: String
+//    var name: String
+//}
 
 public class SpotifyPlaylist: SpotifyPlaylistBackend {
     enum SpotifyError: Error {
@@ -29,6 +29,12 @@ public class SpotifyPlaylist: SpotifyPlaylistBackend {
     init(_ spotify: Spotify, uri: String) {
         self.uri = uri
         super.init(spotify)
+    }
+        
+    init(_ spotify: Spotify, playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>) {
+        self.uri = playlist.uri
+        super.init(spotify)
+        self._attributes = SpotifyPlaylist.attributes(of: playlist)
     }
         
     public required init(from decoder: Decoder) throws {
@@ -45,6 +51,12 @@ public class SpotifyPlaylist: SpotifyPlaylistBackend {
 
     public override var id: String { uri }
 
+    static func attributes(of playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>) -> TypedDict<PlaylistAttribute> {
+        let attributes = TypedDict<PlaylistAttribute>()
+        attributes[PlaylistAttribute.title] = playlist.name
+        return attributes
+    }
+    
     static func spotifyURI(fromURL url: URL) throws -> String {
         guard
             url.host == "open.spotify.com",
@@ -58,13 +70,8 @@ public class SpotifyPlaylist: SpotifyPlaylistBackend {
 
     static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyPlaylist, Error> {
         return Future { try spotifyURI(fromURL: url) }
-            .flatMap { uri in
-                spotify.api.filteredPlaylist(uri, filters: MinimalSpotifyPlaylist.filters, additionalTypes: [.track])
-            }
-            .decodeSpotifyObject(MinimalSpotifyPlaylist.self)
-            .map { playlist in
-                SpotifyPlaylist(spotify, uri: playlist.uri)
-            }
+            .flatMap { spotify.api.playlist($0) }
+            .map { SpotifyPlaylist(spotify, playlist: $0) }
             .eraseToAnyPublisher()
     }
     
@@ -76,7 +83,7 @@ public class SpotifyPlaylist: SpotifyPlaylistBackend {
         // There are actually playlists with up to 10.000 items lol
         let paginationLimit = 100
 
-        spotify.api.playlistTracks(uri, limit: count, offset: 0)
+        let tracks = spotify.api.playlistTracks(uri, limit: count, offset: 0)
             .unfold(limit: paginationLimit) {
                 $0.offset + $0.items.count >= $0.total ? nil :
                 spotify.api.playlistTracks(uri, limit: count, offset: $0.offset + count)
@@ -88,7 +95,11 @@ public class SpotifyPlaylist: SpotifyPlaylistBackend {
                     return ExistingSpotifyTrack(item.item).map { SpotifyTrack(spotify, uri: $0.uri) }
                 }
             }
-            .sink(receiveCompletion: appLogErrors) { tracks in
+            .eraseToAnyPublisher()
+            
+        spotify.api.playlist(uri).eraseToAnyPublisher().zip(tracks)
+            .sink(receiveCompletion: appLogErrors) { (info, tracks) in
+                self._attributes = SpotifyPlaylist.attributes(of: info)
                 self._tracks = tracks
                 self._loadLevel = .detailed
             }
