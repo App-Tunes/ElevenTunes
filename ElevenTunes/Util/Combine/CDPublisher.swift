@@ -89,8 +89,6 @@ class CDPublisher<Entity>: NSObject, NSFetchedResultsControllerDelegate, Publish
             cancellable = fetchPublisher.subject.onMain().sink(receiveCompletion: { completion in
                 subscriber.receive(completion: completion)
             }, receiveValue: { value in
-                Swift.print(String(describing: subscriber))
-                Swift.print(String(describing: value))
                 _ = subscriber.receive(value)
             })
         }
