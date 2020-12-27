@@ -17,6 +17,7 @@ extension DBPlaylist {
 
     @NSManaged public var backend: PersistentPlaylist?
     @NSManaged public var backendID: String
+    @NSManaged public var isDirectory: Bool
     @NSManaged public var indexed: Bool
     @NSManaged public var cachedLoadLevel: Int16
     @NSManaged public var title: String?

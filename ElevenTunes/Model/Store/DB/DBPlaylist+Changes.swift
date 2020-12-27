@@ -71,6 +71,9 @@ extension DBPlaylist: SelfChangeWatcher {
         
         if changes.keys.contains("backend") {
             refreshObservation()
+            if let backend = backend {
+                isDirectory = backend.supportsChildren()
+            }
         }
         
         if changes.keys.contains("cachedLoadLevel") {

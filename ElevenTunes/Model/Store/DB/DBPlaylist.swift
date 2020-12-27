@@ -53,6 +53,9 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
         _anyChildren = children.array as! [DBPlaylist]
         _attributes = cachedAttributes
         _loadLevel = LoadLevel(rawValue: cachedLoadLevel) ?? .none
+        if let backend = backend {
+            isDirectory = backend.supportsChildren()
+        }
 
         refreshObservation()
     }
@@ -79,7 +82,7 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
         return backend.load(atLeast: level, deep: false, library: library)
     }
     
-    public func supportsChildren() -> Bool { backend?.supportsChildren() ?? true }
+    public func supportsChildren() -> Bool { backend?.supportsChildren() ?? isDirectory }
 
     @discardableResult
     public func add(tracks: [PersistentTrack]) -> Bool {
@@ -92,6 +95,10 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
         }
         
         // We are without backend, aka transient
+        guard !isDirectory else {
+            return false
+        }
+        
         let (tracks, _) = Library.convert(DirectLibrary(allTracks: tracks), context: context)
         addToTracks(NSOrderedSet(array: tracks))
         
@@ -109,6 +116,10 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
         }
 
         // We are without backend, aka transient
+        guard isDirectory else {
+            return false
+        }
+        
         let (_, playlists) = Library.convert(DirectLibrary(allPlaylists: children), context: context)
         addToChildren(NSOrderedSet(array: playlists))
         
