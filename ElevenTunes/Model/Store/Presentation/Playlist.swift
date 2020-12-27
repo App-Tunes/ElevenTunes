@@ -24,7 +24,6 @@ class Playlist: ObservableObject {
         backend.anyTracks.assign(to: &$_tracks)
         backend.loadLevel.assign(to: &$_loadLevel)
         backend.attributes.assign(to: &$_attributes)
-        print(_attributes)
     }
         
     var uuid = UUID()

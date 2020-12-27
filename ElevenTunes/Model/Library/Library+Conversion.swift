@@ -26,8 +26,8 @@ extension Library {
 
         let convertTrack = { (backend: PersistentTrack) -> DBTrack in
             let dbTrack = DBTrack(entity: trackModel, insertInto: context)
-            // TODO attributes
             dbTrack.backend = backend
+            dbTrack.backendID = backend.id
             return dbTrack
         }
 
@@ -66,6 +66,7 @@ extension Library {
             // TODO If already exists, return that
             let dbPlaylist = DBPlaylist(entity: playlistModel, insertInto: context)
             dbPlaylist.backend = backend
+            dbPlaylist.backendID = backend.id
             return dbPlaylist
         }
         

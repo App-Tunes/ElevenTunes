@@ -13,7 +13,8 @@ import SwiftUI
 
 @objc(DBPlaylist)
 public class DBPlaylist: NSManagedObject, AnyPlaylist {
-    var cancellables = Set<AnyCancellable>()
+    var observers = Set<AnyCancellable>()
+    var backendObservers = Set<AnyCancellable>()
 
     public var id: String { objectID.description }
     
@@ -21,39 +22,64 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
         backend?.icon ?? Image(systemName: "music.note.list")
     }
     
-    @Published private var _anyTracks: [AnyTrack] = []
+    @Published var _anyTracks: [AnyTrack] = []
     public var anyTracks: AnyPublisher<[AnyTrack], Never> {
         $_anyTracks.eraseToAnyPublisher()
     }
     
-    @Published private var _anyChildren: [AnyPlaylist] = []
+    @Published var _anyChildren: [AnyPlaylist] = []
     public var anyChildren: AnyPublisher<[AnyPlaylist], Never> {
         $_anyChildren.eraseToAnyPublisher()
     }
     
-    @Published private var _loadLevel: LoadLevel = .none
+    @Published var _loadLevel: LoadLevel = .none
     public var loadLevel: AnyPublisher<LoadLevel, Never> {
         $_loadLevel.eraseToAnyPublisher()
     }
     
-    @Published private var _attributes: TypedDict<PlaylistAttribute> = .init()
+    @Published var _attributes: TypedDict<PlaylistAttribute> = .init()
     public var attributes: AnyPublisher<TypedDict<PlaylistAttribute>, Never> {
         $_attributes.eraseToAnyPublisher()
-    }
-    
-    func pushAttributes() {
-        _attributes = cachedAttributes
     }
     
     func refreshObservation() {
         guard let context = managedObjectContext else { return }
         
-        cancellables = []
+        if observers.isEmpty {
+            let tracksFetchRequest = DBTrack.createFetchRequest()
+            tracksFetchRequest.predicate = NSPredicate(format: "ALL references = %@", self)
+            CDPublisher(request: tracksFetchRequest, context: context)
+                .sink(receiveCompletion: appLogErrors) {
+                    [weak self] in self?._anyTracks = $0
+                }
+                .store(in: &observers)
+
+            let childrenFetchRequest = Self.createFetchRequest()
+            childrenFetchRequest.predicate = NSPredicate(format: "ALL parent = %@", self)
+            CDPublisher(request: childrenFetchRequest, context: context)
+                .sink(receiveCompletion: appLogErrors) {
+                    [weak self] in self?._anyChildren = $0
+                }
+                .store(in: &observers)
+            
+            let selfFetchRequest = Self.createFetchRequest()
+            selfFetchRequest.predicate = NSPredicate(format: "self = %@", self)
+            CDPublisher(request: selfFetchRequest, context: context)
+                .sink(receiveCompletion: appLogErrors) { [unowned self] _ in
+                    _attributes = cachedAttributes
+                    _loadLevel = LoadLevel(rawValue: self.cachedLoadLevel) ?? .none
+                    refreshObservation()
+                }
+                .store(in: &observers)
+        }
+        
+        backendObservers = []
         if let backend = backend {
             backend.tracks
                 .onMain()
                 .sink { [unowned self] tracks in
-                    if indexed {
+                    let oldIDs = self.tracks.map { ($0 as! DBTrack).backendID }
+                    if indexed, oldIDs != tracks.map(\.id) {
                         let old = self.tracks
                         let (dbTracks, _) = Library.convert(DirectLibrary(allTracks: tracks), context: context)
                         self.tracks = NSOrderedSet(array: dbTracks)
@@ -62,12 +88,13 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
                     
                     _anyTracks = tracks
                 }
-                .store(in: &cancellables)
+                .store(in: &backendObservers)
             
             backend.children
                 .onMain()
                 .sink { [unowned self] children in
-                    if indexed {
+                    let oldIDs = self.children.map { ($0 as! DBPlaylist).backendID }
+                    if indexed, oldIDs != children.map(\.id) {
                         let old = self.children
                         let (_, dbPlaylists) = Library.convert(DirectLibrary(allPlaylists: children), context: context)
                         self.children = NSOrderedSet(array: dbPlaylists)
@@ -76,40 +103,19 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
                     
                     _anyChildren = children
                 }
-                .store(in: &cancellables)
+                .store(in: &backendObservers)
 
             backend.attributes
                 .onMain()
                 .sink { [unowned self] attributes in
                     merge(attributes: attributes)
                 }
-                .store(in: &cancellables)
+                .store(in: &backendObservers)
 
             backend.loadLevel.sink { [unowned self] loadLevel in
                 self._loadLevel = loadLevel
                 self.cachedLoadLevel = loadLevel.rawValue
-            }.store(in: &cancellables)
-        }
-        else {
-            do {
-                let tracksFetchRequest = DBTrack.createFetchRequest()
-                tracksFetchRequest.predicate = NSPredicate(format: "ALL references = %@", self)
-                CDPublisher(request: tracksFetchRequest, context: context)
-                    .sink(receiveCompletion: appLogErrors) {
-                        [weak self] in self?._anyTracks = $0
-                    }
-                    .store(in: &cancellables)
-
-                let childrenFetchRequest = Self.createFetchRequest()
-                childrenFetchRequest.predicate = NSPredicate(format: "ALL parent = %@", self)
-                CDPublisher(request: childrenFetchRequest, context: context)
-                    .sink(receiveCompletion: appLogErrors) {
-                        [weak self] in self?._anyChildren = $0
-                    }
-                    .store(in: &cancellables)
-                
-                // TODO Attributes stream
-            }
+            }.store(in: &backendObservers)
         }
     }
     

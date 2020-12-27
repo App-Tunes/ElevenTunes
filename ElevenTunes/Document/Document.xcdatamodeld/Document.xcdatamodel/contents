@@ -2,6 +2,7 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="20B29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="DBPlaylist" representedClassName="DBPlaylist" syncable="YES">
         <attribute name="backend" optional="YES" attributeType="Transformable" valueTransformerName="PlaylistBackendTransformer" customClassName=".PersistentPlaylist"/>
+        <attribute name="backendID" attributeType="String" defaultValueString=""/>
         <attribute name="cachedLoadLevel" attributeType="Integer 16" valueTransformerName="LoadLevelTransformer" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="indexed" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
         <attribute name="title" attributeType="String" defaultValueString="Unnamed Playlist" spotlightIndexingEnabled="YES"/>
@@ -11,12 +12,13 @@
     </entity>
     <entity name="DBTrack" representedClassName="DBTrack" syncable="YES">
         <attribute name="backend" optional="YES" attributeType="Transformable" valueTransformerName="TrackBackendTransformer" customClassName=".PersistentTrack"/>
+        <attribute name="backendID" attributeType="String" defaultValueString=""/>
         <attribute name="cachedLoadLevel" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="title" attributeType="String" defaultValueString="Unnamed Track" spotlightIndexingEnabled="YES"/>
         <relationship name="references" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DBPlaylist" inverseName="tracks" inverseEntity="DBPlaylist"/>
     </entity>
     <elements>
-        <element name="DBPlaylist" positionX="27" positionY="72" width="128" height="134"/>
-        <element name="DBTrack" positionX="18" positionY="63" width="128" height="89"/>
+        <element name="DBPlaylist" positionX="27" positionY="72" width="128" height="149"/>
+        <element name="DBTrack" positionX="18" positionY="63" width="128" height="104"/>
     </elements>
 </model>
