@@ -20,7 +20,6 @@ public class SpotifyTrack: RemoteTrack {
     
     static var _icon: Image { Image("spotify-logo") }
 
-    var spotify: Spotify
     var uri: String
     
     static func spotifyURI(fromURL url: URL) throws -> String {
@@ -34,14 +33,12 @@ public class SpotifyTrack: RemoteTrack {
         return "spotify:track:\(id)"
     }
     
-    init(_ spotify: Spotify, uri: String) {
-        self.spotify = spotify
+    init(uri: String) {
         self.uri = uri
         super.init()
     }
 
-    init(_ spotify: Spotify, track: ExistingSpotifyTrack) {
-        self.spotify = spotify
+    init(track: ExistingSpotifyTrack) {
         self.uri = track.uri
         super.init()
         self._attributes = SpotifyTrack.extractAttributes(from: track)
@@ -50,10 +47,6 @@ public class SpotifyTrack: RemoteTrack {
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard let spotify = decoder.userInfo[CodingUserInfoKey.spotify] as? Spotify else {
-            throw SpotifyDecodeError.noSpotify
-        }
-        self.spotify = spotify
         uri = try container.decode(String.self, forKey: .uri)
         try super.init(from: decoder)
     }
@@ -73,12 +66,12 @@ public class SpotifyTrack: RemoteTrack {
             .flatMap { uri in
                 spotify.api.track(uri).compactMap(ExistingSpotifyTrack.init)
             }
-            .map { SpotifyTrack(spotify, uri: $0.uri) }
+            .map { SpotifyTrack(uri: $0.uri) }
             .eraseToAnyPublisher()
     }
     
-    public override func emitter() -> AnyPublisher<AnyAudioEmitter, Error> {
-        let spotify = self.spotify
+    public override func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
+        let spotify = context.spotify
         
         let spotifyTrack = spotify.api.track(uri)
             .compactMap(ExistingSpotifyTrack.init)
@@ -104,8 +97,8 @@ public class SpotifyTrack: RemoteTrack {
         ])
     }
     
-    public override func load(atLeast level: LoadLevel) -> Bool {
-        let spotify = self.spotify
+    public override func load(atLeast level: LoadLevel, context: PlayContext) -> Bool {
+        let spotify = context.spotify
         let uri = self.uri
         
         spotify.api.track(uri)

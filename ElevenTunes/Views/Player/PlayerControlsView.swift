@@ -59,11 +59,11 @@ struct PlayerControlsView: View {
         .frame(height: 50)
     }
 }
-
-struct PlayerControlsView_Previews: PreviewProvider {
-    static var previews: some View {
-        let player = Player()
-        
-        PlayerControlsView(player: player)
-    }
-}
+//
+//struct PlayerControlsView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let player = Player()
+//        
+//        PlayerControlsView(player: player)
+//    }
+//}

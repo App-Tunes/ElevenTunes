@@ -10,7 +10,7 @@ import SwiftUI
 struct PlaylistsView: View {
     @ObservedObject var directory: Playlist
         
-    @Environment(\.interpreter) private var interpreter: ContentInterpreter!
+    @Environment(\.library) private var library: Library!
 
     var body: some View {
         List() {
@@ -27,13 +27,13 @@ struct PlaylistsView: View {
                         playlist.icon.resizable().aspectRatio(contentMode: .fit).frame(width: 15, height: 15)
                         Text(playlist[PlaylistAttribute.title] ?? "Unknown Playlist")
                     }
-                    .onAppear { playlist.load(atLeast: .minimal) }
+                    .onAppear { playlist.load(atLeast: .minimal, context: library.player.context) }
                 }
             }
         }
-        .onAppear { directory.load(atLeast: .minimal) }
+        .onAppear { directory.load(atLeast: .minimal, context: library.player.context) }
         .frame(minWidth: 0, maxWidth: 800, maxHeight: .infinity)
-        .onDrop(of: ContentInterpreter.types, delegate: PlaylistDropInterpreter(interpreter, parent: directory))
+        .onDrop(of: ContentInterpreter.types, delegate: PlaylistDropInterpreter(library.interpreter, parent: directory))
    }
 }
 

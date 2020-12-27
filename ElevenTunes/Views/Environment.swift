@@ -8,22 +8,13 @@
 import Foundation
 import SwiftUI
 
-struct SpotifyEnvironmentKey: EnvironmentKey {
-    static let defaultValue: Spotify? = nil
-}
-
-struct InterpreterEnvironmentKey: EnvironmentKey {
-    static let defaultValue: ContentInterpreter? = nil
+struct LibraryEnvironmentKey: EnvironmentKey {
+    static let defaultValue: Library? = nil
 }
 
 extension EnvironmentValues {
-    var spotify: Spotify? {
-        get { self[SpotifyEnvironmentKey] }
-        set { self[SpotifyEnvironmentKey] = newValue }
-    }
-
-    var interpreter: ContentInterpreter? {
-        get { self[InterpreterEnvironmentKey] }
-        set { self[InterpreterEnvironmentKey] = newValue }
+    var library: Library? {
+        get { self[LibraryEnvironmentKey] }
+        set { self[LibraryEnvironmentKey] = newValue }
     }
 }

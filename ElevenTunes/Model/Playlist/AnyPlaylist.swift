@@ -25,7 +25,7 @@ public protocol AnyPlaylist: AnyObject {
     var attributes: AnyPublisher<TypedDict<PlaylistAttribute>, Never> { get }
 
     @discardableResult
-    func load(atLeast level: LoadLevel, deep: Bool) -> Bool
+    func load(atLeast level: LoadLevel, deep: Bool, context: PlayContext) -> Bool
 
     @discardableResult
     func add(tracks: [PersistentTrack]) -> Bool
@@ -36,8 +36,8 @@ public protocol AnyPlaylist: AnyObject {
 
 extension AnyPlaylist {
     @discardableResult
-    public func load(atLeast level: LoadLevel) -> Bool {
-        load(atLeast: level, deep: false)
+    public func load(atLeast level: LoadLevel, context: PlayContext) -> Bool {
+        load(atLeast: level, deep: false, context: context)
     }
 }
 
@@ -56,7 +56,7 @@ public class PersistentPlaylist: NSObject, AnyPlaylist, Codable {
     public func add(children: [PersistentPlaylist]) -> Bool { false }
     
     @discardableResult
-    public func load(atLeast level: LoadLevel, deep: Bool) -> Bool {
+    public func load(atLeast level: LoadLevel, deep: Bool, context: PlayContext) -> Bool {
         fatalError()
     }
 

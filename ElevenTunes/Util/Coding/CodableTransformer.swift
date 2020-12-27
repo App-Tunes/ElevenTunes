@@ -15,17 +15,6 @@ class TypedJSONCodableTransformer<Key: Hashable & Codable, Wrapper: TypedCodable
     let decoder = JSONDecoder()
     
     override func transformedValue(_ value: Any?) -> Any? {
-        guard let data = value as? NSData else {
-            return nil
-        }
-        return try? decode(data as Data)
-    }
-    
-    func decode(_ data: Data) throws -> Wrapper {
-        try decoder.decode(Wrapper.self, from: data)
-    }
-
-    override func reverseTransformedValue(_ value: Any?) -> Any? {
         guard let value = value else { return nil }
         guard let codable = value as? Codable else {
             appLogger.error("Tried encoding uncodable object \(value)")
@@ -40,5 +29,16 @@ class TypedJSONCodableTransformer<Key: Hashable & Codable, Wrapper: TypedCodable
     
     func encode(_ object: Wrapper) throws -> Data {
         try encoder.encode(object)
+    }
+
+    override func reverseTransformedValue(_ value: Any?) -> Any? {
+        guard let data = value as? NSData else {
+            return nil
+        }
+        return try? decode(data as Data).object
+    }
+    
+    func decode(_ data: Data) throws -> Wrapper {
+        try decoder.decode(Wrapper.self, from: data)
     }
 }

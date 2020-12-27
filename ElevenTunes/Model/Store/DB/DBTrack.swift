@@ -33,8 +33,9 @@ public class DBTrack: NSManagedObject, AnyTrack {
         $_attributes.eraseToAnyPublisher()
     }
 
-    public func emitter() -> AnyPublisher<AnyAudioEmitter, Error> {
-        backend?.emitter() ?? Fail(error: EmitterFail.noBackend).eraseToAnyPublisher()
+    public func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
+        backend?.emitter(context: context)
+            ?? Fail(error: EmitterFail.noBackend).eraseToAnyPublisher()
     }
         
     public override func awakeFromFetch() { initialSetup() }
@@ -48,7 +49,7 @@ public class DBTrack: NSManagedObject, AnyTrack {
     }
 
     @discardableResult
-    public func load(atLeast level: LoadLevel) -> Bool {
+    public func load(atLeast level: LoadLevel, context: PlayContext) -> Bool {
         guard level > _loadLevel else {
             return true
         }
@@ -66,6 +67,6 @@ public class DBTrack: NSManagedObject, AnyTrack {
             return true
         }
         
-        return backend.load(atLeast: level)
+        return backend.load(atLeast: level, context: context)
     }
 }

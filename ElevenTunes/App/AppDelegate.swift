@@ -9,6 +9,10 @@ import Cocoa
 import SwiftUI
 import Combine
 
+struct GlobalSettingsLevel: SettingsLevel {
+    var spotify: Spotify?
+}
+
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
     let spotify: Spotify
@@ -24,7 +28,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let spotify = Spotify()
         self.spotify = spotify
         
-        let settingsView = SettingsView().environment(\.spotify, spotify)
+        let settingsView = SettingsView().environment(\.settingsLevel, GlobalSettingsLevel(spotify: spotify))
         self.settingsWC = .init(content: AnyView(settingsView))
     }
     

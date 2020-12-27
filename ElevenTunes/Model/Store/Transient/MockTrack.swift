@@ -46,10 +46,10 @@ class MockTrack: PersistentTrack {
         $_attributes.eraseToAnyPublisher()
     }
 
-    override func emitter() -> AnyPublisher<AnyAudioEmitter, Error> {
+    override func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
         Fail(error: MockError()).eraseToAnyPublisher()
     }
     
     @discardableResult
-    override func load(atLeast level: LoadLevel) -> Bool { true }
+    override func load(atLeast level: LoadLevel, context: PlayContext) -> Bool { true }
 }

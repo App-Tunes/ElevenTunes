@@ -19,7 +19,7 @@ import SpotifyWebAPI
 //    var name: String
 //}
 
-public class SpotifyPlaylist: SpotifyPlaylistBackend {
+public class SpotifyPlaylist: RemotePlaylist {
     enum SpotifyError: Error {
         case noURI
     }
@@ -28,14 +28,14 @@ public class SpotifyPlaylist: SpotifyPlaylistBackend {
 
     static var _icon: Image { Image("spotify-logo") }
 
-    init(_ spotify: Spotify, uri: String) {
+    init(uri: String) {
         self.uri = uri
-        super.init(spotify)
+        super.init()
     }
         
-    init(_ spotify: Spotify, playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>) {
+    init(playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>) {
         self.uri = playlist.uri
-        super.init(spotify)
+        super.init()
         self._attributes = SpotifyPlaylist.attributes(of: playlist)
     }
         
@@ -75,12 +75,12 @@ public class SpotifyPlaylist: SpotifyPlaylistBackend {
     static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyPlaylist, Error> {
         return Future { try spotifyURI(fromURL: url) }
             .flatMap { spotify.api.playlist($0) }
-            .map { SpotifyPlaylist(spotify, playlist: $0) }
+            .map { SpotifyPlaylist(playlist: $0) }
             .eraseToAnyPublisher()
     }
     
-    public override func load(atLeast level: LoadLevel, deep: Bool) -> Bool {
-        let spotify = self.spotify
+    public override func load(atLeast level: LoadLevel, deep: Bool, context: PlayContext) -> Bool {
+        let spotify = context.spotify
         let count = 100
         let uri = self.uri
         
@@ -96,7 +96,7 @@ public class SpotifyPlaylist: SpotifyPlaylistBackend {
             .map { $0.flatMap { $0.items } }
             .map { items in
                 items.compactMap { item -> SpotifyTrack? in
-                    return ExistingSpotifyTrack(item.item).map { SpotifyTrack(spotify, track: $0) }
+                    return ExistingSpotifyTrack(item.item).map { SpotifyTrack(track: $0) }
                 }
             }
             .eraseToAnyPublisher()

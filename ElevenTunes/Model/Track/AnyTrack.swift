@@ -15,11 +15,11 @@ public protocol AnyTrack: AnyObject {
     var loadLevel: AnyPublisher<LoadLevel, Never> { get }
     var attributes: AnyPublisher<TypedDict<TrackAttribute>, Never> { get }
 
-    func emitter() -> AnyPublisher<AnyAudioEmitter, Error>
+    func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error>
     var icon: Image { get }
     
     @discardableResult
-    func load(atLeast level: LoadLevel) -> Bool
+    func load(atLeast level: LoadLevel, context: PlayContext) -> Bool
 }
 
 public class PersistentTrack: NSObject, AnyTrack, Codable {
@@ -31,11 +31,11 @@ public class PersistentTrack: NSObject, AnyTrack, Codable {
     
     public var attributes: AnyPublisher<TypedDict<TrackAttribute>, Never> { fatalError() }
     
-    public func emitter() -> AnyPublisher<AnyAudioEmitter, Error> {
+    public func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
         fatalError()
     }
     
-    public func load(atLeast level: LoadLevel) -> Bool {
+    public func load(atLeast level: LoadLevel, context: PlayContext) -> Bool {
         fatalError()
     }
 }

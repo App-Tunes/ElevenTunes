@@ -11,22 +11,16 @@ import SwiftUI
 
 class LibraryDocument: NSPersistentDocument {
     override init() {
-        spotify = AppDelegate.shared.spotify
-
         super.init()
-        let oldContext = managedObjectContext!
-        managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-        managedObjectContext!.persistentStoreCoordinator = oldContext.persistentStoreCoordinator
-        managedObjectContext!.name = oldContext.name
+        let defaultContext = managedObjectContext!
+        let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        context.persistentStoreCoordinator = defaultContext.persistentStoreCoordinator
+        context.name = defaultContext.name
+        managedObjectContext = context
         
-        _library = Library(managedObjectContext: managedObjectContext!)
-        _interpreter = ContentInterpreter.createDefault(spotify: spotify)
+        _library = Library(managedObjectContext: context, spotify: AppDelegate.shared.spotify)
     }
-    
-    let spotify: Spotify
-    private var _interpreter: ContentInterpreter?
-    var interpreter: ContentInterpreter { _interpreter! }
-    
+        
     private var _library: Library?
     var library: Library { _library! }
 
@@ -37,10 +31,10 @@ class LibraryDocument: NSPersistentDocument {
     override func makeWindowControllers() {
         // Create the SwiftUI view and set the context as the value for the managedObjectContext environment keyPath.
         // Add `@Environment(\.managedObjectContext)` in the views that will need the context.
-        let contentView = ContentView(library: .constant(library))
+        let contentView = ContentView()
             .environment(\.managedObjectContext, self.managedObjectContext!)
-            .environment(\.interpreter, interpreter)
-            .environment(\.spotify, AppDelegate.shared.spotify)
+            .environment(\.library, library)
+            .environment(\.player, library.player)
 
         // Create the window and set the content view.
         let window = NSWindow(

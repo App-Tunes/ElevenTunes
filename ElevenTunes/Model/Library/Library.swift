@@ -18,13 +18,22 @@ struct DirectLibrary: AnyLibrary {
     var allPlaylists: [PersistentPlaylist] = []
 }
 
-class Library {
+public class Library {
     let managedObjectContext: NSManagedObjectContext
     let mainPlaylist: LibraryPlaylist
         
-    init(managedObjectContext: NSManagedObjectContext) {
+    let spotify: Spotify
+    let interpreter: ContentInterpreter
+    
+    let player: Player
+
+    init(managedObjectContext: NSManagedObjectContext, spotify: Spotify) {
         self.managedObjectContext = managedObjectContext
+        self.spotify = spotify
+        self.interpreter = ContentInterpreter.createDefault(spotify: spotify)
+
         self.mainPlaylist = LibraryPlaylist(managedObjectContext: managedObjectContext)
+        player = Player(context: PlayContext(spotify: spotify))
         
         NotificationCenter.default.addObserver(self, selector: #selector(objectsDidChange), name: .NSManagedObjectContextObjectsDidChange, object: managedObjectContext)
     }

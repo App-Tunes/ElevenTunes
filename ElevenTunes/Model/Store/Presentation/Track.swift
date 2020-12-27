@@ -30,13 +30,15 @@ class Track: AnyTrack, ObservableObject {
     @Published var _attributes: TypedDict<TrackAttribute> = .init()
     var attributes: AnyPublisher<TypedDict<TrackAttribute>, Never>
 
-    func emitter() -> AnyPublisher<AnyAudioEmitter, Error> { backend.emitter() }
+    func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
+        backend.emitter(context: context)
+    }
 
     var icon: Image { backend.icon }
     
     @discardableResult
-    func load(atLeast level: LoadLevel) -> Bool {
-        backend.load(atLeast: level)
+    func load(atLeast level: LoadLevel, context: PlayContext) -> Bool {
+        backend.load(atLeast: level, context: context)
     }
 
     subscript<T: TrackAttribute & TypedKey>(_ attribute: T) -> T.Value? {

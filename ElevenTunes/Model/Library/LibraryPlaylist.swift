@@ -51,7 +51,7 @@ class LibraryPlaylist: AnyPlaylist {
     }
     
     @discardableResult
-    func load(atLeast level: LoadLevel, deep: Bool) -> Bool {
+    func load(atLeast level: LoadLevel, deep: Bool, context: PlayContext) -> Bool {
         // TODO Deep
         true
     }

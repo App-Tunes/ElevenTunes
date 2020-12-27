@@ -44,7 +44,7 @@ public class FileTrack: RemoteTrack {
         return FileTrack(url)
     }
         
-    public override func emitter() -> AnyPublisher<AnyAudioEmitter, Error> {
+    public override func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
         let url = self.url
         return Future {
             let player = try AVAudioPlayer(contentsOf: url)

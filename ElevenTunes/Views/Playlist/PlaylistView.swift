@@ -9,6 +9,8 @@ import SwiftUI
 
 struct PlaylistView: View {
     @ObservedObject var playlist: Playlist
+    
+    @Environment(\.player) var player: Player!
 
     var body: some View {
         HSplitView {
@@ -35,7 +37,7 @@ struct PlaylistView: View {
 //            TrackInfoView()
         }
         .listStyle(DefaultListStyle())
-        .onAppear() { playlist.load(atLeast: .detailed) }
+        .onAppear() { playlist.load(atLeast: .detailed, context: player.context) }
     }
 }
 

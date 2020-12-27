@@ -77,7 +77,6 @@
 		806E1FF72596B2A5003EEA83 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E1FF62596B2A5003EEA83 /* Track.swift */; };
 		806E1FFC2596B2AC003EEA83 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E1FFB2596B2AC003EEA83 /* Playlist.swift */; };
 		806E20012596B6C3003EEA83 /* RemotePlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E20002596B6C3003EEA83 /* RemotePlaylist.swift */; };
-		806E20062596B887003EEA83 /* SpotifyPlaylistBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E20052596B887003EEA83 /* SpotifyPlaylistBackend.swift */; };
 		806E20222596C26A003EEA83 /* RemoteTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E20212596C26A003EEA83 /* RemoteTrack.swift */; };
 		806E202825975A0E003EEA83 /* MockTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E202725975A0E003EEA83 /* MockTrack.swift */; };
 		806E203025975A15003EEA83 /* TransientPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E202F25975A15003EEA83 /* TransientPlaylist.swift */; };
@@ -188,7 +187,6 @@
 		806E1FF62596B2A5003EEA83 /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		806E1FFB2596B2AC003EEA83 /* Playlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
 		806E20002596B6C3003EEA83 /* RemotePlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePlaylist.swift; sourceTree = "<group>"; };
-		806E20052596B887003EEA83 /* SpotifyPlaylistBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyPlaylistBackend.swift; sourceTree = "<group>"; };
 		806E20212596C26A003EEA83 /* RemoteTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTrack.swift; sourceTree = "<group>"; };
 		806E202725975A0E003EEA83 /* MockTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTrack.swift; sourceTree = "<group>"; };
 		806E202F25975A15003EEA83 /* TransientPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransientPlaylist.swift; sourceTree = "<group>"; };
@@ -456,7 +454,6 @@
 			children = (
 				80151F012593E1FD00D9539A /* api */,
 				802E2DA3259643AE00CB91EC /* SpotifyTrack.swift */,
-				806E20052596B887003EEA83 /* SpotifyPlaylistBackend.swift */,
 				802E2DA5259643AE00CB91EC /* SpotifyPlaylist.swift */,
 				802E2DA7259643AE00CB91EC /* SpotifyUserPlaylist.swift */,
 				806B28AB258ED4CE0091EA4D /* SpotifyAudioEmitter.swift */,
@@ -829,7 +826,6 @@
 				806B28D8258FB4F50091EA4D /* NSItemProvider+Combine.swift in Sources */,
 				80050839259792000055FB2D /* CDPublisher.swift in Sources */,
 				806B27EE258D7D880091EA4D /* Player.swift in Sources */,
-				806E20062596B887003EEA83 /* SpotifyPlaylistBackend.swift in Sources */,
 				806B2796258D5D540091EA4D /* PlaylistsView.swift in Sources */,
 				80151EF52593C98500D9539A /* SpotifyDeviceView.swift in Sources */,
 				80ED7691258FF41200B8B9C3 /* Array.swift in Sources */,

@@ -7,8 +7,23 @@
 
 import SwiftUI
 
+protocol SettingsLevel {
+    var spotify: Spotify? { get }
+}
+
+struct SettingsLevelEnvironmentKey: EnvironmentKey {
+    static let defaultValue: SettingsLevel? = nil
+}
+
+extension EnvironmentValues {
+    var settingsLevel: SettingsLevel? {
+        get { self[SettingsLevelEnvironmentKey] }
+        set { self[SettingsLevelEnvironmentKey] = newValue }
+    }
+}
+
 struct SettingsView: View {
-    @Environment(\.spotify) var spotify: Spotify?
+    @Environment(\.settingsLevel) var settingsLevel: SettingsLevel!
     
     enum Tabs: Hashable {
         case general, spotify
@@ -19,7 +34,7 @@ struct SettingsView: View {
             GeneralSettingsView()
                 .tag(Tabs.general)
             
-            if let spotify = spotify {
+            if let spotify = settingsLevel.spotify {
                 SpotifySettingsView(spotify: spotify)
                     .tag(Tabs.spotify)
             }

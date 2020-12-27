@@ -11,7 +11,7 @@ struct PlayTrackView: View {
     @State var playlist: Playlist
     @State var track: Track
 
-    @Environment(\.player) private var player: Player
+    @Environment(\.player) private var player: Player!
     @State var current: Track?
     @State var next: Track?
 
@@ -43,6 +43,8 @@ struct TrackView: View {
     @ObservedObject var playlist: Playlist
     @ObservedObject var track: Track
     
+    @Environment(\.player) var player: Player!
+    
     var body: some View {
         HStack {
             PlayTrackView(playlist: playlist, track: track)
@@ -61,7 +63,7 @@ struct TrackView: View {
             }
         }
         .tag(track)
-        .onAppear() { track.load(atLeast: .minimal) }
+        .onAppear() { track.load(atLeast: .minimal, context: player.context) }
     }
 }
 
@@ -70,7 +72,7 @@ struct TracksView: View {
     
     @State var selected: Track?
 
-    @Environment(\.interpreter) private var interpreter: ContentInterpreter!
+    @Environment(\.library) private var library: Library!
     
     var body: some View {
         List(selection: $selected) {
@@ -80,7 +82,7 @@ struct TracksView: View {
             }
         }
         .frame(minWidth: 200, maxWidth: .infinity, minHeight: 50, maxHeight: .infinity)
-        .onDrop(of: ContentInterpreter.types, delegate: PlaylistDropInterpreter(interpreter, parent : playlist))
+        .onDrop(of: ContentInterpreter.types, delegate: PlaylistDropInterpreter(library.interpreter, parent : playlist))
     }
 }
 

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PlayerBarView: View {
-    @Environment(\.player) private var player: Player
+    @Environment(\.player) private var player: Player!
 
     var body: some View {
         VStack {

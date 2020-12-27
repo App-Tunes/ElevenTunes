@@ -58,7 +58,7 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
     }
     
     @discardableResult
-    public func load(atLeast level: LoadLevel, deep: Bool) -> Bool {
+    public func load(atLeast level: LoadLevel, deep: Bool, context: PlayContext) -> Bool {
         guard level > _loadLevel else {
             return true
         }
@@ -76,7 +76,7 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
             return true
         }
         
-        return backend.load(atLeast: level, deep: false)
+        return backend.load(atLeast: level, deep: false, context: context)
     }
 
     @discardableResult

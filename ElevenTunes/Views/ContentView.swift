@@ -8,25 +8,20 @@
 import SwiftUI
 
 struct PlayerEnvironmentKey: EnvironmentKey {
-    static let defaultValue: Player = Player()
+    static let defaultValue: Player? = nil
 }
 
 extension EnvironmentValues {
-    var player: Player {
+    var player: Player? {
         get { self[PlayerEnvironmentKey] }
         set { self[PlayerEnvironmentKey] = newValue }
     }
 }
 
 struct ContentView: View {
-    @Binding var library: Library
     @State var isImporting: Bool = false
-
-    let player = Player()
     
-    init(library: Binding<Library>) {
-        self._library = library
-    }
+    @Environment(\.library) var library: Library!
     
     var body: some View {
         VSplitView {
@@ -37,7 +32,6 @@ struct ContentView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .layoutPriority(2)
         }
-            .environment(\.player, player)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

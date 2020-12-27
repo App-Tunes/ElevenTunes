@@ -10,6 +10,6 @@ import Foundation
 import Combine
 import SwiftUI
 
-public class SpotifyUserPlaylist: SpotifyPlaylistBackend {
+public class SpotifyUserPlaylist: RemotePlaylist {
     public override var id: String { "spotify::userplaylist" }
 }

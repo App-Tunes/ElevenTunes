@@ -8,6 +8,10 @@
 import Foundation
 import Combine
 
+public struct PlayContext {
+    var spotify: Spotify
+}
+
 class Player {
     @Published var previous: Track? {
         didSet {
@@ -15,7 +19,7 @@ class Player {
             previousEmitter =
                 oldValue?.id == previous?.id ? previousEmitter
                 : previous?.id == current?.id ? currentEmitter
-                : previous?.emitter()
+                : previous?.emitter(context: context)
         }
     }
     
@@ -26,7 +30,7 @@ class Player {
                 oldValue?.id == current?.id ? currentEmitter
                 : current?.id == next?.id ? nextEmitter
                 : current?.id == previous?.id ? previousEmitter
-                : current?.emitter()
+                : current?.emitter(context: context)
         }
     }
     @Published var next: Track? {
@@ -35,14 +39,15 @@ class Player {
             nextEmitter =
                 oldValue?.id == next?.id ? nextEmitter
                 : next?.id == current?.id ? currentEmitter
-                : next?.emitter()
+                : next?.emitter(context: context)
         }
     }
 
     @Published var isAlmostNext: Bool = false
 
     @Published var state: PlayerState = .init(isPlaying: false, currentTime: nil)
-
+    var context: PlayContext
+    
     let singlePlayer = SinglePlayer()
 
     private var currentEmitterTask: AnyCancellable?
@@ -54,7 +59,8 @@ class Player {
 
     private var historyObservers = Set<AnyCancellable>()
 
-    init() {
+    init(context: PlayContext) {
+        self.context = context
         singlePlayer.$state.assign(to: &$state)
         singlePlayer.$isAlmostDone.assign(to: &$isAlmostNext)
         singlePlayer.delegate = self

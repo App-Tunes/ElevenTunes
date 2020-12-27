@@ -51,8 +51,10 @@ class TransientPlaylist: PersistentPlaylist {
     }
 
     @discardableResult
-    override func load(atLeast level: LoadLevel, deep: Bool) -> Bool {
-        if deep { _children.forEach { $0.load(atLeast: level, deep: true) } }
+    override func load(atLeast level: LoadLevel, deep: Bool, context: PlayContext) -> Bool {
+        if deep {
+            _children.forEach { $0.load(atLeast: level, deep: true, context: context) }
+        }
         return true
     }
 
