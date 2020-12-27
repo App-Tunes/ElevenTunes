@@ -27,6 +27,7 @@ struct TracksView: View {
                             player.play(PlayHistory(playlist, at: track))
                         }
                 }
+                .frame(height: 15)
                 .onAppear() { track.load(atLeast: .minimal) }
             }
         }
