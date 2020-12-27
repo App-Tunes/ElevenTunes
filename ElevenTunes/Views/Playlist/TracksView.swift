@@ -13,7 +13,7 @@ struct BlinkingImage: View {
     @State var opacity: Double
     @State var animates: Published<Bool>.Publisher
     
-    @State var animatingOpacity: Double = 1
+    @State var animatingOpacity: Double = 0
     @State var animation: Animation = Animation.linear(duration: 0.6)
     
     var body: some View {
