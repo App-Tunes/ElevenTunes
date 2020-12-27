@@ -19,8 +19,14 @@ struct PlayTrackView: View {
         Button(action: {
             player.play(PlayHistory(playlist, at: track))
         }) {
-            Image(systemName: [current, next].contains(track) ? "play.fill" : "play")
-                .foregroundColor(current == track ? Color.primary : Color.primary.opacity(0.3))
+            ZStack {
+                if [current, next].contains(track) {
+                    Image(systemName: "play.fill")
+                        .opacity(current == track ? 1 : 0.2)
+                }
+                
+                Image(systemName: "play")
+            }
         }
         .buttonStyle(BorderlessButtonStyle())
         .disabled(track._loadLevel == .none)
