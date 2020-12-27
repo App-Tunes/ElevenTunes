@@ -35,8 +35,6 @@ public protocol AnyPlaylist: AnyObject {
 }
 
 extension AnyPlaylist {
-    public var icon: Image { Image(systemName: "music.note.list") }
-    
     @discardableResult
     public func load(atLeast level: LoadLevel) -> Bool {
         load(atLeast: level, deep: false)
@@ -45,6 +43,7 @@ extension AnyPlaylist {
 
 public class PersistentPlaylist: NSObject, AnyPlaylist, Codable {
     public var id: String { fatalError() }
+    public var icon: Image { Image(systemName: "music.note.list") }
     
     public var loadLevel: AnyPublisher<LoadLevel, Never> { fatalError() }
     

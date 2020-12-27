@@ -50,6 +50,8 @@ public class SpotifyPlaylist: SpotifyPlaylistBackend {
     }
 
     public override var id: String { uri }
+    
+    override public var icon: Image { Image("spotify-logo") }
 
     static func attributes(of playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>) -> TypedDict<PlaylistAttribute> {
         let attributes = TypedDict<PlaylistAttribute>()

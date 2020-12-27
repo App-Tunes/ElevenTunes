@@ -24,7 +24,7 @@ struct PlaylistsView: View {
             else {
                 ForEach(directory._children.map { Playlist($0) }) { playlist in
                     NavigationLink(destination: PlaylistView(playlist: playlist)) {
-                        playlist.icon
+                        playlist.icon.resizable().aspectRatio(contentMode: .fit).frame(width: 15, height: 15)
                         Text(playlist[PlaylistAttribute.title] ?? "Unknown Playlist")
                     }
                     .onAppear { playlist.load(atLeast: .minimal) }

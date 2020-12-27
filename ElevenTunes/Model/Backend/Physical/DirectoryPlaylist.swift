@@ -35,7 +35,7 @@ public class DirectoryPlaylist: RemotePlaylist {
         try super.encode(to: encoder)
     }
 
-    var icon: Image? { Image(systemName: "folder.fill") }
+    public override var icon: Image { Image(systemName: "folder.fill") }
 }
 
 extension DirectoryPlaylist {

@@ -48,6 +48,7 @@ class Playlist: ObservableObject {
         _attributes[attribute]
     }
 
+    @discardableResult
     func load(atLeast level: LoadLevel, deep: Bool = false) -> Bool {
         // TODO Deep, must somehow react upon other things having loaded lawl
         guard _loadLevel < level else {

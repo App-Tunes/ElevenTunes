@@ -36,7 +36,7 @@ public class M3UPlaylist: RemotePlaylist {
         try super.encode(to: encoder)
     }
 
-    var icon: Image { Image(systemName: "doc.text.fill") }
+    public override var icon: Image { Image(systemName: "doc.text.fill") }
 }
 
 extension M3UPlaylist {
