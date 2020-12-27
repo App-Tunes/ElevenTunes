@@ -67,6 +67,11 @@ extension Library {
             let dbTrack = DBTrack(entity: trackModel, insertInto: context)
             dbTrack.backend = backend
             dbTrack.backendID = backend.id
+            if let backend = backend as? RemoteTrack {
+                // Can use what's there already
+                dbTrack.cachedLoadLevel = backend._loadLevel.rawValue
+                dbTrack.merge(attributes: backend._attributes)
+            }
             return dbTrack
         }
 

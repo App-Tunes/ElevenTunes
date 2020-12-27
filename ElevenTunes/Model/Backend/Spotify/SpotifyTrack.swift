@@ -38,6 +38,14 @@ public class SpotifyTrack: RemoteTrack {
         super.init()
     }
 
+    init(_ spotify: Spotify, track: ExistingSpotifyTrack) {
+        self.spotify = spotify
+        self.uri = track.uri
+        super.init()
+        self._attributes = SpotifyTrack.extractAttributes(from: track)
+        self._loadLevel = .detailed
+    }
+    
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard let spotify = decoder.userInfo[CodingUserInfoKey.spotify] as? Spotify else {
@@ -88,15 +96,20 @@ public class SpotifyTrack: RemoteTrack {
             .eraseToAnyPublisher()
     }
     
+    static func extractAttributes(from track: ExistingSpotifyTrack) -> TypedDict<TrackAttribute> {
+        .init([
+            .title: track.info.name
+        ])
+    }
+    
     public override func load(atLeast level: LoadLevel) -> Bool {
         let spotify = self.spotify
         let uri = self.uri
         
         spotify.api.track(uri)
+            .compactMap(ExistingSpotifyTrack.init)
             .sink(receiveCompletion: appLogErrors) { track in
-                self._attributes = .init([
-                    .title: track.name
-                ])
+                self._attributes = SpotifyTrack.extractAttributes(from: track)
                 self._loadLevel = .detailed
             }
             .store(in: &cancellables)
