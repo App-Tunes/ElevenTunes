@@ -14,7 +14,7 @@ import SwiftUI
 @objc(DBPlaylist)
 public class DBPlaylist: NSManagedObject, AnyPlaylist {
     var cancellables = Set<AnyCancellable>()
-    
+
     public var id: String { objectID.description }
     
     public var icon: Image {
@@ -40,9 +40,9 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
         backend?.attributes ?? Just(.init()).eraseToAnyPublisher()  // TODO
     }
     
-    private func refreshObservation() {
+    func refreshObservation() {
         guard let context = managedObjectContext else { return }
-
+        
         cancellables = []
         if let backend = backend {
             backend.tracks

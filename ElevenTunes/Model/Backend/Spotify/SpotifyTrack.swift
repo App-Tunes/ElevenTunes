@@ -61,12 +61,8 @@ public class SpotifyTrack: RemoteTrack {
             .flatMap { uri in
                 spotify.api.track(uri).compactMap(ExistingSpotifyTrack.init)
             }
-            .map { convert(spotify, from: $0) }
+            .map { SpotifyTrack(spotify, uri: $0.uri) }
             .eraseToAnyPublisher()
-    }
-
-    static func convert(_ spotify: Spotify, from track: ExistingSpotifyTrack) -> SpotifyTrack {
-        SpotifyTrack(spotify, uri: track.uri)
     }
     
     public override func emitter() -> AnyPublisher<AnyAudioEmitter, Error> {
@@ -88,6 +84,22 @@ public class SpotifyTrack: RemoteTrack {
                 )) as AnyAudioEmitter
             })
             .eraseToAnyPublisher()
+    }
+    
+    public override func load(atLeast level: LoadLevel) -> Bool {
+        let spotify = self.spotify
+        let uri = self.uri
+        
+        spotify.api.track(uri)
+            .sink(receiveCompletion: appLogErrors) { track in
+                self._attributes = .init([
+                    .title: track.name
+                ])
+                self._loadLevel = .detailed
+            }
+            .store(in: &cancellables)
+        
+        return true
     }
 }
 

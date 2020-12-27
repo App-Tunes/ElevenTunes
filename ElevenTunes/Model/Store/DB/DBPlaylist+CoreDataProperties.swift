@@ -16,7 +16,23 @@ extension DBPlaylist {
         return NSFetchRequest<DBPlaylist>(entityName: "DBPlaylist")
     }
 
-    @NSManaged public var backend: PersistentPlaylist?
+//    @NSManaged public var backend: PersistentPlaylist?
+    @objc public var backend: PersistentPlaylist? {
+        set {
+            willChangeValue(forKey: "backend")
+            setPrimitiveValue(newValue, forKey: "backend")
+            didChangeValue(forKey: "backend")
+            refreshObservation()
+        }
+        get {
+            willAccessValue(forKey: "backend")
+            let value = primitiveValue(forKey: "backend") as? PersistentPlaylist
+            didAccessValue(forKey: "backend")
+            return value
+        }
+    }
+
+    
     @NSManaged public var indexed: Bool
     @NSManaged public var cachedLoadLevel: Int16
     @NSManaged public var title: String?

@@ -85,11 +85,12 @@ public class SpotifyPlaylist: SpotifyPlaylistBackend {
             .map { $0.flatMap { $0.items } }
             .map { items in
                 items.compactMap { item -> SpotifyTrack? in
-                    return ExistingSpotifyTrack(item.item).map { SpotifyTrack.convert(spotify, from: $0) }
+                    return ExistingSpotifyTrack(item.item).map { SpotifyTrack(spotify, uri: $0.uri) }
                 }
             }
             .sink(receiveCompletion: appLogErrors) { tracks in
-                
+                self._tracks = tracks
+                self._loadLevel = .detailed
             }
             .store(in: &cancellables)
         
