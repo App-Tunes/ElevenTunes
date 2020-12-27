@@ -13,19 +13,9 @@ struct PlaylistsView: View {
     @Environment(\.library) private var library: Library!
 
     var body: some View {
-        List {
-            ForEach(directory.children!, id: \.id) { playlist in
-                if playlist.backend.supportsChildren() {
-                    OutlineGroup(playlist, children: \.children ) { playlist in
-                        PlaylistRowView(playlist: playlist)
-                            .padding(.leading, 8)
-                    }
-                    .frame(height: 20)
-                }
-                else {
-                    PlaylistRowView(playlist: playlist)
-                }
-            }
+        List(directory.topLevelChildren, children: \.children ) { playlist in
+            PlaylistRowView(playlist: playlist)
+                .padding(.leading, 8)
         }
         .frame(minWidth: 0, maxWidth: 800, maxHeight: .infinity)
         .onDrop(of: ContentInterpreter.types, delegate: PlaylistDropInterpreter(library.interpreter, parent: directory))

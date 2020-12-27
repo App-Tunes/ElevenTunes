@@ -11,9 +11,11 @@ import SwiftUI
 
 class Playlist: ObservableObject {
     let backend: AnyPlaylist
+    let isTopLevel: Bool  // bit hacky but k
     
-    init(_ backend: AnyPlaylist) {
+    init(_ backend: AnyPlaylist, isTopLevel: Bool = false) {
         self.backend = backend
+        self.isTopLevel = isTopLevel
 
         anyChildren = backend.anyChildren
         anyTracks = backend.anyTracks
@@ -37,6 +39,10 @@ class Playlist: ObservableObject {
     var children: [Playlist]? {
         guard backend.supportsChildren() else { return nil }
         return _children.map { Playlist($0) }
+    }
+    
+    var topLevelChildren: [Playlist] {
+        return _children.map { Playlist($0, isTopLevel: true) }
     }
     
     @Published var _tracks: [AnyTrack] = []
