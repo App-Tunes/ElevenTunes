@@ -19,14 +19,23 @@ struct TracksView: View {
         List(selection: $selected) {
             ForEach(playlist._tracks.map { Track($0) } ) { track in
                 HStack {
-                    Image(systemName: "music.note")
-                    
-                    Text(track[TrackAttribute.title] ?? "Unknown Track")
-                        .tag(track)
-                        .onTapGesture(count: 2) {
-                            player.play(PlayHistory(playlist, at: track))
-                        }
+                    if track._loadLevel == .none {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle())
+                            .scaleEffect(0.5, anchor: .center)
+                        
+                        Text("...")
+                    }
+                    else {
+                        track.icon
+                        
+                        Text(track[TrackAttribute.title] ?? "Unknown Track")
+                            .onTapGesture(count: 2) {
+                                player.play(PlayHistory(playlist, at: track))
+                            }
+                    }
                 }
+                .tag(track)
                 .frame(height: 15)
                 .onAppear() { track.load(atLeast: .minimal) }
             }
