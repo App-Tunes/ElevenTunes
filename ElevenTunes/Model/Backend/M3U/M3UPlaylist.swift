@@ -48,15 +48,45 @@ public class M3UPlaylist: RemotePlaylist {
 
     public override var icon: Image { Image(systemName: "doc.text.fill") }
     
+    public static func interpretFile(_ file: String, relativeTo directory: URL) -> [URL] {
+        let lines = file.split(whereSeparator: \.isNewline)
+        
+        var urls: [URL] = []
+        
+        for line in lines {
+            let string = line.trimmingCharacters(in: .whitespaces)
+            let fileURL = URL(fileURLWithPath: string, relativeTo: directory).absoluteURL
+            do {
+                if try fileURL.isFileDirectory() {
+                    let dirURLs = try FileManager.default.contentsOfDirectory(at: fileURL, includingPropertiesForKeys: [.isDirectoryKey])
+                    
+                    // Append all file URLs
+                    urls += dirURLs.filter { !((try? $0.isFileDirectory()) ?? true) }
+                }
+                else {
+                    urls.append(fileURL)
+                }
+            }
+            catch {
+                // On crash, it wasn't a file URL
+                if let url = URL(string: string) {
+                    urls.append(url)
+                }
+            }
+        }
+        
+        return urls
+    }
+    
     public override func load(atLeast level: LoadLevel, deep: Bool, library: Library) -> Bool {
         let url = self.url
         let interpreter = library.interpreter
         
         Future {
-            try String(contentsOf: url).split(whereSeparator: \.isNewline)
+            try String(contentsOf: url)
         }
-        .map {
-            $0.compactMap { URL(fileURLWithPath: String($0), relativeTo: url).absoluteURL }
+        .map { file in
+            M3UPlaylist.interpretFile(file, relativeTo: url)
         }
         .flatMap {
             interpreter.interpret(urls: $0)
