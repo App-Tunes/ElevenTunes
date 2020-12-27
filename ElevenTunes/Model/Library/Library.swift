@@ -32,8 +32,10 @@ public class Library {
         self.spotify = spotify
         self.interpreter = ContentInterpreter.createDefault(spotify: spotify)
 
-        self.mainPlaylist = LibraryPlaylist(managedObjectContext: managedObjectContext)
-        player = Player(context: PlayContext(spotify: spotify))
+        let playContext = PlayContext(spotify: spotify)
+        
+        self.mainPlaylist = LibraryPlaylist(managedObjectContext: managedObjectContext, playContext: playContext)
+        player = Player(context: playContext)
         
         NotificationCenter.default.addObserver(self, selector: #selector(objectsDidChange), name: .NSManagedObjectContextObjectsDidChange, object: managedObjectContext)
     }

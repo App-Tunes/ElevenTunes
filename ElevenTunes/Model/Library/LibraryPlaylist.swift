@@ -11,21 +11,30 @@ import Combine
 
 class LibraryPlaylist: AnyPlaylist {
     let managedObjectContext: NSManagedObjectContext
-            
-    var cancellables = Set<AnyCancellable>()
+    var playContext: PlayContext
 
-    init(managedObjectContext: NSManagedObjectContext) {
+    @Published var staticPlaylists: [AnyPlaylist] = []
+
+    var cancellables = Set<AnyCancellable>()
+        
+    init(managedObjectContext: NSManagedObjectContext, playContext: PlayContext) {
         self.managedObjectContext = managedObjectContext
+        self.playContext = playContext
         
         anyTracks = CDPublisher(request: DBTrack.createFetchRequest(), context: managedObjectContext)
             .map { $0 as [AnyTrack] }
             .replaceError(with: [])
             .eraseToAnyPublisher()
 
-        anyChildren = CDPublisher(request: LibraryPlaylist.playlistFetchRequest, context: managedObjectContext)
+        _anyChildren = CDPublisher(request: LibraryPlaylist.playlistFetchRequest, context: managedObjectContext)
             .map { $0 as [AnyPlaylist] }
+            .zip($staticPlaylists.eraseError()).map { $1 + $0 }
             .replaceError(with: [])
             .eraseToAnyPublisher()
+        
+        staticPlaylists = [
+            SpotifyUserPlaylist()
+        ]
     }
     
     var id: String {
@@ -41,7 +50,9 @@ class LibraryPlaylist: AnyPlaylist {
     }
 
     var anyTracks: AnyPublisher<[AnyTrack], Never>
-    var anyChildren: AnyPublisher<[AnyPlaylist], Never>
+    
+    var _anyChildren: AnyPublisher<[AnyPlaylist], Never>!
+    var anyChildren: AnyPublisher<[AnyPlaylist], Never> { _anyChildren }
 
     static var playlistFetchRequest: NSFetchRequest<DBPlaylist> {
         let request = DBPlaylist.createFetchRequest()
@@ -57,6 +68,8 @@ class LibraryPlaylist: AnyPlaylist {
     }
     
     var icon: Image { Image(systemName: "house.fill" ) }
+    
+    func supportsChildren() -> Bool { true }  // lol imagine if this were false
     
     @discardableResult
     func add(tracks: [PersistentTrack]) -> Bool {

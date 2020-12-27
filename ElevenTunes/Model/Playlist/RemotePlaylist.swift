@@ -16,7 +16,7 @@ public class RemotePlaylist: PersistentPlaylist {
         try super.init(from: decoder)
     }
     public override func encode(to encoder: Encoder) throws { }
-
+    
     @Published var _loadLevel: LoadLevel = .none
     public override var loadLevel: AnyPublisher<LoadLevel, Never> {
         $_loadLevel.eraseToAnyPublisher()

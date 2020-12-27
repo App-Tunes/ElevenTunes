@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import Combine
+import SwiftUI
 
 public class PersistentTrack: NSObject, AnyTrack, Codable {
     public var id: String { fatalError() }

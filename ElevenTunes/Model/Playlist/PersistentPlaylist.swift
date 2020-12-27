@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import Combine
+import SwiftUI
 
 public class PersistentPlaylist: NSObject, AnyPlaylist, Codable {
     public var id: String { fatalError() }
@@ -15,6 +17,8 @@ public class PersistentPlaylist: NSObject, AnyPlaylist, Codable {
     
     public var attributes: AnyPublisher<TypedDict<PlaylistAttribute>, Never> { fatalError() }
     
+    public func supportsChildren() -> Bool { false }
+
     @discardableResult
     public func add(tracks: [PersistentTrack]) -> Bool { false }
     

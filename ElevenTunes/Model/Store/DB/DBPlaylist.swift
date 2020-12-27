@@ -78,6 +78,8 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
         
         return backend.load(atLeast: level, deep: false, context: context)
     }
+    
+    public func supportsChildren() -> Bool { backend?.supportsChildren() ?? true }
 
     @discardableResult
     public func add(tracks: [PersistentTrack]) -> Bool {

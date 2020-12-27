@@ -34,6 +34,11 @@ class Playlist: ObservableObject {
     @Published var _children: [AnyPlaylist] = []
     var anyChildren: AnyPublisher<[AnyPlaylist], Never>
     
+    var children: [Playlist]? {
+        guard backend.supportsChildren() else { return nil }
+        return _children.map { Playlist($0) }
+    }
+    
     @Published var _tracks: [AnyTrack] = []
     var anyTracks: AnyPublisher<[AnyTrack], Never>
     

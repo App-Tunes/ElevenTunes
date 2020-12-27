@@ -7,31 +7,48 @@
 
 import SwiftUI
 
+struct PlaylistRowView: View {
+    @ObservedObject var playlist: Playlist
+    
+    @Environment(\.library) private var library: Library!
+
+    var body: some View {
+        HStack {
+            if playlist._loadLevel < .minimal {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .scaleEffect(0.5)
+                
+                Text("...").foregroundColor(Color.primary.opacity(0.5))
+            }
+            
+            NavigationLink(destination: PlaylistView(playlist: playlist)) {
+                playlist.icon.resizable().aspectRatio(contentMode: .fit).frame(width: 15, height: 15)
+                Text(playlist[PlaylistAttribute.title] ?? "Unknown Playlist")
+            }
+        }
+        .onAppear { playlist.load(atLeast: .minimal, context: library.player.context) }
+    }
+}
+
 struct PlaylistsView: View {
     @ObservedObject var directory: Playlist
         
     @Environment(\.library) private var library: Library!
 
     var body: some View {
-        List() {
-            if directory._loadLevel < .minimal {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle())
-            }
-            else if directory._children.isEmpty {
-                Text("No Contents!")
-            }
-            else {
-                ForEach(directory._children.map { Playlist($0) }) { playlist in
-                    NavigationLink(destination: PlaylistView(playlist: playlist)) {
-                        playlist.icon.resizable().aspectRatio(contentMode: .fit).frame(width: 15, height: 15)
-                        Text(playlist[PlaylistAttribute.title] ?? "Unknown Playlist")
+        List {
+            ForEach(directory.children!, id: \.id) { playlist in
+                if playlist.backend.supportsChildren() {
+                    OutlineGroup(playlist, children: \.children ) { playlist in
+                        PlaylistRowView(playlist: playlist)
                     }
-                    .onAppear { playlist.load(atLeast: .minimal, context: library.player.context) }
+                }
+                else {
+                    PlaylistRowView(playlist: playlist)
                 }
             }
         }
-        .onAppear { directory.load(atLeast: .minimal, context: library.player.context) }
         .frame(minWidth: 0, maxWidth: 800, maxHeight: .infinity)
         .onDrop(of: ContentInterpreter.types, delegate: PlaylistDropInterpreter(library.interpreter, parent: directory))
    }

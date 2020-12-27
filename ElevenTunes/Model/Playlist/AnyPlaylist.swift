@@ -27,6 +27,8 @@ public protocol AnyPlaylist: AnyObject {
     @discardableResult
     func load(atLeast level: LoadLevel, deep: Bool, context: PlayContext) -> Bool
 
+    func supportsChildren() -> Bool  // AKA isFertile
+    
     @discardableResult
     func add(tracks: [PersistentTrack]) -> Bool
     
