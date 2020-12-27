@@ -40,8 +40,8 @@ class SinglePlayer {
             
             if timeLeft > SinglePlayer.timeInAnAlmost {
                 isAlmostDone = false
-                almostDoneTimer = Timer.scheduledTimer(withTimeInterval: duration - currentTime, repeats: false, block: { [unowned self] _ in
-                    self.isAlmostDone = true
+                almostDoneTimer = Timer.scheduledTimer(withTimeInterval: duration - currentTime, repeats: false, block: { [weak self] _ in
+                    self?.isAlmostDone = true
                 })
             }
             else {
