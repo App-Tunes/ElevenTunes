@@ -27,6 +27,7 @@ struct PlaylistRowView: View {
                 Text(playlist[PlaylistAttribute.title] ?? "Unknown Playlist")
             }
         }
+        .frame(height: 15)
         .onAppear { playlist.load(atLeast: .minimal, context: library.player.context) }
     }
 }
@@ -42,7 +43,9 @@ struct PlaylistsView: View {
                 if playlist.backend.supportsChildren() {
                     OutlineGroup(playlist, children: \.children ) { playlist in
                         PlaylistRowView(playlist: playlist)
+                            .padding(.leading, 8)
                     }
+                    .frame(height: 20)
                 }
                 else {
                     PlaylistRowView(playlist: playlist)
