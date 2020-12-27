@@ -14,4 +14,8 @@ extension NSManagedObjectContext {
         child.parent = self
         return child
     }
+    
+    func translate<T: NSManagedObject>(_ object: T) -> T? {
+        self.object(with: object.objectID) as? T
+    }
 }

@@ -10,6 +10,8 @@ import SwiftUI
 import Combine
 
 extension ContentInterpreter {
+    struct LoadError: Error {}
+    
     func interpret(drop info: DropInfo) -> AnyPublisher<[Content], Error>? {
         var publishers: [AnyPublisher<Content, Error>] = []
 
@@ -17,10 +19,14 @@ extension ContentInterpreter {
             for provider in info.itemProviders(for: [type]) {
                 publishers.append(
                     provider.loadItem(forType: type)
+                        .mapError { _ in LoadError() }
                         .tryFlatMap { item in try self.interpret(item, type: type) }
                         .catch { error -> AnyPublisher<Content, Error> in
-                            appLogger.error("Error reading track: \(error)")
-                            return Empty<Content, Error>(completeImmediately: true).eraseToAnyPublisher()
+                            if !(error is LoadError) {
+                                appLogger.error("Error reading content: \(error)")
+                            }
+                            return Empty<Content, Error>(completeImmediately: true)
+                                .eraseToAnyPublisher()
                         }
                         .eraseToAnyPublisher()
                     )

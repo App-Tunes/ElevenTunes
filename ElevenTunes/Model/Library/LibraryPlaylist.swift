@@ -88,7 +88,7 @@ class LibraryPlaylist: AnyPlaylist {
                 DirectLibrary(allPlaylists: children),
                 context: context
             )
-            
+
             do {
                 try context.save()
             }

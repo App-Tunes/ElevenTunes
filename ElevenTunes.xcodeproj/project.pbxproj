@@ -44,6 +44,9 @@
 		8053381625989A7A006F06DC /* NSManagedObjectContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8053381525989A7A006F06DC /* NSManagedObjectContext.swift */; };
 		8053381E2598A871006F06DC /* NSManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8053381D2598A871006F06DC /* NSManagedObject.swift */; };
 		805338232598BA5B006F06DC /* Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805338222598BA5B006F06DC /* Sequence.swift */; };
+		805338282598C5B5006F06DC /* DBTrack+Attributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805338272598C5B5006F06DC /* DBTrack+Attributes.swift */; };
+		8053382D2598D5F3006F06DC /* DBPlaylist+Changes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8053382C2598D5F3006F06DC /* DBPlaylist+Changes.swift */; };
+		805338322598D5F9006F06DC /* DBTrack+Changes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805338312598D5F9006F06DC /* DBTrack+Changes.swift */; };
 		806B2790258D5CBD0091EA4D /* TracksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B278F258D5CBD0091EA4D /* TracksView.swift */; };
 		806B2796258D5D540091EA4D /* PlaylistsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B2795258D5D540091EA4D /* PlaylistsView.swift */; };
 		806B27C1258D69470091EA4D /* LibraryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B27C0258D69470091EA4D /* LibraryMock.swift */; };
@@ -152,6 +155,9 @@
 		8053381525989A7A006F06DC /* NSManagedObjectContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSManagedObjectContext.swift; sourceTree = "<group>"; };
 		8053381D2598A871006F06DC /* NSManagedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSManagedObject.swift; sourceTree = "<group>"; };
 		805338222598BA5B006F06DC /* Sequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sequence.swift; sourceTree = "<group>"; };
+		805338272598C5B5006F06DC /* DBTrack+Attributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DBTrack+Attributes.swift"; sourceTree = "<group>"; };
+		8053382C2598D5F3006F06DC /* DBPlaylist+Changes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DBPlaylist+Changes.swift"; sourceTree = "<group>"; };
+		805338312598D5F9006F06DC /* DBTrack+Changes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DBTrack+Changes.swift"; sourceTree = "<group>"; };
 		806B278F258D5CBD0091EA4D /* TracksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksView.swift; sourceTree = "<group>"; };
 		806B2795258D5D540091EA4D /* PlaylistsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsView.swift; sourceTree = "<group>"; };
 		806B27C0258D69470091EA4D /* LibraryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryMock.swift; sourceTree = "<group>"; };
@@ -296,8 +302,11 @@
 				800508112597761C0055FB2D /* DBPlaylist.swift */,
 				800508122597761C0055FB2D /* DBPlaylist+CoreDataProperties.swift */,
 				800508622598108A0055FB2D /* DBPlaylist+Attributes.swift */,
+				8053382C2598D5F3006F06DC /* DBPlaylist+Changes.swift */,
 				800508132597761C0055FB2D /* DBTrack.swift */,
 				800508142597761C0055FB2D /* DBTrack+CoreDataProperties.swift */,
+				805338272598C5B5006F06DC /* DBTrack+Attributes.swift */,
+				805338312598D5F9006F06DC /* DBTrack+Changes.swift */,
 			);
 			path = DB;
 			sourceTree = "<group>";
@@ -746,8 +755,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				808A761F2593F2EA00B0A9CE /* ContentInterpreter.swift in Sources */,
+				805338322598D5F9006F06DC /* DBTrack+Changes.swift in Sources */,
 				806E20012596B6C3003EEA83 /* RemotePlaylist.swift in Sources */,
 				808A76242593FF4900B0A9CE /* ContentInterpreter+Interpreters.swift in Sources */,
+				8053382D2598D5F3006F06DC /* DBPlaylist+Changes.swift in Sources */,
 				80050825259778340055FB2D /* DBTrack+CoreDataProperties.swift in Sources */,
 				806B28C8258F93D90091EA4D /* Spotify.swift in Sources */,
 				806B2840258E5A960091EA4D /* SinglePlayer.swift in Sources */,
@@ -768,6 +779,7 @@
 				802E2CD2259607E300CB91EC /* Library.swift in Sources */,
 				8005085E259802B60055FB2D /* RawRepresentable.swift in Sources */,
 				802E2CF52596359300CB91EC /* Track+Attributes.swift in Sources */,
+				805338282598C5B5006F06DC /* DBTrack+Attributes.swift in Sources */,
 				802E2D8A259640BF00CB91EC /* DirectoryPlaylist.swift in Sources */,
 				802E2D8C259640BF00CB91EC /* FileTrack.swift in Sources */,
 				802E2CC9259602F200CB91EC /* SettingsWindowController.swift in Sources */,

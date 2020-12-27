@@ -16,22 +16,53 @@ enum EmitterFail: Error {
 
 @objc(DBTrack)
 public class DBTrack: NSManagedObject, AnyTrack {
+    var backendObservers = Set<AnyCancellable>()
+
     public var id: String { objectID.description }
     
+    @Published var _loadLevel: LoadLevel = .none
     public var loadLevel: AnyPublisher<LoadLevel, Never> {
-        backend?.loadLevel ?? Just(.detailed).eraseToAnyPublisher()
+        $_loadLevel.eraseToAnyPublisher()
     }
-
+    
+    @Published var _attributes: TypedDict<TrackAttribute> = .init()
     public var attributes: AnyPublisher<TypedDict<TrackAttribute>, Never> {
-        backend?.attributes ?? Just(.init()).eraseToAnyPublisher()
+        $_attributes.eraseToAnyPublisher()
     }
 
     public func emitter() -> AnyPublisher<AnyAudioEmitter, Error> {
         backend?.emitter() ?? Fail(error: EmitterFail.noBackend).eraseToAnyPublisher()
     }
-    
+        
+    public override func awakeFromFetch() { initialSetup() }
+    public override func awakeFromInsert() { initialSetup() }
+
+    func initialSetup() {
+        _attributes = cachedAttributes
+        _loadLevel = LoadLevel(rawValue: cachedLoadLevel) ?? .none
+
+        refreshObservation()
+    }
+
     @discardableResult
     public func load(atLeast level: LoadLevel) -> Bool {
-        return backend?.load(atLeast: level) ?? true
+        guard level > _loadLevel else {
+            return true
+        }
+        
+        guard let backend = backend else {
+            // Fetch requests have already set the values
+            _loadLevel = .detailed
+            return true
+        }
+        
+        let currentLoadLevel = LoadLevel(rawValue: cachedLoadLevel) ?? .none
+        if currentLoadLevel >= level {
+            // We can use DB cache! Yay!
+            _loadLevel = currentLoadLevel
+            return true
+        }
+        
+        return backend.load(atLeast: level)
     }
 }

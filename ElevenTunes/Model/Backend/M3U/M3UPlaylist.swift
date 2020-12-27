@@ -12,6 +12,10 @@ import SwiftUI
 import Combine
 
 public class M3UPlaylist: RemotePlaylist {
+    enum InterpretationError: Error {
+        case noFile
+    }
+    
     var url: URL
     
     init(_ url: URL) {
@@ -20,7 +24,10 @@ public class M3UPlaylist: RemotePlaylist {
     }
     
     static func create(fromURL url: URL) throws -> M3UPlaylist {
-        // TODO Only if it's really an M3U
+        if try url.isFileDirectory() {
+            throw InterpretationError.noFile
+        }
+        
         return M3UPlaylist(url)
     }
 

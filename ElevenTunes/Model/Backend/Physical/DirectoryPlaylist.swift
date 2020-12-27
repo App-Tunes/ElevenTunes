@@ -11,6 +11,10 @@ import SwiftUI
 import Combine
 
 public class DirectoryPlaylist: RemotePlaylist {
+    enum InterpretationError: Error {
+        case noDirectory
+    }
+
     var url: URL
     
     init(_ url: URL) {
@@ -19,7 +23,10 @@ public class DirectoryPlaylist: RemotePlaylist {
     }
     
     static func create(fromURL url: URL) throws -> DirectoryPlaylist {
-        // TODO Only if url is directory
+        if !(try url.isFileDirectory()) {
+            throw InterpretationError.noDirectory
+        }
+
         return DirectoryPlaylist(url)
     }
     

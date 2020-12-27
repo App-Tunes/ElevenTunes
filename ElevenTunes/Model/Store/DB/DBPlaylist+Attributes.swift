@@ -8,6 +8,10 @@
 import Foundation
 
 extension DBPlaylist {
+    static let attributeProperties = Set([
+        "title"
+    ])
+
     func merge(attributes: TypedDict<PlaylistAttribute>) {
         if let title = attributes[PlaylistAttribute.title] { self.title = title }
         _attributes = cachedAttributes

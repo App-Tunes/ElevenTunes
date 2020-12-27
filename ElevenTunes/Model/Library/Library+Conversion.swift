@@ -98,7 +98,7 @@ extension Library {
         for (playlist, children) in playlistChildren {
             playlist.addToChildren(NSOrderedSet(array: children.map { playlistsByID[$0.id]! }))
         }
-
+                    
         // Finally, gather back what was originally asked
         return (
             library.allTracks.map { tracksByID[$0.id]! },
