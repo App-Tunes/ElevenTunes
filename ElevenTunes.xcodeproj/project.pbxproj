@@ -48,6 +48,7 @@
 		8053382D2598D5F3006F06DC /* DBPlaylist+Changes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8053382C2598D5F3006F06DC /* DBPlaylist+Changes.swift */; };
 		805338322598D5F9006F06DC /* DBTrack+Changes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805338312598D5F9006F06DC /* DBTrack+Changes.swift */; };
 		805338382598FD2E006F06DC /* Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805338372598FD2E006F06DC /* Animation.swift */; };
+		8053383E2599002A006F06DC /* BlinkingImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8053383D2599002A006F06DC /* BlinkingImage.swift */; };
 		806B2790258D5CBD0091EA4D /* TracksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B278F258D5CBD0091EA4D /* TracksView.swift */; };
 		806B2796258D5D540091EA4D /* PlaylistsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B2795258D5D540091EA4D /* PlaylistsView.swift */; };
 		806B27C1258D69470091EA4D /* LibraryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B27C0258D69470091EA4D /* LibraryMock.swift */; };
@@ -160,6 +161,7 @@
 		8053382C2598D5F3006F06DC /* DBPlaylist+Changes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DBPlaylist+Changes.swift"; sourceTree = "<group>"; };
 		805338312598D5F9006F06DC /* DBTrack+Changes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DBTrack+Changes.swift"; sourceTree = "<group>"; };
 		805338372598FD2E006F06DC /* Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animation.swift; sourceTree = "<group>"; };
+		8053383D2599002A006F06DC /* BlinkingImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkingImage.swift; sourceTree = "<group>"; };
 		806B278F258D5CBD0091EA4D /* TracksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksView.swift; sourceTree = "<group>"; };
 		806B2795258D5D540091EA4D /* PlaylistsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsView.swift; sourceTree = "<group>"; };
 		806B27C0258D69470091EA4D /* LibraryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryMock.swift; sourceTree = "<group>"; };
@@ -334,9 +336,18 @@
 		805338362598FD28006F06DC /* SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
+				8053383C2599001B006F06DC /* Views */,
 				805338372598FD2E006F06DC /* Animation.swift */,
 			);
 			path = SwiftUI;
+			sourceTree = "<group>";
+		};
+		8053383C2599001B006F06DC /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8053383D2599002A006F06DC /* BlinkingImage.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		806B2794258D5D390091EA4D /* Navigation */ = {
@@ -785,6 +796,7 @@
 				80AD6952258825FA00192BED /* ElevenTunesApp.swift in Sources */,
 				802E2CED259614EC00CB91EC /* AnyPlaylist.swift in Sources */,
 				800508632598108A0055FB2D /* DBPlaylist+Attributes.swift in Sources */,
+				8053383E2599002A006F06DC /* BlinkingImage.swift in Sources */,
 				805338232598BA5B006F06DC /* Sequence.swift in Sources */,
 				8005083E2597F45B0055FB2D /* CodableRegistry.swift in Sources */,
 				802E2CD2259607E300CB91EC /* Library.swift in Sources */,

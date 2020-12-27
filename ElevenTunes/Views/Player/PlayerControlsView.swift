@@ -32,20 +32,19 @@ struct PlayerControlsView: View {
                 Button(action: {
                     player.toggle()
                 }) {
-                    if isPlaying {
-                        Image(systemName: "pause.fill")
-                    }
-                    else {
-                        Image(systemName: "play.fill")
-                    }
+                    Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                        .font(.system(size: 20))
                 }
                     .buttonStyle(BorderlessButtonStyle())
                     .keyboardShortcut(.space, modifiers: [])
-                
+
                 Button(action: {
                     player.forwards()
                 }) {
-                    Image(systemName: "forward.end.fill")
+                    ZStack {
+                        Image(systemName: "forward.end.fill")
+                            .blinking(opacity: (1, 0.65), animates: player.$isAlmostNext)
+                    }
                 }
                     .buttonStyle(BorderlessButtonStyle())
                     .disabled(next == nil && current == nil)
