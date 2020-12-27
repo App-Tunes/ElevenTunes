@@ -9,6 +9,23 @@ import Foundation
 import CoreData
 
 extension Library {
+    static func existingTracks(forBackends backends: Set<PersistentTrack>, context: NSManagedObjectContext) throws -> [PersistentTrack: DBTrack] {
+        let fetchRequest = DBTrack.createFetchRequest()
+        fetchRequest.predicate = .init(format: "backendID IN %@", backends.map { $0.id })
+        let existing = try context.fetch(fetchRequest)
+        let backendFor = { (track: DBTrack) in backends.first { $0.id == track.backendID }! }
+        return Dictionary(uniqueKeysWithValues: existing.map { (backendFor($0), $0) })
+    }
+    
+    static func existingPlaylists(forBackends backends: Set<PersistentPlaylist>, context: NSManagedObjectContext) throws -> [PersistentPlaylist: DBPlaylist] {
+        let fetchRequest = DBPlaylist.createFetchRequest()
+        fetchRequest.predicate = .init(format: "backendID IN %@", backends.map { $0.id })
+        let existing = try context.fetch(fetchRequest)
+        let backendFor = { (playlist: DBPlaylist) in backends.first { $0.id == playlist.backendID }! }
+        return Dictionary(uniqueKeysWithValues: existing.map { (backendFor($0), $0) })
+    }
+    
+
     static func convert(_ library: DirectLibrary, context: NSManagedObjectContext) -> ([DBTrack], [DBPlaylist]) {
         guard let model = context.persistentStoreCoordinator?.managedObjectModel else {
             fatalError("Failed to find model in MOC")
@@ -19,10 +36,25 @@ extension Library {
         else {
             fatalError("Failed to find track / playlist models in MOC")
         }
+        
+        // ================= Discover all static content =====================
+        // (all deeper playlists' conversion can be deferred)
+        
+        var allTracks = Set(library.allTracks)
+        var allPlaylists = Set<PersistentPlaylist>()
+        
+        // Unfold playlists
+        for backend in flatSequence(first: library.allPlaylists, next: { backend in
+            if let backend = backend as? TransientPlaylist {
+                allTracks.formUnion(backend._tracks)
+                return backend._children
+            }
+            return []
+        }) {
+            allPlaylists.insert(backend)
+        }
 
         // ================= Convert Tracks =====================
-        
-        var tracksByID: [String: DBTrack] = [:]
 
         let convertTrack = { (backend: PersistentTrack) -> DBTrack in
             let dbTrack = DBTrack(entity: trackModel, insertInto: context)
@@ -31,34 +63,22 @@ extension Library {
             return dbTrack
         }
 
-        let convertedTrack = { (backend: PersistentTrack) -> DBTrack in
-            if let track = tracksByID[backend.id] { return track }
-            let dbTrack = convertTrack(backend)
-            tracksByID[backend.id] = dbTrack
-            return dbTrack
-        }
+        let existingTracks = (try? Self.existingTracks(forBackends: allTracks, context: context)) ?? [:]
         
-        let originalTracks = library.allTracks.map(convertedTrack)
+        let tracksByID = Dictionary(uniqueKeysWithValues: allTracks.map { ($0.id, existingTracks[$0] ?? convertTrack($0)) })
         
-        // ================= Convert Static Playlists =====================
-        // (all other playlists' conversion can be deferred)
+        // ================= Convert Playlists =====================
+        // (tracks are guaranteed at this point)
         
-        var playlistsByID: [String: DBPlaylist] = [:]
-        var playlistChildren: [DBPlaylist: [String]] = [:]
-        var playlistsToConvert = library.allPlaylists
+        var playlistChildren: [DBPlaylist: [PersistentPlaylist]] = [:]
         
         let convertPlaylist = { (backend: PersistentPlaylist) -> DBPlaylist in
             if let backend = backend as? TransientPlaylist {
                 let dbPlaylist = DBPlaylist(entity: playlistModel, insertInto: context)
                 
-                let tracks = backend._tracks.map(convertedTrack)
-                dbPlaylist.addToTracks(NSOrderedSet(array: tracks))
-                
-                let children = backend._children
-                playlistsToConvert += children
-                playlistChildren[dbPlaylist] = children.map(\.id)
-                
+                dbPlaylist.addToTracks(NSOrderedSet(array: backend._tracks.map { tracksByID[$0.id]! }))
                 dbPlaylist.merge(attributes: backend._attributes)
+                playlistChildren[dbPlaylist] = backend._children
                 
                 return dbPlaylist
             }
@@ -69,27 +89,21 @@ extension Library {
             dbPlaylist.backendID = backend.id
             return dbPlaylist
         }
+
+        let existingPlaylists = (try? Self.existingPlaylists(forBackends: allPlaylists, context: context)) ?? [:]
+        let playlistsByID = Dictionary(uniqueKeysWithValues: allPlaylists.map { ($0.id, existingPlaylists[$0] ?? convertPlaylist($0)) })
         
-        let convertedPlaylist = { (backend: PersistentPlaylist) -> DBPlaylist in
-            if let playlist = playlistsByID[backend.id] { return playlist }
-            let dbPlaylist = convertPlaylist(backend)
-            playlistsByID[backend.id] = dbPlaylist
-            return dbPlaylist
-        }
-        
-        let originalPlaylists = playlistsToConvert.map(convertedPlaylist)
-        
-        // ================= Convert Static Children =====================
-        
-        while let backend = playlistsToConvert.popLast() {
-            _ = convertedPlaylist(backend)
-        }
-        
+        // ================= Update Children =====================
+        // (playlists are guaranteed at this point)
+
         for (playlist, children) in playlistChildren {
-            let children = children.map { playlistsByID[$0]! }
-            playlist.addToChildren(NSOrderedSet(array: children))
+            playlist.addToChildren(NSOrderedSet(array: children.map { playlistsByID[$0.id]! }))
         }
-        
-        return (originalTracks, originalPlaylists)
+
+        // Finally, gather back what was originally asked
+        return (
+            library.allTracks.map { tracksByID[$0.id]! },
+            library.allPlaylists.map { playlistsByID[$0.id]! }
+        )
     }
 }
