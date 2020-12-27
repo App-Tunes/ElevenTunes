@@ -57,6 +57,13 @@ extension Library {
         // ================= Convert Tracks =====================
 
         let convertTrack = { (backend: PersistentTrack) -> DBTrack in
+            if let backend = backend as? MockTrack {
+                let dbTrack = DBTrack(entity: trackModel, insertInto: context)
+                dbTrack.merge(attributes: backend._attributes)
+                dbTrack.cachedLoadLevel = LoadLevel.detailed.rawValue
+                return dbTrack
+            }
+            
             let dbTrack = DBTrack(entity: trackModel, insertInto: context)
             dbTrack.backend = backend
             dbTrack.backendID = backend.id

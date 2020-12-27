@@ -56,6 +56,8 @@ public class SpotifyTrack: RemoteTrack {
 
     public override var id: String { uri }
 
+    override public var icon: Image { Image("spotify-logo") }
+
     static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyTrack, Error> {
         return Future { try spotifyURI(fromURL: url) }
             .flatMap { uri in

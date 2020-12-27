@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import Combine
+import SwiftUI
 
 enum EmitterFail: Error {
     case noBackend
@@ -19,6 +20,8 @@ public class DBTrack: NSManagedObject, AnyTrack {
     var backendObservers = Set<AnyCancellable>()
 
     public var id: String { objectID.description }
+    
+    public var icon: Image { backend?.icon ?? Image(systemName: "questionmark") }
     
     @Published var _loadLevel: LoadLevel = .none
     public var loadLevel: AnyPublisher<LoadLevel, Never> {

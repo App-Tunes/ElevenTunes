@@ -25,6 +25,8 @@ public protocol AnyTrack: AnyObject {
 public class PersistentTrack: NSObject, AnyTrack, Codable {
     public var id: String { fatalError() }
     
+    public var icon: Image { Image(systemName: "music.note") }
+    
     public var loadLevel: AnyPublisher<LoadLevel, Never> { fatalError() }
     
     public var attributes: AnyPublisher<TypedDict<TrackAttribute>, Never> { fatalError() }
@@ -36,10 +38,6 @@ public class PersistentTrack: NSObject, AnyTrack, Codable {
     public func load(atLeast level: LoadLevel) -> Bool {
         fatalError()
     }
-}
-
-extension AnyTrack {
-    public var icon: Image { Image(systemName: "music.note") }
 }
 
 class TrackBackendTypedCodable: TypedCodable<String> {
