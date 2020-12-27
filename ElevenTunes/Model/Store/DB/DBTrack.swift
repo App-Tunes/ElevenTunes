@@ -49,7 +49,7 @@ public class DBTrack: NSManagedObject, AnyTrack {
     }
 
     @discardableResult
-    public func load(atLeast level: LoadLevel, context: PlayContext) -> Bool {
+    public func load(atLeast level: LoadLevel, library: Library) -> Bool {
         guard level > _loadLevel else {
             return true
         }
@@ -67,6 +67,6 @@ public class DBTrack: NSManagedObject, AnyTrack {
             return true
         }
         
-        return backend.load(atLeast: level, context: context)
+        return backend.load(atLeast: level, library: library)
     }
 }

@@ -19,7 +19,7 @@ public protocol AnyTrack: AnyObject {
     var icon: Image { get }
     
     @discardableResult
-    func load(atLeast level: LoadLevel, context: PlayContext) -> Bool
+    func load(atLeast level: LoadLevel, library: Library) -> Bool
 }
 
 class TrackBackendTypedCodable: TypedCodable<String> {

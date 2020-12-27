@@ -21,6 +21,7 @@ public class M3UPlaylist: RemotePlaylist {
     init(_ url: URL) {
         self.url = url
         super.init()
+        _attributes[PlaylistAttribute.title] = url.lastPathComponent
     }
     
     static func create(fromURL url: URL) throws -> M3UPlaylist {
@@ -42,8 +43,35 @@ public class M3UPlaylist: RemotePlaylist {
         try container.encode(url, forKey: .url)
         try super.encode(to: encoder)
     }
+    
+    public override var id: String { url.absoluteString }
 
     public override var icon: Image { Image(systemName: "doc.text.fill") }
+    
+    public override func load(atLeast level: LoadLevel, deep: Bool, library: Library) -> Bool {
+        let url = self.url
+        let interpreter = library.interpreter
+        
+        Future {
+            try String(contentsOf: url).split(whereSeparator: \.isNewline)
+        }
+        .map {
+            $0.compactMap { URL(fileURLWithPath: String($0), relativeTo: url).absoluteURL }
+        }
+        .flatMap {
+            interpreter.interpret(urls: $0)
+                ?? Just([]).eraseError().eraseToAnyPublisher()
+        }
+        .sink(receiveCompletion: appLogErrors(_:)) { [unowned self] contents in
+            let library = ContentInterpreter.collect(fromContents: contents)
+            _tracks = library.0
+            _children = library.1
+            _attributes[PlaylistAttribute.title] = url.lastPathComponent
+            _loadLevel = .detailed
+        }.store(in: &cancellables)
+
+        return true
+    }
 }
 
 extension M3UPlaylist {

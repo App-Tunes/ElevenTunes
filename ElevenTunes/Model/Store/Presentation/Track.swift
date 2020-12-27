@@ -37,8 +37,8 @@ class Track: AnyTrack, ObservableObject {
     var icon: Image { backend.icon }
     
     @discardableResult
-    func load(atLeast level: LoadLevel, context: PlayContext) -> Bool {
-        backend.load(atLeast: level, context: context)
+    func load(atLeast level: LoadLevel, library: Library) -> Bool {
+        backend.load(atLeast: level, library: library)
     }
 
     subscript<T: TrackAttribute & TypedKey>(_ attribute: T) -> T.Value? {

@@ -71,8 +71,8 @@ public class SpotifyUserPlaylist: RemotePlaylist {
             .eraseToAnyPublisher()
     }
         
-    public override func load(atLeast level: LoadLevel, deep: Bool, context: PlayContext) -> Bool {
-        let spotify = context.spotify
+    public override func load(atLeast level: LoadLevel, deep: Bool, library: Library) -> Bool {
+        let spotify = library.spotify
         let count = 50
         let uri = self.uri
         

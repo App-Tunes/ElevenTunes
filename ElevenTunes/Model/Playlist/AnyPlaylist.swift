@@ -25,7 +25,7 @@ public protocol AnyPlaylist: AnyObject {
     var attributes: AnyPublisher<TypedDict<PlaylistAttribute>, Never> { get }
 
     @discardableResult
-    func load(atLeast level: LoadLevel, deep: Bool, context: PlayContext) -> Bool
+    func load(atLeast level: LoadLevel, deep: Bool, library: Library) -> Bool
 
     func supportsChildren() -> Bool  // AKA isFertile
     
@@ -38,8 +38,8 @@ public protocol AnyPlaylist: AnyObject {
 
 extension AnyPlaylist {
     @discardableResult
-    public func load(atLeast level: LoadLevel, context: PlayContext) -> Bool {
-        load(atLeast: level, deep: false, context: context)
+    public func load(atLeast level: LoadLevel, library: Library) -> Bool {
+        load(atLeast: level, deep: false, library: library)
     }
 }
 

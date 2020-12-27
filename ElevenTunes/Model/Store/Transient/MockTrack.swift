@@ -51,5 +51,5 @@ class MockTrack: PersistentTrack {
     }
     
     @discardableResult
-    override func load(atLeast level: LoadLevel, context: PlayContext) -> Bool { true }
+    override func load(atLeast level: LoadLevel, library: Library) -> Bool { true }
 }

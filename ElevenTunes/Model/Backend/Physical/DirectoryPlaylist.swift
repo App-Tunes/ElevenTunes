@@ -20,6 +20,7 @@ public class DirectoryPlaylist: RemotePlaylist {
     init(_ url: URL) {
         self.url = url
         super.init()
+        _attributes[PlaylistAttribute.title] = url.lastPathComponent
     }
     
     static func create(fromURL url: URL) throws -> DirectoryPlaylist {
@@ -42,7 +43,34 @@ public class DirectoryPlaylist: RemotePlaylist {
         try super.encode(to: encoder)
     }
 
-    public override var icon: Image { Image(systemName: "folder.fill") }
+    static let _icon: Image = Image(systemName: "folder.fill")
+    public override var icon: Image { DirectoryPlaylist._icon }
+    
+    public override var id: String { url.absoluteString }
+    
+    public override func supportsChildren() -> Bool { true }
+    
+    public override func load(atLeast level: LoadLevel, deep: Bool, library: Library) -> Bool {
+        let url = self.url
+        let interpreter = library.interpreter
+        
+        Future {
+            try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: [.isDirectoryKey])
+        }
+        .flatMap {
+            interpreter.interpret(urls: $0)
+                ?? Just([]).eraseError().eraseToAnyPublisher()
+        }
+        .sink(receiveCompletion: appLogErrors(_:)) { [unowned self] contents in
+            let library = ContentInterpreter.collect(fromContents: contents)
+            _tracks = library.0
+            _children = library.1
+            _attributes[PlaylistAttribute.title] = url.lastPathComponent
+            _loadLevel = .detailed
+        }.store(in: &cancellables)
+        
+        return true
+    }
 }
 
 extension DirectoryPlaylist {

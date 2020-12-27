@@ -30,7 +30,14 @@ class ContentInterpreter {
 
         for url in urls {
             if let publisher = try? interpret(url: url) {
-                publishers.append(publisher)
+                publishers.append(
+                    publisher
+                        .catch { _ in
+                            Empty<Content, Error>(completeImmediately: true)
+                                .eraseToAnyPublisher()
+                        }
+                        .eraseToAnyPublisher()
+                )
             }
         }
         

@@ -97,8 +97,8 @@ public class SpotifyTrack: RemoteTrack {
         ])
     }
     
-    public override func load(atLeast level: LoadLevel, context: PlayContext) -> Bool {
-        let spotify = context.spotify
+    public override func load(atLeast level: LoadLevel, library: Library) -> Bool {
+        let spotify = library.spotify
         let uri = self.uri
         
         spotify.api.track(uri)

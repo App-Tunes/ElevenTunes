@@ -53,13 +53,13 @@ class Playlist: ObservableObject {
     }
 
     @discardableResult
-    func load(atLeast level: LoadLevel, deep: Bool = false, context: PlayContext) -> Bool {
+    func load(atLeast level: LoadLevel, deep: Bool = false, library: Library) -> Bool {
         // TODO Deep, must somehow react upon other things having loaded lawl
         guard _loadLevel < level else {
             return false
         }
         
-        return backend.load(atLeast: level, deep: deep, context: context)
+        return backend.load(atLeast: level, deep: deep, library: library)
     }
 
     @discardableResult

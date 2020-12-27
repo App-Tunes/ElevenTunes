@@ -22,7 +22,7 @@ public class PersistentTrack: NSObject, AnyTrack, Codable {
         fatalError()
     }
     
-    public func load(atLeast level: LoadLevel, context: PlayContext) -> Bool {
+    public func load(atLeast level: LoadLevel, library: Library) -> Bool {
         fatalError()
     }
 }

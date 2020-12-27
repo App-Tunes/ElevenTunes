@@ -43,7 +43,7 @@ struct TrackView: View {
     @ObservedObject var playlist: Playlist
     @ObservedObject var track: Track
     
-    @Environment(\.player) var player: Player!
+    @Environment(\.library) var library: Library!
     
     var body: some View {
         HStack {
@@ -63,7 +63,7 @@ struct TrackView: View {
             }
         }
         .tag(track)
-        .onAppear() { track.load(atLeast: .minimal, context: player.context) }
+        .onAppear() { track.load(atLeast: .minimal, library: library) }
     }
 }
 
