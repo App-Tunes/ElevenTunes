@@ -7,21 +7,35 @@
 
 import SwiftUI
 
+struct PlayTrackView: View {
+    @State var playlist: Playlist
+    @State var track: Track
+
+    @Environment(\.player) private var player: Player
+    @State var current: Track?
+    @State var next: Track?
+
+    var body: some View {
+        Button(action: {
+            player.play(PlayHistory(playlist, at: track))
+        }) {
+            Image(systemName: [current, next].contains(track) ? "play.fill" : "play")
+                .foregroundColor(current == track ? Color.primary : Color.primary.opacity(0.3))
+        }
+        .buttonStyle(BorderlessButtonStyle())
+        .disabled(track._loadLevel == .none)
+        .onReceive(player.$current) { self.current = $0 }
+        .onReceive(player.$next) { self.next = $0 }
+    }
+}
+
 struct TrackView: View {
     @ObservedObject var playlist: Playlist
     @ObservedObject var track: Track
     
-    @Environment(\.player) private var player: Player
-
     var body: some View {
         HStack {
-            Button(action: {
-                player.play(PlayHistory(playlist, at: track))
-            }) {
-                Image(systemName: player.current == track ? "play.fill" : "play")
-            }
-            .buttonStyle(BorderlessButtonStyle())
-            .disabled(track._loadLevel == .none)
+            PlayTrackView(playlist: playlist, track: track)
 
             if track._loadLevel == .none {
                 ProgressView()
