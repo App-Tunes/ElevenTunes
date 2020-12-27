@@ -27,7 +27,7 @@ struct TracksView: View {
                         Text("...")
                     }
                     else {
-                        track.icon
+                        track.icon.resizable().aspectRatio(contentMode: .fit).frame(width: 15, height: 15)
                         
                         Text(track[TrackAttribute.title] ?? "Unknown Track")
                             .onTapGesture(count: 2) {
