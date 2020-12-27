@@ -83,7 +83,6 @@ extension Library {
                 return dbPlaylist
             }
             
-            // TODO If already exists, return that
             let dbPlaylist = DBPlaylist(entity: playlistModel, insertInto: context)
             dbPlaylist.backend = backend
             dbPlaylist.backendID = backend.id
