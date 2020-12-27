@@ -71,7 +71,7 @@ extension DBPlaylist: SelfChangeWatcher {
         
         if changes.keys.contains("backend") {
             refreshObservation()
-            if let backend = backend {
+            if let backend = backend, isDirectory != backend.supportsChildren() {
                 isDirectory = backend.supportsChildren()
             }
         }
