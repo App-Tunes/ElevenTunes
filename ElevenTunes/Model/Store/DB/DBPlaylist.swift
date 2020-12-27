@@ -45,27 +45,33 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
 
         cancellables = []
         if let backend = backend {
-            backend.tracks.sink { [unowned self] tracks in
-                if indexed {
-                    let old = self.tracks
-                    let (dbTracks, _) = Library.convert(DirectLibrary(allTracks: tracks), context: context)
-                    self.tracks = NSOrderedSet(array: dbTracks)
-                    Library.prune(tracks: old.array as! [DBTrack], context: context)
+            backend.tracks
+                .onMain()
+                .sink { [unowned self] tracks in
+                    if indexed {
+                        let old = self.tracks
+                        let (dbTracks, _) = Library.convert(DirectLibrary(allTracks: tracks), context: context)
+                        self.tracks = NSOrderedSet(array: dbTracks)
+                        Library.prune(tracks: old.array as! [DBTrack], context: context)
+                    }
+                    
+                    _anyTracks = tracks
                 }
-                
-                _anyTracks = tracks
-            }.store(in: &cancellables)
+                .store(in: &cancellables)
             
-            backend.children.sink { [unowned self] children in
-                if indexed {
-                    let old = self.children
-                    let (_, dbPlaylists) = Library.convert(DirectLibrary(allPlaylists: children), context: context)
-                    self.children = NSOrderedSet(array: dbPlaylists)
-                    Library.prune(playlists: old.array as! [DBPlaylist], context: context)
+            backend.children
+                .onMain()
+                .sink { [unowned self] children in
+                    if indexed {
+                        let old = self.children
+                        let (_, dbPlaylists) = Library.convert(DirectLibrary(allPlaylists: children), context: context)
+                        self.children = NSOrderedSet(array: dbPlaylists)
+                        Library.prune(playlists: old.array as! [DBPlaylist], context: context)
+                    }
+                    
+                    _anyChildren = children
                 }
-                
-                _anyChildren = children
-            }.store(in: &cancellables)
+                .store(in: &cancellables)
             
             backend.loadLevel.sink { [unowned self] loadLevel in
                 self._loadLevel = loadLevel

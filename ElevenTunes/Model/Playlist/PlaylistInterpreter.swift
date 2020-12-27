@@ -36,6 +36,7 @@ class PlaylistDropInterpreter<Playlist: AnyPlaylist>: DropDelegate {
         let playlist = self.parent
         interpreted
             .map { ContentInterpreter.collect(fromContents: $0) }
+            .onMain()
             .sink(receiveCompletion: appLogErrors(_:)) { (tracks, playlists) in
                 playlist.add(tracks: tracks)
                 playlist.add(children: playlists)

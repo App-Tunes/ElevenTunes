@@ -18,7 +18,7 @@ public class SpotifyTrack: RemoteTrack {
         case noURI
     }
 
-    var spotify: Spotify = AppDelegate.shared.spotify
+    var spotify: Spotify
     var uri: String
     
     static func spotifyURI(fromURL url: URL) throws -> String {
