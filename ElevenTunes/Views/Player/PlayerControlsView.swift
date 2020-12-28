@@ -18,7 +18,19 @@ struct PlayerControlsView: View {
 
     var body: some View {
         VStack {
-            Text(current?[TrackAttribute.title] ?? "Nothing Playing")
+            HStack {
+                if let current = current {
+                    current.icon
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 15, height: 15)
+
+                    Text(current[TrackAttribute.title] ?? "Untitled Track")
+                }
+                else {
+                    Text("Nothing Playing").opacity(0.5)
+                }
+            }
             
             HStack {
                 Button(action: {
