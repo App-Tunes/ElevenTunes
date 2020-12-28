@@ -8,7 +8,7 @@
 import Foundation
 import AVFoundation
 
-class AVFoundationAudioEmitter: NSObject, AnyAudioEmitter {
+class AVAudioPlayerEmitter: NSObject, AnyAudioEmitter {
     let audio: AVAudioPlayer
     
     weak var delegate: AudioEmitterDelegate? = nil
@@ -40,7 +40,7 @@ class AVFoundationAudioEmitter: NSObject, AnyAudioEmitter {
     }
 }
 
-extension AVFoundationAudioEmitter : AVAudioPlayerDelegate {
+extension AVAudioPlayerEmitter : AVAudioPlayerDelegate {
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         delegate?.emitterDidStop(self)
     }

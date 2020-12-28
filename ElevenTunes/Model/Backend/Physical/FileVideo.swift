@@ -56,7 +56,7 @@ public class FileVideo: RemoteTrack {
         return Future {
             let player = try AVAudioPlayer(contentsOf: url)
             player.prepareToPlay()
-            return AVFoundationAudioEmitter(player)
+            return AVAudioPlayerEmitter(player)
         }
             .eraseToAnyPublisher()
     }
