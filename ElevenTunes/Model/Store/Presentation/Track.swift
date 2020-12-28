@@ -43,7 +43,8 @@ class Track: ObservableObject {
     func invalidateCaches(_ mask: TrackContentMask, reloadWith library: Library? = nil) {
         cacheMask.subtract(mask)  // Let's immediately invalidate ourselves
         if let library = library {
-            backend.invalidateCaches(mask, reloadWith: library)
+            backend.invalidateCaches(mask)
+            load(atLeast: mask, library: library)
         }
         else {
             backend.invalidateCaches(mask)

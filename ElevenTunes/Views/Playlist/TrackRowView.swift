@@ -55,7 +55,8 @@ struct TrackRowView: View {
                     .progressViewStyle(CircularProgressViewStyle())
                     .scaleEffect(0.5, anchor: .center)
                 
-                Text("...")
+                Text(track[TrackAttribute.title] ?? "...")
+                    .opacity(0.5)
             }
             else {
                 track.icon.resizable().aspectRatio(contentMode: .fit).frame(width: 15, height: 15)
@@ -63,15 +64,6 @@ struct TrackRowView: View {
                 Text(track[TrackAttribute.title] ?? "Unknown Track")
             }
         }
-        .contextMenu {
-            Button(action: {
-                track.invalidateCaches([.minimal], reloadWith: library)
-            }) {
-                Image(systemName: "arrow.clockwise")
-                Text("Reload Metadata")
-            }
-        }
-        .tag(track)
         .onAppear() { track.load(atLeast: .minimal, library: library) }
     }
 }

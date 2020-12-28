@@ -104,7 +104,7 @@ public class SpotifyTrack: RemoteTrack {
         spotify.api.track(uri)
             .compactMap(ExistingSpotifyTrack.init)
             .onMain()
-            .sink(receiveCompletion: appLogErrors) { track in
+            .sink(receiveCompletion: appLogErrors) { [unowned self] track in
                 self._attributes = SpotifyTrack.extractAttributes(from: track)
                 self._cacheMask = [.minimal]
             }

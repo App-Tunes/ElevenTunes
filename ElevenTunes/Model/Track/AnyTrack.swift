@@ -34,13 +34,6 @@ public protocol AnyTrack: AnyObject {
     func invalidateCaches(_ mask: TrackContentMask)
 }
 
-extension AnyTrack {
-    func invalidateCaches(_ mask: TrackContentMask, reloadWith library: Library) {
-        invalidateCaches(mask)
-        load(atLeast: mask, library: library)
-    }
-}
-
 class TrackBackendTypedCodable: TypedCodable<String> {
     static let _registry = CodableRegistry<String>()
         .register(MockTrack.self, for: "mock")
