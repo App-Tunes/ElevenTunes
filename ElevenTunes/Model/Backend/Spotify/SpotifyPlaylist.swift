@@ -12,17 +12,22 @@ import Combine
 import AVFoundation
 import SpotifyWebAPI
 
-//struct MinimalSpotifyPlaylist: Codable, Hashable {
-//    static let filters = "uri,name"
-//
-//    var uri: String
-//    var name: String
-//}
+struct MinimalPagingObject<Item: Codable & Hashable>: Codable, Hashable {
+    let offset: Int
+    let total: Int
+    let items: [Item]
+}
+
+struct MinimalPlaylistItemContainer<Item: Codable & Hashable>: Codable, Hashable {
+    var track: Item
+}
 
 public class SpotifyPlaylist: RemotePlaylist {
     enum SpotifyError: Error {
         case noURI
     }
+    
+    static let minimalQueryFilters = "offset,total,items(track(\(MinimalSpotifyTrack.filters)))"
         
     var uri: String
 
@@ -97,17 +102,20 @@ public class SpotifyPlaylist: RemotePlaylist {
             let count = 100
             let paginationLimit = 100
 
-            spotify.api.playlistTracks(uri, limit: count, offset: 0)
+            let getItems = { (offset: Int) in
+                spotify.api.filteredPlaylistItems(uri, filters: SpotifyPlaylist.minimalQueryFilters, additionalTypes: [.track], limit: count, offset: offset)
+                    .decodeSpotifyObject(MinimalPagingObject<MinimalPlaylistItemContainer<MinimalSpotifyTrack>>.self)
+            }
+            
+            getItems(0)
                 .unfold(limit: paginationLimit) {
                     $0.offset + $0.items.count >= $0.total ? nil :
-                    spotify.api.playlistTracks(uri, limit: count, offset: $0.offset + count)
+                    getItems($0.offset + count)
                 }
                 .collect()
-                .map { $0.flatMap { $0.items } }
+                .map { $0.flatMap { $0.items.map { $0.track } } }
                 .map { items in
-                    items.compactMap { item -> SpotifyTrack? in
-                        return ExistingSpotifyTrack(item.item).map { SpotifyTrack(track: $0) }
-                    }
+                    items.map(SpotifyTrack.init)
                 }
                 .onMain()
                 .sink(receiveCompletion: appLogErrors(_:)) { tracks in

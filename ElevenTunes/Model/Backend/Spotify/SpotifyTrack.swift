@@ -13,6 +13,13 @@ import SpotifyWebAPI
 import SwiftUI
 import Combine
 
+struct MinimalSpotifyTrack: Codable, Hashable {
+    static let filters = "uri,name"
+
+    var uri: String
+    var name: String
+}
+
 public class SpotifyTrack: RemoteTrack {
     enum SpotifyError: Error {
         case noURI
@@ -43,6 +50,11 @@ public class SpotifyTrack: RemoteTrack {
         super.init()
         self._attributes = SpotifyTrack.extractAttributes(from: track)
         self._cacheMask = [.minimal]
+    }
+    
+    init(track: MinimalSpotifyTrack) {
+        self.uri = track.uri
+        super.init()
     }
     
     public required init(from decoder: Decoder) throws {
