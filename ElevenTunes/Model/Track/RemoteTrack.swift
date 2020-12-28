@@ -20,4 +20,8 @@ public class RemoteTrack: PersistentTrack {
     public override var attributes: AnyPublisher<TypedDict<TrackAttribute>, Never> {
         $_attributes.eraseToAnyPublisher()
     }
+    
+    public override func invalidateCaches(_ mask: TrackContentMask) {
+        _cacheMask.subtract(mask)
+    }
 }

@@ -63,6 +63,14 @@ struct TrackRowView: View {
                 Text(track[TrackAttribute.title] ?? "Unknown Track")
             }
         }
+        .contextMenu {
+            Button(action: {
+                track.invalidateCaches([.minimal], reloadWith: library)
+            }) {
+                Image(systemName: "arrow.clockwise")
+                Text("Reload Metadata")
+            }
+        }
         .tag(track)
         .onAppear() { track.load(atLeast: .minimal, library: library) }
     }

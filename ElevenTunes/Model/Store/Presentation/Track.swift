@@ -40,9 +40,14 @@ class Track: ObservableObject {
         backend.load(atLeast: missing, library: library)
     }
 
-    func invalidateCaches(_ mask: TrackContentMask) {
+    func invalidateCaches(_ mask: TrackContentMask, reloadWith library: Library? = nil) {
         cacheMask.subtract(mask)  // Let's immediately invalidate ourselves
-        backend.invalidateCaches(mask)
+        if let library = library {
+            backend.invalidateCaches(mask, reloadWith: library)
+        }
+        else {
+            backend.invalidateCaches(mask)
+        }
     }
 
     subscript<T: TrackAttribute & TypedKey>(_ attribute: T) -> T.Value? {
