@@ -1,9 +1,8 @@
 //
-//  FileTrack+CoreDataClass.swift
+//  FileVideo.swift
 //  ElevenTunes
 //
-//  Created by Lukas Tenbrink on 25.12.20.
-//
+//  Created by Lukas Tenbrink on 28.12.20.
 //
 
 import Foundation
@@ -13,7 +12,7 @@ import Combine
 import AVFoundation
 import SwiftUI
 
-public class FileTrack: RemoteTrack {
+public class FileVideo: RemoteTrack {
     public var url: URL
     
     init(_ url: URL) {
@@ -39,17 +38,20 @@ public class FileTrack: RemoteTrack {
         guard let type = UTType(filenameExtension: url.pathExtension) else {
             return false
         }
-        return type.conforms(to: .audio)
+        return type.conforms(to: .audiovisualContent) && !type.conforms(to: .audio)
     }
 
-    static func create(fromURL url: URL) throws -> FileTrack {
+    static func create(fromURL url: URL) throws -> FileVideo {
         _ = try AVAudioFile(forReading: url) // Just so we know it's readable
-        return FileTrack(url)
+        return FileVideo(url)
     }
      
     public override var id: String { url.absoluteString }
+    
+    public override var icon: Image { Image(systemName: "video") }
         
     public override func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
+        // TODO Return video emitter when possible
         let url = self.url
         return Future {
             let player = try AVAudioPlayer(contentsOf: url)
@@ -65,7 +67,7 @@ public class FileTrack: RemoteTrack {
     }
 }
 
-extension FileTrack {
+extension FileVideo {
     enum CodingKeys: String, CodingKey {
       case url
     }

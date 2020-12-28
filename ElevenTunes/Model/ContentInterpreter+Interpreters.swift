@@ -60,10 +60,14 @@ extension ContentInterpreter {
             .playlist(try DirectoryPlaylist.create(fromURL: $0))
         })
         
+        register(simple(matches: FileVideo.understands) {
+            .track(try FileVideo.create(fromURL: $0))
+        })
+        
         register(simple(matches: FileTrack.understands) {
             .track(try FileTrack.create(fromURL: $0))
         })
-        
+
         return interpreter
     }
 }

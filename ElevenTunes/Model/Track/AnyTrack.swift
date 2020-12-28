@@ -45,6 +45,7 @@ class TrackBackendTypedCodable: TypedCodable<String> {
     static let _registry = CodableRegistry<String>()
         .register(MockTrack.self, for: "mock")
         .register(FileTrack.self, for: "file")
+        .register(FileVideo.self, for: "videofile")
         .register(SpotifyTrack.self, for: "spotify")
 
     override class var registry: CodableRegistry<String> { _registry }
