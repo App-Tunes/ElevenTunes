@@ -35,7 +35,12 @@ class SinglePlayer {
         state = .init(isPlaying: playing?.isPlaying ?? false, currentTime: playing?.currentTime ?? nil)
         
         almostDoneTimer?.invalidate()
-        if let duration = playing?.duration, let currentTime = playing?.currentTime {
+        if
+            let playing = playing,
+            playing.isPlaying,
+            let duration = playing.duration,
+            let currentTime = playing.currentTime
+        {
             let timeLeft = duration - currentTime
             
             if timeLeft > SinglePlayer.timeInAnAlmost {
