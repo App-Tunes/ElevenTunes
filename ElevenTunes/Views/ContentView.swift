@@ -32,6 +32,7 @@ struct ContentView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .layoutPriority(2)
         }
+            .preferredColorScheme(.dark)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
