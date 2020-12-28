@@ -23,11 +23,15 @@ struct PlayTrackView: View {
             ZStack {
                 if track == next {
                     Image(systemName: "play.fill")
-                        .blinking(opacity: (0.35, 1), animates: player.$isAlmostNext)
+                        .blinking(
+                            // If track is next AND current, start with 1 and blink downwards.
+                            // otherwise, start half translucent and blink upwards
+                            opacity: track == current ? (1, 0.5) : (0.35, 1),
+                            animates: player.$isAlmostNext
+                        )
                 }
                 else if track == current {
                     Image(systemName: "play.fill")
-                        .opacity(track == current ? 1 : 0.35)
                 }
                 
                 Image(systemName: "play")
