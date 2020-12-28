@@ -17,7 +17,10 @@ struct PlayerBarView: View {
             }
                 .layoutPriority(2)
             
-            PlayPositionView(player: player.singlePlayer)
+            ZStack {
+                PlayPositionView(player: player.singlePlayer)
+            }
+            .background(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.3), .clear]), startPoint: .bottom, endPoint: .top))
         }
     }
 }
