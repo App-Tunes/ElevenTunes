@@ -72,8 +72,9 @@ extension DBPlaylist: SelfChangeWatcher {
         
         if changes.keys.contains("backend") {
             refreshObservation()
-            if let backend = backend {
+            if let backend = backend, backend.id != backendID {
                 // Invalidate stuff we stored for the backend
+                backendID = backend.id
                 if backendCacheMask != 0 { backendCacheMask = 0 }
                 if tracks.firstObject != nil { tracks = NSOrderedSet() }
                 if children.firstObject != nil { children = NSOrderedSet() }
