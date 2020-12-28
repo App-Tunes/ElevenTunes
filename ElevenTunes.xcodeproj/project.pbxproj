@@ -18,6 +18,7 @@
 		8005085E259802B60055FB2D /* RawRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8005085D259802B60055FB2D /* RawRepresentable.swift */; };
 		800508632598108A0055FB2D /* DBPlaylist+Attributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800508622598108A0055FB2D /* DBPlaylist+Attributes.swift */; };
 		800C11FA259A378D0017A116 /* FileVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800C11F9259A378D0017A116 /* FileVideo.swift */; };
+		800C11FF259A3EF10017A116 /* TrackRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800C11FE259A3EF10017A116 /* TrackRowView.swift */; };
 		80151ED12593C50700D9539A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80151ED02593C50700D9539A /* SettingsView.swift */; };
 		80151EDC2593C53200D9539A /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80151EDB2593C53200D9539A /* GeneralSettingsView.swift */; };
 		80151EE82593C92A00D9539A /* SpotifyAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80151EE72593C92A00D9539A /* SpotifyAuthView.swift */; };
@@ -134,6 +135,7 @@
 		8005085D259802B60055FB2D /* RawRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawRepresentable.swift; sourceTree = "<group>"; };
 		800508622598108A0055FB2D /* DBPlaylist+Attributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DBPlaylist+Attributes.swift"; sourceTree = "<group>"; };
 		800C11F9259A378D0017A116 /* FileVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileVideo.swift; sourceTree = "<group>"; };
+		800C11FE259A3EF10017A116 /* TrackRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackRowView.swift; sourceTree = "<group>"; };
 		80151ED02593C50700D9539A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		80151EDB2593C53200D9539A /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		80151EE72593C92A00D9539A /* SpotifyAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAuthView.swift; sourceTree = "<group>"; };
@@ -605,6 +607,7 @@
 			children = (
 				80AD698D2588287900192BED /* PlaylistView.swift */,
 				806B278F258D5CBD0091EA4D /* TracksView.swift */,
+				800C11FE259A3EF10017A116 /* TrackRowView.swift */,
 				80AD69A9258829EE00192BED /* FilterBarView.swift */,
 				80AD69A4258829C400192BED /* PlaylistBarView.swift */,
 				80AD699F258828F400192BED /* TrackInfoView.swift */,
@@ -851,6 +854,7 @@
 				80050822259778340055FB2D /* DBPlaylist+CoreDataProperties.swift in Sources */,
 				80050824259778340055FB2D /* DBTrack.swift in Sources */,
 				80AD69B725882D1200192BED /* PlayPositionView.swift in Sources */,
+				800C11FF259A3EF10017A116 /* TrackRowView.swift in Sources */,
 				806E1FDB2596A9A3003EEA83 /* CodableTransformer.swift in Sources */,
 				806B28AC258ED4CE0091EA4D /* SpotifyAudioEmitter.swift in Sources */,
 				8053381625989A7A006F06DC /* NSManagedObjectContext.swift in Sources */,
