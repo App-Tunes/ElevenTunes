@@ -79,7 +79,7 @@ public class SpotifyTrack: RemoteTrack {
             .compactMap { $0 }
             .eraseError()
         
-        return spotifyTrack.zip(device)
+        return spotifyTrack.combineLatest(device)
             .map({ (track, device) -> AnyAudioEmitter in
                 RemoteAudioEmitter(SpotifyAudioEmitter(
                     spotify,
