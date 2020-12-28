@@ -31,11 +31,7 @@ class LibraryPlaylist: AnyPlaylist {
             .combineLatest($staticPlaylists.eraseError()).map { $1 + $0 }
             .replaceError(with: [])
             .eraseToAnyPublisher()
-        
-        _anyChildren.sink { children in
-            print(children)
-        }.store(in: &cancellables)
-        
+                
         staticPlaylists = [
             SpotifyUserPlaylist()
         ]
