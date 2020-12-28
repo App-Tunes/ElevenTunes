@@ -43,6 +43,7 @@ struct PlaylistRowView: View {
             else {
                 NavigationLink(destination: PlaylistView(playlist: playlist)) {
                     title(playlist[PlaylistAttribute.title] ?? "Unknown Playlist")
+                        .opacity((playlist._tracks.isEmpty && playlist._children.isEmpty) ? 0.6 : 1)
                 }
             }
         }
