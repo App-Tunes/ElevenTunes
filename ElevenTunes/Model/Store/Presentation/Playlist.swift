@@ -17,15 +17,10 @@ class Playlist: ObservableObject {
         self.backend = backend
         self.isTopLevel = isTopLevel
 
-        anyChildren = backend.anyChildren
-        anyTracks = backend.anyTracks
-        loadLevel = backend.loadLevel
-        attributes = backend.attributes
-        
-        backend.anyChildren.assign(to: &$_children)
-        backend.anyTracks.assign(to: &$_tracks)
-        backend.loadLevel.assign(to: &$_loadLevel)
-        backend.attributes.assign(to: &$_attributes)
+        backend.anyChildren.assign(to: &$children)
+        backend.anyTracks.assign(to: &$tracks)
+        backend.cacheMask.assign(to: &$cacheMask)
+        backend.attributes.assign(to: &$attributes)
     }
         
     var uuid = UUID()
@@ -36,39 +31,39 @@ class Playlist: ObservableObject {
         (isTopLevel && backend.supportsChildren()) ? .secondary : backend.accentColor
     }
 
-    @Published var _children: [AnyPlaylist] = []
-    var anyChildren: AnyPublisher<[AnyPlaylist], Never>
+    @Published var children: [AnyPlaylist] = []
     
-    var children: [Playlist]? {
+    var viewChildren: [Playlist]? {
         guard backend.supportsChildren() else { return nil }
-        return _children.map { Playlist($0) }
+        return children.map { Playlist($0) }
     }
     
     var topLevelChildren: [Playlist] {
-        return _children.map { Playlist($0, isTopLevel: true) }
+        return children.map { Playlist($0, isTopLevel: true) }
     }
     
-    @Published var _tracks: [AnyTrack] = []
-    var anyTracks: AnyPublisher<[AnyTrack], Never>
-    
-    @Published var _loadLevel: LoadLevel = .none
-    var loadLevel: AnyPublisher<LoadLevel, Never>
-    
-    @Published var _attributes: TypedDict<PlaylistAttribute> = .init()
-    var attributes: AnyPublisher<TypedDict<PlaylistAttribute>, Never>
+    @Published var tracks: [AnyTrack] = []
+    @Published var cacheMask: PlaylistContentMask = []
+    @Published var attributes: TypedDict<PlaylistAttribute> = .init()
 
     subscript<T: PlaylistAttribute & TypedKey>(_ attribute: T) -> T.Value? {
-        _attributes[attribute]
+        attributes[attribute]
     }
 
-    @discardableResult
-    func load(atLeast level: LoadLevel, deep: Bool = false, library: Library) -> Bool {
+    func load(atLeast mask: PlaylistContentMask, deep: Bool = false, library: Library) {
         // TODO Deep, must somehow react upon other things having loaded lawl
-        guard _loadLevel < level else {
-            return false
+        
+        let missing = mask.subtracting(cacheMask)
+        guard !missing.isEmpty else {
+            return
         }
         
-        return backend.load(atLeast: level, deep: deep, library: library)
+        backend.load(atLeast: missing, deep: deep, library: library)
+    }
+
+    func invalidateCaches(_ mask: PlaylistContentMask) {
+        cacheMask.subtract(mask)  // Let's immediately invalidate ourselves
+        backend.invalidateCaches(mask)
     }
 
     @discardableResult

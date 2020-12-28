@@ -39,9 +39,9 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
         $_anyChildren.eraseToAnyPublisher()
     }
     
-    @Published var _loadLevel: LoadLevel = .none
-    public var loadLevel: AnyPublisher<LoadLevel, Never> {
-        $_loadLevel.eraseToAnyPublisher()
+    @Published var _cacheMask: PlaylistContentMask = []
+    public var cacheMask: AnyPublisher<PlaylistContentMask, Never> {
+        $_cacheMask.eraseToAnyPublisher()
     }
     
     @Published var _attributes: TypedDict<PlaylistAttribute> = .init()
@@ -56,34 +56,37 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
         _anyTracks = tracks.array as! [DBTrack]
         _anyChildren = children.array as! [DBPlaylist]
         _attributes = cachedAttributes
-        _loadLevel = LoadLevel(rawValue: cachedLoadLevel) ?? .none
-        if let backend = backend {
-            isDirectory = backend.supportsChildren()
-        }
 
         refreshObservation()
     }
     
-    @discardableResult
-    public func load(atLeast level: LoadLevel, deep: Bool, library: Library) -> Bool {
-        guard level > _loadLevel else {
-            return true
-        }
-        
+    public func load(atLeast mask: PlaylistContentMask, deep: Bool, library: Library) {
         guard let backend = backend else {
             // Fetch requests have already set the values
-            _loadLevel = .detailed
-            return true
+            _cacheMask = [.minimal, .children, .tracks, .attributes]
+            return
         }
         
-        let currentLoadLevel = LoadLevel(rawValue: cachedLoadLevel) ?? .none
-        if indexed && currentLoadLevel >= level {
-            // We can use DB cache! Yay!
-            _loadLevel = currentLoadLevel
-            return true
+        // If indexed, tracks and children are NEVER in our cache
+        let currentCache = _cacheMask.subtracting(indexed ? [.children, .tracks] : [])
+        let missing = mask.subtracting(currentCache)
+        
+        if missing.isEmpty {
+            // We have everything we need! Yay!
+            return
         }
         
-        return backend.load(atLeast: level, deep: false, library: library)
+        // Only reload what's missing
+        backend.load(atLeast: missing, deep: false, library: library)
+    }
+    
+    public func invalidateCaches(_ mask: PlaylistContentMask) {
+        if let backend = backend {
+            let newMask = _cacheMask.subtracting(mask)
+            _cacheMask = newMask
+            backendCacheMask = newMask.rawValue
+            backend.invalidateCaches(mask)
+        }
     }
     
     public func supportsChildren() -> Bool { backend?.supportsChildren() ?? isDirectory }

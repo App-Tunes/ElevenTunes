@@ -9,8 +9,17 @@ import Foundation
 import SwiftUI
 import Combine
 
-public enum LoadLevel: Int16, Comparable {
-    case none, minimal, detailed
+public struct PlaylistContentMask: OptionSet {
+    public let rawValue: Int16
+    
+    public init(rawValue: Int16) {
+        self.rawValue = rawValue
+    }
+    
+    public static let minimal      = PlaylistContentMask(rawValue: 1 << 0)
+    public static let tracks       = PlaylistContentMask(rawValue: 1 << 1)
+    public static let children     = PlaylistContentMask(rawValue: 1 << 2)
+    public static let attributes   = PlaylistContentMask(rawValue: 1 << 3)
 }
 
 public protocol AnyPlaylist: AnyObject {
@@ -20,14 +29,13 @@ public protocol AnyPlaylist: AnyObject {
 
     var anyTracks: AnyPublisher<[AnyTrack], Never> { get }
     var anyChildren: AnyPublisher<[AnyPlaylist], Never> { get }
-
-    var loadLevel: AnyPublisher<LoadLevel, Never> { get }
-    
     var attributes: AnyPublisher<TypedDict<PlaylistAttribute>, Never> { get }
 
-    @discardableResult
-    func load(atLeast level: LoadLevel, deep: Bool, library: Library) -> Bool
+    var cacheMask: AnyPublisher<PlaylistContentMask, Never> { get }
 
+    func load(atLeast mask: PlaylistContentMask, deep: Bool, library: Library)
+    func invalidateCaches(_ mask: PlaylistContentMask)
+    
     func supportsChildren() -> Bool  // AKA isFertile
     
     @discardableResult
@@ -38,9 +46,13 @@ public protocol AnyPlaylist: AnyObject {
 }
 
 extension AnyPlaylist {
-    @discardableResult
-    public func load(atLeast level: LoadLevel, library: Library) -> Bool {
+    public func load(atLeast level: PlaylistContentMask, library: Library) {
         load(atLeast: level, deep: false, library: library)
+    }
+    
+    func invalidateCaches(_ mask: PlaylistContentMask, reloadWith library: Library) {
+        invalidateCaches(mask)
+        load(atLeast: mask, library: library)
     }
 }
 

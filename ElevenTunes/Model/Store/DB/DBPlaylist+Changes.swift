@@ -23,8 +23,9 @@ extension DBPlaylist {
                         self.tracks = NSOrderedSet(array: dbTracks)
                         Library.prune(tracks: old.array as! [DBTrack], context: context)
                     }
-                    
-                    _anyTracks = tracks
+                    else {
+                        _anyTracks = tracks
+                    }
                 }
                 .store(in: &backendObservers)
             
@@ -38,8 +39,9 @@ extension DBPlaylist {
                         self.children = NSOrderedSet(array: dbPlaylists)
                         Library.prune(playlists: old.array as! [DBPlaylist], context: context)
                     }
-                    
-                    _anyChildren = children
+                    else {
+                        _anyChildren = children
+                    }
                 }
                 .store(in: &backendObservers)
 
@@ -50,11 +52,10 @@ extension DBPlaylist {
                 }
                 .store(in: &backendObservers)
 
-            backend.loadLevel
+            backend.cacheMask
                 .onMain()
-                .sink { [unowned self] loadLevel in
-                    self._loadLevel = loadLevel
-                    self.cachedLoadLevel = loadLevel.rawValue
+                .sink { [unowned self] cacheMask in
+                    self.backendCacheMask |= cacheMask.rawValue
                 }
                 .store(in: &backendObservers)
         }
@@ -71,13 +72,19 @@ extension DBPlaylist: SelfChangeWatcher {
         
         if changes.keys.contains("backend") {
             refreshObservation()
-            if let backend = backend, isDirectory != backend.supportsChildren() {
-                isDirectory = backend.supportsChildren()
+            if let backend = backend {
+                // Invalidate stuff we stored for the backend
+                if backendCacheMask != 0 { backendCacheMask = 0 }
+                if tracks.firstObject != nil { tracks = NSOrderedSet() }
+                if children.firstObject != nil { children = NSOrderedSet() }
+                // Attributes will be either overriden by new playlist, or kept
+                
+                if isDirectory != backend.supportsChildren() { isDirectory = backend.supportsChildren() }
             }
         }
         
-        if changes.keys.contains("cachedLoadLevel") {
-            _loadLevel = LoadLevel(rawValue: cachedLoadLevel) ?? .none
+        if changes.keys.contains("backendCacheMask") {
+            _cacheMask = PlaylistContentMask(rawValue: backendCacheMask)
         }
         
         if changes.keys.contains("tracks") {

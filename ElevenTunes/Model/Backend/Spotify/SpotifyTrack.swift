@@ -42,7 +42,7 @@ public class SpotifyTrack: RemoteTrack {
         self.uri = track.uri
         super.init()
         self._attributes = SpotifyTrack.extractAttributes(from: track)
-        self._loadLevel = .detailed
+        self._cacheMask = [.minimal]
     }
     
     public required init(from decoder: Decoder) throws {
@@ -97,7 +97,7 @@ public class SpotifyTrack: RemoteTrack {
         ])
     }
     
-    public override func load(atLeast level: LoadLevel, library: Library) -> Bool {
+    public override func load(atLeast mask: TrackContentMask, library: Library) {
         let spotify = library.spotify
         let uri = self.uri
         
@@ -106,11 +106,9 @@ public class SpotifyTrack: RemoteTrack {
             .onMain()
             .sink(receiveCompletion: appLogErrors) { track in
                 self._attributes = SpotifyTrack.extractAttributes(from: track)
-                self._loadLevel = .detailed
+                self._cacheMask = [.minimal]
             }
             .store(in: &cancellables)
-        
-        return true
     }
 }
 

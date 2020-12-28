@@ -33,7 +33,7 @@ struct PlayTrackView: View {
             }
         }
         .buttonStyle(BorderlessButtonStyle())
-        .disabled(track._loadLevel == .none)
+        .disabled(!track.cacheMask.contains(.minimal))
         .onReceive(player.$current) { self.current = $0 }
         .onReceive(player.$next) { self.next = $0 }
     }
@@ -49,7 +49,7 @@ struct TrackView: View {
         HStack {
             PlayTrackView(playlist: playlist, track: track)
 
-            if track._loadLevel == .none {
+            if !track.cacheMask.contains(.minimal) {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle())
                     .scaleEffect(0.5, anchor: .center)
@@ -76,7 +76,7 @@ struct TracksView: View {
     
     var body: some View {
         List(selection: $selected) {
-            ForEach(playlist._tracks.map { Track($0) } ) { track in
+            ForEach(playlist.tracks.map { Track($0) } ) { track in
                 TrackView(playlist: playlist, track: track)
                     .frame(height: 15)
             }

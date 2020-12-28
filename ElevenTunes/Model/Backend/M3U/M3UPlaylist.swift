@@ -21,7 +21,7 @@ public class M3UPlaylist: RemotePlaylist {
     init(_ url: URL) {
         self.url = url
         super.init()
-        _attributes[PlaylistAttribute.title] = url.lastPathComponent
+        loadMinimal()
     }
     
     static func create(fromURL url: URL) throws -> M3UPlaylist {
@@ -78,9 +78,23 @@ public class M3UPlaylist: RemotePlaylist {
         return urls
     }
     
-    public override func load(atLeast level: LoadLevel, deep: Bool, library: Library) -> Bool {
+    func loadMinimal() {
+        _attributes[PlaylistAttribute.title] = url.lastPathComponent
+        _cacheMask.formUnion(.minimal)
+    }
+    
+    public override func load(atLeast mask: PlaylistContentMask, deep: Bool, library: Library) {
         let url = self.url
         let interpreter = library.interpreter
+        
+        // We ALWAYS have minimal info
+        if !_cacheMask.isSuperset(of: mask.intersection([.minimal])) {
+            loadMinimal()
+        }
+
+        guard !mask.isDisjoint(with: [.children, .tracks, .attributes]) else {
+            return
+        }
         
         Future {
             try String(contentsOf: url)
@@ -92,15 +106,14 @@ public class M3UPlaylist: RemotePlaylist {
             interpreter.interpret(urls: $0)
                 ?? Just([]).eraseError().eraseToAnyPublisher()
         }
+        .onMain()
         .sink(receiveCompletion: appLogErrors(_:)) { [unowned self] contents in
             let library = ContentInterpreter.collect(fromContents: contents)
             _tracks = library.0
             _children = library.1
             _attributes[PlaylistAttribute.title] = url.lastPathComponent
-            _loadLevel = .detailed
+            _cacheMask.formUnion([.children, .tracks, .attributes])
         }.store(in: &cancellables)
-
-        return true
     }
 }
 

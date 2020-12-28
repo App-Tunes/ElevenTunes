@@ -14,7 +14,7 @@ public class PersistentPlaylist: NSObject, AnyPlaylist, Codable {
     public var icon: Image { Playlist.defaultIcon }
     public var accentColor: Color { .secondary }
     
-    public var loadLevel: AnyPublisher<LoadLevel, Never> { fatalError() }
+    public var cacheMask: AnyPublisher<PlaylistContentMask, Never> { fatalError() }
     
     public var attributes: AnyPublisher<TypedDict<PlaylistAttribute>, Never> { fatalError() }
     
@@ -26,10 +26,11 @@ public class PersistentPlaylist: NSObject, AnyPlaylist, Codable {
     @discardableResult
     public func add(children: [PersistentPlaylist]) -> Bool { false }
     
-    @discardableResult
-    public func load(atLeast level: LoadLevel, deep: Bool, library: Library) -> Bool {
+    public func load(atLeast mask: PlaylistContentMask, deep: Bool, library: Library) {
         fatalError()
     }
+    
+    public func invalidateCaches(_ mask: PlaylistContentMask) { }
 
     var tracks: AnyPublisher<[PersistentTrack], Never> { fatalError() }
     var children: AnyPublisher<[PersistentPlaylist], Never> { fatalError() }

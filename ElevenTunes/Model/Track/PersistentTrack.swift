@@ -14,7 +14,7 @@ public class PersistentTrack: NSObject, AnyTrack, Codable {
     
     public var icon: Image { Track.defaultIcon }
     
-    public var loadLevel: AnyPublisher<LoadLevel, Never> { fatalError() }
+    public var cacheMask: AnyPublisher<TrackContentMask, Never> { fatalError() }
     
     public var attributes: AnyPublisher<TypedDict<TrackAttribute>, Never> { fatalError() }
     
@@ -22,7 +22,9 @@ public class PersistentTrack: NSObject, AnyTrack, Codable {
         fatalError()
     }
     
-    public func load(atLeast level: LoadLevel, library: Library) -> Bool {
+    public func load(atLeast mask: TrackContentMask, library: Library) {
         fatalError()
     }
+    
+    public func invalidateCaches(_ mask: TrackContentMask) { }
 }

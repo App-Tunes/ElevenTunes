@@ -20,7 +20,7 @@ public class FileTrack: RemoteTrack {
         self.url = url
         super.init()
         _attributes[TrackAttribute.title] = url.lastPathComponent
-        _loadLevel = .detailed
+        _cacheMask = [.minimal]
     }
     
     public required init(from decoder: Decoder) throws {
@@ -59,10 +59,9 @@ public class FileTrack: RemoteTrack {
             .eraseToAnyPublisher()
     }
     
-    public override func load(atLeast level: LoadLevel, library: Library) -> Bool {
+    public override func load(atLeast mask: TrackContentMask, library: Library) {
         _attributes[TrackAttribute.title] = url.lastPathComponent
-        _loadLevel = .detailed
-        return true
+        _cacheMask.formUnion(.minimal)
     }
 }
 

@@ -43,7 +43,8 @@ class LibraryPlaylist: AnyPlaylist {
     
     var accentColor: Color { .accentColor }
     
-    var loadLevel: AnyPublisher<LoadLevel, Never> = Just(.detailed).eraseToAnyPublisher()
+    var cacheMask: AnyPublisher<PlaylistContentMask, Never> =
+        Just([.minimal, .children, .tracks, .attributes]).eraseToAnyPublisher()
     
     // TODO
     @Published var _attributes: TypedDict<PlaylistAttribute> = .init()
@@ -63,10 +64,12 @@ class LibraryPlaylist: AnyPlaylist {
         return request
     }
     
-    @discardableResult
-    func load(atLeast level: LoadLevel, deep: Bool, library: Library) -> Bool {
+    func load(atLeast level: PlaylistContentMask, deep: Bool, library: Library) {
         // TODO Deep
-        true
+    }
+    
+    func invalidateCaches(_ mask: PlaylistContentMask) {
+        // We have no caches per se, everything is stream
     }
     
     var icon: Image { Image(systemName: "house.fill" ) }

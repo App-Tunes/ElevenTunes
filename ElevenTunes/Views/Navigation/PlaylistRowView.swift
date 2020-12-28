@@ -32,7 +32,7 @@ struct PlaylistRowView: View {
                 .foregroundColor(playlist.accentColor)
                 .saturation(0.5)
 
-            if playlist._loadLevel < .minimal {
+            if !playlist.cacheMask.contains(.minimal) {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle())
                     .scaleEffect(0.5)
@@ -43,11 +43,10 @@ struct PlaylistRowView: View {
             else {
                 NavigationLink(destination: PlaylistView(playlist: playlist)) {
                     title(playlist[PlaylistAttribute.title] ?? "Unknown Playlist")
-                        .opacity((playlist._tracks.isEmpty && playlist._children.isEmpty) ? 0.6 : 1)
+                        .opacity((playlist.tracks.isEmpty && playlist.children.isEmpty) ? 0.6 : 1)
                 }
             }
         }
         .frame(height: playlist.isTopLevel ? 24 : 4) // The 4 is ridiculous but this counteracts the enormous default padding lol
-        .onAppear { playlist.load(atLeast: .minimal, library: library) }
     }
 }

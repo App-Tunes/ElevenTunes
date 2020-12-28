@@ -26,7 +26,7 @@ class PlayHistory {
     }
     
     convenience init(_ playlist: Playlist, at track: Track) {
-        let tracks = playlist._tracks
+        let tracks = playlist.tracks
         let trackIdx = tracks.firstIndex { $0.id == track.id }
         if trackIdx == nil {
             appLogger.error("Failed to find \(track) in \(playlist)")

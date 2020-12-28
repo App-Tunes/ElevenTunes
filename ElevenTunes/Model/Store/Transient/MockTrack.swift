@@ -37,8 +37,8 @@ class MockTrack: PersistentTrack {
     let uuid = UUID()
     override var id: String { uuid.description }
     
-    override var loadLevel: AnyPublisher<LoadLevel, Never> {
-        Just(.detailed).eraseToAnyPublisher()
+    override var cacheMask: AnyPublisher<TrackContentMask, Never> {
+        Just(.minimal).eraseToAnyPublisher()
     }
     
     @Published var _attributes: TypedDict<TrackAttribute> = .init()
@@ -50,6 +50,5 @@ class MockTrack: PersistentTrack {
         Fail(error: MockError()).eraseToAnyPublisher()
     }
     
-    @discardableResult
-    override func load(atLeast level: LoadLevel, library: Library) -> Bool { true }
+    override func load(atLeast level: TrackContentMask, library: Library) { }
 }

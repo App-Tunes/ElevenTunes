@@ -11,9 +11,9 @@ import Combine
 public class RemoteTrack: PersistentTrack {
     var cancellables = Set<AnyCancellable>()
 
-    @Published var _loadLevel: LoadLevel = .none
-    public override var loadLevel: AnyPublisher<LoadLevel, Never> {
-        $_loadLevel.eraseToAnyPublisher()
+    @Published var _cacheMask: TrackContentMask = []
+    public override var cacheMask: AnyPublisher<TrackContentMask, Never> {
+        $_cacheMask.eraseToAnyPublisher()
     }
 
     @Published var _attributes: TypedDict<TrackAttribute> = .init()

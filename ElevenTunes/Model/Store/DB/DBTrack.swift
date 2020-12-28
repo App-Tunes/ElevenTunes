@@ -23,9 +23,9 @@ public class DBTrack: NSManagedObject, AnyTrack {
     
     public var icon: Image { backend?.icon ?? Image(systemName: "questionmark") }
     
-    @Published var _loadLevel: LoadLevel = .none
-    public var loadLevel: AnyPublisher<LoadLevel, Never> {
-        $_loadLevel.eraseToAnyPublisher()
+    @Published var _cacheMask: TrackContentMask = []
+    public var cacheMask: AnyPublisher<TrackContentMask, Never> {
+        $_cacheMask.eraseToAnyPublisher()
     }
     
     @Published var _attributes: TypedDict<TrackAttribute> = .init()
@@ -43,30 +43,42 @@ public class DBTrack: NSManagedObject, AnyTrack {
 
     func initialSetup() {
         _attributes = cachedAttributes
-        _loadLevel = LoadLevel(rawValue: cachedLoadLevel) ?? .none
+        if backend != nil {
+            _cacheMask = TrackContentMask(rawValue: backendCacheMask)
+        }
+        else {
+            _cacheMask = .minimal
+        }
 
         refreshObservation()
     }
 
-    @discardableResult
-    public func load(atLeast level: LoadLevel, library: Library) -> Bool {
-        guard level > _loadLevel else {
-            return true
-        }
-        
+    public func load(atLeast mask: TrackContentMask, library: Library) {
         guard let backend = backend else {
             // Fetch requests have already set the values
-            _loadLevel = .detailed
-            return true
+            if _cacheMask != [.minimal] {
+                _cacheMask = [.minimal]
+            }
+            return
         }
         
-        let currentLoadLevel = LoadLevel(rawValue: cachedLoadLevel) ?? .none
-        if currentLoadLevel >= level {
-            // We can use DB cache! Yay!
-            _loadLevel = currentLoadLevel
-            return true
+        let missing = mask.subtracting(_cacheMask)
+        
+        if missing.isEmpty {
+            // We have everything we need! Yay!
+            return
         }
         
-        return backend.load(atLeast: level, library: library)
+        // Only reload what's missing
+        backend.load(atLeast: missing, library: library)
+    }
+    
+    public func invalidateCaches(_ mask: TrackContentMask) {
+        if let backend = backend {
+            let newMask = _cacheMask.subtracting(mask)
+            _cacheMask = newMask
+            backendCacheMask = newMask.rawValue
+            backend.invalidateCaches(mask)
+        }
     }
 }

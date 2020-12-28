@@ -9,26 +9,21 @@ import Foundation
 import Combine
 import SwiftUI
 
-class Track: AnyTrack, ObservableObject {
+class Track: ObservableObject {
     var backend: AnyTrack
     
     init(_ backend: AnyTrack) {
         self.backend = backend
         
-        loadLevel = backend.loadLevel
-        attributes = backend.attributes
-        
-        backend.loadLevel.assign(to: &$_loadLevel)
-        backend.attributes.assign(to: &$_attributes)
+        backend.cacheMask.assign(to: &$cacheMask)
+        backend.attributes.assign(to: &$attributes)
     }
     
     var id: String { backend.id }
 
-    @Published var _loadLevel: LoadLevel = .none
-    var loadLevel: AnyPublisher<LoadLevel, Never>
+    @Published var cacheMask: TrackContentMask = []
     
-    @Published var _attributes: TypedDict<TrackAttribute> = .init()
-    var attributes: AnyPublisher<TypedDict<TrackAttribute>, Never>
+    @Published var attributes: TypedDict<TrackAttribute> = .init()
 
     func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
         backend.emitter(context: context)
@@ -36,13 +31,22 @@ class Track: AnyTrack, ObservableObject {
 
     var icon: Image { backend.icon }
     
-    @discardableResult
-    func load(atLeast level: LoadLevel, library: Library) -> Bool {
-        backend.load(atLeast: level, library: library)
+    func load(atLeast mask: TrackContentMask, library: Library) {
+        let missing = mask.subtracting(cacheMask)
+        guard !missing.isEmpty else {
+            return
+        }
+        
+        backend.load(atLeast: missing, library: library)
+    }
+
+    func invalidateCaches(_ mask: TrackContentMask) {
+        cacheMask.subtract(mask)  // Let's immediately invalidate ourselves
+        backend.invalidateCaches(mask)
     }
 
     subscript<T: TrackAttribute & TypedKey>(_ attribute: T) -> T.Value? {
-        _attributes[attribute]
+        attributes[attribute]
     }
 }
 

@@ -19,7 +19,7 @@ struct PlaylistView: View {
                 
 //                Divider()
                 
-                if playlist._loadLevel < .minimal {
+                if !playlist.cacheMask.isSuperset(of: [.minimal, .tracks]) {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
                 }
@@ -37,7 +37,7 @@ struct PlaylistView: View {
 //            TrackInfoView()
         }
         .listStyle(DefaultListStyle())
-        .onAppear() { playlist.load(atLeast: .detailed, library: library) }
+        .onAppear() { playlist.load(atLeast: [.minimal, .tracks], library: library) }
     }
 }
 

@@ -81,38 +81,50 @@ public class SpotifyPlaylist: RemotePlaylist {
             .eraseToAnyPublisher()
     }
     
-    public override func load(atLeast level: LoadLevel, deep: Bool, library: Library) -> Bool {
+    public override func load(atLeast mask: PlaylistContentMask, deep: Bool, library: Library) {
         let spotify = library.spotify
-        let count = 100
         let uri = self.uri
         
-        // There are actually playlists with up to 10.000 items lol
-        let paginationLimit = 100
-
-        let tracks = spotify.api.playlistTracks(uri, limit: count, offset: 0)
-            .unfold(limit: paginationLimit) {
-                $0.offset + $0.items.count >= $0.total ? nil :
-                spotify.api.playlistTracks(uri, limit: count, offset: $0.offset + count)
-            }
-            .collect()
-            .map { $0.flatMap { $0.items } }
-            .map { items in
-                items.compactMap { item -> SpotifyTrack? in
-                    return ExistingSpotifyTrack(item.item).map { SpotifyTrack(track: $0) }
-                }
-            }
-            .eraseToAnyPublisher()
-            
-        spotify.api.playlist(uri).eraseToAnyPublisher().zip(tracks)
-            .onMain()
-            .sink(receiveCompletion: appLogErrors) { (info, tracks) in
-                self._attributes = SpotifyPlaylist.attributes(of: info)
-                self._tracks = tracks
-                self._loadLevel = .detailed
-            }
-            .store(in: &cancellables)
+        let missing = mask.subtracting(_cacheMask)
         
-        return true
+        if !missing.isDisjoint(with: [.children]) {
+            // How many times grandma, we will NEVER want children
+            _cacheMask.formUnion(.children)
+        }
+        
+        if !missing.isDisjoint(with: [.tracks]) {
+            // There are actually playlists with up to 10.000 items lol
+            let count = 100
+            let paginationLimit = 100
+
+            spotify.api.playlistTracks(uri, limit: count, offset: 0)
+                .unfold(limit: paginationLimit) {
+                    $0.offset + $0.items.count >= $0.total ? nil :
+                    spotify.api.playlistTracks(uri, limit: count, offset: $0.offset + count)
+                }
+                .collect()
+                .map { $0.flatMap { $0.items } }
+                .map { items in
+                    items.compactMap { item -> SpotifyTrack? in
+                        return ExistingSpotifyTrack(item.item).map { SpotifyTrack(track: $0) }
+                    }
+                }
+                .onMain()
+                .sink(receiveCompletion: appLogErrors(_:)) { tracks in
+                    self._tracks = tracks
+                    self._cacheMask.formUnion(.tracks)
+                }.store(in: &cancellables)
+        }
+        
+        if !missing.isDisjoint(with: [.minimal, .attributes]) {
+            spotify.api.playlist(uri).eraseToAnyPublisher()
+                .onMain()
+                .sink(receiveCompletion: appLogErrors) { info in
+                    self._attributes = SpotifyPlaylist.attributes(of: info)
+                    self._cacheMask.formUnion([.minimal, .attributes])
+                }
+                .store(in: &cancellables)
+        }
     }
 }
 

@@ -71,47 +71,58 @@ public class SpotifyUserPlaylist: RemotePlaylist {
             .eraseToAnyPublisher()
     }
         
-    public override func load(atLeast level: LoadLevel, deep: Bool, library: Library) -> Bool {
+    public override func load(atLeast mask: PlaylistContentMask, deep: Bool, library: Library) {
         let spotify = library.spotify
-        let count = 50
         let uri = self.uri
         
-        let paginationLimit = 100
+        let missing = mask.subtracting(_cacheMask)
 
-        let playlistsAt = { (offset: Int) in
-            uri != nil
-                ? spotify.api.userPlaylists(for: uri!, limit: count, offset: offset)
-                : spotify.api.currentUserPlaylists(limit: count, offset: offset)
+        if missing.contains(.tracks) {
+            _cacheMask.formUnion(.tracks)
         }
-        
-        let playlists = playlistsAt(0)
-            .unfold(limit: paginationLimit) {
-                $0.offset + $0.items.count >= $0.total ? nil
-                    : playlistsAt($0.offset + count)
+
+        if missing.contains(.children) {
+            let count = 50
+            let paginationLimit = 100
+
+            let playlistsAt = { (offset: Int) in
+                uri != nil
+                    ? spotify.api.userPlaylists(for: uri!, limit: count, offset: offset)
+                    : spotify.api.currentUserPlaylists(limit: count, offset: offset)
             }
-            .collect()
-            .map { $0.flatMap { $0.items } }
-            .map { items in
-                items.compactMap { item -> SpotifyPlaylist? in
-                    return SpotifyPlaylist(uri: item.uri)
-                }
-            }
-            .eraseToAnyPublisher()
             
-        let userProfile = uri != nil
-            ? spotify.api.userProfile(uri!)
-            : spotify.api.currentUserProfile()
-        
-        userProfile.eraseToAnyPublisher().zip(playlists)
-            .onMain()
-            .sink(receiveCompletion: appLogErrors) { (info, playlists) in
-                self._attributes = SpotifyUserPlaylist.attributes(of: info)
-                self._children = playlists
-                self._loadLevel = .detailed
-            }
-            .store(in: &cancellables)
-        
-        return true
+            playlistsAt(0)
+                .unfold(limit: paginationLimit) {
+                    $0.offset + $0.items.count >= $0.total ? nil
+                        : playlistsAt($0.offset + count)
+                }
+                .collect()
+                .map { $0.flatMap { $0.items } }
+                .map { items in
+                    items.compactMap { item -> SpotifyPlaylist? in
+                        return SpotifyPlaylist(uri: item.uri)
+                    }
+                }
+                .onMain()
+                .sink(receiveCompletion: appLogErrors(_:)) { playlists in
+                    self._children = playlists
+                    self._cacheMask.formUnion(.children)
+                }.store(in: &cancellables)
+        }
+            
+        if !missing.isDisjoint(with: [.minimal, .attributes]) {
+            let userProfile = uri != nil
+                ? spotify.api.userProfile(uri!)
+                : spotify.api.currentUserProfile()
+            
+            userProfile.eraseToAnyPublisher()
+                .onMain()
+                .sink(receiveCompletion: appLogErrors) { info in
+                    self._attributes = SpotifyUserPlaylist.attributes(of: info)
+                    self._cacheMask.formUnion([.minimal, .attributes])
+                }
+                .store(in: &cancellables)
+        }
     }
 }
 

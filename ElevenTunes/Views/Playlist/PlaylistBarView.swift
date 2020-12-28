@@ -12,7 +12,7 @@ struct PlaylistBarView: View {
 
     var body: some View {
         GeometryReader { geo in
-            Text("\(playlist._tracks.count) tracks")
+            Text("\(playlist.tracks.count) tracks")
                 .position(x: geo.size.width / 2, y: geo.size.height / 2 - 5)
         }
             .frame(minWidth: 200)

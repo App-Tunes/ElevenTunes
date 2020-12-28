@@ -20,7 +20,7 @@ public class DirectoryPlaylist: RemotePlaylist {
     init(_ url: URL) {
         self.url = url
         super.init()
-        _attributes[PlaylistAttribute.title] = url.lastPathComponent
+        loadMinimal()
     }
     
     static func create(fromURL url: URL) throws -> DirectoryPlaylist {
@@ -51,9 +51,23 @@ public class DirectoryPlaylist: RemotePlaylist {
     
     public override func supportsChildren() -> Bool { true }
     
-    public override func load(atLeast level: LoadLevel, deep: Bool, library: Library) -> Bool {
+    func loadMinimal() {
+        _attributes[PlaylistAttribute.title] = url.lastPathComponent
+        _cacheMask.formUnion([.minimal, .attributes])
+    }
+    
+    public override func load(atLeast mask: PlaylistContentMask, deep: Bool, library: Library) {
         let url = self.url
         let interpreter = library.interpreter
+        
+        // We ALWAYS have minimal info
+        if !_cacheMask.isSuperset(of: mask.intersection([.minimal, .attributes])) {
+            loadMinimal()
+        }
+        
+        guard !mask.isDisjoint(with: [.tracks, .children]) else {
+            return  // Don't need to load contents
+        }
         
         Future {
             try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: [.isDirectoryKey])
@@ -62,15 +76,16 @@ public class DirectoryPlaylist: RemotePlaylist {
             interpreter.interpret(urls: $0)
                 ?? Just([]).eraseError().eraseToAnyPublisher()
         }
+        .onMain()
         .sink(receiveCompletion: appLogErrors(_:)) { [unowned self] contents in
             let library = ContentInterpreter.collect(fromContents: contents)
             _tracks = library.0
             _children = library.1
             _attributes[PlaylistAttribute.title] = url.lastPathComponent
-            _loadLevel = .detailed
+            _cacheMask.formUnion([.children, .tracks])
         }.store(in: &cancellables)
         
-        return true
+        return
     }
 }
 

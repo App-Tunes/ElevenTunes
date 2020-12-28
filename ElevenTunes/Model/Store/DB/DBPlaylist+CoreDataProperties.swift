@@ -19,7 +19,7 @@ extension DBPlaylist {
     @NSManaged public var backendID: String
     @NSManaged public var isDirectory: Bool
     @NSManaged public var indexed: Bool
-    @NSManaged public var cachedLoadLevel: Int16
+    @NSManaged public var backendCacheMask: Int16
     @NSManaged public var title: String?
     @NSManaged public var children: NSOrderedSet
     @NSManaged public var parent: DBPlaylist?

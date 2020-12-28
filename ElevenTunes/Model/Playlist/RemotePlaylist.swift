@@ -17,9 +17,13 @@ public class RemotePlaylist: PersistentPlaylist {
     }
     public override func encode(to encoder: Encoder) throws { }
     
-    @Published var _loadLevel: LoadLevel = .none
-    public override var loadLevel: AnyPublisher<LoadLevel, Never> {
-        $_loadLevel.eraseToAnyPublisher()
+    @Published var _cacheMask: PlaylistContentMask = []
+    public override var cacheMask: AnyPublisher<PlaylistContentMask, Never> {
+        $_cacheMask.eraseToAnyPublisher()
+    }
+    
+    public override func invalidateCaches(_ mask: PlaylistContentMask) {
+        _cacheMask.subtract(mask)
     }
     
     @Published var _tracks: [PersistentTrack] = []

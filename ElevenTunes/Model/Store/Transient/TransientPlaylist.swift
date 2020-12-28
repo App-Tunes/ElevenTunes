@@ -41,8 +41,8 @@ class TransientPlaylist: PersistentPlaylist {
 //        try container.encode(_children, forKey: .children)
     }
 
-    override var loadLevel: AnyPublisher<LoadLevel, Never> {
-        Just(.detailed).eraseToAnyPublisher()
+    override var cacheMask: AnyPublisher<PlaylistContentMask, Never> {
+        Just([.minimal, .children, .tracks, .attributes]).eraseToAnyPublisher()
     }
     
     @Published var _attributes: TypedDict<PlaylistAttribute> = .init()
@@ -50,12 +50,10 @@ class TransientPlaylist: PersistentPlaylist {
         $_attributes.eraseToAnyPublisher()
     }
 
-    @discardableResult
-    override func load(atLeast level: LoadLevel, deep: Bool, library: Library) -> Bool {
+    override func load(atLeast mask: PlaylistContentMask, deep: Bool, library: Library) {
         if deep {
-            _children.forEach { $0.load(atLeast: level, deep: true, library: library) }
+            _children.forEach { $0.load(atLeast: mask, deep: true, library: library) }
         }
-        return true
     }
 
     @Published var _tracks: [PersistentTrack]

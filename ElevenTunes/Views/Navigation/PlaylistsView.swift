@@ -13,8 +13,9 @@ struct PlaylistsView: View {
     @Environment(\.library) private var library: Library!
 
     var body: some View {
-        List(directory.topLevelChildren, children: \.children ) { playlist in
+        List(directory.topLevelChildren, children: \.viewChildren) { playlist in
             PlaylistRowView(playlist: playlist)
+                .onAppear { playlist.load(atLeast: [.minimal, .children], library: library) }
                 .padding(.leading, 8)
         }
         .frame(minWidth: 0, maxWidth: 800, maxHeight: .infinity)

@@ -60,7 +60,6 @@ extension Library {
             if let backend = backend as? MockTrack {
                 let dbTrack = DBTrack(entity: trackModel, insertInto: context)
                 dbTrack.merge(attributes: backend._attributes)
-                dbTrack.cachedLoadLevel = LoadLevel.detailed.rawValue
                 return dbTrack
             }
             
@@ -69,7 +68,6 @@ extension Library {
             dbTrack.backendID = backend.id
             if let backend = backend as? RemoteTrack {
                 // Can use what's there already
-                dbTrack.cachedLoadLevel = backend._loadLevel.rawValue
                 dbTrack.merge(attributes: backend._attributes)
             }
             return dbTrack
@@ -98,6 +96,11 @@ extension Library {
             let dbPlaylist = DBPlaylist(entity: playlistModel, insertInto: context)
             dbPlaylist.backend = backend
             dbPlaylist.backendID = backend.id
+            if let backend = backend as? RemotePlaylist {
+                // Children and Tracks may be deferred in conversion, so we can
+                // only inherit attributes
+                dbPlaylist.merge(attributes: backend._attributes)
+            }
             return dbPlaylist
         }
 

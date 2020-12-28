@@ -18,11 +18,10 @@ extension DBTrack {
                 }
                 .store(in: &backendObservers)
 
-            backend.loadLevel
+            backend.cacheMask
                 .onMain()
-                .sink { [unowned self] loadLevel in
-                    self._loadLevel = loadLevel
-                    self.cachedLoadLevel = loadLevel.rawValue
+                .sink { [unowned self] cacheMask in
+                    self.backendCacheMask |= cacheMask.rawValue
                 }
                 .store(in: &backendObservers)
         }
@@ -39,10 +38,15 @@ extension DBTrack: SelfChangeWatcher {
         
         if changes.keys.contains("backend") {
             refreshObservation()
+            if backend != nil {
+                // Invalidate stuff we stored for the backend
+                if backendCacheMask != 0 { backendCacheMask = 0 }
+                // Attributes will be either overriden by new playlist, or kept
+            }
         }
-        
-        if changes.keys.contains("cachedLoadLevel") {
-            _loadLevel = LoadLevel(rawValue: cachedLoadLevel) ?? .none
+
+        if changes.keys.contains("backendCacheMask") {
+            _cacheMask = TrackContentMask(rawValue: backendCacheMask)
         }
     }
 }
