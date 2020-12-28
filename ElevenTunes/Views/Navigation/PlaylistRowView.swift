@@ -47,7 +47,7 @@ struct PlaylistRowView: View {
                 }
             }
         }
-        .frame(height: playlist.isTopLevel ? 24 : 12)
+        .frame(height: playlist.isTopLevel ? 24 : 4) // The 4 is ridiculous but this counteracts the enormous default padding lol
         .onAppear { playlist.load(atLeast: .minimal, library: library) }
     }
 }
