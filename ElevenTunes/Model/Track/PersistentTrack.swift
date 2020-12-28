@@ -27,4 +27,15 @@ public class PersistentTrack: NSObject, AnyTrack, Codable {
     }
     
     public func invalidateCaches(_ mask: TrackContentMask) { }
+    
+    // NSObject gedöns
+    
+    public override var hash: Int { id.hash }
+    
+    public override func isEqual(_ other: Any?) -> Bool {
+        guard let other = other as? PersistentTrack else { return false }
+        return self.id == other.id
+    }
 }
+
+extension PersistentTrack: Identifiable { }

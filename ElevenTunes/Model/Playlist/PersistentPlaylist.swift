@@ -36,7 +36,18 @@ public class PersistentPlaylist: NSObject, AnyPlaylist, Codable {
 
     var tracks: AnyPublisher<[PersistentTrack], Never> { fatalError() }
     var children: AnyPublisher<[PersistentPlaylist], Never> { fatalError() }
+    
+    // NSObject gedöns
+    
+    public override var hash: Int { id.hash }
+    
+    public override func isEqual(_ other: Any?) -> Bool {
+        guard let other = other as? PersistentPlaylist else { return false }
+        return self.id == other.id
+    }
 }
+
+extension PersistentPlaylist: Identifiable {}
 
 extension PersistentPlaylist {
     public var anyTracks: AnyPublisher<[AnyTrack], Never> {
