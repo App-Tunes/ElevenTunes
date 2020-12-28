@@ -60,6 +60,8 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
         refreshObservation()
     }
     
+    public var hasCaches: Bool { backend != nil }
+    
     public func load(atLeast mask: PlaylistContentMask, deep: Bool, library: Library) {
         guard let backend = backend else {
             // Fetch requests have already set the values

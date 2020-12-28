@@ -26,6 +26,8 @@ public class PersistentPlaylist: NSObject, AnyPlaylist, Codable {
     @discardableResult
     public func add(children: [PersistentPlaylist]) -> Bool { false }
     
+    public var hasCaches: Bool { true }
+    
     public func load(atLeast mask: PlaylistContentMask, deep: Bool, library: Library) {
         fatalError()
     }

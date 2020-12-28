@@ -47,6 +47,16 @@ struct PlaylistRowView: View {
                 }
             }
         }
+        .contextMenu {
+            if playlist.backend.hasCaches {
+                Button(action: {
+                    playlist.invalidateCaches([.minimal, .children, .tracks, .attributes], reloadWith: library)
+                }) {
+                    Image(systemName: "arrow.clockwise")
+                    Text("Reload Metadata")
+                }
+            }
+        }
         .frame(height: playlist.isTopLevel ? 24 : 4) // The 4 is ridiculous but this counteracts the enormous default padding lol
     }
 }

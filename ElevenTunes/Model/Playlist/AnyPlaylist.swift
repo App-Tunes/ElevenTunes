@@ -31,6 +31,7 @@ public protocol AnyPlaylist: AnyObject {
     var anyChildren: AnyPublisher<[AnyPlaylist], Never> { get }
     var attributes: AnyPublisher<TypedDict<PlaylistAttribute>, Never> { get }
 
+    var hasCaches: Bool { get }
     var cacheMask: AnyPublisher<PlaylistContentMask, Never> { get }
 
     func load(atLeast mask: PlaylistContentMask, deep: Bool, library: Library)

@@ -61,9 +61,14 @@ class Playlist: ObservableObject {
         backend.load(atLeast: missing, deep: deep, library: library)
     }
 
-    func invalidateCaches(_ mask: PlaylistContentMask) {
+    func invalidateCaches(_ mask: PlaylistContentMask, reloadWith library: Library? = nil) {
         cacheMask.subtract(mask)  // Let's immediately invalidate ourselves
-        backend.invalidateCaches(mask)
+        if let library = library {
+            backend.invalidateCaches(mask, reloadWith: library)
+        }
+        else {
+            backend.invalidateCaches(mask)
+        }
     }
 
     @discardableResult

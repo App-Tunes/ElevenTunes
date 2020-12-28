@@ -43,6 +43,8 @@ class LibraryPlaylist: AnyPlaylist {
     
     var accentColor: Color { .accentColor }
     
+    var hasCaches: Bool { false }
+    
     var cacheMask: AnyPublisher<PlaylistContentMask, Never> =
         Just([.minimal, .children, .tracks, .attributes]).eraseToAnyPublisher()
     
