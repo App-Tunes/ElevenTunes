@@ -56,6 +56,12 @@ public class DBPlaylist: NSManagedObject, AnyPlaylist {
         _anyTracks = tracks.array as! [DBTrack]
         _anyChildren = children.array as! [DBPlaylist]
         _attributes = cachedAttributes
+        if backend != nil {
+            _cacheMask = PlaylistContentMask(rawValue: backendCacheMask)
+        }
+        else {
+            _cacheMask = [.minimal, .children, .tracks, .attributes]
+        }
 
         refreshObservation()
     }
