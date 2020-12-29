@@ -47,10 +47,17 @@ extension Publisher {
         return mapError { $0 as Error }
     }
     
-    func handleTermination(handler: @escaping () -> Void) -> Publishers.HandleEvents<Self> {
+    func handleTermination(handler: @escaping (Bool) -> Void) -> Publishers.HandleEvents<Self> {
         return handleEvents(
-            receiveCompletion: { _ in handler() },
-            receiveCancel: { handler() }
+            receiveCompletion: {
+                switch $0 {
+                case.finished:
+                    handler(true)
+                default:
+                    handler(false)
+                }
+            },
+            receiveCancel: { handler(false) }
         )
     }
 }

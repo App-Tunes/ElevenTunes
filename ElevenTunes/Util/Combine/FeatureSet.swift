@@ -64,6 +64,9 @@ class FeatureSet<Feature: Hashable, Set> where Set: SetAlgebra, Set.Element == F
         }
     }
     
+    fileprivate func unblock(_ feature: Feature) { lock.perform { blocked.remove(feature) } }
+    fileprivate func unblockAll(_ features: Set) { lock.perform { blocked.subtract(features) } }
+
     func insert(_ feature: Feature) { lock.perform { _ = features.insert(feature) } }
     func formUnion(_ features: Set) { lock.perform { self.features.formUnion(features) } }
     
@@ -122,6 +125,14 @@ extension FeatureSet {
             return fulfilling
         }
         
+        /// Aborts the features from the promise
+        @discardableResult
+        func abandonAll(_ features: Set) -> Set {
+            let abandoning = subtract(features)
+            if !abandoning.isEmpty { parent.unblockAll(abandoning) }
+            return abandoning
+        }
+        
         @discardableResult
         /// Calls the closure if the feature can be fulfilled
         func fulfilling(_ feature: Feature, during closure: () -> Void) -> Bool {
@@ -145,22 +156,13 @@ extension FeatureSet {
         }
 
         /// Offloads fulfilling the feature to the cancellation of the return value
-        func fulfillLater(_ feature: Feature) -> AnyCancellable? {
-            guard remove(feature) else {
-                return nil
-            }
-
-            return AnyCancellable { [weak parent] in parent?.mark(feature) }
-        }
-
-        /// Offloads fulfilling the feature to the cancellation of the return value
-        func fulfillAnyLater(_ features: Set) -> AnyCancellable? {
+        func fulfillAnyLater(_ features: Set) -> Promise? {
             let fulfilling = subtract(features)
             guard !fulfilling.isEmpty else {
                 return nil
             }
 
-            return AnyCancellable { [weak parent] in parent?.markAll(fulfilling) }
+            return Promise(parent: parent, features: fulfilling)
         }
     }
 }
@@ -175,14 +177,11 @@ extension FeatureSet.Promise: CustomStringConvertible where Set: CustomStringCon
 
 extension Publisher {
     /// Fulfills the feature once the stream terminates
-    func fulfilling<Feature: Hashable, Set>(_ feature: Feature, of promise: FeatureSet<Feature, Set>.Promise) -> Publishers.HandleEvents<Self> where Set: SetAlgebra, Set.Element == Feature {
-        let later = promise.fulfillLater(feature)
-        return handleTermination { later?.cancel() }
-    }
-
-    /// Fulfills the feature once the stream terminates
     func fulfillingAny<Feature: Hashable, Set>(_ features: Set, of promise: FeatureSet<Feature, Set>.Promise) -> Publishers.HandleEvents<Self> where Set: SetAlgebra, Set.Element == Feature {
         let later = promise.fulfillAnyLater(features)
-        return handleTermination { later?.cancel() }
+        return handleTermination { success in
+            if success { later?.fulfillAny(features) }
+            else { later?.abandonAll(features) }
+        }
     }
 }

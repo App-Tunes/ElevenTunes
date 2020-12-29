@@ -115,7 +115,7 @@ public class SpotifyPlaylist: RemotePlaylist {
                         items.map(SpotifyTrack.init)
                     }
                     .onMain()
-                    .fulfilling(.tracks, of: promise)
+                    .fulfillingAny(.tracks, of: promise)
                     .sink(receiveCompletion: appLogErrors(_:)) { tracks in
                         self._tracks = tracks
                     }.store(in: &cancellables)

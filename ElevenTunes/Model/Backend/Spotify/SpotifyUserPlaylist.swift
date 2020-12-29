@@ -102,7 +102,7 @@ public class SpotifyUserPlaylist: RemotePlaylist {
                         }
                     }
                     .onMain()
-                    .fulfilling(.children, of: promise)
+                    .fulfillingAny(.children, of: promise)
                     .sink(receiveCompletion: appLogErrors(_:)) { playlists in
                         self._children = playlists
                     }.store(in: &cancellables)
@@ -115,7 +115,7 @@ public class SpotifyUserPlaylist: RemotePlaylist {
                 
                 userProfile.eraseToAnyPublisher()
                     .onMain()
-                    .fulfilling([.minimal, .attributes], of: promise)
+                    .fulfillingAny([.minimal, .attributes], of: promise)
                     .sink(receiveCompletion: appLogErrors) { info in
                         self._attributes = SpotifyUserPlaylist.attributes(of: info)
                     }

@@ -77,7 +77,7 @@ public class DirectoryPlaylist: RemotePlaylist {
                     ?? Just([]).eraseError().eraseToAnyPublisher()
             }
             .onMain()
-            .fulfilling([.tracks, .children], of: promise)
+            .fulfillingAny([.tracks, .children], of: promise)
             .sink(receiveCompletion: appLogErrors(_:)) { [unowned self] contents in
                 let library = ContentInterpreter.collect(fromContents: contents)
                 _tracks = library.0
