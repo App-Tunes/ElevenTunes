@@ -85,11 +85,11 @@ extension FeatureSet {
             self.unfulfilledFeatures = features
         }
         
-        func canFulfill(_ feature: Feature) -> Bool {
+        func includes(_ feature: Feature) -> Bool {
             lock.perform { unfulfilledFeatures.contains(feature) }
         }
         
-        func canFulfillAny(_ features: Set) -> Bool {
+        func includesAny(_ features: Set) -> Bool {
             lock.perform { !unfulfilledFeatures.isDisjoint(with: features) }
         }
 

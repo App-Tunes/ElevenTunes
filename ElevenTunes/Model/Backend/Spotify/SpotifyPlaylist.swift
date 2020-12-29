@@ -94,7 +94,7 @@ public class SpotifyPlaylist: RemotePlaylist {
             let spotify = library.spotify
             let uri = self.uri
             
-            if promise.canFulfill(.tracks) {
+            if promise.includes(.tracks) {
                 // There are actually playlists with up to 10.000 items lol
                 let count = 100
                 let paginationLimit = 100
@@ -121,7 +121,7 @@ public class SpotifyPlaylist: RemotePlaylist {
                     }.store(in: &cancellables)
             }
             
-            if promise.canFulfillAny([.minimal, .attributes]) {
+            if promise.includesAny([.minimal, .attributes]) {
                 spotify.api.playlist(uri).eraseToAnyPublisher()
                     .onMain()
                     .fulfillingAny([.minimal, .attributes], of: promise)

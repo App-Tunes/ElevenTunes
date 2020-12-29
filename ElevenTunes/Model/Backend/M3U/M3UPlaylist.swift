@@ -92,7 +92,7 @@ public class M3UPlaylist: RemotePlaylist {
                 loadMinimal()
             }
             
-            guard promise.canFulfillAny([.tracks, .children]) else {
+            guard promise.includesAny([.tracks, .children]) else {
                 return
             }
             
