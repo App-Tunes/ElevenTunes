@@ -130,7 +130,6 @@ public class SpotifyPlaylist: RemotePlaylist {
                 .sink(receiveCompletion: appLogErrors) { info in
                     self._attributes = SpotifyPlaylist.attributes(of: info)
                     self._cacheMask.formUnion([.minimal, .attributes])
-                    print(ObjectIdentifier(self), self._cacheMask)
                 }
                 .store(in: &cancellables)
         }
