@@ -72,56 +72,55 @@ public class SpotifyUserPlaylist: RemotePlaylist {
     }
         
     public override func load(atLeast mask: PlaylistContentMask, deep: Bool, library: Library) {
-        let spotify = library.spotify
-        let uri = self.uri
-        
-        let missing = mask.subtracting(_cacheMask)
+        contentSet.promise(mask) { promise in
+            // Tracks will always be []
+            promise.fulfill(.tracks)
+            
+            let spotify = library.spotify
+            let uri = self.uri
 
-        if missing.contains(.tracks) {
-            _cacheMask.formUnion(.tracks)
-        }
+            if promise.canFulfill(.children) {
+                let count = 50
+                let paginationLimit = 100
 
-        if missing.contains(.children) {
-            let count = 50
-            let paginationLimit = 100
-
-            let playlistsAt = { (offset: Int) in
-                uri != nil
-                    ? spotify.api.userPlaylists(for: uri!, limit: count, offset: offset)
-                    : spotify.api.currentUserPlaylists(limit: count, offset: offset)
+                let playlistsAt = { (offset: Int) in
+                    uri != nil
+                        ? spotify.api.userPlaylists(for: uri!, limit: count, offset: offset)
+                        : spotify.api.currentUserPlaylists(limit: count, offset: offset)
+                }
+                
+                playlistsAt(0)
+                    .unfold(limit: paginationLimit) {
+                        $0.offset + $0.items.count >= $0.total ? nil
+                            : playlistsAt($0.offset + count)
+                    }
+                    .collect()
+                    .map { $0.flatMap { $0.items } }
+                    .map { items in
+                        items.compactMap { item -> SpotifyPlaylist? in
+                            return SpotifyPlaylist(uri: item.uri)
+                        }
+                    }
+                    .onMain()
+                    .fulfilling(.children, of: promise)
+                    .sink(receiveCompletion: appLogErrors(_:)) { playlists in
+                        self._children = playlists
+                    }.store(in: &cancellables)
             }
             
-            playlistsAt(0)
-                .unfold(limit: paginationLimit) {
-                    $0.offset + $0.items.count >= $0.total ? nil
-                        : playlistsAt($0.offset + count)
-                }
-                .collect()
-                .map { $0.flatMap { $0.items } }
-                .map { items in
-                    items.compactMap { item -> SpotifyPlaylist? in
-                        return SpotifyPlaylist(uri: item.uri)
+            if promise.canFulfillAny([.minimal, .attributes]) {
+                let userProfile = uri != nil
+                    ? spotify.api.userProfile(uri!)
+                    : spotify.api.currentUserProfile()
+                
+                userProfile.eraseToAnyPublisher()
+                    .onMain()
+                    .fulfilling([.minimal, .attributes], of: promise)
+                    .sink(receiveCompletion: appLogErrors) { info in
+                        self._attributes = SpotifyUserPlaylist.attributes(of: info)
                     }
-                }
-                .onMain()
-                .sink(receiveCompletion: appLogErrors(_:)) { playlists in
-                    self._children = playlists
-                    self._cacheMask.formUnion(.children)
-                }.store(in: &cancellables)
-        }
-            
-        if !missing.isDisjoint(with: [.minimal, .attributes]) {
-            let userProfile = uri != nil
-                ? spotify.api.userProfile(uri!)
-                : spotify.api.currentUserProfile()
-            
-            userProfile.eraseToAnyPublisher()
-                .onMain()
-                .sink(receiveCompletion: appLogErrors) { info in
-                    self._attributes = SpotifyUserPlaylist.attributes(of: info)
-                    self._cacheMask.formUnion([.minimal, .attributes])
-                }
-                .store(in: &cancellables)
+                    .store(in: &cancellables)
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
-public struct PlaylistContentMask: OptionSet {
+public struct PlaylistContentMask: OptionSet, Hashable {
     public let rawValue: Int16
     
     public init(rawValue: Int16) {

@@ -36,14 +36,16 @@ struct PlaylistRowView: View {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle())
                     .scaleEffect(0.5)
-                
-                title(playlist[PlaylistAttribute.title] ?? "...")
-                    .opacity(0.5)
             }
-            else {
-                NavigationLink(destination: PlaylistView(playlist: playlist)) {
+
+            NavigationLink(destination: PlaylistView(playlist: playlist)) {
+                if playlist.cacheMask.contains(.minimal) {
                     title(playlist[PlaylistAttribute.title] ?? "Unknown Playlist")
                         .opacity((playlist.tracks.isEmpty && playlist.children.isEmpty) ? 0.6 : 1)
+                }
+                else {
+                    title(playlist[PlaylistAttribute.title] ?? "...")
+                        .opacity(0.5)
                 }
             }
         }

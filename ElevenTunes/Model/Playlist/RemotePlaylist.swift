@@ -17,13 +17,14 @@ public class RemotePlaylist: PersistentPlaylist {
     }
     public override func encode(to encoder: Encoder) throws { }
     
-    @Published var _cacheMask: PlaylistContentMask = []
+    let contentSet: FeatureSet<PlaylistContentMask, PlaylistContentMask> = .init()
+    
     public override var cacheMask: AnyPublisher<PlaylistContentMask, Never> {
-        $_cacheMask.eraseToAnyPublisher()
+        contentSet.$features.eraseToAnyPublisher()
     }
     
     public override func invalidateCaches(_ mask: PlaylistContentMask) {
-        _cacheMask.subtract(mask)
+        contentSet.subtract(mask)
     }
     
     @Published var _tracks: [PersistentTrack] = []

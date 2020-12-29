@@ -22,6 +22,7 @@ public class M3UPlaylist: RemotePlaylist {
         self.url = url
         super.init()
         loadMinimal()
+        contentSet.formUnion([.minimal, .attributes])
     }
     
     static func create(fromURL url: URL) throws -> M3UPlaylist {
@@ -80,40 +81,39 @@ public class M3UPlaylist: RemotePlaylist {
     
     func loadMinimal() {
         _attributes[PlaylistAttribute.title] = url.lastPathComponent
-        _cacheMask.formUnion(.minimal)
     }
     
     public override func load(atLeast mask: PlaylistContentMask, deep: Bool, library: Library) {
-        let url = self.url
-        let interpreter = library.interpreter
-        
-        // We ALWAYS have minimal info
-        if !_cacheMask.isSuperset(of: mask.intersection([.minimal])) {
-            loadMinimal()
-        }
+        contentSet.promise(mask) { promise in
+            let url = self.url
+            let interpreter = library.interpreter
 
-        guard !mask.isDisjoint(with: [.children, .tracks, .attributes]) else {
-            return
+            promise.fulfilling([.minimal, .attributes]) {
+                loadMinimal()
+            }
+            
+            guard promise.canFulfillAny([.tracks, .children]) else {
+                return
+            }
+            
+            Future {
+                try String(contentsOf: url)
+            }
+            .map { file in
+                M3UPlaylist.interpretFile(file, relativeTo: url)
+            }
+            .flatMap {
+                interpreter.interpret(urls: $0)
+                    ?? Just([]).eraseError().eraseToAnyPublisher()
+            }
+            .onMain()
+            .fulfilling([.tracks, .children], of: promise)
+            .sink(receiveCompletion: appLogErrors(_:)) { [unowned self] contents in
+                let library = ContentInterpreter.collect(fromContents: contents)
+                _tracks = library.0
+                _children = library.1
+            }.store(in: &cancellables)
         }
-        
-        Future {
-            try String(contentsOf: url)
-        }
-        .map { file in
-            M3UPlaylist.interpretFile(file, relativeTo: url)
-        }
-        .flatMap {
-            interpreter.interpret(urls: $0)
-                ?? Just([]).eraseError().eraseToAnyPublisher()
-        }
-        .onMain()
-        .sink(receiveCompletion: appLogErrors(_:)) { [unowned self] contents in
-            let library = ContentInterpreter.collect(fromContents: contents)
-            _tracks = library.0
-            _children = library.1
-            _attributes[PlaylistAttribute.title] = url.lastPathComponent
-            _cacheMask.formUnion([.children, .tracks, .attributes])
-        }.store(in: &cancellables)
     }
 }
 

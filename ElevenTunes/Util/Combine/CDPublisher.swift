@@ -86,11 +86,9 @@ class CDPublisher<Entity>: NSObject, NSFetchedResultsControllerDelegate, Publish
             subscriber.receive(subscription: self)
 
             // TODO If not onMain, will crash. Why? Who knows!
-            cancellable = fetchPublisher.subject.onMain().sink(receiveCompletion: { completion in
-                subscriber.receive(completion: completion)
-            }, receiveValue: { value in
-                _ = subscriber.receive(value)
-            })
+            cancellable = fetchPublisher.subject.onMain()
+                .sink(receiveCompletion: subscriber.receive, receiveValue: { _ = subscriber.receive($0)}
+            )
         }
 
         func request(_ demand: Subscribers.Demand) {}

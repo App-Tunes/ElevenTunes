@@ -46,6 +46,13 @@ extension Publisher {
     func eraseError() -> Publishers.MapError<Self, Error> {
         return mapError { $0 as Error }
     }
+    
+    func handleTermination(handler: @escaping () -> Void) -> Publishers.HandleEvents<Self> {
+        return handleEvents(
+            receiveCompletion: { _ in handler() },
+            receiveCancel: { handler() }
+        )
+    }
 }
 
 extension Publisher where Failure == Never {

@@ -21,6 +21,7 @@ public class DirectoryPlaylist: RemotePlaylist {
         self.url = url
         super.init()
         loadMinimal()
+        contentSet.formUnion([.minimal, .attributes])
     }
     
     static func create(fromURL url: URL) throws -> DirectoryPlaylist {
@@ -53,37 +54,36 @@ public class DirectoryPlaylist: RemotePlaylist {
     
     func loadMinimal() {
         _attributes[PlaylistAttribute.title] = url.lastPathComponent
-        _cacheMask.formUnion([.minimal, .attributes])
     }
     
     public override func load(atLeast mask: PlaylistContentMask, deep: Bool, library: Library) {
-        let url = self.url
-        let interpreter = library.interpreter
-        
-        // We ALWAYS have minimal info
-        if !_cacheMask.isSuperset(of: mask.intersection([.minimal, .attributes])) {
-            loadMinimal()
+        contentSet.promise(mask) { promise in
+            let url = self.url
+            let interpreter = library.interpreter
+
+            promise.fulfilling([.minimal, .attributes]) {
+                loadMinimal()
+            }
+            
+            guard promise.canFulfillAny([.tracks, .children]) else {
+                return
+            }
+            
+            Future {
+                try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: [.isDirectoryKey])
+            }
+            .flatMap {
+                interpreter.interpret(urls: $0)
+                    ?? Just([]).eraseError().eraseToAnyPublisher()
+            }
+            .onMain()
+            .fulfilling([.tracks, .children], of: promise)
+            .sink(receiveCompletion: appLogErrors(_:)) { [unowned self] contents in
+                let library = ContentInterpreter.collect(fromContents: contents)
+                _tracks = library.0
+                _children = library.1
+            }.store(in: &cancellables)
         }
-        
-        guard !mask.isDisjoint(with: [.tracks, .children]) else {
-            return  // Don't need to load contents
-        }
-        
-        Future {
-            try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: [.isDirectoryKey])
-        }
-        .flatMap {
-            interpreter.interpret(urls: $0)
-                ?? Just([]).eraseError().eraseToAnyPublisher()
-        }
-        .onMain()
-        .sink(receiveCompletion: appLogErrors(_:)) { [unowned self] contents in
-            let library = ContentInterpreter.collect(fromContents: contents)
-            _tracks = library.0
-            _children = library.1
-            _attributes[PlaylistAttribute.title] = url.lastPathComponent
-            _cacheMask.formUnion([.children, .tracks])
-        }.store(in: &cancellables)
         
         return
     }

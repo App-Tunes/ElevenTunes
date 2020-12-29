@@ -87,51 +87,49 @@ public class SpotifyPlaylist: RemotePlaylist {
     }
     
     public override func load(atLeast mask: PlaylistContentMask, deep: Bool, library: Library) {
-        let spotify = library.spotify
-        let uri = self.uri
-        
-        let missing = mask.subtracting(_cacheMask)
-        
-        if !missing.isDisjoint(with: [.children]) {
-            // How many times grandma, we will NEVER want children
-            _cacheMask.formUnion(.children)
-        }
-        
-        if !missing.isDisjoint(with: [.tracks]) {
-            // There are actually playlists with up to 10.000 items lol
-            let count = 100
-            let paginationLimit = 100
+        contentSet.promise(mask) { promise in
+            // Children will always be []
+            promise.fulfill(.children)
+            
+            let spotify = library.spotify
+            let uri = self.uri
+            
+            if promise.canFulfill(.tracks) {
+                // There are actually playlists with up to 10.000 items lol
+                let count = 100
+                let paginationLimit = 100
 
-            let getItems = { (offset: Int) in
-                spotify.api.filteredPlaylistItems(uri, filters: SpotifyPlaylist.minimalQueryFilters, additionalTypes: [.track], limit: count, offset: offset)
-                    .decodeSpotifyObject(MinimalPagingObject<MinimalPlaylistItemContainer<MinimalSpotifyTrack>>.self)
+                let getItems = { (offset: Int) in
+                    spotify.api.filteredPlaylistItems(uri, filters: SpotifyPlaylist.minimalQueryFilters, additionalTypes: [.track], limit: count, offset: offset)
+                        .decodeSpotifyObject(MinimalPagingObject<MinimalPlaylistItemContainer<MinimalSpotifyTrack>>.self)
+                }
+                
+                getItems(0)
+                    .unfold(limit: paginationLimit) {
+                        $0.offset + $0.items.count >= $0.total ? nil :
+                        getItems($0.offset + count)
+                    }
+                    .collect()
+                    .map { $0.flatMap { $0.items.map { $0.track } } }
+                    .map { items in
+                        items.map(SpotifyTrack.init)
+                    }
+                    .onMain()
+                    .fulfilling(.tracks, of: promise)
+                    .sink(receiveCompletion: appLogErrors(_:)) { tracks in
+                        self._tracks = tracks
+                    }.store(in: &cancellables)
             }
             
-            getItems(0)
-                .unfold(limit: paginationLimit) {
-                    $0.offset + $0.items.count >= $0.total ? nil :
-                    getItems($0.offset + count)
-                }
-                .collect()
-                .map { $0.flatMap { $0.items.map { $0.track } } }
-                .map { items in
-                    items.map(SpotifyTrack.init)
-                }
-                .onMain()
-                .sink(receiveCompletion: appLogErrors(_:)) { tracks in
-                    self._tracks = tracks
-                    self._cacheMask.formUnion(.tracks)
-                }.store(in: &cancellables)
-        }
-        
-        if !missing.isDisjoint(with: [.minimal, .attributes]) {
-            spotify.api.playlist(uri).eraseToAnyPublisher()
-                .onMain()
-                .sink(receiveCompletion: appLogErrors) { info in
-                    self._attributes = SpotifyPlaylist.attributes(of: info)
-                    self._cacheMask.formUnion([.minimal, .attributes])
-                }
-                .store(in: &cancellables)
+            if promise.canFulfillAny([.minimal, .attributes]) {
+                spotify.api.playlist(uri).eraseToAnyPublisher()
+                    .onMain()
+                    .fulfillingAny([.minimal, .attributes], of: promise)
+                    .sink(receiveCompletion: appLogErrors) { info in
+                        self._attributes = SpotifyPlaylist.attributes(of: info)
+                    }
+                    .store(in: &cancellables)
+            }
         }
     }
 }
