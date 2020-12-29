@@ -11,9 +11,10 @@ import Combine
 public class RemoteTrack: PersistentTrack {
     var cancellables = Set<AnyCancellable>()
 
-    @Published var _cacheMask: TrackContentMask = []
+    let contentSet: FeatureSet<TrackContentMask, TrackContentMask> = .init()
+    
     public override var cacheMask: AnyPublisher<TrackContentMask, Never> {
-        $_cacheMask.eraseToAnyPublisher()
+        contentSet.$features.eraseToAnyPublisher()
     }
 
     @Published var _attributes: TypedDict<TrackAttribute> = .init()
@@ -22,6 +23,6 @@ public class RemoteTrack: PersistentTrack {
     }
     
     public override func invalidateCaches(_ mask: TrackContentMask) {
-        _cacheMask.subtract(mask)
+        contentSet.subtract(mask)
     }
 }

@@ -20,7 +20,7 @@ public class FileTrack: RemoteTrack {
         self.url = url
         super.init()
         _attributes[TrackAttribute.title] = url.lastPathComponent
-        _cacheMask = [.minimal]
+        contentSet.insert(.minimal)
     }
     
     public required init(from decoder: Decoder) throws {
@@ -61,7 +61,7 @@ public class FileTrack: RemoteTrack {
     
     public override func load(atLeast mask: TrackContentMask, library: Library) {
         _attributes[TrackAttribute.title] = url.lastPathComponent
-        _cacheMask.formUnion(.minimal)
+        contentSet.insert(.minimal)
     }
 }
 

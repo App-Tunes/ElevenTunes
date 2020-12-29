@@ -64,7 +64,7 @@ class FeatureSet<Feature: Hashable, Set> where Set: SetAlgebra, Set.Element == F
         }
     }
     
-    fileprivate func unblock(_ feature: Feature) { lock.perform { blocked.remove(feature) } }
+    fileprivate func unblock(_ feature: Feature) { lock.perform { _ = blocked.remove(feature) } }
     fileprivate func unblockAll(_ features: Set) { lock.perform { blocked.subtract(features) } }
 
     func insert(_ feature: Feature) { lock.perform { _ = features.insert(feature) } }

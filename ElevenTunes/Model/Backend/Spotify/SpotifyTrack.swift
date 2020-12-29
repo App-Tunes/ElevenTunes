@@ -49,7 +49,7 @@ public class SpotifyTrack: RemoteTrack {
         self.uri = track.uri
         super.init()
         self._attributes = SpotifyTrack.extractAttributes(from: track)
-        self._cacheMask = [.minimal]
+        contentSet.insert(.minimal)
     }
     
     init(track: MinimalSpotifyTrack) {
@@ -110,17 +110,19 @@ public class SpotifyTrack: RemoteTrack {
     }
     
     public override func load(atLeast mask: TrackContentMask, library: Library) {
-        let spotify = library.spotify
-        let uri = self.uri
-        
-        spotify.api.track(uri)
-            .compactMap(ExistingSpotifyTrack.init)
-            .onMain()
-            .sink(receiveCompletion: appLogErrors) { [unowned self] track in
-                self._attributes = SpotifyTrack.extractAttributes(from: track)
-                self._cacheMask = [.minimal]
-            }
-            .store(in: &cancellables)
+        contentSet.promise(mask) { promise in
+            let spotify = library.spotify
+            let uri = self.uri
+            
+            spotify.api.track(uri)
+                .compactMap(ExistingSpotifyTrack.init)
+                .onMain()
+                .fulfillingAny(.minimal, of: promise)
+                .sink(receiveCompletion: appLogErrors) { [unowned self] track in
+                    self._attributes = SpotifyTrack.extractAttributes(from: track)
+                }
+                .store(in: &cancellables)
+        }
     }
 }
 
