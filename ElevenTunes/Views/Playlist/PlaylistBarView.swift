@@ -8,15 +8,17 @@
 import SwiftUI
 
 struct PlaylistBarView: View {
-    @ObservedObject var playlist: Playlist
+    @State var playlist: AnyPlaylist
+    @State var tracks: [AnyTrack] = []
 
     var body: some View {
         GeometryReader { geo in
-            Text("\(playlist.tracks.count) tracks")
+            Text("\(tracks.count) tracks")
                 .position(x: geo.size.width / 2, y: geo.size.height / 2 - 5)
         }
             .frame(minWidth: 200)
             .frame(height: 20)
+            .onReceive(playlist.tracks()) { tracks = $0 }
     }
 }
 

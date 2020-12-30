@@ -25,8 +25,9 @@ struct BlinkingImage: View {
     @State var animation: Animation = Animation.linear(duration: 0.6)
     
     var body: some View {
-        HStack {
-            image.opacity(animatingOpacity)
+        image.opacity(animatingOpacity)
+        .onAppear {
+            withAnimation(.instant) { animatingOpacity = opacity.0 }
         }
         .onReceive(animates) {
             if $0 {

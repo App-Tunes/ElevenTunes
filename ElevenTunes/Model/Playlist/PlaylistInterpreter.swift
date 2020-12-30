@@ -12,11 +12,11 @@ import Combine
 
 class PlaylistDropInterpreter: DropDelegate {
     let interpreter: ContentInterpreter
-    let parent: Playlist
+    let parent: AnyPlaylist
     
     var cancellables = Set<AnyCancellable>()
     
-    init(_ interpreter: ContentInterpreter, parent: Playlist) {
+    init(_ interpreter: ContentInterpreter, parent: AnyPlaylist) {
         self.interpreter = interpreter
         self.parent = parent
     }

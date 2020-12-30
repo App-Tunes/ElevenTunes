@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NavigatorView: View {
-    @ObservedObject var directory: Playlist
+    @State var directory: AnyPlaylist
     
     var body: some View {
         NavigationView {
@@ -18,8 +18,8 @@ struct NavigatorView: View {
     }
 }
 
-struct NavigatorView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigatorView(directory: Playlist(LibraryMock.directory()))
-    }
-}
+//struct NavigatorView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NavigatorView(directory: Playlist(LibraryMock.directory()))
+//    }
+//}

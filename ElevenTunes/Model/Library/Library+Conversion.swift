@@ -9,7 +9,7 @@ import Foundation
 import CoreData
 
 extension Library {
-    static func existingTracks(forBackends backends: Set<PersistentTrack>, context: NSManagedObjectContext) throws -> [PersistentTrack: DBTrack] {
+    static func existingTracks(forBackends backends: Set<TrackToken>, context: NSManagedObjectContext) throws -> [TrackToken: DBTrack] {
         let fetchRequest = DBTrack.createFetchRequest()
         fetchRequest.predicate = .init(format: "backendID IN %@", backends.map { $0.id })
         let existing = try context.fetch(fetchRequest)
@@ -17,7 +17,7 @@ extension Library {
         return Dictionary(uniqueKeysWithValues: existing.map { (backendFor($0), $0) })
     }
     
-    static func existingPlaylists(forBackends backends: Set<PersistentPlaylist>, context: NSManagedObjectContext) throws -> [PersistentPlaylist: DBPlaylist] {
+    static func existingPlaylists(forBackends backends: Set<PlaylistToken>, context: NSManagedObjectContext) throws -> [PlaylistToken: DBPlaylist] {
         let fetchRequest = DBPlaylist.createFetchRequest()
         fetchRequest.predicate = .init(format: "backendID IN %@", backends.map { $0.id })
         let existing = try context.fetch(fetchRequest)
@@ -41,13 +41,13 @@ extension Library {
         // (all deeper playlists' conversion can be deferred)
         
         var allTracks = Set(library.allTracks)
-        var allPlaylists = Set<PersistentPlaylist>()
+        var allPlaylists = Set<PlaylistToken>()
         
         // Unfold playlists
         for backend in flatSequence(first: library.allPlaylists, next: { backend in
             if let backend = backend as? TransientPlaylist {
-                allTracks.formUnion(backend._tracks)
-                return backend._children
+                allTracks.formUnion(backend._tracks.map { $0.asToken })
+                return backend._children.map { $0.asToken }
             }
             return []
         }) {
@@ -56,7 +56,7 @@ extension Library {
 
         // ================= Convert Tracks =====================
 
-        let convertTrack = { (backend: PersistentTrack) -> DBTrack in
+        let convertTrack = { (backend: TrackToken) -> DBTrack in
             if let backend = backend as? MockTrack {
                 let dbTrack = DBTrack(entity: trackModel, insertInto: context)
                 dbTrack.merge(attributes: backend._attributes)
@@ -66,10 +66,7 @@ extension Library {
             let dbTrack = DBTrack(entity: trackModel, insertInto: context)
             dbTrack.backend = backend
             dbTrack.backendID = backend.id
-            if let backend = backend as? RemoteTrack {
-                // Can use what's there already
-                dbTrack.merge(attributes: backend._attributes)
-            }
+
             return dbTrack
         }
 
@@ -80,15 +77,15 @@ extension Library {
         // ================= Convert Playlists =====================
         // (tracks are guaranteed at this point)
         
-        var playlistChildren: [DBPlaylist: [PersistentPlaylist]] = [:]
+        var playlistChildren: [DBPlaylist: [String]] = [:]
         
-        let convertPlaylist = { (backend: PersistentPlaylist) -> DBPlaylist in
+        let convertPlaylist = { (backend: PlaylistToken) -> DBPlaylist in
             if let backend = backend as? TransientPlaylist {
                 let dbPlaylist = DBPlaylist(entity: playlistModel, insertInto: context)
                 
                 dbPlaylist.addToTracks(NSOrderedSet(array: backend._tracks.map { tracksByID[$0.id]! }))
                 dbPlaylist.merge(attributes: backend._attributes)
-                playlistChildren[dbPlaylist] = backend._children
+                playlistChildren[dbPlaylist] = backend._children.map { $0.asToken.id }
                 
                 return dbPlaylist
             }
@@ -96,11 +93,7 @@ extension Library {
             let dbPlaylist = DBPlaylist(entity: playlistModel, insertInto: context)
             dbPlaylist.backend = backend
             dbPlaylist.backendID = backend.id
-            if let backend = backend as? RemotePlaylist {
-                // Children and Tracks may be deferred in conversion, so we can
-                // only inherit attributes
-                dbPlaylist.merge(attributes: backend._attributes)
-            }
+            
             return dbPlaylist
         }
 
@@ -111,7 +104,7 @@ extension Library {
         // (playlists are guaranteed at this point)
 
         for (playlist, children) in playlistChildren {
-            playlist.addToChildren(NSOrderedSet(array: children.map { playlistsByID[$0.id]! }))
+            playlist.addToChildren(NSOrderedSet(array: children.map { playlistsByID[$0]! }))
         }
                     
         // Finally, gather back what was originally asked

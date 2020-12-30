@@ -7,8 +7,9 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
-class MockTrack: PersistentTrack {
+class MockTrack: TrackToken, AnyTrack {
     class MockError: Error {}
     
     enum CodingKeys: String, CodingKey {
@@ -33,22 +34,30 @@ class MockTrack: PersistentTrack {
 //        // TODO
 //        try super.encode(to: encoder)
     }
+    
+    var asToken: TrackToken { self }
+    
+    var icon: Image { Image(systemName: "questionmark") }
 
     let uuid = UUID()
     override var id: String { uuid.description }
     
-    override var cacheMask: AnyPublisher<TrackContentMask, Never> {
+    override func expand(_ context: Library) -> AnyPublisher<AnyTrack, Never> {
+        Just(self).eraseToAnyPublisher()
+    }
+    
+    func cacheMask() -> AnyPublisher<TrackContentMask, Never> {
         Just(.minimal).eraseToAnyPublisher()
     }
     
     @Published var _attributes: TypedDict<TrackAttribute> = .init()
-    override var attributes: AnyPublisher<TypedDict<TrackAttribute>, Never> {
+    func attributes() -> AnyPublisher<TypedDict<TrackAttribute>, Never> {
         $_attributes.eraseToAnyPublisher()
     }
 
-    override func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
+    func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
         Fail(error: MockError()).eraseToAnyPublisher()
     }
     
-    override func load(atLeast level: TrackContentMask, library: Library) { }
+    func invalidateCaches(_ mask: TrackContentMask) { }
 }

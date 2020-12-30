@@ -6,31 +6,42 @@
 //
 
 import SwiftUI
+import Combine
+
+struct PlayingTrackView: View {
+    @State var current: AnyTrack?
+    @State var attributes: TypedDict<TrackAttribute> = .init()
+    
+    var body: some View {
+        HStack {
+            if let current = current {
+                current.icon
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 15, height: 15)
+
+                Text(attributes[TrackAttribute.title] ?? "Untitled Track")
+            }
+            else {
+                Text("Nothing Playing").opacity(0.5)
+            }
+        }
+        .onReceive(current?.attributes() ?? Just(.init()).eraseToAnyPublisher()) { attributes = $0 }
+    }
+}
 
 struct PlayerControlsView: View {
     @State var player: Player
     
-    @State var previous: Track?
-    @State var current: Track?
-    @State var next: Track?
+    @State var previous: AnyTrack?
+    @State var current: AnyTrack?
+    @State var next: AnyTrack?
 
     @State var isPlaying: Bool = false
-
+    
     var body: some View {
         VStack {
-            HStack {
-                if let current = current {
-                    current.icon
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 15, height: 15)
-
-                    Text(current[TrackAttribute.title] ?? "Untitled Track")
-                }
-                else {
-                    Text("Nothing Playing").opacity(0.5)
-                }
-            }
+            PlayingTrackView(current: current)
             
             HStack {
                 Button(action: {

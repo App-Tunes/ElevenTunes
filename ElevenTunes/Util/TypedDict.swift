@@ -20,6 +20,8 @@ public class TypedDict<K: AnyObject & Hashable> {
         self.contents = dict
     }
     
+    var isEmpty: Bool { contents.isEmpty }
+    
     func merge(_ dict: TypedDict<K>) {
         for (key, value) in dict.contents {
             contents[key] = value

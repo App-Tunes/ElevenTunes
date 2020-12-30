@@ -16,7 +16,7 @@ extension DBTrack {
         return NSFetchRequest<DBTrack>(entityName: "DBTrack")
     }
 
-    @NSManaged public var backend: PersistentTrack?
+    @NSManaged public var backend: TrackToken?
     @NSManaged public var backendID: String
     @NSManaged public var title: String?
     @NSManaged public var backendCacheMask: Int16

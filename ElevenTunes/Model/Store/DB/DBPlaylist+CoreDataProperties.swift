@@ -15,7 +15,7 @@ extension DBPlaylist {
         return NSFetchRequest<DBPlaylist>(entityName: "DBPlaylist")
     }
 
-    @NSManaged public var backend: PersistentPlaylist?
+    @NSManaged public var backend: PlaylistToken?
     @NSManaged public var backendID: String
     @NSManaged public var isDirectory: Bool
     @NSManaged public var indexed: Bool

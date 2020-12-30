@@ -7,38 +7,50 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
-public class RemotePlaylist: PersistentPlaylist {
+public class RemotePlaylist: AnyPlaylist {
     var cancellables = Set<AnyCancellable>()
-    
-    public override init() { super.init() }
-    public required init(from decoder: Decoder) throws {
-        try super.init(from: decoder)
-    }
-    public override func encode(to encoder: Encoder) throws { }
     
     let contentSet: FeatureSet<PlaylistContentMask, PlaylistContentMask> = .init()
     
-    public override var cacheMask: AnyPublisher<PlaylistContentMask, Never> {
+    public var id: String { asToken.id }
+    public var asToken: PlaylistToken { fatalError() }
+
+    public var accentColor: Color { .primary }
+    public var icon: Image { Image(systemName: "music.note.list") }
+    
+    public var hasCaches: Bool { true }
+    public func supportsChildren() -> Bool { false }
+    
+    public func cacheMask() -> AnyPublisher<PlaylistContentMask, Never> {
         contentSet.$features.eraseToAnyPublisher()
     }
     
-    public override func invalidateCaches(_ mask: PlaylistContentMask) {
+    public func invalidateCaches(_ mask: PlaylistContentMask) {
         contentSet.subtract(mask)
     }
     
-    @Published var _tracks: [PersistentTrack] = []
-    public override var tracks: AnyPublisher<[PersistentTrack], Never> {
+    @Published public var _tracks: [AnyTrack] = []
+    public func tracks() -> AnyPublisher<[AnyTrack], Never> {
         $_tracks.eraseToAnyPublisher()
     }
     
-    @Published var _children: [PersistentPlaylist] = []
-    public override var children: AnyPublisher<[PersistentPlaylist], Never> {
+    @Published public var _children: [AnyPlaylist] = []
+    public func children() -> AnyPublisher<[AnyPlaylist], Never> {
         $_children.eraseToAnyPublisher()
     }
     
-    @Published var _attributes: TypedDict<PlaylistAttribute> = TypedDict()
-    public override var attributes: AnyPublisher<TypedDict<PlaylistAttribute>, Never> {
+    @Published public var _attributes: TypedDict<PlaylistAttribute> = .init()
+    public func attributes() -> AnyPublisher<TypedDict<PlaylistAttribute>, Never> {
         $_attributes.eraseToAnyPublisher()
     }
+    
+    public func load(atLeast mask: PlaylistContentMask, library: Library) {
+        fatalError()
+    }
+    
+    public func add(tracks: [TrackToken]) -> Bool { false }
+    
+    public func add(children: [PlaylistToken]) -> Bool { false }
 }

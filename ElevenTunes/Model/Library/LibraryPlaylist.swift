@@ -8,6 +8,7 @@
 import Cocoa
 import SwiftUI
 import Combine
+import CombineExt
 
 class LibraryPlaylist: AnyPlaylist {
     let managedObjectContext: NSManagedObjectContext
@@ -16,24 +17,32 @@ class LibraryPlaylist: AnyPlaylist {
     @Published var staticPlaylists: [AnyPlaylist] = []
 
     var cancellables = Set<AnyCancellable>()
+    var library: Library?  // Weak because reference cycle
         
-    init(managedObjectContext: NSManagedObjectContext, playContext: PlayContext) {
-        self.managedObjectContext = managedObjectContext
+    init(library: Library, playContext: PlayContext) {
+        self.managedObjectContext = library.managedObjectContext
         self.playContext = playContext
+        self.library = library
         
-        anyTracks = CDPublisher(request: DBTrack.createFetchRequest(), context: managedObjectContext)
-            .map { $0 as [AnyTrack] }
+        _tracks = CDPublisher(request: DBTrack.createFetchRequest(), context: managedObjectContext)
+            .flatMap {
+                $0.map { [weak self] in self!.library!.track(cachedBy: $0) }
+                    .combineLatest()
+            }
             .replaceError(with: [])
             .eraseToAnyPublisher()
 
-        _anyChildren = CDPublisher(request: LibraryPlaylist.playlistFetchRequest, context: managedObjectContext)
-            .map { $0 as [AnyPlaylist] }
+        _children = CDPublisher(request: LibraryPlaylist.playlistFetchRequest, context: managedObjectContext)
+            .flatMap {
+                $0.map { [weak self] in self!.library!.playlist(cachedBy: $0) }
+                    .combineLatest()
+            }
             .combineLatest($staticPlaylists.eraseError()).map { $1 + $0 }
             .replaceError(with: [])
             .eraseToAnyPublisher()
                 
         staticPlaylists = [
-            SpotifyUserPlaylist()
+            SpotifyUserPlaylist(spotify: library.spotify)
         ]
     }
     
@@ -45,19 +54,27 @@ class LibraryPlaylist: AnyPlaylist {
     
     var hasCaches: Bool { false }
     
-    var cacheMask: AnyPublisher<PlaylistContentMask, Never> =
+    var asToken: PlaylistToken { fatalError()}
+    
+    func cacheMask() -> AnyPublisher<PlaylistContentMask, Never> {
         Just([.minimal, .children, .tracks, .attributes]).eraseToAnyPublisher()
+    }
+    
+    var _tracks: AnyPublisher<[AnyTrack], Never>!
+    func tracks() -> AnyPublisher<[AnyTrack], Never> {
+        _tracks
+    }
+    
+    var _children: AnyPublisher<[AnyPlaylist], Never>!
+    func children() -> AnyPublisher<[AnyPlaylist], Never> {
+        _children
+    }
     
     // TODO
     @Published var _attributes: TypedDict<PlaylistAttribute> = .init()
-    var attributes: AnyPublisher<TypedDict<PlaylistAttribute>, Never> {
+    func attributes() -> AnyPublisher<TypedDict<PlaylistAttribute>, Never> {
         $_attributes.eraseToAnyPublisher()
     }
-
-    var anyTracks: AnyPublisher<[AnyTrack], Never>
-    
-    var _anyChildren: AnyPublisher<[AnyPlaylist], Never>!
-    var anyChildren: AnyPublisher<[AnyPlaylist], Never> { _anyChildren }
 
     static var playlistFetchRequest: NSFetchRequest<DBPlaylist> {
         let request = DBPlaylist.createFetchRequest()
@@ -66,7 +83,7 @@ class LibraryPlaylist: AnyPlaylist {
         return request
     }
     
-    func load(atLeast level: PlaylistContentMask, deep: Bool, library: Library) {
+    func load(atLeast mask: PlaylistContentMask, library: Library) {
         // TODO Deep
     }
     
@@ -79,7 +96,7 @@ class LibraryPlaylist: AnyPlaylist {
     func supportsChildren() -> Bool { true }  // lol imagine if this were false
     
     @discardableResult
-    func add(tracks: [PersistentTrack]) -> Bool {
+    func add(tracks: [TrackToken]) -> Bool {
         // Fetch requests auto-update content
         let context = managedObjectContext.child(concurrencyType: .privateQueueConcurrencyType)
         context.perform {
@@ -100,7 +117,7 @@ class LibraryPlaylist: AnyPlaylist {
     }
     
     @discardableResult
-    func add(children: [PersistentPlaylist]) -> Bool {
+    func add(children: [PlaylistToken]) -> Bool {
         // Fetch requests auto-update content
         let context = managedObjectContext.child(concurrencyType: .privateQueueConcurrencyType)
         context.perform {

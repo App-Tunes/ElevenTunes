@@ -8,16 +8,20 @@
 import Foundation
 import Combine
 
+enum PlayHistoryContext {
+    case playlist(_ playlist: AnyPlaylist, tracks: [AnyTrack], index: Int)
+}
+
 class PlayHistory {
-    @Published private(set) var queue: [Track]
-    @Published private(set) var history: [Track] = []
+    @Published private(set) var queue: [AnyTrack]
+    @Published private(set) var history: [AnyTrack] = []
 
     // previous = history.last, next = queue.first
-    @Published private(set) var previous: Track?
-    @Published private(set) var current: Track?
-    @Published private(set) var next: Track?
+    @Published private(set) var previous: AnyTrack?
+    @Published private(set) var current: AnyTrack?
+    @Published private(set) var next: AnyTrack?
     
-    init(_ queue: [Track] = [], history: [Track] = []) {
+    init(_ queue: [AnyTrack] = [], history: [AnyTrack] = []) {
         self.queue = queue
         self.history = history
         
@@ -25,19 +29,15 @@ class PlayHistory {
         $history.map(\.last).assign(to: &$previous)
     }
     
-    convenience init(_ playlist: Playlist, at track: Track) {
-        let tracks = playlist.tracks
-        let trackIdx = tracks.firstIndex { $0.id == track.id }
-        if trackIdx == nil {
-            appLogger.error("Failed to find \(track) in \(playlist)")
+    convenience init(context: PlayHistoryContext) {
+        switch context {
+        case .playlist(_, let tracks, let index):
+            self.init(Array(tracks[index...]), history: Array(tracks[..<index]))
         }
-        let idx = trackIdx ?? 0
-        
-        self.init(Array(tracks[idx...].map(Track.init)), history: Array(tracks[..<idx].map(Track.init)))
     }
         
     @discardableResult
-    func forwards() -> Track? {
+    func forwards() -> AnyTrack? {
         // Move forwards in replacements so that no value is missing at any point
         if let current = current { history.append(current) }
         current = queue.first
@@ -47,7 +47,7 @@ class PlayHistory {
     }
     
     @discardableResult
-    func backwards() -> Track? {
+    func backwards() -> AnyTrack? {
         // Move backwards in replacements so that no value is missing at any point
         if let current = current { queue.prepend(current) }
         current = history.last

@@ -9,28 +9,28 @@ import Foundation
 import SwiftUI
 
 struct PlayTrackView: View {
-    @State var track: Track
-    @State var playlist: Playlist
+    @State var track: AnyTrack
+    @State var context: PlayHistoryContext
 
     @Environment(\.player) private var player: Player!
-    @State var current: Track?
-    @State var next: Track?
+    @State var current: AnyTrack?
+    @State var next: AnyTrack?
 
     var body: some View {
         Button(action: {
-            player.play(PlayHistory(playlist, at: track))
+            player.play(PlayHistory(context: context))
         }) {
             ZStack {
-                if track == next {
+                if track.id == next?.id {
                     Image(systemName: "play.fill")
                         .blinking(
                             // If track is next AND current, start with 1 and blink downwards.
                             // otherwise, start half translucent and blink upwards
-                            opacity: track == current ? (1, 0.5) : (0.35, 1),
+                            opacity: track.id == current?.id ? (1, 0.5) : (0.35, 1),
                             animates: player.$isAlmostNext
                         )
                 }
-                else if track == current {
+                else if track.id == current?.id {
                     Image(systemName: "play.fill")
                 }
                 
@@ -38,36 +38,39 @@ struct PlayTrackView: View {
             }
         }
         .buttonStyle(BorderlessButtonStyle())
-        .disabled(!track.cacheMask.contains(.minimal))
         .onReceive(player.$current) { self.current = $0 }
         .onReceive(player.$next) { self.next = $0 }
     }
 }
 
 struct TrackRowView: View {
-    @ObservedObject var track: Track
-    @ObservedObject var playlist: Playlist
-    
+    @State var track: AnyTrack
+    @State var context: PlayHistoryContext
+
+    @State var attributes: TypedDict<TrackAttribute> = .init()
+    @State var contentMask: TrackContentMask = []
+
     @Environment(\.library) var library: Library!
     
     var body: some View {
         HStack {
-            PlayTrackView(track: track, playlist: playlist)
+            PlayTrackView(track: track, context: context)
 
-            if !track.cacheMask.contains(.minimal) {
+            if !contentMask.contains(.minimal) {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle())
                     .scaleEffect(0.5, anchor: .center)
                 
-                Text(track[TrackAttribute.title] ?? "...")
+                Text(attributes[TrackAttribute.title] ?? "...")
                     .opacity(0.5)
             }
             else {
                 track.icon.resizable().aspectRatio(contentMode: .fit).frame(width: 15, height: 15)
                 
-                Text(track[TrackAttribute.title] ?? "Unknown Track")
+                Text(attributes[TrackAttribute.title] ?? "Unknown Track")
             }
         }
-        .onAppear() { track.load(atLeast: .minimal, library: library) }
+        .onReceive(track.attributes()) { attributes = $0 }
+        .onReceive(track.cacheMask()) { contentMask = $0 }
     }
 }

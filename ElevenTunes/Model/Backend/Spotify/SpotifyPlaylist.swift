@@ -22,30 +22,24 @@ struct MinimalPlaylistItemContainer<Item: Codable & Hashable>: Codable, Hashable
     var track: Item
 }
 
-public class SpotifyPlaylist: RemotePlaylist {
+public class SpotifyPlaylistToken: PlaylistToken {
     enum SpotifyError: Error {
         case noURI
     }
     
-    static let minimalQueryFilters = "offset,total,items(track(\(MinimalSpotifyTrack.filters)))"
-        
+    enum CodingKeys: String, CodingKey {
+      case uri
+    }
+    
     var uri: String
 
-    static var _icon: Image { Image("spotify-logo") }
-    
-    public override var accentColor: Color { .green }
+    public override var id: String { uri }
 
-    init(uri: String) {
+    init(_ uri: String) {
         self.uri = uri
         super.init()
     }
-        
-    init(playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>) {
-        self.uri = playlist.uri
-        super.init()
-        self._attributes = SpotifyPlaylist.attributes(of: playlist)
-    }
-        
+    
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         uri = try container.decode(String.self, forKey: .uri)
@@ -56,16 +50,6 @@ public class SpotifyPlaylist: RemotePlaylist {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(uri, forKey: .uri)
         try super.encode(to: encoder)
-    }
-
-    public override var id: String { uri }
-    
-    override public var icon: Image { SpotifyPlaylist._icon }
-
-    static func attributes(of playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>) -> TypedDict<PlaylistAttribute> {
-        let attributes = TypedDict<PlaylistAttribute>()
-        attributes[PlaylistAttribute.title] = playlist.name
-        return attributes
     }
     
     static func spotifyURI(fromURL url: URL) throws -> String {
@@ -79,21 +63,58 @@ public class SpotifyPlaylist: RemotePlaylist {
         return "spotify:playlist:\(id)"
     }
 
-    static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyPlaylist, Error> {
+    static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyPlaylistToken, Error> {
         return Future { try spotifyURI(fromURL: url) }
             .flatMap { spotify.api.playlist($0) }
-            .map { SpotifyPlaylist(playlist: $0) }
+            .map { SpotifyPlaylistToken($0.uri) }
             .eraseToAnyPublisher()
     }
     
-    public override func load(atLeast mask: PlaylistContentMask, deep: Bool, library: Library) {
+    override func expand(_ context: Library) -> AnyPublisher<AnyPlaylist, Never> {
+        Just(SpotifyPlaylist(self, spotify: context.spotify)).eraseToAnyPublisher()
+    }
+}
+
+public class SpotifyPlaylist: RemotePlaylist {
+    static let minimalQueryFilters = "offset,total,items(track(\(MinimalSpotifyTrack.filters)))"
+
+    let token: SpotifyPlaylistToken
+    let spotify: Spotify
+    
+    static var _icon: Image { Image("spotify-logo") }
+    
+    public override var accentColor: Color { .green }
+
+    init(_ token: SpotifyPlaylistToken, spotify: Spotify) {
+        self.token = token
+        self.spotify = spotify
+        super.init()
+    }
+    
+//    init(playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>, spotify: Spotify) {
+//        self.token = playlist.uri
+//        super.init()
+//        self._attributes = SpotifyPlaylist.attributes(of: playlist)
+//    }
+
+    public override var asToken: PlaylistToken { token }
+    
+    override public var icon: Image { SpotifyPlaylist._icon }
+
+    static func attributes(of playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>) -> TypedDict<PlaylistAttribute> {
+        let attributes = TypedDict<PlaylistAttribute>()
+        attributes[PlaylistAttribute.title] = playlist.name
+        return attributes
+    }
+        
+    public override func load(atLeast mask: PlaylistContentMask, library: Library) {
         contentSet.promise(mask) { promise in
             // Children will always be []
             promise.fulfill(.children)
-            
+
             let spotify = library.spotify
-            let uri = self.uri
-            
+            let uri = token.uri
+
             if promise.includes(.tracks) {
                 // There are actually playlists with up to 10.000 items lol
                 let count = 100
@@ -103,7 +124,7 @@ public class SpotifyPlaylist: RemotePlaylist {
                     spotify.api.filteredPlaylistItems(uri, filters: SpotifyPlaylist.minimalQueryFilters, additionalTypes: [.track], limit: count, offset: offset)
                         .decodeSpotifyObject(MinimalPagingObject<MinimalPlaylistItemContainer<MinimalSpotifyTrack>>.self)
                 }
-                
+
                 getItems(0)
                     .unfold(limit: paginationLimit) {
                         $0.offset + $0.items.count >= $0.total ? nil :
@@ -112,7 +133,7 @@ public class SpotifyPlaylist: RemotePlaylist {
                     .collect()
                     .map { $0.flatMap { $0.items.map { $0.track } } }
                     .map { items in
-                        items.map(SpotifyTrack.init)
+                        items.map { SpotifyTrack(SpotifyTrackToken($0.uri), spotify: spotify) }
                     }
                     .onMain()
                     .fulfillingAny(.tracks, of: promise)
@@ -120,7 +141,7 @@ public class SpotifyPlaylist: RemotePlaylist {
                         self._tracks = tracks
                     }.store(in: &cancellables)
             }
-            
+
             if promise.includesAny([.minimal, .attributes]) {
                 spotify.api.playlist(uri).eraseToAnyPublisher()
                     .onMain()
@@ -131,11 +152,5 @@ public class SpotifyPlaylist: RemotePlaylist {
                     .store(in: &cancellables)
             }
         }
-    }
-}
-
-extension SpotifyPlaylist {
-    enum CodingKeys: String, CodingKey {
-      case uri
     }
 }

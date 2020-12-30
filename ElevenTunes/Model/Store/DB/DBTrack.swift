@@ -15,70 +15,69 @@ enum EmitterFail: Error {
     case noBackend
 }
 
-@objc(DBTrack)
-public class DBTrack: NSManagedObject, AnyTrack {
+public class DBLibraryTrack: AnyTrack {
+    let library: Library
+    let cache: DBTrack
+    let backend: AnyTrack?
+    
     var backendObservers = Set<AnyCancellable>()
 
-    public var id: String { objectID.description }
+    init(library: Library, cache: DBTrack, backend: AnyTrack?) {
+        self.library = library
+        self.cache = cache
+        self.backend = backend
+    }
+    
+    public var asToken: TrackToken { fatalError() }
+    
+    public var id: String { cache.objectID.description }
     
     public var icon: Image { backend?.icon ?? Image(systemName: "questionmark") }
     
-    @Published var _cacheMask: TrackContentMask = []
-    public var cacheMask: AnyPublisher<TrackContentMask, Never> {
-        $_cacheMask.eraseToAnyPublisher()
+    public func cacheMask() -> AnyPublisher<TrackContentMask, Never> {
+        guard backend != nil else {
+            // If no backend, we don't even have a cache
+            return Just(TrackContentMask.minimal).eraseToAnyPublisher()
+        }
+        
+        return cache.$cacheMaskP.eraseToAnyPublisher()
     }
     
-    @Published var _attributes: TypedDict<TrackAttribute> = .init()
-    public var attributes: AnyPublisher<TypedDict<TrackAttribute>, Never> {
-        $_attributes.eraseToAnyPublisher()
+    public func attributes() -> AnyPublisher<TypedDict<TrackAttribute>, Never> {
+        cache.$attributesP.eraseToAnyPublisher()
     }
 
+    public func invalidateCaches(_ mask: TrackContentMask) {
+        if let backend = backend {
+            let clearBits = cache.backendCacheMask & mask.rawValue
+            if clearBits != 0 {
+                cache.backendCacheMask -= clearBits
+            }
+            
+            backend.invalidateCaches(mask)
+        }
+    }
+    
     public func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
         backend?.emitter(context: context)
             ?? Fail(error: EmitterFail.noBackend).eraseToAnyPublisher()
     }
-        
+}
+
+@objc(DBTrack)
+public class DBTrack: NSManagedObject {
+    @Published var backendP: TrackToken?
+    
+    @Published var cacheMaskP: TrackContentMask = []
+    @Published var attributesP: TypedDict<TrackAttribute> = .init()
+            
     public override func awakeFromFetch() { initialSetup() }
     public override func awakeFromInsert() { initialSetup() }
 
     func initialSetup() {
-        _attributes = cachedAttributes
-        if backend != nil {
-            _cacheMask = TrackContentMask(rawValue: backendCacheMask)
-        }
-        else {
-            _cacheMask = .minimal
-        }
-
-        refreshObservation()
-    }
-
-    public func load(atLeast mask: TrackContentMask, library: Library) {
-        guard let backend = backend else {
-            // Fetch requests have already set the values
-            if _cacheMask != [.minimal] {
-                _cacheMask = [.minimal]
-            }
-            return
-        }
+        backendP = backend
         
-        let missing = mask.subtracting(_cacheMask)
-        
-        if missing.isEmpty {
-            // We have everything we need! Yay!
-            return
-        }
-        
-        // Only reload what's missing
-        backend.load(atLeast: missing, library: library)
-    }
-    
-    public func invalidateCaches(_ mask: TrackContentMask) {
-        if let backend = backend {
-            let newMask = _cacheMask.subtracting(mask)
-            _cacheMask = newMask
-            backendCacheMask = newMask.rawValue
-            backend.invalidateCaches(mask)
-        }
+        cacheMaskP = TrackContentMask(rawValue: backendCacheMask)
+        attributesP = cachedAttributes
     }
 }

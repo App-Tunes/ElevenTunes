@@ -13,7 +13,7 @@ public struct PlayContext {
 }
 
 class Player {
-    @Published var previous: Track? {
+    @Published var previous: AnyTrack? {
         didSet {
             // Re-use last played if possible
             previousEmitter =
@@ -23,7 +23,7 @@ class Player {
         }
     }
     
-    @Published var current: Track? {
+    @Published var current: AnyTrack? {
         didSet {
             // If possible, use prepared caches
             currentEmitter =
@@ -33,7 +33,7 @@ class Player {
                 : current?.emitter(context: context)
         }
     }
-    @Published var next: Track? {
+    @Published var next: AnyTrack? {
         didSet {
             // Re-use last played if possible
             nextEmitter =
@@ -84,7 +84,7 @@ class Player {
         singlePlayer.toggle()
     }
     
-    func play(_ track: Track?) {
+    func play(_ track: AnyTrack?) {
         history = PlayHistory(track != nil ? [track!] : [])
         forwards()
     }

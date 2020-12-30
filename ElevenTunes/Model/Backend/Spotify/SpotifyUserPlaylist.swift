@@ -11,14 +11,20 @@ import Combine
 import SwiftUI
 import SpotifyWebAPI
 
-public class SpotifyUserPlaylist: RemotePlaylist {
+public class SpotifyUserPlaylistToken: PlaylistToken {
     enum SpotifyError: Error {
         case noURI
+    }
+    
+    enum CodingKeys: String, CodingKey {
+      case uri
     }
         
     var uri: String?
     
-    init(uri: String? = nil) {
+    public override var id: String { uri ?? "spotify::playlist::currentuser" }
+
+    init(_ uri: String? = nil) {
         self.uri = uri
         super.init()
     }
@@ -26,7 +32,6 @@ public class SpotifyUserPlaylist: RemotePlaylist {
     init(user: SpotifyWebAPI.SpotifyUser) {
         self.uri = user.uri
         super.init()
-        self._attributes = SpotifyUserPlaylist.attributes(of: user)
     }
         
     public required init(from decoder: Decoder) throws {
@@ -39,18 +44,6 @@ public class SpotifyUserPlaylist: RemotePlaylist {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(uri, forKey: .uri)
         try super.encode(to: encoder)
-    }
-    
-    override public var icon: Image { SpotifyPlaylist._icon }
-
-    public override var id: String { uri ?? "spotify::playlist::currentuser" }
-    
-    public override func supportsChildren() -> Bool { true }
-    
-    static func attributes(of user: SpotifyWebAPI.SpotifyUser) -> TypedDict<PlaylistAttribute> {
-        let attributes = TypedDict<PlaylistAttribute>()
-        attributes[PlaylistAttribute.title] = user.displayName ?? user.id
-        return attributes
     }
     
     static func spotifyURI(fromURL url: URL) throws -> String {
@@ -67,17 +60,47 @@ public class SpotifyUserPlaylist: RemotePlaylist {
     static func create(_ spotify: Spotify, fromURL url: URL?) -> AnyPublisher<SpotifyUserPlaylist, Error> {
         return Future { try url.map { try spotifyURI(fromURL: $0) } }
             .flatMap { $0.map { spotify.api.userProfile($0) } ?? spotify.api.currentUserProfile() }
-            .map { SpotifyUserPlaylist(user: $0) }
+            .map { SpotifyUserPlaylist($0, spotify: spotify) }
             .eraseToAnyPublisher()
     }
-        
-    public override func load(atLeast mask: PlaylistContentMask, deep: Bool, library: Library) {
+}
+
+public class SpotifyUserPlaylist: RemotePlaylist {
+    let token: SpotifyUserPlaylistToken
+    let spotify: Spotify
+    
+    init(spotify: Spotify) {
+        self.token = SpotifyUserPlaylistToken(nil)
+        self.spotify = spotify
+    }
+    
+    init(_ user: SpotifyUser, spotify: Spotify) {
+        self.token = SpotifyUserPlaylistToken(user.uri)
+        self.spotify = spotify
+        super.init()
+        self._attributes = SpotifyUserPlaylist.attributes(of: user)
+        contentSet.formUnion([.tracks, .attributes])
+    }
+
+    public override var asToken: PlaylistToken { token }
+    
+    override public var icon: Image { SpotifyPlaylist._icon }
+    
+    public override func supportsChildren() -> Bool { true }
+    
+    static func attributes(of user: SpotifyWebAPI.SpotifyUser) -> TypedDict<PlaylistAttribute> {
+        let attributes = TypedDict<PlaylistAttribute>()
+        attributes[PlaylistAttribute.title] = user.displayName ?? user.id
+        return attributes
+    }
+            
+    public override func load(atLeast mask: PlaylistContentMask, library: Library) {
         contentSet.promise(mask) { promise in
             // Tracks will always be []
             promise.fulfill(.tracks)
             
             let spotify = library.spotify
-            let uri = self.uri
+            let uri = token.uri
 
             if promise.includes(.children) {
                 let count = 50
@@ -98,7 +121,7 @@ public class SpotifyUserPlaylist: RemotePlaylist {
                     .map { $0.flatMap { $0.items } }
                     .map { items in
                         items.compactMap { item -> SpotifyPlaylist? in
-                            return SpotifyPlaylist(uri: item.uri)
+                            SpotifyPlaylist(SpotifyPlaylistToken(item.uri), spotify: spotify)
                         }
                     }
                     .onMain()
@@ -122,11 +145,5 @@ public class SpotifyUserPlaylist: RemotePlaylist {
                     .store(in: &cancellables)
             }
         }
-    }
-}
-
-extension SpotifyUserPlaylist {
-    enum CodingKeys: String, CodingKey {
-      case uri
     }
 }

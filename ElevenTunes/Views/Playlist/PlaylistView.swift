@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct PlaylistView: View {
-    @ObservedObject var playlist: Playlist
-    
+    @State var playlist: AnyPlaylist
     @Environment(\.library) var library: Library!
+    
+    @State var contentMask: PlaylistContentMask = []
 
     var body: some View {
         HSplitView {
@@ -19,7 +20,7 @@ struct PlaylistView: View {
                 
 //                Divider()
                 
-                if !playlist.cacheMask.isSuperset(of: [.minimal, .tracks]) {
+                if !contentMask.isSuperset(of: [.minimal, .tracks]) {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
                 }
@@ -37,12 +38,12 @@ struct PlaylistView: View {
 //            TrackInfoView()
         }
         .listStyle(DefaultListStyle())
-        .onAppear() { playlist.load(atLeast: [.minimal, .tracks], library: library) }
+        .onReceive(playlist.cacheMask()) { contentMask = $0 }
     }
 }
 
-struct PlaylistView_Previews: PreviewProvider {
-    static var previews: some View {
-        PlaylistView(playlist: Playlist(LibraryMock.playlist()))
-    }
-}
+//struct PlaylistView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PlaylistView(playlist: Playlist(LibraryMock.playlist()))
+//    }
+//}

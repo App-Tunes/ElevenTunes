@@ -7,8 +7,9 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
-class TransientPlaylist: PersistentPlaylist {
+class TransientPlaylist: PlaylistToken, AnyPlaylist {
     enum CodingKeys: String, CodingKey {
       case attributes, tracks, children
     }
@@ -20,7 +21,15 @@ class TransientPlaylist: PersistentPlaylist {
     var uuid = UUID()
     override var id: String { uuid.description }
     
-    init(attributes: TypedDict<PlaylistAttribute>, children: [PersistentPlaylist] = [], tracks: [PersistentTrack] = []) {
+    var icon: Image { Image(systemName: "music.note.list") }
+    var accentColor: Color { .primary }
+    
+    var hasCaches: Bool { false }
+    func invalidateCaches(_ mask: PlaylistContentMask) {}
+    
+    func supportsChildren() -> Bool { false }
+
+    init(attributes: TypedDict<PlaylistAttribute>, children: [AnyPlaylist] = [], tracks: [AnyTrack] = []) {
         _attributes = attributes
         _tracks = tracks
         _children = children
@@ -40,41 +49,43 @@ class TransientPlaylist: PersistentPlaylist {
 //        try container.encode(_tracks, forKey: .tracks)
 //        try container.encode(_children, forKey: .children)
     }
+    
+    override func expand(_ context: Library) -> AnyPublisher<AnyPlaylist, Never> {
+        Just(self).eraseToAnyPublisher()
+    }
+    
+    var asToken: PlaylistToken { self }
 
-    override var cacheMask: AnyPublisher<PlaylistContentMask, Never> {
+    func cacheMask() -> AnyPublisher<PlaylistContentMask, Never> {
         Just([.minimal, .children, .tracks, .attributes]).eraseToAnyPublisher()
     }
     
     @Published var _attributes: TypedDict<PlaylistAttribute> = .init()
-    override var attributes: AnyPublisher<TypedDict<PlaylistAttribute>, Never> {
+    func attributes() -> AnyPublisher<TypedDict<PlaylistAttribute>, Never> {
         $_attributes.eraseToAnyPublisher()
     }
 
-    override func load(atLeast mask: PlaylistContentMask, deep: Bool, library: Library) {
-        if deep {
-            _children.forEach { $0.load(atLeast: mask, deep: true, library: library) }
-        }
-    }
-
-    @Published var _tracks: [PersistentTrack]
-    override var tracks: AnyPublisher<[PersistentTrack], Never> {
+    @Published var _tracks: [AnyTrack]
+    func tracks() -> AnyPublisher<[AnyTrack], Never> {
         $_tracks.eraseToAnyPublisher()
     }
     
-    @Published var _children: [PersistentPlaylist]
-    override var children: AnyPublisher<[PersistentPlaylist], Never> {
+    @Published var _children: [AnyPlaylist]
+    func children() -> AnyPublisher<[AnyPlaylist], Never> {
         $_children.eraseToAnyPublisher()
     }
 
     @discardableResult
-    override func add(tracks: [PersistentTrack]) -> Bool {
-        _tracks += tracks
+    func add(tracks: [TrackToken]) -> Bool {
+//        _tracks += tracks
+        // TODO
         return true
     }
     
     @discardableResult
-    override func add(children: [PersistentPlaylist]) -> Bool {
-        _children += children
+    func add(children: [PlaylistToken]) -> Bool {
+//        _children += children
+        // TODO
         return true
     }
 }

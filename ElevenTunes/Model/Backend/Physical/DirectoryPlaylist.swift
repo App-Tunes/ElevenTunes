@@ -10,7 +10,11 @@ import Foundation
 import SwiftUI
 import Combine
 
-public class DirectoryPlaylist: RemotePlaylist {
+public class DirectoryPlaylistToken: PlaylistToken {
+    enum CodingKeys: String, CodingKey {
+      case url
+    }
+
     enum InterpretationError: Error {
         case noDirectory
     }
@@ -20,16 +24,14 @@ public class DirectoryPlaylist: RemotePlaylist {
     init(_ url: URL) {
         self.url = url
         super.init()
-        loadMinimal()
-        contentSet.formUnion([.minimal, .attributes])
     }
     
-    static func create(fromURL url: URL) throws -> DirectoryPlaylist {
+    static func create(fromURL url: URL) throws -> DirectoryPlaylistToken {
         if !(try url.isFileDirectory()) {
             throw InterpretationError.noDirectory
         }
 
-        return DirectoryPlaylist(url)
+        return DirectoryPlaylistToken(url)
     }
     
     public required init(from decoder: Decoder) throws {
@@ -43,22 +45,36 @@ public class DirectoryPlaylist: RemotePlaylist {
         try container.encode(url, forKey: .url)
         try super.encode(to: encoder)
     }
+}
 
+public class DirectoryPlaylist: RemotePlaylist {
+    let library: Library
+    let token: DirectoryPlaylistToken
+    public override var asToken: PlaylistToken { token }
+    
     static let _icon: Image = Image(systemName: "folder")
     public override var icon: Image { DirectoryPlaylist._icon }
     public override var accentColor: Color { .accentColor }
-    
-    public override var id: String { url.absoluteString }
-    
+        
     public override func supportsChildren() -> Bool { true }
     
-    func loadMinimal() {
-        _attributes[PlaylistAttribute.title] = url.lastPathComponent
+    init(_ token: DirectoryPlaylistToken, library: Library) {
+        self.library = library
+        self.token = token
+        super.init()
+        loadMinimal()
+        contentSet.formUnion([.minimal, .attributes])
     }
     
-    public override func load(atLeast mask: PlaylistContentMask, deep: Bool, library: Library) {
+    func loadMinimal() {
+        _attributes[PlaylistAttribute.title] = token.url.lastPathComponent
+    }
+    
+    public override func load(atLeast mask: PlaylistContentMask, library: Library) {
+        let library = self.library
+        
         contentSet.promise(mask) { promise in
-            let url = self.url
+            let url = token.url
             let interpreter = library.interpreter
 
             promise.fulfilling([.minimal, .attributes]) {
@@ -76,21 +92,22 @@ public class DirectoryPlaylist: RemotePlaylist {
                 interpreter.interpret(urls: $0)
                     ?? Just([]).eraseError().eraseToAnyPublisher()
             }
+            .flatMap { (contents: [Content]) -> AnyPublisher<([AnyTrack], [AnyPlaylist]), Never> in
+                let (tracks, children) = ContentInterpreter.collect(fromContents: contents)
+                
+                let tracksMerge = tracks.map { $0.expand(library) }.combineLatest()
+                let playlistsMerge = children.map { $0.expand(library) }.combineLatest()
+                
+                return tracksMerge.zip(playlistsMerge).eraseToAnyPublisher()
+            }
             .onMain()
             .fulfillingAny([.tracks, .children], of: promise)
-            .sink(receiveCompletion: appLogErrors(_:)) { [unowned self] contents in
-                let library = ContentInterpreter.collect(fromContents: contents)
-                _tracks = library.0
-                _children = library.1
+            .sink(receiveCompletion: appLogErrors(_:)) { [unowned self] (tracks, children) in
+                _tracks = tracks
+                _children = children
             }.store(in: &cancellables)
         }
         
         return
-    }
-}
-
-extension DirectoryPlaylist {
-    enum CodingKeys: String, CodingKey {
-      case url
     }
 }

@@ -7,22 +7,36 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
-public class RemoteTrack: PersistentTrack {
+public class RemoteTrack: AnyTrack {
     var cancellables = Set<AnyCancellable>()
 
+    public var asToken: TrackToken { fatalError() }
+    public var id: String { asToken.id }
+
+    public var icon: Image { Image(systemName: "music.note") }
+    
     let contentSet: FeatureSet<TrackContentMask, TrackContentMask> = .init()
     
-    public override var cacheMask: AnyPublisher<TrackContentMask, Never> {
+    public func cacheMask() -> AnyPublisher<TrackContentMask, Never> {
         contentSet.$features.eraseToAnyPublisher()
     }
 
     @Published var _attributes: TypedDict<TrackAttribute> = .init()
-    public override var attributes: AnyPublisher<TypedDict<TrackAttribute>, Never> {
+    public func attributes() -> AnyPublisher<TypedDict<TrackAttribute>, Never> {
         $_attributes.eraseToAnyPublisher()
     }
     
-    public override func invalidateCaches(_ mask: TrackContentMask) {
+    public func invalidateCaches(_ mask: TrackContentMask) {
         contentSet.subtract(mask)
+    }
+    
+    public func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
+        fatalError()
+    }
+    
+    public func load(atLeast mask: TrackContentMask, library: Library) {
+        fatalError()
     }
 }

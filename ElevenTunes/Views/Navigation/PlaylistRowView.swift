@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct PlaylistRowView: View {
-    @ObservedObject var playlist: Playlist
+    @State var playlist: AnyPlaylist
     
-    @Environment(\.library) private var library: Library!
-
+    @State var contentMask: PlaylistContentMask = []
+    @State var attributes: TypedDict<PlaylistAttribute> = .init()
+    
     func title(_ text: String) -> Text {
-        if playlist.isTopLevel, playlist.backend.supportsChildren() {
+        // TODO false = isTopLevel
+        if false, playlist.supportsChildren() {
             return Text(text)
                 .bold()
                 .foregroundColor(.secondary)
@@ -25,40 +27,44 @@ struct PlaylistRowView: View {
         
     var body: some View {
         HStack {
-            playlist.icon
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 15, height: 15)
-                .foregroundColor(playlist.accentColor)
-                .saturation(0.5)
-
-            if !playlist.cacheMask.contains(.minimal) {
+            if !contentMask.contains(.minimal) {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle())
                     .scaleEffect(0.5)
             }
+            else {
+                playlist.icon
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 15, height: 15)
+                    .foregroundColor(playlist.accentColor)
+                    .saturation(0.5)
+            }
 
             NavigationLink(destination: PlaylistView(playlist: playlist)) {
-                if playlist.cacheMask.contains(.minimal) {
-                    title(playlist[PlaylistAttribute.title] ?? "Unknown Playlist")
-                        .opacity((playlist.tracks.isEmpty && playlist.children.isEmpty) ? 0.6 : 1)
+                if contentMask.contains(.minimal) {
+                    title(attributes[PlaylistAttribute.title] ?? "Unknown Playlist")
+//                        .opacity((playlist.tracks.isEmpty && playlist.children.isEmpty) ? 0.6 : 1)
                 }
                 else {
-                    title(playlist[PlaylistAttribute.title] ?? "...")
+                    title(attributes[PlaylistAttribute.title] ?? "...")
                         .opacity(0.5)
                 }
             }
         }
         .contextMenu {
-            if playlist.backend.hasCaches {
+            if playlist.hasCaches {
                 Button(action: {
-                    playlist.invalidateCaches([.minimal, .children, .tracks, .attributes], reloadWith: library)
+                    playlist.invalidateCaches([.minimal, .children, .tracks, .attributes])
                 }) {
                     Image(systemName: "arrow.clockwise")
                     Text("Reload Metadata")
                 }
             }
         }
-        .frame(height: playlist.isTopLevel ? 24 : 4) // The 4 is ridiculous but this counteracts the enormous default padding lol
+        // TODO false = isTopLevel
+        .frame(height: false ? 24 : 4) // The 4 is ridiculous but this counteracts the enormous default padding lol
+        .onReceive(playlist.cacheMask()) { contentMask = $0 }
+        .onReceive(playlist.attributes()) { attributes = $0 }
     }
 }

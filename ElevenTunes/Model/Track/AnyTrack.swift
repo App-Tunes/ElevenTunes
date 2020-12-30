@@ -22,14 +22,13 @@ public struct TrackContentMask: OptionSet, Hashable {
 
 public protocol AnyTrack: AnyObject {
     var id: String { get }
+    var asToken: TrackToken { get }
     
-    var cacheMask: AnyPublisher<TrackContentMask, Never> { get }
-    var attributes: AnyPublisher<TypedDict<TrackAttribute>, Never> { get }
+    func cacheMask() -> AnyPublisher<TrackContentMask, Never>
+    func attributes() -> AnyPublisher<TypedDict<TrackAttribute>, Never>
 
     func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error>
     var icon: Image { get }
-    
-    func load(atLeast level: TrackContentMask, library: Library)
     
     func invalidateCaches(_ mask: TrackContentMask)
 }
@@ -37,9 +36,9 @@ public protocol AnyTrack: AnyObject {
 class TrackBackendTypedCodable: TypedCodable<String> {
     static let _registry = CodableRegistry<String>()
         .register(MockTrack.self, for: "mock")
-        .register(FileTrack.self, for: "file")
-        .register(FileVideo.self, for: "videofile")
-        .register(SpotifyTrack.self, for: "spotify")
+        .register(FileTrackToken.self, for: "file")
+        .register(FileVideoToken.self, for: "videofile")
+        .register(SpotifyTrackToken.self, for: "spotify")
 
     override class var registry: CodableRegistry<String> { _registry }
 }

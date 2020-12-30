@@ -9,18 +9,20 @@ import Cocoa
 import Combine
 
 protocol AnyLibrary {
-    var allTracks: [PersistentTrack] { get }
-    var allPlaylists: [PersistentPlaylist] { get }
+    var allTracks: [TrackToken] { get }
+    var allPlaylists: [PlaylistToken] { get }
 }
 
 struct DirectLibrary: AnyLibrary {
-    var allTracks: [PersistentTrack] = []
-    var allPlaylists: [PersistentPlaylist] = []
+    var allTracks: [TrackToken] = []
+    var allPlaylists: [PlaylistToken] = []
 }
 
 public class Library {
     let managedObjectContext: NSManagedObjectContext
-    let mainPlaylist: LibraryPlaylist
+
+    var _mainPlaylist: LibraryPlaylist! = nil
+    var mainPlaylist: LibraryPlaylist { _mainPlaylist }
         
     let spotify: Spotify
     let interpreter: ContentInterpreter
@@ -34,9 +36,10 @@ public class Library {
 
         let playContext = PlayContext(spotify: spotify)
         
-        self.mainPlaylist = LibraryPlaylist(managedObjectContext: managedObjectContext, playContext: playContext)
         player = Player(context: playContext)
-        
+
+        _mainPlaylist = LibraryPlaylist(library: self, playContext: playContext)
+
         NotificationCenter.default.addObserver(self, selector: #selector(objectsDidChange), name: .NSManagedObjectContextObjectsDidChange, object: managedObjectContext)
     }
         

@@ -71,7 +71,9 @@ class FeatureSet<Feature: Hashable, Set> where Set: SetAlgebra, Set.Element == F
     func formUnion(_ features: Set) { lock.perform { self.features.formUnion(features) } }
     
     func remove(_ feature: Feature) { lock.perform { _ = features.remove(feature) } }
-    func subtract(_ features: Set) { lock.perform { self.features.subtract(features) } }
+    func subtract(_ features: Set) { lock.perform {
+        self.features.subtract(features)
+    } }
 }
 
 extension FeatureSet {

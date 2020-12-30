@@ -33,39 +33,39 @@ extension ContentInterpreter {
         let register = { interpreter.interpreters.append($0) }
         
         register(simple {
-            _ = try SpotifyTrack.spotifyURI(fromURL: $0)
+            _ = try SpotifyTrackToken.spotifyURI(fromURL: $0)
             return true
         } interpret: {
-            SpotifyTrack.create(spotify, fromURL: $0)
+            SpotifyTrackToken.create(spotify, fromURL: $0)
                 .map { Content.track($0) }
                 .eraseToAnyPublisher()
         })
         
         register(simple {
-            _ = try SpotifyPlaylist.spotifyURI(fromURL: $0)
+            _ = try SpotifyPlaylistToken.spotifyURI(fromURL: $0)
             return true
         } interpret: { (url: URL) -> AnyPublisher<Content, Error> in
-            SpotifyPlaylist.create(spotify, fromURL: url)
+            SpotifyPlaylistToken.create(spotify, fromURL: url)
                 .map { Content.playlist($0) }
                 .eraseToAnyPublisher()
         })
         
         register(simple { $0.pathExtension == "m3u" } interpret: {
-            .playlist(try M3UPlaylist.create(fromURL: $0))
+            .playlist(try M3UPlaylistToken.create(fromURL: $0))
         })
         
         register(simple {
             try $0.isFileDirectory()
         } interpret: {
-            .playlist(try DirectoryPlaylist.create(fromURL: $0))
+            .playlist(try DirectoryPlaylistToken.create(fromURL: $0))
         })
         
-        register(simple(matches: FileVideo.understands) {
-            .track(try FileVideo.create(fromURL: $0))
+        register(simple(matches: FileVideoToken.understands) {
+            .track(try FileVideoToken.create(fromURL: $0))
         })
         
-        register(simple(matches: FileTrack.understands) {
-            .track(try FileTrack.create(fromURL: $0))
+        register(simple(matches: FileTrackToken.understands) {
+            .track(try FileTrackToken.create(fromURL: $0))
         })
 
         return interpreter

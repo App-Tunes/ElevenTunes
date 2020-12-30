@@ -9,135 +9,153 @@
 import Foundation
 import CoreData
 import Combine
+import CombineExt
 import SwiftUI
 
 protocol SelfChangeWatcher {
     func onSelfChange()
 }
 
-@objc(DBPlaylist)
-public class DBPlaylist: NSManagedObject, AnyPlaylist {
+public class DBLibraryPlaylist: AnyPlaylist {
+    let library: Library
+    let cache: DBPlaylist
+    let backend: AnyPlaylist?
+    let isIndexed: Bool
+    let isDirectory: Bool
+
     var backendObservers = Set<AnyCancellable>()
 
-    public var id: String { objectID.description }
+    public var asToken: PlaylistToken { fatalError() }
+
+    init(library: Library, cache: DBPlaylist, backend: AnyPlaylist?, isIndexed: Bool, isDirectory: Bool) {
+        self.library = library
+        self.cache = cache
+        self.backend = backend
+        self.isIndexed = isIndexed
+        self.isDirectory = isDirectory
+    }
+    
+    public var id: String { cache.objectID.description }
     
     public var icon: Image {
-        backend?.icon ?? Playlist.defaultIcon
+        backend?.icon ?? Image(systemName: "music.note.list")
     }
     
     public var accentColor: Color {
         backend?.accentColor ?? .secondary
     }
     
-    @Published var _anyTracks: [AnyTrack] = []
-    public var anyTracks: AnyPublisher<[AnyTrack], Never> {
-        $_anyTracks.eraseToAnyPublisher()
-    }
-    
-    @Published var _anyChildren: [AnyPlaylist] = []
-    public var anyChildren: AnyPublisher<[AnyPlaylist], Never> {
-        $_anyChildren.eraseToAnyPublisher()
-    }
-    
-    @Published var _cacheMask: PlaylistContentMask = []
-    public var cacheMask: AnyPublisher<PlaylistContentMask, Never> {
-        $_cacheMask.eraseToAnyPublisher()
-    }
-    
-    @Published var _attributes: TypedDict<PlaylistAttribute> = .init()
-    public var attributes: AnyPublisher<TypedDict<PlaylistAttribute>, Never> {
-        $_attributes.eraseToAnyPublisher()
-    }
-        
-    public override func awakeFromFetch() { initialSetup() }
-    public override func awakeFromInsert() { initialSetup() }
-
-    func initialSetup() {
-        _anyTracks = tracks.array as! [DBTrack]
-        _anyChildren = children.array as! [DBPlaylist]
-        _attributes = cachedAttributes
-        if backend != nil {
-            _cacheMask = PlaylistContentMask(rawValue: backendCacheMask)
-        }
-        else {
-            _cacheMask = [.minimal, .children, .tracks, .attributes]
-        }
-
-        refreshObservation()
-    }
-    
     public var hasCaches: Bool { backend != nil }
-    
-    public func load(atLeast mask: PlaylistContentMask, deep: Bool, library: Library) {
-        guard let backend = backend else {
-            // Fetch requests have already set the values
-            _cacheMask = [.minimal, .children, .tracks, .attributes]
-            return
-        }
-        
-        // If indexed, tracks and children are NEVER in our cache
-        let currentCache = _cacheMask.subtracting(indexed ? [.children, .tracks] : [])
-        let missing = mask.subtracting(currentCache)
-        
-        if missing.isEmpty {
-            // We have everything we need! Yay!
-            return
-        }
-        
-        // Only reload what's missing
-        backend.load(atLeast: missing, deep: false, library: library)
-    }
     
     public func invalidateCaches(_ mask: PlaylistContentMask) {
         if let backend = backend {
-            let newMask = _cacheMask.subtracting(mask)
-            _cacheMask = newMask
-            backendCacheMask = newMask.rawValue
+            let clearBits = cache.backendCacheMask & mask.rawValue
+            if clearBits != 0 {
+                cache.backendCacheMask -= clearBits
+            }
+            
             backend.invalidateCaches(mask)
         }
     }
     
-    public func supportsChildren() -> Bool { backend?.supportsChildren() ?? isDirectory }
-
-    @discardableResult
-    public func add(tracks: [PersistentTrack]) -> Bool {
-        if let backend = backend {
-            return backend.add(tracks: tracks)
+    lazy var _cacheMask: AnyPublisher<PlaylistContentMask, Never> = {
+        guard let backend = backend else {
+            // If no backend, we don't even have a cache
+            return Just(PlaylistContentMask.all).eraseToAnyPublisher()
         }
         
-        guard let context = managedObjectContext else {
-            return false
+        if isIndexed {
+            // If indexed, the cache is just the db cache
+            return cache.$cacheMaskP.eraseToAnyPublisher()
         }
         
-        // We are without backend, aka transient
-        guard !isDirectory else {
-            return false
-        }
-        
-        let (tracks, _) = Library.convert(DirectLibrary(allTracks: tracks), context: context)
-        addToTracks(NSOrderedSet(array: tracks))
-        
-        return true
+        // If not indexed, the cache consists of backend's children and tracks,
+        // and the rest ours
+        return backend.cacheMask()
+            .combineLatest(cache.$cacheMaskP)
+            .map { (backendMask, dbMask) in
+                backendMask.intersection([.children, .tracks])
+                .union(dbMask.subtracting([.children, .tracks]))
+            }
+            .eraseToAnyPublisher()
+    }()
+    public func cacheMask() -> AnyPublisher<PlaylistContentMask, Never> {
+        _cacheMask
     }
     
-    @discardableResult
-    public func add(children: [PersistentPlaylist]) -> Bool {
-        if let backend = backend {
-            return backend.add(children: children)
+    lazy var _tracks: AnyPublisher<[AnyTrack], Never> = {
+        guard let backend = backend, !isIndexed else {
+            // Everything is cached
+            let library = self.library
+            
+            return cache.$tracksP
+                .flatMap { $0.map(library.track).combineLatest() }
+                .eraseToAnyPublisher()
         }
         
-        guard let context = managedObjectContext else {
-            return false
+        return backend.tracks()
+    }()
+    
+    public func tracks() -> AnyPublisher<[AnyTrack], Never> {
+        _tracks
+    }
+    
+    lazy var _children: AnyPublisher<[AnyPlaylist], Never> = {
+        guard let backend = backend, !isIndexed else {
+            // Everything is cached
+            let library = self.library
+            return cache.$childrenP
+                .flatMap { $0.map(library.playlist).combineLatest() }
+                .eraseToAnyPublisher()
         }
+        
+        return backend.children()
+    }()
+    
+    public func children() -> AnyPublisher<[AnyPlaylist], Never> {
+        _children
+    }
+    
+    public func attributes() -> AnyPublisher<TypedDict<PlaylistAttribute>, Never> {
+        cache.$attributesP.eraseToAnyPublisher()
+    }
+    
+    public func supportsChildren() -> Bool {
+        backend?.supportsChildren() ?? isDirectory
+    }
+    
+    public func add(tracks: [TrackToken]) -> Bool {
+        false  // TODO
+    }
+    
+    public func add(children: [PlaylistToken]) -> Bool {
+        false  // TODO
+    }
 
-        // We are without backend, aka transient
-        guard isDirectory else {
-            return false
-        }
-        
-        let (_, playlists) = Library.convert(DirectLibrary(allPlaylists: children), context: context)
-        addToChildren(NSOrderedSet(array: playlists))
-        
-        return true
+}
+
+@objc(DBPlaylist)
+public class DBPlaylist: NSManagedObject {
+    @Published var backendP: PlaylistToken? = nil
+    @Published var isIndexedP: Bool = false
+    @Published var isDirectoryP: Bool = false
+
+    @Published var cacheMaskP: PlaylistContentMask = []
+    @Published var tracksP: [DBTrack] = []
+    @Published var childrenP: [DBPlaylist] = []
+    @Published var attributesP: TypedDict<PlaylistAttribute> = .init()
+    
+    public override func awakeFromFetch() { initialSetup() }
+    public override func awakeFromInsert() { initialSetup() }
+    
+    func initialSetup() {
+        backendP = backend
+        isIndexedP = indexed
+        isDirectoryP = isDirectory
+
+        cacheMaskP = PlaylistContentMask(rawValue: backendCacheMask)
+        tracksP = tracks.array as! [DBTrack]
+        childrenP = children.array as! [DBPlaylist]
+        attributesP = cachedAttributes
     }
 }

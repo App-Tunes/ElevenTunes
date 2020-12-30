@@ -13,14 +13,18 @@ import Combine
 import AVFoundation
 import SwiftUI
 
-public class FileTrack: RemoteTrack {
-    public var url: URL
+public class FileTrackToken: TrackToken {
+    enum CodingKeys: String, CodingKey {
+      case url
+    }
+
+    public let url: URL
+    
+    public override var id: String { url.absoluteString }
     
     init(_ url: URL) {
         self.url = url
         super.init()
-        _attributes[TrackAttribute.title] = url.lastPathComponent
-        contentSet.insert(.minimal)
     }
     
     public required init(from decoder: Decoder) throws {
@@ -34,7 +38,7 @@ public class FileTrack: RemoteTrack {
         try container.encode(url, forKey: .url)
         try super.encode(to: encoder)
     }
-
+    
     static func understands(url: URL) -> Bool {
         guard let type = UTType(filenameExtension: url.pathExtension) else {
             return false
@@ -42,15 +46,26 @@ public class FileTrack: RemoteTrack {
         return type.conforms(to: .audio)
     }
 
-    static func create(fromURL url: URL) throws -> FileTrack {
+    static func create(fromURL url: URL) throws -> FileTrackToken {
         _ = try AVAudioFile(forReading: url) // Just so we know it's readable
-        return FileTrack(url)
+        return FileTrackToken(url)
     }
-     
-    public override var id: String { url.absoluteString }
+}
+
+public class FileTrack: RemoteTrack {
+    let token: FileTrackToken
+    
+    init(_ token: FileTrackToken) {
+        self.token = token
+        super.init()
+        _attributes[TrackAttribute.title] = token.url.lastPathComponent
+        contentSet.insert(.minimal)
+    }
+         
+    public override var id: String { token.id }
         
     public override func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
-        let url = self.url
+        let url = token.url
         return Future {
             let player = try AVAudioPlayer(contentsOf: url)
             player.prepareToPlay()
@@ -59,14 +74,8 @@ public class FileTrack: RemoteTrack {
             .eraseToAnyPublisher()
     }
     
-    public override func load(atLeast mask: TrackContentMask, library: Library) {
-        _attributes[TrackAttribute.title] = url.lastPathComponent
-        contentSet.insert(.minimal)
-    }
-}
-
-extension FileTrack {
-    enum CodingKeys: String, CodingKey {
-      case url
-    }
+//    public override func load(atLeast mask: TrackContentMask, library: Library) {
+//        _attributes[TrackAttribute.title] = url.lastPathComponent
+//        contentSet.insert(.minimal)
+//    }
 }

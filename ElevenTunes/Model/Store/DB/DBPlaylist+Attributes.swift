@@ -13,8 +13,11 @@ extension DBPlaylist {
     ])
 
     func merge(attributes: TypedDict<PlaylistAttribute>) {
+        guard !attributes.isEmpty else { return }
+        
         if let title = attributes[PlaylistAttribute.title] { self.title = title }
-        _attributes = cachedAttributes
+        
+        attributesP = cachedAttributes
     }
     
     var cachedAttributes: TypedDict<PlaylistAttribute> {

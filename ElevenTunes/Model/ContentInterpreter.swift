@@ -11,8 +11,8 @@ import UniformTypeIdentifiers
 import Cocoa
 
 enum Content {
-    case playlist(_ playlist: PersistentPlaylist)
-    case track(_ track: PersistentTrack)
+    case playlist(_ playlist: PlaylistToken)
+    case track(_ track: TrackToken)
 }
 
 class ContentInterpreter {
@@ -75,9 +75,9 @@ class ContentInterpreter {
         }
     }
     
-    static func collect(fromContents contents: [Content]) -> ([PersistentTrack], [PersistentPlaylist]) {
-        var playlists: [PersistentPlaylist] = []
-        var tracks: [PersistentTrack] = []
+    static func collect(fromContents contents: [Content]) -> ([TrackToken], [PlaylistToken]) {
+        var playlists: [PlaylistToken] = []
+        var tracks: [TrackToken] = []
         
         for content in contents {
             switch content {

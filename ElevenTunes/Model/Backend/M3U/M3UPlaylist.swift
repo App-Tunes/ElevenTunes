@@ -11,26 +11,28 @@ import CoreData
 import SwiftUI
 import Combine
 
-public class M3UPlaylist: RemotePlaylist {
+public class M3UPlaylistToken: PlaylistToken {
     enum InterpretationError: Error {
         case noFile
     }
-    
+
+    enum CodingKeys: String, CodingKey {
+      case url
+    }
+
     var url: URL
     
     init(_ url: URL) {
         self.url = url
         super.init()
-        loadMinimal()
-        contentSet.formUnion([.minimal, .attributes])
     }
     
-    static func create(fromURL url: URL) throws -> M3UPlaylist {
+    static func create(fromURL url: URL) throws -> M3UPlaylistToken {
         if try url.isFileDirectory() {
             throw InterpretationError.noFile
         }
         
-        return M3UPlaylist(url)
+        return M3UPlaylistToken(url)
     }
 
     public required init(from decoder: Decoder) throws {
@@ -46,6 +48,21 @@ public class M3UPlaylist: RemotePlaylist {
     }
     
     public override var id: String { url.absoluteString }
+}
+
+public class M3UPlaylist: RemotePlaylist {
+    let library: Library
+    let token: M3UPlaylistToken
+    
+    init(_ token: M3UPlaylistToken, library: Library) {
+        self.library = library
+        self.token = token
+        super.init()
+        loadMinimal()
+        contentSet.formUnion([.minimal, .attributes])
+    }
+    
+    public override var asToken: PlaylistToken { token }
 
     public override var icon: Image { Image(systemName: "doc.text") }
     
@@ -80,22 +97,22 @@ public class M3UPlaylist: RemotePlaylist {
     }
     
     func loadMinimal() {
-        _attributes[PlaylistAttribute.title] = url.lastPathComponent
+        _attributes[PlaylistAttribute.title] = token.url.lastPathComponent
     }
     
-    public override func load(atLeast mask: PlaylistContentMask, deep: Bool, library: Library) {
+    public override func load(atLeast mask: PlaylistContentMask, library: Library) {
         contentSet.promise(mask) { promise in
-            let url = self.url
+            let url = token.url
             let interpreter = library.interpreter
 
             promise.fulfilling([.minimal, .attributes]) {
                 loadMinimal()
             }
-            
+
             guard promise.includesAny([.tracks, .children]) else {
                 return
             }
-            
+
             Future {
                 try String(contentsOf: url)
             }
@@ -106,19 +123,20 @@ public class M3UPlaylist: RemotePlaylist {
                 interpreter.interpret(urls: $0)
                     ?? Just([]).eraseError().eraseToAnyPublisher()
             }
+            .flatMap { (contents: [Content]) -> AnyPublisher<([AnyTrack], [AnyPlaylist]), Never> in
+                let (tracks, children) = ContentInterpreter.collect(fromContents: contents)
+                
+                let tracksMerge = tracks.map { $0.expand(library) }.combineLatest()
+                let playlistsMerge = children.map { $0.expand(library) }.combineLatest()
+
+                return tracksMerge.zip(playlistsMerge).eraseToAnyPublisher()
+            }
             .onMain()
             .fulfillingAny([.tracks, .children], of: promise)
-            .sink(receiveCompletion: appLogErrors(_:)) { [unowned self] contents in
-                let library = ContentInterpreter.collect(fromContents: contents)
-                _tracks = library.0
-                _children = library.1
+            .sink(receiveCompletion: appLogErrors(_:)) { [unowned self] (tracks, children) in
+                _tracks = tracks
+                _children = children
             }.store(in: &cancellables)
         }
-    }
-}
-
-extension M3UPlaylist {
-    enum CodingKeys: String, CodingKey {
-      case url
     }
 }

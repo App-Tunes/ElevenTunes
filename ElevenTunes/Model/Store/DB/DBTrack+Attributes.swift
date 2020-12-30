@@ -14,7 +14,8 @@ extension DBTrack {
 
     func merge(attributes: TypedDict<TrackAttribute>) {
         if let title = attributes[TrackAttribute.title] { self.title = title }
-        _attributes = cachedAttributes
+        
+        attributesP = cachedAttributes
     }
     
     var cachedAttributes: TypedDict<TrackAttribute> {

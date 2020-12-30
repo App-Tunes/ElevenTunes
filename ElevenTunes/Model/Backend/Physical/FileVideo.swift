@@ -12,14 +12,16 @@ import Combine
 import AVFoundation
 import SwiftUI
 
-public class FileVideo: RemoteTrack {
+public class FileVideoToken: TrackToken {
+    enum CodingKeys: String, CodingKey {
+      case url
+    }
+
     public var url: URL
     
     init(_ url: URL) {
         self.url = url
         super.init()
-        _attributes[TrackAttribute.title] = url.lastPathComponent
-        contentSet.insert(.minimal)
     }
     
     public required init(from decoder: Decoder) throws {
@@ -41,18 +43,29 @@ public class FileVideo: RemoteTrack {
         return type.conforms(to: .audiovisualContent) && !type.conforms(to: .audio)
     }
 
-    static func create(fromURL url: URL) throws -> FileVideo {
+    static func create(fromURL url: URL) throws -> FileVideoToken {
         _ = try AVAudioFile(forReading: url) // Just so we know it's readable
-        return FileVideo(url)
+        return FileVideoToken(url)
     }
-     
-    public override var id: String { url.absoluteString }
+}
+
+public class FileVideo: RemoteTrack {
+    let token: FileVideoToken
+    
+    init(_ token: FileVideoToken) {
+        self.token = token
+        super.init()
+        _attributes[TrackAttribute.title] = token.url.lastPathComponent
+        contentSet.insert(.minimal)
+    }
+    
+    public override var asToken: TrackToken { token }
     
     public override var icon: Image { Image(systemName: "video") }
         
     public override func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
         // TODO Return video emitter when possible
-        let url = self.url
+        let url = token.url
         return Future {
             let player = try AVAudioPlayer(contentsOf: url)
             player.prepareToPlay()
@@ -61,14 +74,8 @@ public class FileVideo: RemoteTrack {
             .eraseToAnyPublisher()
     }
     
-    public override func load(atLeast mask: TrackContentMask, library: Library) {
-        _attributes[TrackAttribute.title] = url.lastPathComponent
-        contentSet.insert(.minimal)
-    }
-}
-
-extension FileVideo {
-    enum CodingKeys: String, CodingKey {
-      case url
-    }
+//    public override func load(atLeast mask: TrackContentMask, library: Library) {
+//        _attributes[TrackAttribute.title] = url.lastPathComponent
+//        contentSet.insert(.minimal)
+//    }
 }
