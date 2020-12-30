@@ -81,8 +81,6 @@
 		806E1FC22596A12C003EEA83 /* AnyTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E1FC12596A12C003EEA83 /* AnyTrack.swift */; };
 		806E1FD32596A5FA003EEA83 /* Playlist+Attributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E1FD22596A5FA003EEA83 /* Playlist+Attributes.swift */; };
 		806E1FDB2596A9A3003EEA83 /* CodableTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E1FDA2596A9A3003EEA83 /* CodableTransformer.swift */; };
-		806E1FF72596B2A5003EEA83 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E1FF62596B2A5003EEA83 /* Track.swift */; };
-		806E1FFC2596B2AC003EEA83 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E1FFB2596B2AC003EEA83 /* Playlist.swift */; };
 		806E20012596B6C3003EEA83 /* RemotePlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E20002596B6C3003EEA83 /* RemotePlaylist.swift */; };
 		806E20222596C26A003EEA83 /* RemoteTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E20212596C26A003EEA83 /* RemoteTrack.swift */; };
 		806E202825975A0E003EEA83 /* MockTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E202725975A0E003EEA83 /* MockTrack.swift */; };
@@ -202,8 +200,6 @@
 		806E1FC12596A12C003EEA83 /* AnyTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyTrack.swift; sourceTree = "<group>"; };
 		806E1FD22596A5FA003EEA83 /* Playlist+Attributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Playlist+Attributes.swift"; sourceTree = "<group>"; };
 		806E1FDA2596A9A3003EEA83 /* CodableTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableTransformer.swift; sourceTree = "<group>"; };
-		806E1FF62596B2A5003EEA83 /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
-		806E1FFB2596B2AC003EEA83 /* Playlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
 		806E20002596B6C3003EEA83 /* RemotePlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePlaylist.swift; sourceTree = "<group>"; };
 		806E20212596C26A003EEA83 /* RemoteTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTrack.swift; sourceTree = "<group>"; };
 		806E202725975A0E003EEA83 /* MockTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTrack.swift; sourceTree = "<group>"; };
@@ -502,20 +498,10 @@
 		806E1FF42596B294003EEA83 /* Store */ = {
 			isa = PBXGroup;
 			children = (
-				806E1FF52596B29D003EEA83 /* Presentation */,
 				806E2026259759E0003EEA83 /* Transient */,
 				802E2D7625963FE800CB91EC /* DB */,
 			);
 			path = Store;
-			sourceTree = "<group>";
-		};
-		806E1FF52596B29D003EEA83 /* Presentation */ = {
-			isa = PBXGroup;
-			children = (
-				806E1FFB2596B2AC003EEA83 /* Playlist.swift */,
-				806E1FF62596B2A5003EEA83 /* Track.swift */,
-			);
-			path = Presentation;
 			sourceTree = "<group>";
 		};
 		806E2026259759E0003EEA83 /* Transient */ = {
@@ -892,11 +878,9 @@
 				806B27C1258D69470091EA4D /* LibraryMock.swift in Sources */,
 				800C1204259A4AC10017A116 /* Set.swift in Sources */,
 				800508592597FEEB0055FB2D /* Library+Prune.swift in Sources */,
-				806E1FF72596B2A5003EEA83 /* Track.swift in Sources */,
 				806B28A4258ED16C0091EA4D /* AVAudioPlayerEmitter.swift in Sources */,
 				80AD69AA258829EE00192BED /* FilterBarView.swift in Sources */,
 				800C121C259B580A0017A116 /* FeatureSet.swift in Sources */,
-				806E1FFC2596B2AC003EEA83 /* Playlist.swift in Sources */,
 				80AD698E2588287900192BED /* PlaylistView.swift in Sources */,
 				806B28E6258FB9A10091EA4D /* AnyPublisher.swift in Sources */,
 				805338382598FD2E006F06DC /* Animation.swift in Sources */,
