@@ -56,7 +56,7 @@ extension Library {
 
         // ================= Convert Tracks =====================
 
-        let convertTrack = { (backend: TrackToken) -> DBTrack in
+        func convertTrack(_ backend: TrackToken) -> DBTrack {
             if let backend = backend as? MockTrack {
                 let dbTrack = DBTrack(entity: trackModel, insertInto: context)
                 dbTrack.merge(attributes: backend._attributes)
@@ -79,7 +79,7 @@ extension Library {
         
         var playlistChildren: [DBPlaylist: [String]] = [:]
         
-        let convertPlaylist = { (backend: PlaylistToken) -> DBPlaylist in
+        func convertPlaylist(_ backend: PlaylistToken) -> DBPlaylist {
             if let backend = backend as? TransientPlaylist {
                 let dbPlaylist = DBPlaylist(entity: playlistModel, insertInto: context)
                 
