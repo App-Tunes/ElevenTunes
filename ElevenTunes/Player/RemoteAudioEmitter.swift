@@ -44,7 +44,7 @@ class RemoteAudioEmitter: AnyAudioEmitter {
         self.endpoint.delegate = self
         
         if let endpoint = endpoint as? ActiveStateQueryingAudioEndpoint {
-            stateQueryTimer = Timer(timeInterval: 2, repeats: true, block: { _ in
+            stateQueryTimer = Timer(timeInterval: 10, repeats: true, block: { _ in
                 endpoint.queryState()
             })
             RunLoop.main.add(stateQueryTimer!, forMode: .default)
