@@ -9,7 +9,8 @@ import SwiftUI
 import Combine
 
 struct PlayingTrackView: View {
-    @State var current: AnyTrack?
+    // Unfortunately, @State doesn't work right now. It doesn't update the view....
+    let current: AnyTrack?
     @State var attributes: TypedDict<TrackAttribute> = .init()
     
     var body: some View {
@@ -21,12 +22,12 @@ struct PlayingTrackView: View {
                     .frame(width: 15, height: 15)
 
                 Text(attributes[TrackAttribute.title] ?? "Untitled Track")
+                    .onReceive(current.attributes()) { attributes = $0 }
             }
             else {
                 Text("Nothing Playing").opacity(0.5)
             }
         }
-        .onReceive(current?.attributes() ?? Just(.init()).eraseToAnyPublisher()) { attributes = $0 }
     }
 }
 
