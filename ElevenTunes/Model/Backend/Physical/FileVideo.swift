@@ -18,6 +18,7 @@ public class FileVideoToken: TrackToken {
     }
 
     public var url: URL
+    public override var id: String { url.absoluteString }
     
     init(_ url: URL) {
         self.url = url
@@ -47,6 +48,10 @@ public class FileVideoToken: TrackToken {
         _ = try AVAudioFile(forReading: url) // Just so we know it's readable
         return FileVideoToken(url)
     }
+    
+    override func expand(_ context: Library) -> AnyTrack {
+        FileVideo(self)
+    }
 }
 
 public class FileVideo: RemoteTrack {
@@ -74,8 +79,11 @@ public class FileVideo: RemoteTrack {
             .eraseToAnyPublisher()
     }
     
-//    public override func load(atLeast mask: TrackContentMask, library: Library) {
-//        _attributes[TrackAttribute.title] = url.lastPathComponent
-//        contentSet.insert(.minimal)
-//    }
+    public override func load(atLeast mask: TrackContentMask) {
+        contentSet.promise(mask) { promise in
+            promise.fulfilling(.minimal) {
+                _attributes.value[TrackAttribute.title] = token.url.lastPathComponent
+            }
+        }
+    }
 }

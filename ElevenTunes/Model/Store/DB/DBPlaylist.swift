@@ -116,8 +116,15 @@ public class DBLibraryPlaylist: AnyPlaylist {
         _children
     }
     
+    lazy var _attributes: AnyPublisher<TypedDict<PlaylistAttribute>, Never> = {
+        guard let backend = backend else {
+            return cache.$attributesP.eraseToAnyPublisher()
+        }
+        
+        return backend.attributes()
+    }()
     public func attributes() -> AnyPublisher<TypedDict<PlaylistAttribute>, Never> {
-        cache.$attributesP.eraseToAnyPublisher()
+        _attributes
     }
     
     public func supportsChildren() -> Bool {

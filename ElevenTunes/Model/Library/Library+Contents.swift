@@ -12,13 +12,10 @@ extension Library {
     func playlist(cachedBy cache: DBPlaylist) -> AnyPublisher<AnyPlaylist, Never> {
         _ = cache.backend // Fire Fault
         
-        let backend = cache.$backendP.flatMap { (token: PlaylistToken?) in
-            token?.expand(self)
-                .map { $0 as AnyPlaylist? }.eraseToAnyPublisher()
-                ?? Just<AnyPlaylist?>(nil).eraseToAnyPublisher()
-        }
-        
-        return backend.combineLatest(cache.$isIndexedP, cache.$isDirectoryP)
+        return cache.$backendP.map {
+                $0?.expand(self)
+            }
+            .combineLatest(cache.$isIndexedP, cache.$isDirectoryP)
             .map { (backend: AnyPlaylist?, isIndexed: Bool, isDirectory: Bool) -> AnyPlaylist in
                 DBLibraryPlaylist(library: self, cache: cache, backend: backend, isIndexed: isIndexed, isDirectory: isDirectory)
             }
@@ -28,12 +25,9 @@ extension Library {
     func track(cachedBy cache: DBTrack) -> AnyPublisher<AnyTrack, Never> {
         _ = cache.backend // Fire Fault
         
-        let backend = cache.$backendP.flatMap { (token: TrackToken?) in
-            token?.expand(self).map { $0 as AnyTrack? }.eraseToAnyPublisher()
-                ?? Just<AnyTrack?>(nil).eraseToAnyPublisher()
-        }
-        
-        return backend
+        return cache.$backendP.map {
+                $0?.expand(self)
+            }
             .map { backend in
                 DBLibraryTrack(library: self, cache: cache, backend: backend)
             }

@@ -42,9 +42,7 @@ class MockTrack: TrackToken, AnyTrack {
     let uuid = UUID()
     override var id: String { uuid.description }
     
-    override func expand(_ context: Library) -> AnyPublisher<AnyTrack, Never> {
-        Just(self).eraseToAnyPublisher()
-    }
+    override func expand(_ context: Library) -> AnyTrack { self }
     
     func cacheMask() -> AnyPublisher<TrackContentMask, Never> {
         Just(.minimal).eraseToAnyPublisher()

@@ -26,6 +26,8 @@ public class DirectoryPlaylistToken: PlaylistToken {
         super.init()
     }
     
+    public override var id: String { url.absoluteString }
+    
     static func create(fromURL url: URL) throws -> DirectoryPlaylistToken {
         if !(try url.isFileDirectory()) {
             throw InterpretationError.noDirectory
@@ -44,6 +46,10 @@ public class DirectoryPlaylistToken: PlaylistToken {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(url, forKey: .url)
         try super.encode(to: encoder)
+    }
+    
+    override func expand(_ context: Library) -> AnyPlaylist {
+        DirectoryPlaylist(self, library: context)
     }
 }
 
@@ -77,7 +83,7 @@ public class DirectoryPlaylist: RemotePlaylist {
             let url = token.url
             let interpreter = library.interpreter
 
-            promise.fulfilling([.minimal, .attributes]) {
+            promise.fulfillingAny([.minimal, .attributes]) {
                 loadMinimal()
             }
             
@@ -92,13 +98,10 @@ public class DirectoryPlaylist: RemotePlaylist {
                 interpreter.interpret(urls: $0)
                     ?? Just([]).eraseError().eraseToAnyPublisher()
             }
-            .flatMap { (contents: [Content]) -> AnyPublisher<([AnyTrack], [AnyPlaylist]), Never> in
+            .map { (contents: [Content]) -> ([AnyTrack], [AnyPlaylist]) in
                 let (tracks, children) = ContentInterpreter.collect(fromContents: contents)
                 
-                let tracksMerge = tracks.map { $0.expand(library) }.combineLatest()
-                let playlistsMerge = children.map { $0.expand(library) }.combineLatest()
-                
-                return tracksMerge.zip(playlistsMerge).eraseToAnyPublisher()
+                return (tracks.map { $0.expand(library) }, children.map { $0.expand(library) })
             }
             .onMain()
             .fulfillingAny([.tracks, .children], of: promise)

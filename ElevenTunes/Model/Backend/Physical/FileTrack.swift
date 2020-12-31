@@ -50,6 +50,10 @@ public class FileTrackToken: TrackToken {
         _ = try AVAudioFile(forReading: url) // Just so we know it's readable
         return FileTrackToken(url)
     }
+    
+    override func expand(_ context: Library) -> AnyTrack {
+        FileTrack(self)
+    }
 }
 
 public class FileTrack: RemoteTrack {
@@ -74,8 +78,11 @@ public class FileTrack: RemoteTrack {
             .eraseToAnyPublisher()
     }
     
-//    public override func load(atLeast mask: TrackContentMask, library: Library) {
-//        _attributes[TrackAttribute.title] = url.lastPathComponent
-//        contentSet.insert(.minimal)
-//    }
+    public override func load(atLeast mask: TrackContentMask) {
+        contentSet.promise(mask) { promise in
+            promise.fulfilling(.minimal) {
+                _attributes.value[TrackAttribute.title] = token.url.lastPathComponent
+            }
+        }
+    }
 }

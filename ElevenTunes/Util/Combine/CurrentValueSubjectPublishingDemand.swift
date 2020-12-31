@@ -36,6 +36,8 @@ public class CurrentValueSubjectPublishingDemand<Output, Failure: Error>: Subjec
         // Only push to those that currently have a demand,
         // as requested by Swift API
         let requests: [CSubscription] = demandLock.perform {
+            guard demand > .none else { return [] }
+            
             demand -= 1
             return subscriptions.filter {
                 let isPositive = $0.demand > .none

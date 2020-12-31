@@ -12,7 +12,7 @@ import SwiftUI
 public class TrackToken: NSObject, Codable {
     public var id: String { fatalError() }
     
-    func expand(_ context: Library) -> AnyPublisher<AnyTrack, Never> { fatalError() }
+    func expand(_ context: Library) -> AnyTrack { fatalError() }
     
     // NSObject gedöns
     

@@ -69,8 +69,8 @@ public class SpotifyTrackToken: TrackToken {
             .eraseToAnyPublisher()
     }
     
-    override func expand(_ context: Library) -> AnyPublisher<AnyTrack, Never> {
-        Just(SpotifyTrack(self, spotify: context.spotify)).eraseToAnyPublisher()
+    override func expand(_ context: Library) -> AnyTrack {
+        SpotifyTrack(self, spotify: context.spotify)
     }
 }
 

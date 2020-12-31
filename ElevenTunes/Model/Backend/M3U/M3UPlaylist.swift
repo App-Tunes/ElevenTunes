@@ -27,13 +27,7 @@ public class M3UPlaylistToken: PlaylistToken {
         super.init()
     }
     
-    static func create(fromURL url: URL) throws -> M3UPlaylistToken {
-        if try url.isFileDirectory() {
-            throw InterpretationError.noFile
-        }
-        
-        return M3UPlaylistToken(url)
-    }
+    public override var id: String { url.absoluteString }
 
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -47,7 +41,17 @@ public class M3UPlaylistToken: PlaylistToken {
         try super.encode(to: encoder)
     }
     
-    public override var id: String { url.absoluteString }
+    static func create(fromURL url: URL) throws -> M3UPlaylistToken {
+        if try url.isFileDirectory() {
+            throw InterpretationError.noFile
+        }
+        
+        return M3UPlaylistToken(url)
+    }
+    
+    override func expand(_ context: Library) -> AnyPlaylist {
+        M3UPlaylist(self, library: context)
+    }
 }
 
 public class M3UPlaylist: RemotePlaylist {
@@ -106,7 +110,7 @@ public class M3UPlaylist: RemotePlaylist {
             let library = self.library
             let interpreter = library.interpreter
 
-            promise.fulfilling([.minimal, .attributes]) {
+            promise.fulfillingAny([.minimal, .attributes]) {
                 loadMinimal()
             }
 
@@ -124,13 +128,10 @@ public class M3UPlaylist: RemotePlaylist {
                 interpreter.interpret(urls: $0)
                     ?? Just([]).eraseError().eraseToAnyPublisher()
             }
-            .flatMap { (contents: [Content]) -> AnyPublisher<([AnyTrack], [AnyPlaylist]), Never> in
+            .map { (contents: [Content]) -> ([AnyTrack], [AnyPlaylist]) in
                 let (tracks, children) = ContentInterpreter.collect(fromContents: contents)
                 
-                let tracksMerge = tracks.map { $0.expand(library) }.combineLatest()
-                let playlistsMerge = children.map { $0.expand(library) }.combineLatest()
-
-                return tracksMerge.zip(playlistsMerge).eraseToAnyPublisher()
+                return (tracks.map { $0.expand(library) }, children.map { $0.expand(library) })
             }
             .onMain()
             .fulfillingAny([.tracks, .children], of: promise)

@@ -12,7 +12,7 @@ import SwiftUI
 public class PlaylistToken: NSObject, Codable {
     public var id: String { fatalError() }
 
-    func expand(_ context: Library) -> AnyPublisher<AnyPlaylist, Never> { fatalError() }
+    func expand(_ context: Library) -> AnyPlaylist { fatalError() }
 
     // NSObject gedöns
     

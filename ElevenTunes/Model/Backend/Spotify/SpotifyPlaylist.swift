@@ -70,8 +70,8 @@ public class SpotifyPlaylistToken: PlaylistToken {
             .eraseToAnyPublisher()
     }
     
-    override func expand(_ context: Library) -> AnyPublisher<AnyPlaylist, Never> {
-        Just(SpotifyPlaylist(self, spotify: context.spotify)).eraseToAnyPublisher()
+    override func expand(_ context: Library) -> AnyPlaylist {
+        SpotifyPlaylist(self, spotify: context.spotify)
     }
 }
 

@@ -50,9 +50,7 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
 //        try container.encode(_children, forKey: .children)
     }
     
-    override func expand(_ context: Library) -> AnyPublisher<AnyPlaylist, Never> {
-        Just(self).eraseToAnyPublisher()
-    }
+    override func expand(_ context: Library) -> AnyPlaylist { self }
     
     var asToken: PlaylistToken { self }
 
