@@ -48,17 +48,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         urls = urls.filter { !spotify.handleURL($0) }
 
-        // TODO 
-//        interpreter.interpret(urls: urls)?
-//            .map {
-//                ContentInterpreter.library(fromContents: $0, name: "New Document")
-//            }
-//            .sink(receiveCompletion: appLogErrors) { library in
-//                let doc = LibraryDocument()
-//                doc.library.import(library: library)
-//                NSDocumentController.shared.addDocument(doc)
-//            }
-//            .store(in: &cancellables)
+        let documentController = NSDocumentController.shared
+        
+        do {
+            let doc = try documentController.makeUntitledDocument(ofType: "library")
+                as! LibraryDocument
+            let library = doc.library
+
+            library.interpreter.interpret(urls: urls)?
+                .map {
+                    ContentInterpreter.library(fromContents: $0, name: "New Document")
+                }
+                .sink(receiveCompletion: { result in
+                    switch result {
+                    case .finished:
+                        doc.makeWindowControllers()
+                        doc.showWindows()
+                        documentController.addDocument(doc)
+                    case .failure(let error):
+                        // Document will deallocate
+                        appLogger.error("Error interpreting urls: \(error)")
+                    }
+                }) { library in
+                    doc.library.import(library: library)
+                }
+                .store(in: &cancellables)
+        }
+        catch let error {
+            appLogger.error("Error creating new document: \(error)")
+        }
     }
 
     @IBAction func showSettings(_ sender: AnyObject?) {
