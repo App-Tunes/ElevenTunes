@@ -105,7 +105,7 @@ public class SpotifyTrack: RemoteTrack {
     public override func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
         let spotify = context.spotify
         
-        let spotifyTrack = spotify.api.track(token.trackID)
+        let spotifyTrack = spotify.api.track(token)
             .compactMap(ExistingSpotifyTrack.init)
         let device = spotify.devices.$selected
             .compactMap { $0 }
