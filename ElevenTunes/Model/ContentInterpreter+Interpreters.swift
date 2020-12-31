@@ -51,10 +51,10 @@ extension ContentInterpreter {
         })
         
         register(simple {
-            _ = try SpotifyUserPlaylistToken.userID(fromURL: $0)
+            _ = try SpotifyUserToken.userID(fromURL: $0)
             return true
         } interpret: { (url: URL) -> AnyPublisher<Content, Error> in
-            SpotifyUserPlaylistToken.create(spotify, fromURL: url)
+            SpotifyUserToken.create(spotify, fromURL: url)
                 .map { Content.playlist($0) }
                 .eraseToAnyPublisher()
         })

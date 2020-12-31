@@ -42,7 +42,7 @@ class LibraryPlaylist: AnyPlaylist {
             .eraseToAnyPublisher()
                 
         staticPlaylists = [
-            SpotifyUserPlaylist(spotify: library.spotify)
+            SpotifyUser(spotify: library.spotify)
         ]
     }
     

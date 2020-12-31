@@ -11,7 +11,7 @@ import Combine
 import SwiftUI
 import SpotifyWebAPI
 
-public class SpotifyUserPlaylistToken: PlaylistToken {
+public class SpotifyUserToken: PlaylistToken {
     enum SpotifyError: Error {
         case noURI
     }
@@ -59,37 +59,37 @@ public class SpotifyUserPlaylistToken: PlaylistToken {
         return id
     }
 
-    static func create(_ spotify: Spotify, fromURL url: URL?) -> AnyPublisher<SpotifyUserPlaylistToken, Error> {
+    static func create(_ spotify: Spotify, fromURL url: URL?) -> AnyPublisher<SpotifyUserToken, Error> {
         return Future { try url.map { try userID(fromURL: $0) } }
-            .map { SpotifyUserPlaylistToken($0) }
+            .map { SpotifyUserToken($0) }
             .eraseToAnyPublisher()
     }
     
     override func expand(_ context: Library) -> AnyPlaylist {
-        SpotifyUserPlaylist(self, spotify: context.spotify)
+        SpotifyUser(self, spotify: context.spotify)
     }
 }
 
-public class SpotifyUserPlaylist: RemotePlaylist {
-    let token: SpotifyUserPlaylistToken
+public class SpotifyUser: RemotePlaylist {
+    let token: SpotifyUserToken
     let spotify: Spotify
     
     init(spotify: Spotify) {
-        self.token = SpotifyUserPlaylistToken(nil)
+        self.token = SpotifyUserToken(nil)
         self.spotify = spotify
     }
     
-    init(_ token: SpotifyUserPlaylistToken, spotify: Spotify) {
+    init(_ token: SpotifyUserToken, spotify: Spotify) {
         self.token = token
         self.spotify = spotify
         super.init()
     }
-    
-    convenience init(_ user: SpotifyUser, spotify: Spotify) {
-        self.init(SpotifyUserPlaylistToken(user.uri), spotify: spotify)
-        self._attributes.value = SpotifyUserPlaylist.attributes(of: user)
-        contentSet.formUnion([.tracks, .attributes])
-    }
+
+//    convenience init(_ user: SpotifyWebAPI.SpotifyUser, spotify: Spotify) {
+//        self.init(SpotifyUserToken(user.id), spotify: spotify)
+//        self._attributes.value = SpotifyUser.attributes(of: user.name)
+//        contentSet.formUnion([.tracks, .attributes])
+//    }
 
     public override var asToken: PlaylistToken { token }
     
@@ -153,7 +153,7 @@ public class SpotifyUserPlaylist: RemotePlaylist {
                     .onMain()
                     .fulfillingAny([.minimal, .attributes], of: promise)
                     .sink(receiveCompletion: appLogErrors) { info in
-                        self._attributes.value = SpotifyUserPlaylist.attributes(of: info)
+                        self._attributes.value = SpotifyUser.attributes(of: info)
                     }
                     .store(in: &cancellables)
             }

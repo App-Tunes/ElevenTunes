@@ -70,7 +70,7 @@ class PlaylistBackendTypedCodable: TypedCodable<String> {
         .register(DirectoryPlaylistToken.self, for: "directory")
         .register(M3UPlaylistToken.self, for: "m3u")
         .register(SpotifyPlaylistToken.self, for: "spotify")
-        .register(SpotifyUserPlaylistToken.self, for: "spotify-user")
+        .register(SpotifyUserToken.self, for: "spotify-user")
 
     override class var registry: CodableRegistry<String> { _registry }
 }
