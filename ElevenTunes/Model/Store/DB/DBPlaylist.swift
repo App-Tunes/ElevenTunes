@@ -72,11 +72,11 @@ public class DBLibraryPlaylist: AnyPlaylist {
         // If not indexed, the cache consists of backend's children and tracks,
         // and the rest ours
         return backend.cacheMask()
-            .combineLatest(cache.$cacheMaskP)
-            .map { (backendMask, dbMask) in
-                backendMask.intersection([.children, .tracks])
-                .union(dbMask.subtracting([.children, .tracks]))
-            }
+//            .combineLatest(cache.$cacheMaskP)
+//            .map { (backendMask, dbMask) in
+//                backendMask.intersection([.children, .tracks])
+//                .union(dbMask.subtracting([.children, .tracks]))
+//            }
             .eraseToAnyPublisher()
     }()
     public func cacheMask() -> AnyPublisher<PlaylistContentMask, Never> {
