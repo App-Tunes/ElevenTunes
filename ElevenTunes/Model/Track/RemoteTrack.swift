@@ -23,11 +23,26 @@ public class RemoteTrack: AnyTrack {
         contentSet.$features.eraseToAnyPublisher()
     }
 
-    @Published var _attributes: TypedDict<TrackAttribute> = .init()
+    public var _attributes: CurrentValueSubjectPublishingDemand<TypedDict<TrackAttribute>, Never> = .init(.init())
     public func attributes() -> AnyPublisher<TypedDict<TrackAttribute>, Never> {
-        $_attributes.eraseToAnyPublisher()
+        _attributes.eraseToAnyPublisher()
     }
     
+    init() {
+        mergeDemandMask(
+            TrackContentMask(), subjects: [
+                (_attributes.$demand, .minimal)
+            ]
+        ).combineLatest(contentSet.$features)
+        .map { $0.subtracting($1) }
+        .removeDuplicates()
+        // We may currently be in a feature change, let's defer this run
+        .debounce(for: .milliseconds(10), scheduler: RunLoop.main)
+        .sink { [weak self] in
+            self?.load(atLeast: $0)
+        }.store(in: &cancellables)
+    }
+
     public func invalidateCaches(_ mask: TrackContentMask) {
         contentSet.subtract(mask)
     }
@@ -36,7 +51,7 @@ public class RemoteTrack: AnyTrack {
         fatalError()
     }
     
-    public func load(atLeast mask: TrackContentMask, library: Library) {
+    public func load(atLeast mask: TrackContentMask) {
         fatalError()
     }
 }

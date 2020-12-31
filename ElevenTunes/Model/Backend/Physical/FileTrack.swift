@@ -58,7 +58,7 @@ public class FileTrack: RemoteTrack {
     init(_ token: FileTrackToken) {
         self.token = token
         super.init()
-        _attributes[TrackAttribute.title] = token.url.lastPathComponent
+        _attributes.value[TrackAttribute.title] = token.url.lastPathComponent
         contentSet.insert(.minimal)
     }
          

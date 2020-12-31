@@ -38,12 +38,12 @@ public class RemotePlaylist: AnyPlaylist {
         _tracks.eraseToAnyPublisher()
     }
     
-    @Published public var _children: CurrentValueSubjectPublishingDemand<[AnyPlaylist], Never> = .init([])
+    public var _children: CurrentValueSubjectPublishingDemand<[AnyPlaylist], Never> = .init([])
     public func children() -> AnyPublisher<[AnyPlaylist], Never> {
         _children.eraseToAnyPublisher()
     }
     
-    @Published public var _attributes: CurrentValueSubjectPublishingDemand<TypedDict<PlaylistAttribute>, Never> = .init(.init())
+    public var _attributes: CurrentValueSubjectPublishingDemand<TypedDict<PlaylistAttribute>, Never> = .init(.init())
     public func attributes() -> AnyPublisher<TypedDict<PlaylistAttribute>, Never> {
         _attributes.eraseToAnyPublisher()
     }
