@@ -22,6 +22,6 @@ class SpotifyArtist: TransientArtist {
     override var id: String { artistID }
 
     override var origin: URL? {
-        URL(string: "https://open.spotify.com/artist/6T1x7dsgAHc53agf2uwUxD\(artistID)")
+        URL(string: "https://open.spotify.com/artist/\(artistID)")
     }
 }

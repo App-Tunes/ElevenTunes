@@ -14,42 +14,44 @@ import SwiftUI
 import Combine
 
 struct MinimalSpotifyTrack: Codable, Hashable {
-    static let filters = "uri"
+    static let filters = "id"
 
-    var uri: String
+    var id: String
 }
 
-public class SpotifyTrackToken: TrackToken {
+public class SpotifyTrackToken: TrackToken, SpotifyURIConvertible {
     enum CodingKeys: String, CodingKey {
-      case uri
+      case trackID
     }
     
     enum SpotifyError: Error {
         case noURI
     }
 
-    var uri: String
+    var trackID: String
 
-    public override var id: String { uri }
+    public override var id: String { trackID }
+    
+    public var uri: String { "spotify:track:\(id)" }
 
     init(_ uri: String) {
-        self.uri = uri
+        self.trackID = uri
         super.init()
     }
 
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        uri = try container.decode(String.self, forKey: .uri)
+        trackID = try container.decode(String.self, forKey: .trackID)
         try super.init(from: decoder)
     }
 
     public override func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(uri, forKey: .uri)
+        try container.encode(trackID, forKey: .trackID)
         try super.encode(to: encoder)
     }
     
-    static func spotifyURI(fromURL url: URL) throws -> String {
+    static func trackID(fromURL url: URL) throws -> String {
         guard
             url.host == "open.spotify.com",
             url.pathComponents.dropFirst().first == "track",
@@ -57,15 +59,15 @@ public class SpotifyTrackToken: TrackToken {
         else {
             throw SpotifyError.noURI
         }
-        return "spotify:track:\(id)"
+        return id
     }
     
     static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyTrackToken, Error> {
-        return Future { try spotifyURI(fromURL: url) }
+        return Future { try trackID(fromURL: url) }
             .flatMap { uri in
                 spotify.api.track(uri).compactMap(ExistingSpotifyTrack.init)
             }
-            .map { SpotifyTrackToken($0.uri) }
+            .map { SpotifyTrackToken($0.id) }
             .eraseToAnyPublisher()
     }
     
@@ -85,7 +87,7 @@ public class SpotifyTrack: RemoteTrack {
     }
 
     init(track: ExistingSpotifyTrack, spotify: Spotify) {
-        self.token = SpotifyTrackToken(track.uri)
+        self.token = SpotifyTrackToken(track.id)
         self.spotify = spotify
         super.init()
         self._attributes.value = SpotifyTrack.extractAttributes(from: track)
@@ -95,11 +97,15 @@ public class SpotifyTrack: RemoteTrack {
     public override var asToken: TrackToken { token }
     
     public override var accentColor: Color { .green }
-        
+    
+    public override var origin: URL? {
+        URL(string: "https://open.spotify.com/track/\(token.trackID)")
+    }
+
     public override func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
         let spotify = context.spotify
         
-        let spotifyTrack = spotify.api.track(token.uri)
+        let spotifyTrack = spotify.api.track(token.trackID)
             .compactMap(ExistingSpotifyTrack.init)
         let device = spotify.devices.$selected
             .compactMap { $0 }
@@ -126,9 +132,8 @@ public class SpotifyTrack: RemoteTrack {
     public override func load(atLeast mask: TrackContentMask) {
         contentSet.promise(mask) { promise in
             let spotify = self.spotify
-            let uri = token.uri
             
-            spotify.api.track(uri)
+            spotify.api.track(token)
                 .compactMap(ExistingSpotifyTrack.init)
                 .onMain()
                 .fulfillingAny(.minimal, of: promise)

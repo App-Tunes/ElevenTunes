@@ -112,6 +112,7 @@
 		80D6DAA2259E28B300879BCF /* SpotifyArtist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D6DAA1259E28B200879BCF /* SpotifyArtist.swift */; };
 		80D6DAA7259E2AE100879BCF /* SpotifyAlbum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D6DAA6259E2AE100879BCF /* SpotifyAlbum.swift */; };
 		80D6DAAC259E2CBF00879BCF /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D6DAAB259E2CBF00879BCF /* Link.swift */; };
+		80D6DAB1259E31C800879BCF /* TracksContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D6DAB0259E31C800879BCF /* TracksContextMenu.swift */; };
 		80ED767B258FD5B600B8B9C3 /* PlaylistInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80ED767A258FD5B600B8B9C3 /* PlaylistInterpreter.swift */; };
 		80ED7691258FF41200B8B9C3 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80ED7690258FF41200B8B9C3 /* Array.swift */; };
 /* End PBXBuildFile section */
@@ -243,6 +244,7 @@
 		80D6DAA1259E28B200879BCF /* SpotifyArtist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyArtist.swift; sourceTree = "<group>"; };
 		80D6DAA6259E2AE100879BCF /* SpotifyAlbum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAlbum.swift; sourceTree = "<group>"; };
 		80D6DAAB259E2CBF00879BCF /* Link.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Link.swift; sourceTree = "<group>"; };
+		80D6DAB0259E31C800879BCF /* TracksContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksContextMenu.swift; sourceTree = "<group>"; };
 		80ED767A258FD5B600B8B9C3 /* PlaylistInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistInterpreter.swift; sourceTree = "<group>"; };
 		80ED7688258FDFD700B8B9C3 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		80ED7690258FF41200B8B9C3 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
@@ -625,6 +627,7 @@
 			children = (
 				80AD698D2588287900192BED /* PlaylistView.swift */,
 				806B278F258D5CBD0091EA4D /* TracksView.swift */,
+				80D6DAB0259E31C800879BCF /* TracksContextMenu.swift */,
 				800C11FE259A3EF10017A116 /* TrackRowView.swift */,
 				80AD69A9258829EE00192BED /* FilterBarView.swift */,
 				80AD69A4258829C400192BED /* PlaylistBarView.swift */,
@@ -846,6 +849,7 @@
 				80D6DAA7259E2AE100879BCF /* SpotifyAlbum.swift in Sources */,
 				806E1FD32596A5FA003EEA83 /* Playlist+Attributes.swift in Sources */,
 				806B2836258E4B4F0091EA4D /* PlayerControlsView.swift in Sources */,
+				80D6DAB1259E31C800879BCF /* TracksContextMenu.swift in Sources */,
 				802E2DAB259643AE00CB91EC /* SpotifyPlaylist.swift in Sources */,
 				806B2883258EA42D0091EA4D /* SpotifyAuthenticator.swift in Sources */,
 				802E2CD72596082E00CB91EC /* LibraryPlaylist.swift in Sources */,

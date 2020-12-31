@@ -22,6 +22,6 @@ class SpotifyAlbum: TransientAlbum {
     override var id: String { albumID }
     
     override var origin: URL? {
-        URL(string: "https://open.spotify.com/album/6T1x7dsgAHc53agf2uwUxD\(albumID)")
+        URL(string: "https://open.spotify.com/album/\(albumID)")
     }
 }

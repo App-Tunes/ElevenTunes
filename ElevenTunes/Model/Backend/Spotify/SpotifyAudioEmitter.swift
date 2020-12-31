@@ -11,15 +11,17 @@ import SpotifyWebAPI
 
 class ExistingSpotifyTrack: SpotifyURIConvertible {
     let info: SpotifyWebAPI.Track
-    let uri: String
+    let id: String
     
     init?(_ track: SpotifyWebAPI.Track?) {
-        guard let track = track, let uri = track.uri else {
+        guard let track = track, let id = track.id else {
             return nil
         }
         self.info = track
-        self.uri = uri
+        self.id = id
     }
+    
+    var uri: String { "spotify:track:\(id)" }
 }
 
 class SpotifyAudioEmitter: RemoteAudioEndpoint {

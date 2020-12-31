@@ -23,16 +23,7 @@ struct TracksView: View {
                 ForEach(Array(tracks.enumerated()), id: \.0) { (idx, track) in
                     TrackRowView(track: track, context: .playlist(playlist, tracks: tracks, index: idx))
                         .frame(height: 26)
-                        .contextMenu {
-                            Button(action: {
-                                for idx in selected.alIfContains(idx) {
-                                    tracks[idx].invalidateCaches([.minimal])
-                                }
-                            }) {
-                                Image(systemName: "arrow.clockwise")
-                                Text("Reload Metadata")
-                            }
-                        }
+                        .contextMenu(menuItems: TracksContextMenu(tracks: tracks, idx: idx, selected: selected).callAsFunction)
                         .tag(idx)
                 }
             }

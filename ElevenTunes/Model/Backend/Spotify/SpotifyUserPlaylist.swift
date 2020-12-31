@@ -17,36 +17,38 @@ public class SpotifyUserPlaylistToken: PlaylistToken {
     }
     
     enum CodingKeys: String, CodingKey {
-      case uri
+      case userID
     }
         
-    var uri: String?
+    var userID: String?
     
-    public override var id: String { uri ?? "spotify::playlist::currentuser" }
+    public override var id: String { userID ?? "spotify::playlist::currentuser" }
+    
+    var uri: String? { userID.map { "spotify:user:\($0)" } }
 
-    init(_ uri: String? = nil) {
-        self.uri = uri
+    init(_ userID: String? = nil) {
+        self.userID = userID
         super.init()
     }
         
     init(user: SpotifyWebAPI.SpotifyUser) {
-        self.uri = user.uri
+        self.userID = user.id
         super.init()
     }
         
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        uri = try container.decodeIfPresent(String.self, forKey: .uri)
+        userID = try container.decodeIfPresent(String.self, forKey: .userID)
         try super.init(from: decoder)
     }
     
     public override func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(uri, forKey: .uri)
+        try container.encodeIfPresent(userID, forKey: .userID)
         try super.encode(to: encoder)
     }
     
-    static func spotifyURI(fromURL url: URL) throws -> String {
+    static func userID(fromURL url: URL) throws -> String {
         guard
             url.host == "open.spotify.com",
             url.pathComponents.dropFirst().first == "user",
@@ -54,11 +56,11 @@ public class SpotifyUserPlaylistToken: PlaylistToken {
         else {
             throw SpotifyError.noURI
         }
-        return "spotify:user:\(id)"
+        return id
     }
 
     static func create(_ spotify: Spotify, fromURL url: URL?) -> AnyPublisher<SpotifyUserPlaylist, Error> {
-        return Future { try url.map { try spotifyURI(fromURL: $0) } }
+        return Future { try url.map { try userID(fromURL: $0) } }
             .flatMap { $0.map { spotify.api.userProfile($0) } ?? spotify.api.currentUserProfile() }
             .map { SpotifyUserPlaylist($0, spotify: spotify) }
             .eraseToAnyPublisher()
@@ -123,7 +125,7 @@ public class SpotifyUserPlaylist: RemotePlaylist {
                     .map { $0.flatMap { $0.items } }
                     .map { items in
                         items.compactMap { item -> SpotifyPlaylist? in
-                            SpotifyPlaylist(SpotifyPlaylistToken(item.uri), spotify: spotify)
+                            SpotifyPlaylist(SpotifyPlaylistToken(item.id), spotify: spotify)
                         }
                     }
                     .onMain()

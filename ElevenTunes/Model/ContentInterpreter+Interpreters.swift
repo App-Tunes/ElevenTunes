@@ -33,7 +33,7 @@ extension ContentInterpreter {
         let register = { interpreter.interpreters.append($0) }
         
         register(simple {
-            _ = try SpotifyTrackToken.spotifyURI(fromURL: $0)
+            _ = try SpotifyTrackToken.trackID(fromURL: $0)
             return true
         } interpret: {
             SpotifyTrackToken.create(spotify, fromURL: $0)
@@ -42,7 +42,7 @@ extension ContentInterpreter {
         })
         
         register(simple {
-            _ = try SpotifyPlaylistToken.spotifyURI(fromURL: $0)
+            _ = try SpotifyPlaylistToken.playlistID(fromURL: $0)
             return true
         } interpret: { (url: URL) -> AnyPublisher<Content, Error> in
             SpotifyPlaylistToken.create(spotify, fromURL: url)
