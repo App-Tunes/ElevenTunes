@@ -17,6 +17,10 @@ public class RemoteTrack: AnyTrack {
 
     public var icon: Image { Image(systemName: "music.note") }
     
+    public var accentColor: Color { .primary }
+    
+    public var origin: URL? { nil }
+    
     let contentSet: FeatureSet<TrackContentMask, TrackContentMask> = .init()
     
     public func cacheMask() -> AnyPublisher<TrackContentMask, Never> {

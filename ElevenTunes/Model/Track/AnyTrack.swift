@@ -24,13 +24,17 @@ public protocol AnyTrack: AnyObject {
     var id: String { get }
     var asToken: TrackToken { get }
     
+    var origin: URL? { get }
+
     func cacheMask() -> AnyPublisher<TrackContentMask, Never>
     func artists() -> AnyPublisher<[AnyPlaylist], Never>
     func album() -> AnyPublisher<AnyPlaylist?, Never>
     func attributes() -> AnyPublisher<TypedDict<TrackAttribute>, Never>
 
     func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error>
+    
     var icon: Image { get }
+    var accentColor: Color { get }
     
     func invalidateCaches(_ mask: TrackContentMask)
 }

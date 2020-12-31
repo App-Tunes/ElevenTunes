@@ -21,6 +21,8 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
     var uuid = UUID()
     override var id: String { uuid.description }
     
+    var origin: URL? { nil }
+    
     var icon: Image { Image(systemName: "music.note.list") }
     var accentColor: Color { .primary }
     

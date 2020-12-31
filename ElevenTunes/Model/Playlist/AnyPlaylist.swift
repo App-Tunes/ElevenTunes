@@ -37,6 +37,8 @@ public protocol AnyPlaylist: AnyObject {
     var asToken: PlaylistToken { get }
     var type: PlaylistType { get }
     
+    var origin: URL? { get }
+    
     var icon: Image { get }
     var accentColor: Color { get }
 

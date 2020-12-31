@@ -52,7 +52,15 @@ struct ArtistCellView: View {
     var body: some View {
         HStack {
             if contentMask.contains(.minimal) {
-                Text(attributes[PlaylistAttribute.title] ?? "Unknown Artist")
+                if let url = artist.origin {
+                    UnderlinedLink(
+                        description: attributes[PlaylistAttribute.title] ?? "Unknown Artist",
+                        destination: url
+                    )
+                }
+                else {
+                    Text(attributes[PlaylistAttribute.title] ?? "Unknown Artist")
+                }
             }
             else {
                 Text(attributes[PlaylistAttribute.title] ?? "...")
@@ -75,7 +83,15 @@ struct AlbumCellView: View {
             album.icon
             
             if contentMask.contains(.minimal) {
-                Text(attributes[PlaylistAttribute.title] ?? "Unknown Album")
+                if let url = album.origin {
+                    UnderlinedLink(
+                        description: attributes[PlaylistAttribute.title] ?? "Unknown Album",
+                        destination: url
+                    )
+                }
+                else {
+                    Text(attributes[PlaylistAttribute.title] ?? "Unknown Album")
+                }
             }
             else {
                 Text(attributes[PlaylistAttribute.title] ?? "...")
@@ -97,8 +113,14 @@ struct TrackOriginView: View {
         HStack {
             Image(systemName: "person.2")
             
-            ForEach(artists, id: \.id) {
-                ArtistCellView(artist: $0)
+            if artists.isEmpty {
+                Text("Unknown Artist")
+                    .opacity(0.5)
+            }
+            else {
+                ForEach(artists, id: \.id) {
+                    ArtistCellView(artist: $0)
+                }
             }
             
             if let album = album {
@@ -122,6 +144,7 @@ struct TrackRowView: View {
     var body: some View {
         HStack {
             PlayTrackView(track: track, context: context)
+                .font(.system(size: 14))
 
             if !contentMask.contains(.minimal) {
                 ProgressView()
@@ -134,9 +157,11 @@ struct TrackRowView: View {
             else {
                 track.icon
                     .resizable()
+                    .foregroundColor(track.accentColor)
+                    .saturation(0.5)
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 15, height: 15)
-                
+                    .frame(width: 20, height: 20)
+
                 VStack(alignment: .leading) {
                     Text(attributes[TrackAttribute.title] ?? "Unknown Track")
                         .font(.system(size: 13))

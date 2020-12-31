@@ -52,6 +52,8 @@ class LibraryPlaylist: AnyPlaylist {
     
     var type: PlaylistType { .playlist }
     
+    var origin: URL? { nil }
+    
     var accentColor: Color { .accentColor }
     
     var hasCaches: Bool { false }

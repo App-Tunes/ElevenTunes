@@ -32,7 +32,10 @@ public class DBLibraryTrack: AnyTrack {
     
     public var id: String { cache.objectID.description }
     
+    public var origin: URL? { backend?.origin ?? nil }
+    
     public var icon: Image { backend?.icon ?? Image(systemName: "questionmark") }
+    public var accentColor: Color { backend?.accentColor ?? .primary }
     
     public func cacheMask() -> AnyPublisher<TrackContentMask, Never> {
         guard backend != nil else {

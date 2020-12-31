@@ -38,9 +38,13 @@ class MockTrack: TrackToken, AnyTrack {
     var asToken: TrackToken { self }
     
     var icon: Image { Image(systemName: "questionmark") }
+    
+    var accentColor: Color { .primary}
 
     let uuid = UUID()
     override var id: String { uuid.description }
+    
+    var origin: URL? { nil }
     
     override func expand(_ context: Library) -> AnyTrack { self }
     

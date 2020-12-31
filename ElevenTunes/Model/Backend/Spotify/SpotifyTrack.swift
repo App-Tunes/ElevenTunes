@@ -75,8 +75,6 @@ public class SpotifyTrackToken: TrackToken {
 }
 
 public class SpotifyTrack: RemoteTrack {
-    static var _icon: Image { Image("spotify-logo") }
-
     let spotify: Spotify
     let token: SpotifyTrackToken
         
@@ -96,8 +94,8 @@ public class SpotifyTrack: RemoteTrack {
 
     public override var asToken: TrackToken { token }
     
-    override public var icon: Image { SpotifyTrack._icon }
-    
+    public override var accentColor: Color { .green }
+        
     public override func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
         let spotify = context.spotify
         
@@ -136,14 +134,18 @@ public class SpotifyTrack: RemoteTrack {
                 .fulfillingAny(.minimal, of: promise)
                 .sink(receiveCompletion: appLogErrors) { [unowned self] track in
                     self._attributes.value = SpotifyTrack.extractAttributes(from: track)
-                    self._album.value = TransientAlbum(attributes: .init([
-                        .title: track.info.album?.name
-                    ]))
-                    self._artists.value = (track.info.artists ?? []).map {
-                        TransientArtist(attributes: .init([
-                            .title: $0.name
+                    if let album = track.info.album, let albumID = album.id {
+                        self._album.value = SpotifyAlbum(albumID, attributes: .init([
+                            .title: album.name
                         ]))
                     }
+                    self._artists.value = (track.info.artists ?? [])
+                        .filter { $0.id != nil }
+                        .compactMap {
+                            SpotifyArtist($0.id!, attributes: .init([
+                                .title: $0.name
+                            ]))
+                        }
                 }
                 .store(in: &cancellables)
         }

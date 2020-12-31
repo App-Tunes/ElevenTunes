@@ -37,6 +37,8 @@ public class DBLibraryPlaylist: AnyPlaylist {
     
     public var id: String { cache.objectID.description }
     
+    public var origin: URL? { nil }
+    
     // DB artists and albums aren't supported yet
     public var type: PlaylistType { backend?.type ?? .playlist }
     

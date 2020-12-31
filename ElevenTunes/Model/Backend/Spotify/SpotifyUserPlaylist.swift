@@ -84,7 +84,9 @@ public class SpotifyUserPlaylist: RemotePlaylist {
 
     public override var asToken: PlaylistToken { token }
     
-    override public var icon: Image { SpotifyPlaylist._icon }
+    override public var icon: Image { Image(systemName: "person") }
+    
+    public override var type: PlaylistType { .artist }
     
     public override func supportsChildren() -> Bool { true }
     

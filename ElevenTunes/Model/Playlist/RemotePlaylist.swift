@@ -16,6 +16,8 @@ public class RemotePlaylist: AnyPlaylist {
     
     public var id: String { asToken.id }
     public var asToken: PlaylistToken { fatalError() }
+    
+    public var origin: URL? { nil }
 
     public var accentColor: Color { .primary }
     public var icon: Image { Image(systemName: "music.note.list") }

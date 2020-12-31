@@ -81,8 +81,6 @@ public class SpotifyPlaylist: RemotePlaylist {
     let token: SpotifyPlaylistToken
     let spotify: Spotify
     
-    static var _icon: Image { Image("spotify-logo") }
-    
     public override var accentColor: Color { .green }
 
     init(_ token: SpotifyPlaylistToken, spotify: Spotify) {
@@ -99,8 +97,6 @@ public class SpotifyPlaylist: RemotePlaylist {
 
     public override var asToken: PlaylistToken { token }
     
-    override public var icon: Image { SpotifyPlaylist._icon }
-
     static func attributes(of playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>) -> TypedDict<PlaylistAttribute> {
         let attributes = TypedDict<PlaylistAttribute>()
         attributes[PlaylistAttribute.title] = playlist.name
