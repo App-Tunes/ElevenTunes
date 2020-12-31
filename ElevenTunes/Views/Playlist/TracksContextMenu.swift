@@ -26,14 +26,14 @@ class TracksContextMenu {
     func callAsFunction() -> AnyView {
         AnyView(VStack {
             Button(action: {
-                for idx in self.sindices {
-                    self.tracks[idx].invalidateCaches([.minimal])
+                for track in self.stracks {
+                    track.invalidateCaches([.minimal])
                 }
             }) {
                 Image(systemName: "arrow.clockwise")
                 Text("Reload Metadata")
             }
-            
+
             if let track = stracks.one, let origin = track.origin {
                 Button(action: {
                     NSWorkspace.shared.open(origin)

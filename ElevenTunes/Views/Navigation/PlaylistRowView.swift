@@ -52,16 +52,7 @@ struct PlaylistRowView: View {
                 }
             }
         }
-        .contextMenu {
-            if playlist.hasCaches {
-                Button(action: {
-                    playlist.invalidateCaches([.minimal, .children, .tracks, .attributes])
-                }) {
-                    Image(systemName: "arrow.clockwise")
-                    Text("Reload Metadata")
-                }
-            }
-        }
+        .contextMenu(menuItems: PlaylistsContextMenu(playlist: playlist).callAsFunction)
         // TODO false = isTopLevel
         .frame(height: false ? 24 : 4) // The 4 is ridiculous but this counteracts the enormous default padding lol
         .onReceive(playlist.cacheMask()) { contentMask = $0 }
