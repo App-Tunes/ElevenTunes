@@ -59,11 +59,14 @@ public class SpotifyUserPlaylistToken: PlaylistToken {
         return id
     }
 
-    static func create(_ spotify: Spotify, fromURL url: URL?) -> AnyPublisher<SpotifyUserPlaylist, Error> {
+    static func create(_ spotify: Spotify, fromURL url: URL?) -> AnyPublisher<SpotifyUserPlaylistToken, Error> {
         return Future { try url.map { try userID(fromURL: $0) } }
-            .flatMap { $0.map { spotify.api.userProfile($0) } ?? spotify.api.currentUserProfile() }
-            .map { SpotifyUserPlaylist($0, spotify: spotify) }
+            .map { SpotifyUserPlaylistToken($0) }
             .eraseToAnyPublisher()
+    }
+    
+    override func expand(_ context: Library) -> AnyPlaylist {
+        SpotifyUserPlaylist(self, spotify: context.spotify)
     }
 }
 
@@ -76,10 +79,14 @@ public class SpotifyUserPlaylist: RemotePlaylist {
         self.spotify = spotify
     }
     
-    init(_ user: SpotifyUser, spotify: Spotify) {
-        self.token = SpotifyUserPlaylistToken(user.uri)
+    init(_ token: SpotifyUserPlaylistToken, spotify: Spotify) {
+        self.token = token
         self.spotify = spotify
         super.init()
+    }
+    
+    convenience init(_ user: SpotifyUser, spotify: Spotify) {
+        self.init(SpotifyUserPlaylistToken(user.uri), spotify: spotify)
         self._attributes.value = SpotifyUserPlaylist.attributes(of: user)
         contentSet.formUnion([.tracks, .attributes])
     }
