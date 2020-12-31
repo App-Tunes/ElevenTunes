@@ -22,7 +22,7 @@ struct TracksView: View {
             List(selection: $selected) {
                 ForEach(Array(tracks.enumerated()), id: \.0) { (idx, track) in
                     TrackRowView(track: track, context: .playlist(playlist, tracks: tracks, index: idx))
-                        .frame(height: 15)
+                        .frame(height: 26)
                         .contextMenu {
                             Button(action: {
                                 for idx in selected.alIfContains(idx) {

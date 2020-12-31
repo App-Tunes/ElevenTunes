@@ -24,9 +24,18 @@ public struct PlaylistContentMask: OptionSet, Hashable {
     public static let all          = PlaylistContentMask([.minimal, .tracks, .children, .attributes])
 }
 
+/// wat, you might say. but imagine the possibilities.
+/// An album is just a playlist you can't edit.
+/// An artist is just a folder you can't edit.
+/// Go ahead. Prove me wrong.
+public enum PlaylistType {
+    case playlist, artist, album
+}
+
 public protocol AnyPlaylist: AnyObject {
     var id: String { get }
     var asToken: PlaylistToken { get }
+    var type: PlaylistType { get }
     
     var icon: Image { get }
     var accentColor: Color { get }

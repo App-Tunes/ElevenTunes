@@ -50,6 +50,8 @@ class LibraryPlaylist: AnyPlaylist {
         "Library" // TODO
     }
     
+    var type: PlaylistType { .playlist }
+    
     var accentColor: Color { .accentColor }
     
     var hasCaches: Bool { false }

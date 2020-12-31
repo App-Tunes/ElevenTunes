@@ -48,6 +48,16 @@ class MockTrack: TrackToken, AnyTrack {
         Just(.minimal).eraseToAnyPublisher()
     }
     
+    @Published var _artists: [AnyPlaylist] = []
+    func artists() -> AnyPublisher<[AnyPlaylist], Never> {
+        $_artists.eraseToAnyPublisher()
+    }
+
+    @Published var _album: AnyPlaylist? = nil
+    func album() -> AnyPublisher<AnyPlaylist?, Never> {
+        $_album.eraseToAnyPublisher()
+    }
+
     @Published var _attributes: TypedDict<TrackAttribute> = .init()
     func attributes() -> AnyPublisher<TypedDict<TrackAttribute>, Never> {
         $_attributes.eraseToAnyPublisher()

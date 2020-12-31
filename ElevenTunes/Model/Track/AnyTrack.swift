@@ -25,6 +25,8 @@ public protocol AnyTrack: AnyObject {
     var asToken: TrackToken { get }
     
     func cacheMask() -> AnyPublisher<TrackContentMask, Never>
+    func artists() -> AnyPublisher<[AnyPlaylist], Never>
+    func album() -> AnyPublisher<AnyPlaylist?, Never>
     func attributes() -> AnyPublisher<TypedDict<TrackAttribute>, Never>
 
     func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error>

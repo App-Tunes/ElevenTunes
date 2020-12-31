@@ -46,6 +46,14 @@ public class DBLibraryTrack: AnyTrack {
     public func attributes() -> AnyPublisher<TypedDict<TrackAttribute>, Never> {
         cache.$attributesP.eraseToAnyPublisher()
     }
+    
+    public func artists() -> AnyPublisher<[AnyPlaylist], Never> {
+        backend?.artists() ?? Just([]).eraseToAnyPublisher()
+    }
+    
+    public func album() -> AnyPublisher<AnyPlaylist?, Never> {
+        backend?.album() ?? Just(nil).eraseToAnyPublisher()
+    }
 
     public func invalidateCaches(_ mask: TrackContentMask) {
         if let backend = backend {

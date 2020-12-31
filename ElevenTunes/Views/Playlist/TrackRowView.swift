@@ -43,12 +43,79 @@ struct PlayTrackView: View {
     }
 }
 
+struct ArtistCellView: View {
+    let artist: AnyPlaylist
+
+    @State var contentMask: PlaylistContentMask = []
+    @State var attributes: TypedDict<PlaylistAttribute> = .init()
+
+    var body: some View {
+        HStack {
+            if contentMask.contains(.minimal) {
+                Text(attributes[PlaylistAttribute.title] ?? "Unknown Artist")
+            }
+            else {
+                Text(attributes[PlaylistAttribute.title] ?? "...")
+                    .opacity(0.5)
+            }
+        }
+        .onReceive(artist.attributes()) { attributes = $0 }
+        .onReceive(artist.cacheMask()) { contentMask = $0 }
+    }
+}
+
+struct AlbumCellView: View {
+    let album: AnyPlaylist
+    
+    @State var contentMask: PlaylistContentMask = []
+    @State var attributes: TypedDict<PlaylistAttribute> = .init()
+    
+    var body: some View {
+        HStack {
+            album.icon
+            
+            if contentMask.contains(.minimal) {
+                Text(attributes[PlaylistAttribute.title] ?? "Unknown Album")
+            }
+            else {
+                Text(attributes[PlaylistAttribute.title] ?? "...")
+                    .opacity(0.5)
+            }
+        }
+        .onReceive(album.attributes()) { attributes = $0 }
+        .onReceive(album.cacheMask()) { contentMask = $0 }
+    }
+}
+
+struct TrackOriginView: View {
+    let artists: [AnyPlaylist]
+    let album: AnyPlaylist?
+    
+    @State var albumAttributes: TypedDict<TrackAttribute> = .init()
+
+    var body: some View {
+        HStack {
+            Image(systemName: "person.2")
+            
+            ForEach(artists, id: \.id) {
+                ArtistCellView(artist: $0)
+            }
+            
+            if let album = album {
+                AlbumCellView(album: album)
+            }
+        }
+    }
+}
+
 struct TrackRowView: View {
     @State var track: AnyTrack
     @State var context: PlayHistoryContext
 
-    @State var attributes: TypedDict<TrackAttribute> = .init()
     @State var contentMask: TrackContentMask = []
+    @State var artists: [AnyPlaylist] = []
+    @State var album: AnyPlaylist? = nil
+    @State var attributes: TypedDict<TrackAttribute> = .init()
 
     @Environment(\.library) var library: Library!
     
@@ -65,11 +132,26 @@ struct TrackRowView: View {
                     .opacity(0.5)
             }
             else {
-                track.icon.resizable().aspectRatio(contentMode: .fit).frame(width: 15, height: 15)
+                track.icon
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 15, height: 15)
                 
-                Text(attributes[TrackAttribute.title] ?? "Unknown Track")
+                VStack(alignment: .leading) {
+                    Text(attributes[TrackAttribute.title] ?? "Unknown Track")
+                        .font(.system(size: 13))
+                        .frame(alignment: .bottom)
+                    
+                    TrackOriginView(artists: artists, album: album)
+                        .foregroundColor(.secondary)
+                        .font(.system(size: 11))
+                        .frame(alignment: .top)
+                }
+                .padding(.vertical, 4)
             }
         }
+        .onReceive(track.artists()) { artists = $0 }
+        .onReceive(track.album()) { album = $0 }
         .onReceive(track.attributes()) { attributes = $0 }
         .onReceive(track.cacheMask()) { contentMask = $0 }
     }

@@ -23,6 +23,16 @@ public class RemoteTrack: AnyTrack {
         contentSet.$features.eraseToAnyPublisher()
     }
 
+    public var _artists: CurrentValueSubjectPublishingDemand<[AnyPlaylist], Never> = .init([])
+    public func artists() -> AnyPublisher<[AnyPlaylist], Never> {
+        _artists.eraseToAnyPublisher()
+    }
+    
+    public var _album: CurrentValueSubjectPublishingDemand<AnyPlaylist?, Never> = .init(nil)
+    public func album() -> AnyPublisher<AnyPlaylist?, Never> {
+        _album.eraseToAnyPublisher()
+    }
+    
     public var _attributes: CurrentValueSubjectPublishingDemand<TypedDict<TrackAttribute>, Never> = .init(.init())
     public func attributes() -> AnyPublisher<TypedDict<TrackAttribute>, Never> {
         _attributes.eraseToAnyPublisher()
@@ -31,6 +41,8 @@ public class RemoteTrack: AnyTrack {
     init() {
         mergeDemandMask(
             TrackContentMask(), subjects: [
+                (_artists.$demand, .minimal),
+                (_album.$demand, .minimal),
                 (_attributes.$demand, .minimal)
             ]
         ).combineLatest(contentSet.$features)

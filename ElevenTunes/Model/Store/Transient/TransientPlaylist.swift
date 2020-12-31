@@ -24,6 +24,8 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
     var icon: Image { Image(systemName: "music.note.list") }
     var accentColor: Color { .primary }
     
+    var type: PlaylistType { .playlist }
+    
     var hasCaches: Bool { false }
     func invalidateCaches(_ mask: PlaylistContentMask) {}
     

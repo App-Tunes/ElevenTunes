@@ -37,6 +37,9 @@ public class DBLibraryPlaylist: AnyPlaylist {
     
     public var id: String { cache.objectID.description }
     
+    // DB artists and albums aren't supported yet
+    public var type: PlaylistType { backend?.type ?? .playlist }
+    
     public var icon: Image {
         backend?.icon ?? Image(systemName: "music.note.list")
     }

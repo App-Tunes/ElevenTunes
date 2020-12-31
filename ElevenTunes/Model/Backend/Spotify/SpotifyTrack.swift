@@ -136,6 +136,14 @@ public class SpotifyTrack: RemoteTrack {
                 .fulfillingAny(.minimal, of: promise)
                 .sink(receiveCompletion: appLogErrors) { [unowned self] track in
                     self._attributes.value = SpotifyTrack.extractAttributes(from: track)
+                    self._album.value = TransientAlbum(attributes: .init([
+                        .title: track.info.album?.name
+                    ]))
+                    self._artists.value = (track.info.artists ?? []).map {
+                        TransientArtist(attributes: .init([
+                            .title: $0.name
+                        ]))
+                    }
                 }
                 .store(in: &cancellables)
         }

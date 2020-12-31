@@ -16,8 +16,8 @@ public class TypedDict<K: AnyObject & Hashable> {
     
     init() { }
     
-    init(_ dict: [K: Any]) {
-        self.contents = dict
+    init(_ dict: [K: Any?]) {
+        self.contents = dict.compactMapValues { $0 }
     }
     
     var isEmpty: Bool { contents.isEmpty }
