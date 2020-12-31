@@ -31,22 +31,41 @@ public class RemotePlaylist: AnyPlaylist {
         contentSet.subtract(mask)
     }
     
-    @Published public var _tracks: [AnyTrack] = []
+    @Published var demandMask: PlaylistContentMask = []
+    
+    public var _tracks: CurrentValueSubjectPublishingDemand<[AnyTrack], Never> = .init([])
     public func tracks() -> AnyPublisher<[AnyTrack], Never> {
-        $_tracks.eraseToAnyPublisher()
+        _tracks.eraseToAnyPublisher()
     }
     
-    @Published public var _children: [AnyPlaylist] = []
+    @Published public var _children: CurrentValueSubjectPublishingDemand<[AnyPlaylist], Never> = .init([])
     public func children() -> AnyPublisher<[AnyPlaylist], Never> {
-        $_children.eraseToAnyPublisher()
+        _children.eraseToAnyPublisher()
     }
     
-    @Published public var _attributes: TypedDict<PlaylistAttribute> = .init()
+    @Published public var _attributes: CurrentValueSubjectPublishingDemand<TypedDict<PlaylistAttribute>, Never> = .init(.init())
     public func attributes() -> AnyPublisher<TypedDict<PlaylistAttribute>, Never> {
-        $_attributes.eraseToAnyPublisher()
+        _attributes.eraseToAnyPublisher()
     }
     
-    public func load(atLeast mask: PlaylistContentMask, library: Library) {
+    init() {
+        mergeDemandMask(
+            PlaylistContentMask(), subjects: [
+                (_tracks.$demand, .tracks),
+                (_children.$demand, .children),
+                (_attributes.$demand, .init([.minimal, .attributes]))
+            ]
+        ).combineLatest(contentSet.$features)
+        .map { $0.subtracting($1) }
+        .removeDuplicates()
+        // We may currently be in a feature change, let's defer this run
+        .debounce(for: .milliseconds(10), scheduler: RunLoop.main)
+        .sink { [weak self] in
+            self?.load(atLeast: $0)
+        }.store(in: &cancellables)
+    }
+    
+    public func load(atLeast mask: PlaylistContentMask) {
         fatalError()
     }
     

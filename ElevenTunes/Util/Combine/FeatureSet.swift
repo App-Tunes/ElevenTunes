@@ -29,6 +29,10 @@ class FeatureSet<Feature: Hashable, Set> where Set: SetAlgebra, Set.Element == F
     
     @discardableResult
     func promise(_ features: Set, during closure: (Promise) -> Void) -> Bool {
+        guard !features.isEmpty else {
+            return false  // Empty promises are worth nothing to me
+        }
+        
         lock.lock()
         let missing = features.subtracting(self.features.union(self.blocked))
         

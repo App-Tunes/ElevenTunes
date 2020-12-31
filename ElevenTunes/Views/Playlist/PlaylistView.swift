@@ -39,6 +39,7 @@ struct PlaylistView: View {
         }
         .listStyle(DefaultListStyle())
         .onReceive(playlist.cacheMask()) { contentMask = $0 }
+        .onReceive(playlist.tracks()) { _ in }  // Request tracks to load
     }
 }
 

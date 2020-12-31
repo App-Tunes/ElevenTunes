@@ -97,12 +97,13 @@ public class M3UPlaylist: RemotePlaylist {
     }
     
     func loadMinimal() {
-        _attributes[PlaylistAttribute.title] = token.url.lastPathComponent
+        _attributes.value[PlaylistAttribute.title] = token.url.lastPathComponent
     }
     
-    public override func load(atLeast mask: PlaylistContentMask, library: Library) {
+    public override func load(atLeast mask: PlaylistContentMask) {
         contentSet.promise(mask) { promise in
             let url = token.url
+            let library = self.library
             let interpreter = library.interpreter
 
             promise.fulfilling([.minimal, .attributes]) {
@@ -134,8 +135,8 @@ public class M3UPlaylist: RemotePlaylist {
             .onMain()
             .fulfillingAny([.tracks, .children], of: promise)
             .sink(receiveCompletion: appLogErrors(_:)) { [unowned self] (tracks, children) in
-                _tracks = tracks
-                _children = children
+                _tracks.value = tracks
+                _children.value = children
             }.store(in: &cancellables)
         }
     }

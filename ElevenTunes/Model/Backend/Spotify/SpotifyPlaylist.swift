@@ -107,12 +107,12 @@ public class SpotifyPlaylist: RemotePlaylist {
         return attributes
     }
         
-    public override func load(atLeast mask: PlaylistContentMask, library: Library) {
+    public override func load(atLeast mask: PlaylistContentMask) {
         contentSet.promise(mask) { promise in
             // Children will always be []
             promise.fulfill(.children)
 
-            let spotify = library.spotify
+            let spotify = self.spotify
             let uri = token.uri
 
             if promise.includes(.tracks) {
@@ -138,7 +138,7 @@ public class SpotifyPlaylist: RemotePlaylist {
                     .onMain()
                     .fulfillingAny(.tracks, of: promise)
                     .sink(receiveCompletion: appLogErrors(_:)) { tracks in
-                        self._tracks = tracks
+                        self._tracks.value = tracks
                     }.store(in: &cancellables)
             }
 
@@ -147,7 +147,7 @@ public class SpotifyPlaylist: RemotePlaylist {
                     .onMain()
                     .fulfillingAny([.minimal, .attributes], of: promise)
                     .sink(receiveCompletion: appLogErrors) { info in
-                        self._attributes = SpotifyPlaylist.attributes(of: info)
+                        self._attributes.value = SpotifyPlaylist.attributes(of: info)
                     }
                     .store(in: &cancellables)
             }

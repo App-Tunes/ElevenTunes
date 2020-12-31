@@ -67,10 +67,10 @@ public class DirectoryPlaylist: RemotePlaylist {
     }
     
     func loadMinimal() {
-        _attributes[PlaylistAttribute.title] = token.url.lastPathComponent
+        _attributes.value[PlaylistAttribute.title] = token.url.lastPathComponent
     }
     
-    public override func load(atLeast mask: PlaylistContentMask, library: Library) {
+    public override func load(atLeast mask: PlaylistContentMask) {
         let library = self.library
         
         contentSet.promise(mask) { promise in
@@ -103,8 +103,8 @@ public class DirectoryPlaylist: RemotePlaylist {
             .onMain()
             .fulfillingAny([.tracks, .children], of: promise)
             .sink(receiveCompletion: appLogErrors(_:)) { [unowned self] (tracks, children) in
-                _tracks = tracks
-                _children = children
+                _tracks.value = tracks
+                _children.value = children
             }.store(in: &cancellables)
         }
         

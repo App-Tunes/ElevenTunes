@@ -78,7 +78,7 @@ public class SpotifyUserPlaylist: RemotePlaylist {
         self.token = SpotifyUserPlaylistToken(user.uri)
         self.spotify = spotify
         super.init()
-        self._attributes = SpotifyUserPlaylist.attributes(of: user)
+        self._attributes.value = SpotifyUserPlaylist.attributes(of: user)
         contentSet.formUnion([.tracks, .attributes])
     }
 
@@ -94,13 +94,13 @@ public class SpotifyUserPlaylist: RemotePlaylist {
         return attributes
     }
             
-    public override func load(atLeast mask: PlaylistContentMask, library: Library) {
+    public override func load(atLeast mask: PlaylistContentMask) {
         contentSet.promise(mask) { promise in
             // Tracks will always be []
             promise.fulfill(.tracks)
             
-            let spotify = library.spotify
             let uri = token.uri
+            let spotify = self.spotify
 
             if promise.includes(.children) {
                 let count = 50
@@ -127,7 +127,7 @@ public class SpotifyUserPlaylist: RemotePlaylist {
                     .onMain()
                     .fulfillingAny(.children, of: promise)
                     .sink(receiveCompletion: appLogErrors(_:)) { playlists in
-                        self._children = playlists
+                        self._children.value = playlists
                     }.store(in: &cancellables)
             }
             
@@ -140,7 +140,7 @@ public class SpotifyUserPlaylist: RemotePlaylist {
                     .onMain()
                     .fulfillingAny([.minimal, .attributes], of: promise)
                     .sink(receiveCompletion: appLogErrors) { info in
-                        self._attributes = SpotifyUserPlaylist.attributes(of: info)
+                        self._attributes.value = SpotifyUserPlaylist.attributes(of: info)
                     }
                     .store(in: &cancellables)
             }

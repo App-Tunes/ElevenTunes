@@ -94,6 +94,8 @@ public class SpotifyTrack: RemoteTrack {
         contentSet.insert(.minimal)
     }
 
+    public override var asToken: TrackToken { token }
+    
     override public var icon: Image { SpotifyTrack._icon }
     
     public override func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
