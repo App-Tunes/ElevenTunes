@@ -12,15 +12,16 @@ struct PlayerBarView: View {
 
     var body: some View {
         VStack {
-            HStack {
-                PlayerControlsView(player: player)
-            }
-                .layoutPriority(2)
-            
+            ToolbarView(player: player)
+            // The height doesn't count towards the frame edges, so this means "minimum possible while filling the title bar
+                .edgesIgnoringSafeArea([.top, .leading])
+                .frame(height: 0)
+
             ZStack {
                 PlayPositionView(player: player.singlePlayer)
             }
-            .background(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.3), .clear]), startPoint: .bottom, endPoint: .top))
+                .background(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.3), .clear]), startPoint: .bottom, endPoint: .top))
+                .layoutPriority(2)
         }
     }
 }

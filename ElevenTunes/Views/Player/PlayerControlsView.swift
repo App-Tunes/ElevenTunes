@@ -8,29 +8,6 @@
 import SwiftUI
 import Combine
 
-struct PlayingTrackView: View {
-    // Unfortunately, @State doesn't work right now. It doesn't update the view....
-    let current: AnyTrack?
-    @State var attributes: TypedDict<TrackAttribute> = .init()
-    
-    var body: some View {
-        HStack {
-            if let current = current {
-                current.icon
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 15, height: 15)
-
-                Text(attributes[TrackAttribute.title] ?? "Untitled Track")
-                    .onReceive(current.attributes()) { attributes = $0 }
-            }
-            else {
-                Text("Nothing Playing").opacity(0.5)
-            }
-        }
-    }
-}
-
 struct PlayerControlsView: View {
     @State var player: Player
     
@@ -41,38 +18,56 @@ struct PlayerControlsView: View {
     @State var isPlaying: Bool = false
     
     var body: some View {
-        VStack {
-            PlayingTrackView(current: current)
-            
-            HStack {
-                Button(action: {
-                    player.backwards()
-                }) {
-                    Image(systemName: "backward.fill")
-                }
-                    .buttonStyle(BorderlessButtonStyle())
-                    .disabled(previous == nil && current == nil)
-
-                Button(action: {
-                    player.toggle()
-                }) {
-                    Image(systemName: isPlaying ? "pause.fill" : "play.fill")
-                        .font(.system(size: 20))
-                }
-                    .buttonStyle(BorderlessButtonStyle())
-                    .keyboardShortcut(.space, modifiers: [])
-
-                Button(action: {
-                    player.forwards()
-                }) {
-                    ZStack {
-                        Image(systemName: "forward.fill")
-                            .blinking(opacity: (1, 0.65), animates: player.$isAlmostNext)
-                    }
-                }
-                    .buttonStyle(BorderlessButtonStyle())
-                    .disabled(next == nil && current == nil)
+        HStack {
+            Button(action: {
+                
+            }) {
+                Image(systemName: "shuffle")
+                    .font(.system(size: 14))
             }
+                .buttonStyle(BorderlessButtonStyle())
+                .disabled(true)
+                .padding(.trailing, 3)
+
+            Button(action: {
+                player.backwards()
+            }) {
+                Image(systemName: "backward.fill")
+                    .font(.system(size: 16))
+            }
+                .buttonStyle(BorderlessButtonStyle())
+                .disabled(previous == nil && current == nil)
+
+            Button(action: {
+                player.toggle()
+            }) {
+                Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                    .font(.system(size: 24))
+            }
+                .buttonStyle(BorderlessButtonStyle())
+                .keyboardShortcut(.space, modifiers: [])
+
+            Button(action: {
+                player.forwards()
+            }) {
+                ZStack {
+                    Image(systemName: "forward.fill")
+                        .blinking(opacity: (1, 0.65), animates: player.$isAlmostNext)
+                        .font(.system(size: 16))
+                }
+            }
+                .buttonStyle(BorderlessButtonStyle())
+                .disabled(next == nil && current == nil)
+            
+            Button(action: {
+                
+            }) {
+                Image(systemName: "repeat")
+                    .font(.system(size: 14))
+            }
+                .buttonStyle(BorderlessButtonStyle())
+                .disabled(true)
+                .padding(.leading, 3)
         }
         .onReceive(player.$previous) { self.previous = $0 }
         .onReceive(player.$current) { self.current = $0 }

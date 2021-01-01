@@ -41,6 +41,13 @@ class LibraryDocument: NSPersistentDocument {
             contentRect: NSRect(x: 0, y: 0, width: 480, height: 300),
             styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
             backing: .buffered, defer: false)
+
+        window.toolbarStyle = .unified
+        window.toolbar = NSToolbar()
+        window.titlebarAppearsTransparent = true
+        // We have to make our own. The default one clobbers the views, even if it looks cool
+        window.titleVisibility = .hidden
+
         window.isReleasedWhenClosed = false
         window.center()
         window.contentView = NSHostingView(rootView: contentView)
