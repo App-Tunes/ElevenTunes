@@ -47,9 +47,7 @@ struct ContentView: View {
                     .frame(maxWidth: .infinity)
 
                 HStack {
-                    if let playlist = selection.one {
-                        PlaylistView(playlist: playlist)
-                    }
+                    PlaylistMultiplicityView(playlists: selection.sorted { $0.id < $1.id })
                 }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .layoutPriority(2)
