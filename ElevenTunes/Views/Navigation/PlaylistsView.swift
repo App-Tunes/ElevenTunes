@@ -29,6 +29,8 @@ struct PlaylistsView: View {
     
     var body: some View {
         List {
+            NavigationSearchBar()
+            
             ForEach(topLevelChildren) { category in
                 if category.backend.supportsChildren() {
                     Section(header: PlaylistRowView(playlist: category.backend)) {
