@@ -90,8 +90,9 @@ public class SpotifyTrack: RemoteTrack {
         self.token = SpotifyTrackToken(track.id)
         self.spotify = spotify
         super.init()
-        self._attributes.value = SpotifyTrack.extractAttributes(from: track)
-        contentSet.insert(.minimal)
+        self.extractAttributes(from: track)
+        // TODO Somehow the track might contain different attributes than our own request
+//        contentSet.insert(.minimal)
     }
 
     public override var asToken: TrackToken { token }
@@ -123,10 +124,22 @@ public class SpotifyTrack: RemoteTrack {
             .eraseToAnyPublisher()
     }
     
-    static func extractAttributes(from track: ExistingSpotifyTrack) -> TypedDict<TrackAttribute> {
-        .init([
-            .title: track.info.name
-        ])
+    func extractAttributes(from track: ExistingSpotifyTrack) {
+        self._attributes.value =
+            .init([
+                .title: track.info.name
+            ])
+        
+        if let album = track.info.album, let albumID = album.id {
+            self._album.value = SpotifyAlbum(albumID, album: album, spotify: spotify)
+        }
+        self._artists.value = (track.info.artists ?? [])
+            .filter { $0.id != nil }
+            .compactMap {
+                SpotifyArtist($0.id!, attributes: .init([
+                    .title: $0.name
+                ]))
+            }
     }
     
     public override func load(atLeast mask: TrackContentMask) {
@@ -138,17 +151,7 @@ public class SpotifyTrack: RemoteTrack {
                 .onMain()
                 .fulfillingAny(.minimal, of: promise)
                 .sink(receiveCompletion: appLogErrors) { [unowned self] track in
-                    self._attributes.value = SpotifyTrack.extractAttributes(from: track)
-                    if let album = track.info.album, let albumID = album.id {
-                        self._album.value = SpotifyAlbum(albumID, album: album, spotify: spotify)
-                    }
-                    self._artists.value = (track.info.artists ?? [])
-                        .filter { $0.id != nil }
-                        .compactMap {
-                            SpotifyArtist($0.id!, attributes: .init([
-                                .title: $0.name
-                            ]))
-                        }
+                    self.extractAttributes(from: track)
                 }
                 .store(in: &cancellables)
         }

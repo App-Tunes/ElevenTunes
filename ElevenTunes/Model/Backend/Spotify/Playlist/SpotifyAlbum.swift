@@ -39,6 +39,7 @@ public class SpotifyAlbum: SpotifyURIPlaylist<SpotifyAlbumToken> {
     convenience init(_ albumID: String, album: SpotifyWebAPI.Album, spotify: Spotify) {
         self.init(SpotifyAlbumToken(albumID), spotify: spotify)
         self._attributes.value = SpotifyAlbum.attributes(of: album)
+        contentSet.insert(.minimal)
     }
     
     public override var type: PlaylistType { .album }
