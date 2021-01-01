@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class SpotifyArtist: TransientArtist {
     let artistID: String
@@ -24,4 +25,6 @@ class SpotifyArtist: TransientArtist {
     override var origin: URL? {
         URL(string: "https://open.spotify.com/artist/\(artistID)")
     }
+    
+    override var accentColor: Color { Spotify.color }
 }

@@ -83,7 +83,7 @@ public class SpotifyPlaylist: RemotePlaylist {
     let token: SpotifyPlaylistToken
     let spotify: Spotify
     
-    public override var accentColor: Color { .green }
+    public override var accentColor: Color { Spotify.color }
 
     init(_ token: SpotifyPlaylistToken, spotify: Spotify) {
         self.token = token

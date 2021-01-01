@@ -68,7 +68,7 @@ public class FileTrack: RemoteTrack {
          
     public override var id: String { token.id }
     
-    public override var accentColor: Color { .blue }
+    public override var accentColor: Color { SystemUI.color }
         
     public override func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
         let url = token.url

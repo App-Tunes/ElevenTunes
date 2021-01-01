@@ -158,7 +158,6 @@ struct TrackRowView: View {
                 track.icon
                     .resizable()
                     .foregroundColor(track.accentColor)
-                    .saturation(0.5)
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 20, height: 20)
 

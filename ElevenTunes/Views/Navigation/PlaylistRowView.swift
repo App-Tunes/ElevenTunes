@@ -38,7 +38,6 @@ struct PlaylistRowView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 15, height: 15)
                     .foregroundColor(playlist.accentColor)
-                    .saturation(0.5)
             }
 
             NavigationLink(destination: PlaylistView(playlist: playlist)) {

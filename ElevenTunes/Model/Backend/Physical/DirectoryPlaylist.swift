@@ -60,7 +60,7 @@ public class DirectoryPlaylist: RemotePlaylist {
     
     static let _icon: Image = Image(systemName: "folder")
     public override var icon: Image { DirectoryPlaylist._icon }
-    public override var accentColor: Color { .accentColor }
+    public override var accentColor: Color { SystemUI.color }
         
     public override func supportsChildren() -> Bool { true }
     

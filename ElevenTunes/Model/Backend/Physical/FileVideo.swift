@@ -68,7 +68,7 @@ public class FileVideo: RemoteTrack {
     
     public override var icon: Image { Image(systemName: "video") }
     
-    public override var accentColor: Color { .blue }
+    public override var accentColor: Color { SystemUI.color }
         
     public override func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
         // TODO Return video emitter when possible

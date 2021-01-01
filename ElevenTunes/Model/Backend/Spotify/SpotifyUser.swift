@@ -95,7 +95,7 @@ public class SpotifyUser: RemotePlaylist {
     
     override public var icon: Image { Image(systemName: "person") }
     
-    public override var accentColor: Color { .green }
+    public override var accentColor: Color { Spotify.color }
     
     public override var type: PlaylistType { .artist }
     

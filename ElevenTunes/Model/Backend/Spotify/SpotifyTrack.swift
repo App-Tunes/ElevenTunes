@@ -96,7 +96,7 @@ public class SpotifyTrack: RemoteTrack {
 
     public override var asToken: TrackToken { token }
     
-    public override var accentColor: Color { .green }
+    public override var accentColor: Color { Spotify.color }
     
     public override var origin: URL? {
         URL(string: "https://open.spotify.com/track/\(token.trackID)")
