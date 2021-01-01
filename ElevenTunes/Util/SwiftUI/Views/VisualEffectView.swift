@@ -8,12 +8,12 @@
 import SwiftUI
 import AppKit
 
-struct VisualEffectBackground: NSViewRepresentable {
-    private let material: NSVisualEffectView.Material
-    private let blendingMode: NSVisualEffectView.BlendingMode
-    private let isEmphasized: Bool
+struct VisualEffectView: NSViewRepresentable {
+    let material: NSVisualEffectView.Material
+    let blendingMode: NSVisualEffectView.BlendingMode
+    let isEmphasized: Bool
     
-    fileprivate init(
+    init(
         material: NSVisualEffectView.Material,
         blendingMode: NSVisualEffectView.BlendingMode,
         emphasized: Bool) {
@@ -45,7 +45,7 @@ extension View {
         emphasized: Bool = false
     ) -> some View {
         background(
-            VisualEffectBackground(
+            VisualEffectView(
                 material: material,
                 blendingMode: blendingMode,
                 emphasized: emphasized
@@ -58,7 +58,7 @@ extension View {
         blendingMode: NSVisualEffectView.BlendingMode = .behindWindow,
         emphasized: Bool = false
     ) -> some View {
-        VisualEffectBackground(
+        VisualEffectView(
             material: material,
             blendingMode: blendingMode,
             emphasized: emphasized

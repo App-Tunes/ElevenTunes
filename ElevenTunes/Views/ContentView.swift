@@ -22,18 +22,43 @@ struct ContentView: View {
     @State var isImporting: Bool = false
     
     @Environment(\.library) var library: Library!
-    
-    var body: some View {
-        VSplitView {
-            PlayerBarView()
-                .frame(maxWidth: .infinity)
 
-            NavigatorView(directory: Playlist(library.mainPlaylist))
+    @State var selection = Set<Playlist>()
+
+    var body: some View {
+        
+        HSplitView {
+            ZStack(alignment: .top) {
+                List(selection: $selection) {
+                    NavigatorView(directory: Playlist(library.mainPlaylist))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+
+                VisualEffectView(material: .sidebar, blendingMode: .behindWindow, emphasized: false)
+                    .frame(height: 50)
+                    .edgesIgnoringSafeArea(.top)
+            }
+            // TODO hugging / compression resistance:
+            // setting min height always compressed down to min height :<
+            .frame(minWidth: 250, idealWidth: 250, maxWidth: 400)
+
+            VSplitView {
+                PlayerBarView()
+                    .frame(maxWidth: .infinity)
+
+                HStack {
+                    if let playlist = selection.one {
+                        PlaylistView(playlist: playlist)
+                    }
+                }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .layoutPriority(2)
+            }
+                .preferredColorScheme(.dark)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .layoutPriority(2)
         }
-            .preferredColorScheme(.dark)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .listStyle(SidebarListStyle())
     }
 }
 
