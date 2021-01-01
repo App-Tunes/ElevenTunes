@@ -20,7 +20,7 @@ struct PlayerBarView: View {
             ZStack {
                 PlayPositionView(player: player.singlePlayer)
             }
-            .background(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.4), .clear]).smootherstep(iterations: 10), startPoint: .bottom, endPoint: .top))
+            .background(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.45), .clear]).applying(iterations: 10, sqrt), startPoint: .bottom, endPoint: .top))
                 .layoutPriority(2)
         }
         .background(PlayerMilkyCoverView().edgesIgnoringSafeArea(.top))
