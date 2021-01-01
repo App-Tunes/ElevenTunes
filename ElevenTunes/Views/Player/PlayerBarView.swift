@@ -17,7 +17,7 @@ struct PlayerBarView: View {
                 .edgesIgnoringSafeArea([.top, .leading])
                 .frame(height: 0)
 
-            ZStack {
+            HStack {
                 PlayPositionView(player: player.singlePlayer)
             }
             .background(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.6), .clear]).applying(iterations: 10) { pow($0, 0.3) }, startPoint: .bottom, endPoint: .top))

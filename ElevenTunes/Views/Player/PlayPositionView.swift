@@ -127,25 +127,29 @@ struct PlayPositionView: View {
     }
     
     var body: some View {
-        ZStack {
-            if let playing = playing {
-                PlayPositionBarsView(player: player, playing: playing)
-            }
-            
-            HStack {
-                Text(playing != nil ? "0:00" : "")
-                    .padding(.leading)
+        GeometryReader { geo in
+            ZStack {
+                if let playing = playing {
+                    PlayPositionBarsView(player: player, playing: playing)
+                }
                 
-                Spacer()
+                if geo.size.height >= 20 {
+                    HStack {
+                        Text(playing != nil ? "0:00" : "")
+                            .padding(.leading)
+                        
+                        Spacer()
 
-                Text(timeLeft)
-                    .padding(.trailing)
+                        Text(timeLeft)
+                            .padding(.trailing)
+                    }
+                }
             }
         }
         .onReceive(player.$playing) { playing in
             self.playing = playing
         }
-        .frame(minHeight: 20, maxHeight: 50)
+        .frame(minHeight: 10, maxHeight: 50)
     }
 }
 
