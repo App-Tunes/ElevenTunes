@@ -8,6 +8,19 @@
 import SwiftUI
 import Combine
 
+struct PlaylistSectionView: View {
+    @ObservedObject var section: PlaylistsView.FolderPlaylist
+    
+    var body: some View {
+        if section.children != nil {
+            OutlineGroup(section.children ?? [], children: \.children) { playlist in
+                PlaylistRowView(playlist: playlist.backend)
+                    .padding(.leading, 8)
+            }
+        }
+    }
+}
+
 struct PlaylistsView: View {
     @State var directory: AnyPlaylist
     @State var topLevelChildren: [FolderPlaylist] = []
@@ -15,9 +28,17 @@ struct PlaylistsView: View {
     @Environment(\.library) private var library: Library!
     
     var body: some View {
-        List(topLevelChildren, children: \.children) { playlist in
-            PlaylistRowView(playlist: playlist.backend, isTopLevel: playlist.isTopLevel)
-                .padding(.leading, 8)
+        List {
+            ForEach(topLevelChildren) { category in
+                if category.backend.supportsChildren() {
+                    Section(header: PlaylistRowView(playlist: category.backend)) {
+                        PlaylistSectionView(section: category)
+                    }
+                }
+                else {
+                    PlaylistRowView(playlist: category.backend)
+                }
+            }
         }
         .frame(minWidth: 0, maxWidth: 800, maxHeight: .infinity)
         .onDrop(of: ContentInterpreter.types, delegate: PlaylistDropInterpreter(library.interpreter, parent: directory))
