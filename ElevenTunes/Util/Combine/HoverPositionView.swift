@@ -27,6 +27,7 @@ class NSHoverPosition: NSView {
     
     public override func updateTrackingAreas() {
         trackingArea.map(removeTrackingArea)
+        // TODO How to update during drag?
         trackingArea = NSTrackingArea(rect: bounds, options: [.mouseEnteredAndExited, .mouseMoved, .inVisibleRect, .activeAlways], owner: self, userInfo: nil)
         addTrackingArea(trackingArea!)
     }

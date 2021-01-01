@@ -32,6 +32,7 @@ struct PlayPositionView: View {
     @State var playerState: PlayerState = .init(isPlaying: false, currentTime: nil)
     @State var position: CGFloat? = nil
     @State var mousePosition: CGFloat? = nil
+    @State var isDragging = false
 
     var timeLeft: String {
         guard let time = playing?.duration else {
@@ -100,7 +101,7 @@ struct PlayPositionView: View {
                 if playing?.duration != nil, let mousePosition = mousePosition {
                     VBar(position: mousePosition)
                         .stroke(lineWidth: width)
-                        .opacity(0.5)
+                        .opacity(isDragging ? 1 : 0.5)
                 }
                 
                 HStack {
@@ -116,8 +117,13 @@ struct PlayPositionView: View {
             .contentShape(Rectangle())
             .gesture(
                 DragGesture(minimumDistance: 0, coordinateSpace: .local)
+                    .onChanged { value in
+                        mousePosition = value.location.x / geo.size.width
+                        isDragging = true
+                    }
                     .onEnded { value in
                         move(to: value.location.x / geo.size.width)
+                        isDragging = false
                     }
             )
             .onHoverLocation { location in
