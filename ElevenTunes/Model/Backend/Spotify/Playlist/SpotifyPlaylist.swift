@@ -60,9 +60,10 @@ public class SpotifyPlaylist: SpotifyURIPlaylist<SpotifyPlaylistToken> {
             return Just([]).eraseError().eraseToAnyPublisher()
         }
         
-        let maxInstant = 50
-        return spotify.api.tracks(Array(uris[..<maxInstant]))
-            .zip(Just(uris[maxInstant...]).eraseError()).map { (full, partial) in
+        let split = min(50, uris.count)
+        
+        return spotify.api.tracks(Array(uris[..<split]))
+            .zip(Just(uris[split...]).eraseError()).map { (full, partial) in
                 full.compactMap(ExistingSpotifyTrack.init)
                     .map { SpotifyTrack(track: $0, spotify: spotify) }
                 + partial.map { SpotifyTrack($0, spotify: spotify) }
