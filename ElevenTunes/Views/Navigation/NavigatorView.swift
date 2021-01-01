@@ -20,14 +20,13 @@ struct NavigatorView: View {
                     
                 PlaylistsView(directory: directory)
             }
-            
+            // TODO hugging / compression resistance:
+            // setting min height always compressed down to min height :<
+            .frame(minWidth: 250, idealWidth: 250, maxWidth: 400)
+
             HStack {
                 if let playlist = selection.one {
                     PlaylistView(playlist: playlist)
-                }
-                else {
-                    Rectangle()
-                        .opacity(0)
                 }
             }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -149,7 +149,9 @@ struct PlayPositionView: View {
         .onReceive(player.$playing) { playing in
             self.playing = playing
         }
-        .frame(minHeight: 10, maxHeight: 50)
+        // TODO hugging / compression resistance:
+        // setting min height always compressed down to min height :<
+        .frame(minHeight: 20, idealHeight: 30, maxHeight: 50)
     }
 }
 
