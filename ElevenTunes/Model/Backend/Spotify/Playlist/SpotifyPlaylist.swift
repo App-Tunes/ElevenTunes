@@ -28,6 +28,13 @@ public class SpotifyPlaylistToken: SpotifyURIPlaylistToken {
     override func expand(_ context: Library) -> AnyPlaylist {
         SpotifyPlaylist(self, spotify: context.spotify)
     }
+    
+    static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyPlaylistToken, Error> {
+        return Future { try playlistID(fromURL: url) }
+            .flatMap { spotify.api.playlist(Self($0)) }
+            .map { SpotifyPlaylistToken($0.id) }
+            .eraseToAnyPublisher()
+    }
 }
 
 public class SpotifyPlaylist: SpotifyURIPlaylist<SpotifyPlaylistToken> {

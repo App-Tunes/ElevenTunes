@@ -10,10 +10,7 @@ import Combine
 import SpotifyWebAPI
 import SwiftUI
 
-// Bet you haven't seen this before
-public protocol _SpotifyURIPlaylistToken: SpotifyURIPlaylistToken {}
-
-public class SpotifyURIPlaylistToken: PlaylistToken, SpotifyURIConvertible, _SpotifyURIPlaylistToken {
+public class SpotifyURIPlaylistToken: PlaylistToken, SpotifyURIConvertible {
     enum SpotifyError: Error {
         case noURI
     }
@@ -58,15 +55,6 @@ public class SpotifyURIPlaylistToken: PlaylistToken, SpotifyURIConvertible, _Spo
     }
     
     class var urlComponent: String { fatalError() }
-}
-
-extension _SpotifyURIPlaylistToken {
-    static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<Self, Error> {
-        return Future { try playlistID(fromURL: url) }
-            .flatMap { spotify.api.playlist($0) }
-            .map { Self($0.id) }
-            .eraseToAnyPublisher()
-    }
 }
 
 public class SpotifyURIPlaylist<Token: SpotifyURIPlaylistToken>: RemotePlaylist {

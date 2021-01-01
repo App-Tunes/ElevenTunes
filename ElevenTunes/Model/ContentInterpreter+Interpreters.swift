@@ -59,6 +59,15 @@ extension ContentInterpreter {
                 .eraseToAnyPublisher()
         })
         
+        register(simple {
+            _ = try SpotifyAlbumToken.playlistID(fromURL: $0)
+            return true
+        } interpret: { (url: URL) -> AnyPublisher<Content, Error> in
+            SpotifyAlbumToken.create(spotify, fromURL: url)
+                .map { Content.playlist($0) }
+                .eraseToAnyPublisher()
+        })
+
         register(simple { $0.pathExtension == "m3u" } interpret: {
             .playlist(try M3UPlaylistToken.create(fromURL: $0))
         })

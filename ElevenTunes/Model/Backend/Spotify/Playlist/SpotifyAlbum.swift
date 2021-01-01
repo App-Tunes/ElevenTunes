@@ -11,10 +11,19 @@ import SpotifyWebAPI
 import Combine
 
 public class SpotifyAlbumToken: SpotifyURIPlaylistToken {
+    class NoAlbumID: Error {}
+    
     override class var urlComponent: String { "album" }
     
     override func expand(_ context: Library) -> AnyPlaylist {
         SpotifyAlbum(self, spotify: context.spotify)
+    }
+    
+    static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyAlbumToken, Error> {
+        return Future { try playlistID(fromURL: url) }
+            .flatMap { spotify.api.album(Self($0)) }
+            .tryMap { SpotifyAlbumToken(try $0.id.unwrap(orThrow: NoAlbumID())) }
+            .eraseToAnyPublisher()
     }
 }
 
@@ -65,7 +74,7 @@ public class SpotifyAlbum: SpotifyURIPlaylist<SpotifyAlbumToken> {
 
             if promise.includes(.tracks) {
                 // There are actually playlists with up to 10.000 items lol
-                let count = 100
+                let count = 50
                 let paginationLimit = 100
 
                 let getItems = { (offset: Int) in
