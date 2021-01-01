@@ -31,6 +31,7 @@ struct PlayPositionView: View {
     @State var playing: AnyAudioEmitter?
     @State var playerState: PlayerState = .init(isPlaying: false, currentTime: nil)
     @State var position: CGFloat? = nil
+    @State var mousePosition: CGFloat? = nil
 
     var timeLeft: String {
         guard let time = playing?.duration else {
@@ -89,9 +90,17 @@ struct PlayPositionView: View {
     var body: some View {
         GeometryReader { geo in
             ZStack {
+                let width = max(1, min(2, 3 - geo.size.height / 20))
+                
                 if let position = position {
                     VBar(position: position)
-                        .stroke(lineWidth: max(1, min(2, 3 - geo.size.height / 20)))
+                        .stroke(lineWidth: width)
+                }
+                
+                if playing?.duration != nil, let mousePosition = mousePosition {
+                    VBar(position: mousePosition)
+                        .stroke(lineWidth: width)
+                        .opacity(0.5)
                 }
                 
                 HStack {
@@ -111,6 +120,11 @@ struct PlayPositionView: View {
                         move(to: value.location.x / geo.size.width)
                     }
             )
+            .onHoverLocation { location in
+                self.mousePosition = location.x / geo.size.width
+            } onEnded: {
+                self.mousePosition = nil
+            }
         }
         .onReceive(player.$playing) { playing in
             self.playing = playing
