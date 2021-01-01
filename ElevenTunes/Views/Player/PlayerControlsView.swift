@@ -68,14 +68,14 @@ struct PlayerControlsView: View {
                 .buttonStyle(BorderlessButtonStyle())
                 .disabled(true)
                 .padding(.leading, 3)
+            
+            PlayerAudioView(player: player)
+                .padding(.leading)
         }
         .onReceive(player.$previous) { self.previous = $0 }
         .onReceive(player.$current) { self.current = $0 }
         .onReceive(player.$next) { self.next = $0 }
         .onReceive(player.$state) { self.isPlaying = $0.isPlaying }
-
-        .frame(minWidth: 500)
-        .frame(height: 50)
     }
 }
 //

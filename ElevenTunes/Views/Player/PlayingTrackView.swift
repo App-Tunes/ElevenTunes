@@ -25,6 +25,7 @@ struct PlayingTrackView: View {
                 Text("Nothing Playing").opacity(0.5)
             }
         }
+        .padding(.top, 8)
         .onReceive(player.$current) { self.current = $0 }
     }
 }

@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 
 struct TrackCellView: View {
-    @State var track: AnyTrack
+    var track: AnyTrack
 
     @State var contentMask: TrackContentMask = []
     @State var artists: [AnyPlaylist] = []
