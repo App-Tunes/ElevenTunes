@@ -143,7 +143,10 @@ public class DBLibraryPlaylist: AnyPlaylist {
     public func add(children: [PlaylistToken]) -> Bool {
         false  // TODO
     }
-
+    
+    public func previewImage() -> AnyPublisher<NSImage?, Never> {
+        backend?.previewImage() ?? Just(nil).eraseToAnyPublisher()
+    }
 }
 
 @objc(DBPlaylist)

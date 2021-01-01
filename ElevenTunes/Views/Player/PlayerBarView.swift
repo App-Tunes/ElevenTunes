@@ -23,6 +23,7 @@ struct PlayerBarView: View {
                 .background(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.3), .clear]), startPoint: .bottom, endPoint: .top))
                 .layoutPriority(2)
         }
+        .background(PlayerMilkyCoverView().edgesIgnoringSafeArea(.top))
     }
 }
 

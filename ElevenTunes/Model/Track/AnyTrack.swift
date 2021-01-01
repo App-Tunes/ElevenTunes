@@ -35,7 +35,9 @@ public protocol AnyTrack: AnyObject {
     
     var icon: Image { get }
     var accentColor: Color { get }
-    
+
+    func previewImage() -> AnyPublisher<NSImage?, Never>
+
     func invalidateCaches(_ mask: TrackContentMask)
 }
 

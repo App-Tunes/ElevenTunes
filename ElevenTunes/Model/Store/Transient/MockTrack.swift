@@ -72,4 +72,8 @@ class MockTrack: TrackToken, AnyTrack {
     }
     
     func invalidateCaches(_ mask: TrackContentMask) { }
+    
+    func previewImage() -> AnyPublisher<NSImage?, Never> {
+        Just(nil).eraseToAnyPublisher()
+    }
 }

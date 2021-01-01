@@ -79,7 +79,7 @@ public class SpotifyTrackToken: TrackToken, SpotifyURIConvertible {
 public class SpotifyTrack: RemoteTrack {
     let spotify: Spotify
     let token: SpotifyTrackToken
-        
+            
     init(_ token: SpotifyTrackToken, spotify: Spotify) {
         self.token = token
         self.spotify = spotify
@@ -140,9 +140,7 @@ public class SpotifyTrack: RemoteTrack {
                 .sink(receiveCompletion: appLogErrors) { [unowned self] track in
                     self._attributes.value = SpotifyTrack.extractAttributes(from: track)
                     if let album = track.info.album, let albumID = album.id {
-                        self._album.value = SpotifyAlbum(albumID, attributes: .init([
-                            .title: album.name
-                        ]))
+                        self._album.value = SpotifyAlbum(albumID, album: album, spotify: spotify)
                     }
                     self._artists.value = (track.info.artists ?? [])
                         .filter { $0.id != nil }

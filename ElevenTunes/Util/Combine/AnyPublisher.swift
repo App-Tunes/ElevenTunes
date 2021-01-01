@@ -60,6 +60,19 @@ extension Publisher {
             receiveCancel: { handler(false) }
         )
     }
+    
+    func sink(receiveResult: @escaping (Result<Output, Failure>) -> Void) -> AnyCancellable {
+        sink { completion in
+            switch completion {
+            case .finished:
+                return
+            case .failure(let error):
+                receiveResult(.failure(error))
+            }
+        } receiveValue: { value in
+            receiveResult(.success(value))
+        }
+    }
 }
 
 extension Publisher where Failure == Never {

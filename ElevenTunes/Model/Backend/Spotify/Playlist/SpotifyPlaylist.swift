@@ -22,85 +22,24 @@ struct MinimalPlaylistItemContainer<Item: Codable & Hashable>: Codable, Hashable
     var track: Item
 }
 
-public class SpotifyPlaylistToken: PlaylistToken, SpotifyURIConvertible {
-    enum SpotifyError: Error {
-        case noURI
-    }
-    
-    enum CodingKeys: String, CodingKey {
-      case playlistID
-    }
-    
-    var playlistID: String
-
-    public override var id: String { playlistID }
-    
-    public var uri: String { "spotify:playlist:\(id)" }
-
-    init(_ playlistID: String) {
-        self.playlistID = playlistID
-        super.init()
-    }
-    
-    public required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        playlistID = try container.decode(String.self, forKey: .playlistID)
-        try super.init(from: decoder)
-    }
-    
-    public override func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(playlistID, forKey: .playlistID)
-        try super.encode(to: encoder)
-    }
-    
-    static func playlistID(fromURL url: URL) throws -> String {
-        guard
-            url.host == "open.spotify.com",
-            url.pathComponents.dropFirst().first == "playlist",
-            let id = url.pathComponents.last
-        else {
-            throw SpotifyError.noURI
-        }
-        return id
-    }
-
-    static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyPlaylistToken, Error> {
-        return Future { try playlistID(fromURL: url) }
-            .flatMap { spotify.api.playlist($0) }
-            .map { SpotifyPlaylistToken($0.id) }
-            .eraseToAnyPublisher()
-    }
+public class SpotifyPlaylistToken: SpotifyURIPlaylistToken {
+    override class var urlComponent: String { "playlist" }
     
     override func expand(_ context: Library) -> AnyPlaylist {
         SpotifyPlaylist(self, spotify: context.spotify)
     }
 }
 
-public class SpotifyPlaylist: RemotePlaylist {
+public class SpotifyPlaylist: SpotifyURIPlaylist<SpotifyPlaylistToken> {
     static let minimalQueryFilters = "offset,total,items(track(\(MinimalSpotifyTrack.filters)))"
-
-    let token: SpotifyPlaylistToken
-    let spotify: Spotify
     
-    public override var accentColor: Color { Spotify.color }
-
-    init(_ token: SpotifyPlaylistToken, spotify: Spotify) {
-        self.token = token
-        self.spotify = spotify
-        super.init()
+    override init(_ token: SpotifyPlaylistToken, spotify: Spotify) {
+        super.init(token, spotify: spotify)
     }
     
-//    init(playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>, spotify: Spotify) {
-//        self.token = playlist.uri
-//        super.init()
-//        self._attributes = SpotifyPlaylist.attributes(of: playlist)
-//    }
-
-    public override var asToken: PlaylistToken { token }
-    
-    public override var origin: URL? {
-        URL(string: "https://open.spotify.com/playlist/\(token.playlistID)")
+    init(_ albumID: String, album: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>, spotify: Spotify) {
+        super.init(SpotifyPlaylistToken(albumID), spotify: spotify)
+        self._attributes.value = SpotifyPlaylist.attributes(of: album)
     }
 
     static func attributes(of playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>) -> TypedDict<PlaylistAttribute> {
@@ -133,7 +72,7 @@ public class SpotifyPlaylist: RemotePlaylist {
                         getItems($0.offset + count)
                     }
                     .collect()
-                    .map { $0.flatMap { $0.items.map { $0.track } } }
+                    .map { $0.flatMap { $0.items }.map { $0.track } }
                     .map { items in
                         items.map { SpotifyTrack(SpotifyTrackToken($0.id), spotify: spotify) }
                     }

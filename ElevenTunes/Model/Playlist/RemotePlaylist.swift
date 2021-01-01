@@ -76,4 +76,8 @@ public class RemotePlaylist: AnyPlaylist {
     public func add(tracks: [TrackToken]) -> Bool { false }
     
     public func add(children: [PlaylistToken]) -> Bool { false }
+    
+    public func previewImage() -> AnyPublisher<NSImage?, Never> {
+        Just(nil).eraseToAnyPublisher()
+    }
 }

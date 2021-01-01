@@ -70,4 +70,10 @@ public class RemoteTrack: AnyTrack {
     public func load(atLeast mask: TrackContentMask) {
         fatalError()
     }
+    
+    public func previewImage() -> AnyPublisher<NSImage?, Never> {
+        album().flatMap {
+            $0?.previewImage() ?? Just(nil).eraseToAnyPublisher()
+        }.eraseToAnyPublisher()
+    }
 }

@@ -90,4 +90,8 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
         // TODO
         return true
     }
+    
+    func previewImage() -> AnyPublisher<NSImage?, Never> {
+        Just(nil).eraseToAnyPublisher()
+    }
 }

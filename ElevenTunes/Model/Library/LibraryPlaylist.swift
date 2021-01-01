@@ -79,6 +79,10 @@ class LibraryPlaylist: AnyPlaylist {
     func attributes() -> AnyPublisher<TypedDict<PlaylistAttribute>, Never> {
         $_attributes.eraseToAnyPublisher()
     }
+    
+    func previewImage() -> AnyPublisher<NSImage?, Never> {
+        Just(nil).eraseToAnyPublisher()
+    }
 
     static var playlistFetchRequest: NSFetchRequest<DBPlaylist> {
         let request = DBPlaylist.createFetchRequest()

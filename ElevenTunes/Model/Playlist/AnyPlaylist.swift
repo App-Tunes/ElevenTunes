@@ -57,6 +57,8 @@ public protocol AnyPlaylist: AnyObject {
     
     @discardableResult
     func add(children: [PlaylistToken]) -> Bool
+    
+    func previewImage() -> AnyPublisher<NSImage?, Never>
 }
 
 extension AnyPlaylist {
@@ -71,6 +73,7 @@ class PlaylistBackendTypedCodable: TypedCodable<String> {
         .register(M3UPlaylistToken.self, for: "m3u")
         .register(SpotifyPlaylistToken.self, for: "spotify")
         .register(SpotifyUserToken.self, for: "spotify-user")
+        .register(SpotifyAlbumToken.self, for: "spotify-album")
 
     override class var registry: CodableRegistry<String> { _registry }
 }

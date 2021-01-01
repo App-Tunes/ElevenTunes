@@ -73,6 +73,10 @@ public class DBLibraryTrack: AnyTrack {
         backend?.emitter(context: context)
             ?? Fail(error: EmitterFail.noBackend).eraseToAnyPublisher()
     }
+    
+    public func previewImage() -> AnyPublisher<NSImage?, Never> {
+        backend?.previewImage() ?? Just(nil).eraseToAnyPublisher()
+    }
 }
 
 @objc(DBTrack)
