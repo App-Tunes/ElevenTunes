@@ -89,7 +89,7 @@ public class SpotifyAlbum: SpotifyURIPlaylist<SpotifyAlbumToken> {
                     .collect()
                     .map { $0.flatMap { $0.items }.compactMap(ExistingSpotifyTrack.init) }
                     .map { items in
-                        items.map { SpotifyTrack(SpotifyTrackToken($0.id), spotify: spotify) }
+                        items.map { SpotifyTrack(track: $0, spotify: spotify) }
                     }
                     .onMain()
                     .fulfillingAny(.tracks, of: promise)
