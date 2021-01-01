@@ -28,6 +28,7 @@
 		80151EE82593C92A00D9539A /* SpotifyAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80151EE72593C92A00D9539A /* SpotifyAuthView.swift */; };
 		80151EF52593C98500D9539A /* SpotifyDeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80151EF42593C98500D9539A /* SpotifyDeviceView.swift */; };
 		80151EFA2593E1EF00D9539A /* SpotifyDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80151EF92593E1EF00D9539A /* SpotifyDevices.swift */; };
+		802DBA22259FA9B000EA6DB7 /* Gradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802DBA21259FA9B000EA6DB7 /* Gradient.swift */; };
 		802E2BC12594DE1F00CB91EC /* LibraryDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2BC02594DE1F00CB91EC /* LibraryDocument.swift */; };
 		802E2C9D2595FEB900CB91EC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 802E2C9C2595FEB800CB91EC /* Main.storyboard */; };
 		802E2CA22595FEC700CB91EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2CA12595FEC700CB91EC /* AppDelegate.swift */; };
@@ -174,6 +175,7 @@
 		80151EE72593C92A00D9539A /* SpotifyAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAuthView.swift; sourceTree = "<group>"; };
 		80151EF42593C98500D9539A /* SpotifyDeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyDeviceView.swift; sourceTree = "<group>"; };
 		80151EF92593E1EF00D9539A /* SpotifyDevices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyDevices.swift; sourceTree = "<group>"; };
+		802DBA21259FA9B000EA6DB7 /* Gradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gradient.swift; sourceTree = "<group>"; };
 		802E2BC02594DE1F00CB91EC /* LibraryDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryDocument.swift; sourceTree = "<group>"; };
 		802E2C9C2595FEB800CB91EC /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		802E2CA12595FEC700CB91EC /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -408,6 +410,7 @@
 				805338372598FD2E006F06DC /* Animation.swift */,
 				808D548C259F3BC9006F7435 /* Color.swift */,
 				80C9A184259F916F00A038CC /* Combine.swift */,
+				802DBA21259FA9B000EA6DB7 /* Gradient.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -933,6 +936,7 @@
 				8053384B25991DB8006F06DC /* TrackToken.swift in Sources */,
 				802E2CED259614EC00CB91EC /* AnyPlaylist.swift in Sources */,
 				800508632598108A0055FB2D /* DBPlaylist+Attributes.swift in Sources */,
+				802DBA22259FA9B000EA6DB7 /* Gradient.swift in Sources */,
 				8053383E2599002A006F06DC /* BlinkingImage.swift in Sources */,
 				805338232598BA5B006F06DC /* Sequence.swift in Sources */,
 				8005083E2597F45B0055FB2D /* CodableRegistry.swift in Sources */,
