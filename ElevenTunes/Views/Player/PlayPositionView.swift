@@ -26,38 +26,17 @@ struct VBar : Shape {
     }
 }
 
-struct PlayPositionView: View {
+struct PlayPositionBarsView: View {
     @State var player: SinglePlayer
-    @State var playing: AnyAudioEmitter?
+
+    let playing: AnyAudioEmitter
     @State var playerState: PlayerState = .init(isPlaying: false, currentTime: nil)
+
     @State var position: CGFloat? = nil
     @State var mousePosition: CGFloat? = nil
     @State var isDragging = false
-
-    var timeLeft: String {
-        guard let time = playing?.duration else {
-            return ""
-        }
-        
-        let totalSeconds = Int(time)
-        let hours: Int = Int(totalSeconds / 3600)
-        
-        let minutes: Int = Int(totalSeconds % 3600 / 60)
-        let seconds: Int = Int((totalSeconds % 3600) % 60)
-
-        if hours > 0 {
-            return String(format: "%i:%02i:%02i", hours, minutes, seconds)
-        } else {
-            return String(format: "%i:%02i", minutes, seconds)
-        }
-    }
     
     func updatePosition() {
-        guard let playing = playing else {
-            position = nil
-            return
-        }
-        
         guard let duration = playing.duration, let currentTime = playerState.currentTime else {
             position = nil // TODO Show infinite loading-bar style progress bar
             return
@@ -77,10 +56,6 @@ struct PlayPositionView: View {
     }
     
     func move(to point: CGFloat) {
-        guard let playing = playing else {
-            return
-        }
-        
         do {
             try playing.move(to: playing.duration.map { $0 * TimeInterval(point) } ?? 0 )
         } catch let error {
@@ -98,20 +73,10 @@ struct PlayPositionView: View {
                         .stroke(lineWidth: width)
                 }
                 
-                if playing?.duration != nil, let mousePosition = mousePosition {
+                if playing.duration != nil, let mousePosition = mousePosition {
                     VBar(position: mousePosition)
                         .stroke(lineWidth: width)
                         .opacity(isDragging ? 1 : 0.5)
-                }
-                
-                HStack {
-                    Text(playing != nil ? "0:00" : "")
-                        .padding(.leading)
-                    
-                    Spacer()
-
-                    Text(timeLeft)
-                        .padding(.trailing)
                 }
             }
             .contentShape(Rectangle())
@@ -132,12 +97,53 @@ struct PlayPositionView: View {
                 self.mousePosition = nil
             }
         }
-        .onReceive(player.$playing) { playing in
-            self.playing = playing
-        }
         .onReceive(player.$state) { state in
             self.playerState = state
             updatePosition()
+        }
+    }
+}
+
+struct PlayPositionView: View {
+    @State var player: SinglePlayer
+    @State var playing: AnyAudioEmitter?
+
+    var timeLeft: String {
+        guard let time = playing?.duration else {
+            return ""
+        }
+        
+        let totalSeconds = Int(time)
+        let hours: Int = Int(totalSeconds / 3600)
+        
+        let minutes: Int = Int(totalSeconds % 3600 / 60)
+        let seconds: Int = Int((totalSeconds % 3600) % 60)
+
+        if hours > 0 {
+            return String(format: "%i:%02i:%02i", hours, minutes, seconds)
+        } else {
+            return String(format: "%i:%02i", minutes, seconds)
+        }
+    }
+    
+    var body: some View {
+        ZStack {
+            if let playing = playing {
+                PlayPositionBarsView(player: player, playing: playing)
+            }
+            
+            HStack {
+                Text(playing != nil ? "0:00" : "")
+                    .padding(.leading)
+                
+                Spacer()
+
+                Text(timeLeft)
+                    .padding(.trailing)
+            }
+        }
+        .onReceive(player.$playing) { playing in
+            self.playing = playing
         }
         .frame(minHeight: 20, maxHeight: 50)
     }
