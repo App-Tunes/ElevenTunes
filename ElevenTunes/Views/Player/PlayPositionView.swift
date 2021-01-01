@@ -136,11 +136,13 @@ struct PlayPositionView: View {
                 if geo.size.height >= 20 {
                     HStack {
                         Text(playing != nil ? "0:00" : "")
+                            .foregroundColor(.secondary)
                             .padding(.leading)
                         
                         Spacer()
 
                         Text(timeLeft)
+                            .foregroundColor(.secondary)
                             .padding(.trailing)
                     }
                 }
