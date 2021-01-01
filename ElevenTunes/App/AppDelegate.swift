@@ -62,9 +62,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 .sink(receiveCompletion: { result in
                     switch result {
                     case .finished:
-                        doc.makeWindowControllers()
-                        doc.showWindows()
-                        documentController.addDocument(doc)
+                        DispatchQueue.main.async {
+                            doc.makeWindowControllers()
+                            doc.showWindows()
+                            documentController.addDocument(doc)
+                        }
                     case .failure(let error):
                         // Document will deallocate
                         appLogger.error("Error interpreting urls: \(error)")
