@@ -9,13 +9,13 @@ import SwiftUI
 
 struct PlaylistRowView: View {
     @State var playlist: AnyPlaylist
-    
+    @State var isTopLevel: Bool = false
+
     @State var contentMask: PlaylistContentMask = []
     @State var attributes: TypedDict<PlaylistAttribute> = .init()
     
     func title(_ text: String) -> Text {
-        // TODO false = isTopLevel
-        if false, playlist.supportsChildren() {
+        if isTopLevel, playlist.supportsChildren() {
             return Text(text)
                 .bold()
                 .foregroundColor(.secondary)
@@ -52,8 +52,7 @@ struct PlaylistRowView: View {
             }
         }
         .contextMenu(menuItems: PlaylistsContextMenu(playlist: playlist).callAsFunction)
-        // TODO false = isTopLevel
-        .frame(height: false ? 24 : 4) // The 4 is ridiculous but this counteracts the enormous default padding lol
+        .frame(height: isTopLevel ? 24 : 0) // The 0 is ridiculous but this counteracts the enormous default padding lol
         .onReceive(playlist.cacheMask()) { contentMask = $0 }
         .onReceive(playlist.attributes()) { attributes = $0 }
     }

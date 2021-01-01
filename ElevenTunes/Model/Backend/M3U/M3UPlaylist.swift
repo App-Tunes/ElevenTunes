@@ -70,6 +70,8 @@ public class M3UPlaylist: RemotePlaylist {
 
     public override var icon: Image { Image(systemName: "doc.text") }
     
+    public override var accentColor: Color { SystemUI.color }
+    
     public static func interpretFile(_ file: String, relativeTo directory: URL) -> [URL] {
         let lines = file.split(whereSeparator: \.isNewline)
         

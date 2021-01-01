@@ -8,26 +8,6 @@
 import SwiftUI
 import Combine
 
-class FolderPlaylist: ObservableObject, Identifiable {
-    let backend: AnyPlaylist
-    var observation: AnyCancellable? = nil
-
-    @Published var children: [FolderPlaylist]? = nil
-
-    var id: String { backend.id }
-    
-    init(_ backend: AnyPlaylist) {
-        self.backend = backend
-        
-        if backend.supportsChildren() {
-            children = []
-            observation = backend.children()
-                .map { $0.map(FolderPlaylist.init) }
-                .assignWeak(to: \FolderPlaylist.children, on: self)
-        }
-    }
-}
-
 struct PlaylistsView: View {
     @State var directory: AnyPlaylist
     @State var topLevelChildren: [FolderPlaylist] = []
@@ -36,13 +16,37 @@ struct PlaylistsView: View {
     
     var body: some View {
         List(topLevelChildren, children: \.children) { playlist in
-            PlaylistRowView(playlist: playlist.backend)
+            PlaylistRowView(playlist: playlist.backend, isTopLevel: playlist.isTopLevel)
                 .padding(.leading, 8)
         }
         .frame(minWidth: 0, maxWidth: 800, maxHeight: .infinity)
         .onDrop(of: ContentInterpreter.types, delegate: PlaylistDropInterpreter(library.interpreter, parent: directory))
-        .onReceive(directory.children()) { topLevelChildren = $0.map(FolderPlaylist.init) }
+        .onReceive(directory.children()) { topLevelChildren = $0.map { FolderPlaylist($0, isTopLevel: true) } }
    }
+}
+
+extension PlaylistsView {
+    class FolderPlaylist: ObservableObject, Identifiable {
+        let backend: AnyPlaylist
+        let isTopLevel: Bool
+        var observation: AnyCancellable? = nil
+
+        @Published var children: [FolderPlaylist]? = nil
+
+        var id: String { backend.id }
+        
+        init(_ backend: AnyPlaylist, isTopLevel: Bool = false) {
+            self.backend = backend
+            self.isTopLevel = isTopLevel
+            
+            if backend.supportsChildren() {
+                children = []
+                observation = backend.children()
+                    .map { $0.map { FolderPlaylist($0) } }
+                    .assignWeak(to: \FolderPlaylist.children, on: self)
+            }
+        }
+    }
 }
 
 //struct PlaylistsView_Previews: PreviewProvider {
