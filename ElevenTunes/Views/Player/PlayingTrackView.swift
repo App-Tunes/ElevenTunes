@@ -13,7 +13,7 @@ import Combine
 struct PlayingTrackView: View {
     @State var player: Player
 
-    @State var current: AnyTrack?
+    @State var current: Track?
     @State var attributes: TypedDict<TrackAttribute> = .init()
     
     var body: some View {
@@ -26,6 +26,6 @@ struct PlayingTrackView: View {
             }
         }
         .padding(.top, 8)
-        .onReceive(player.$current) { self.current = $0 }
+        .onReceive(player.$current) { self.current = Track($0) }
     }
 }

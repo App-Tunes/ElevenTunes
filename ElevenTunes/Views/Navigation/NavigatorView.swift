@@ -6,13 +6,32 @@
 //
 
 import SwiftUI
+import Combine
 
 struct NavigatorView: View {
-    @State var directory: AnyPlaylist
+    @State var directory: Playlist
+    
+    @State var selection = Set<Playlist>()
     
     var body: some View {
-        NavigationView {
-            PlaylistsView(directory: directory)
+        HSplitView {
+            List(selection: $selection) {
+                NavigationSearchBar()
+                    
+                PlaylistsView(directory: directory)
+            }
+            
+            HStack {
+                if let playlist = selection.one {
+                    PlaylistView(playlist: playlist)
+                }
+                else {
+                    Rectangle()
+                        .opacity(0)
+                }
+            }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .layoutPriority(2)
         }
         .listStyle(SidebarListStyle())
     }

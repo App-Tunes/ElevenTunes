@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 
 struct TrackCellView: View {
-    var track: AnyTrack
+    let track: Track
 
     @State var contentMask: TrackContentMask = []
     @State var artists: [AnyPlaylist] = []
@@ -29,9 +29,9 @@ struct TrackCellView: View {
                     .opacity(0.5)
             }
             else {
-                track.icon
+                track.backend.icon
                     .resizable()
-                    .foregroundColor(track.accentColor)
+                    .foregroundColor(track.backend.accentColor)
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 20, height: 20)
 
@@ -49,9 +49,9 @@ struct TrackCellView: View {
             }
         }
         .lineLimit(1)
-        .onReceive(track.artists()) { artists = $0 }
-        .onReceive(track.album()) { album = $0 }
-        .onReceive(track.attributes()) { attributes = $0 }
-        .onReceive(track.cacheMask()) { contentMask = $0 }
+        .onReceive(track.backend.artists()) { artists = $0 }
+        .onReceive(track.backend.album()) { album = $0 }
+        .onReceive(track.backend.attributes()) { attributes = $0 }
+        .onReceive(track.backend.cacheMask()) { contentMask = $0 }
     }
 }

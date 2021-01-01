@@ -9,67 +9,60 @@ import SwiftUI
 import Combine
 
 struct PlaylistSectionView: View {
-    @ObservedObject var section: PlaylistsView.FolderPlaylist
+    @State var playlist: Playlist
+    @State var children: [Playlist] = []
+    
+    var isTopLevel: Bool = false
+    
+    @ViewBuilder var _body: some View {
+        if playlist.backend.supportsChildren() {
+            if isTopLevel {
+                Section(header: PlaylistRowView(playlist: playlist)) {
+                    ForEach(children) { child in
+                        PlaylistSectionView(playlist: child)
+                    }
+                }
+                .tag(playlist)
+            }
+            else {
+                DisclosureGroup {
+                    ForEach(children) { child in
+                        PlaylistSectionView(playlist: child)
+                    }
+                } label: {
+                    PlaylistRowView(playlist: playlist)
+                }
+                .tag(playlist)
+            }
+        }
+        else {
+            PlaylistRowView(playlist: playlist)
+                .tag(playlist)
+        }
+    }
     
     var body: some View {
-        if section.children != nil {
-            OutlineGroup(section.children ?? [], children: \.children) { playlist in
-                PlaylistRowView(playlist: playlist.backend)
-                    .padding(.leading, 8)
-            }
+        _body
+        .onReceive(playlist.backend.children()) {
+            children = $0.map(Playlist.init)
         }
     }
 }
 
 struct PlaylistsView: View {
-    @State var directory: AnyPlaylist
-    @State var topLevelChildren: [FolderPlaylist] = []
+    @State var directory: Playlist
+    @State var topLevelChildren: [Playlist] = []
         
     @Environment(\.library) private var library: Library!
     
     var body: some View {
-        List {
-            NavigationSearchBar()
-            
-            ForEach(topLevelChildren) { category in
-                if category.backend.supportsChildren() {
-                    Section(header: PlaylistRowView(playlist: category.backend)) {
-                        PlaylistSectionView(section: category)
-                    }
-                }
-                else {
-                    PlaylistRowView(playlist: category.backend)
-                }
-            }
+        ForEach(topLevelChildren) { category in
+            PlaylistSectionView(playlist: category, isTopLevel: true)
         }
-        .frame(minWidth: 0, maxWidth: 800, maxHeight: .infinity)
-        .onDrop(of: ContentInterpreter.types, delegate: PlaylistDropInterpreter(library.interpreter, parent: directory))
-        .onReceive(directory.children()) { topLevelChildren = $0.map { FolderPlaylist($0, isTopLevel: true) } }
+        .frame(minWidth: 0, maxWidth: 800, maxHeight: .infinity, alignment: .leading)
+        .onDrop(of: ContentInterpreter.types, delegate: PlaylistDropInterpreter(library.interpreter, parent: directory.backend))
+        .onReceive(directory.backend.children()) { topLevelChildren = $0.map(Playlist.init) }
    }
-}
-
-extension PlaylistsView {
-    class FolderPlaylist: ObservableObject, Identifiable {
-        let backend: AnyPlaylist
-        let isTopLevel: Bool
-        var observation: AnyCancellable? = nil
-
-        @Published var children: [FolderPlaylist]? = nil
-
-        var id: String { backend.id }
-        
-        init(_ backend: AnyPlaylist, isTopLevel: Bool = false) {
-            self.backend = backend
-            self.isTopLevel = isTopLevel
-            
-            if backend.supportsChildren() {
-                children = []
-                observation = backend.children()
-                    .map { $0.map { FolderPlaylist($0) } }
-                    .assignWeak(to: \FolderPlaylist.children, on: self)
-            }
-        }
-    }
 }
 
 //struct PlaylistsView_Previews: PreviewProvider {

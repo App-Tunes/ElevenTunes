@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TracksView: View {
-    @State var playlist: AnyPlaylist
+    let playlist: Playlist
     
     @State var tracks: [AnyTrack] = []
     
@@ -21,7 +21,7 @@ struct TracksView: View {
         ZStack {
             List(selection: $selected) {
                 ForEach(Array(tracks.enumerated()), id: \.0) { (idx, track) in
-                    TrackRowView(track: track, context: .playlist(playlist, tracks: tracks, index: idx))
+                    TrackRowView(track: Track(track), context: .playlist(playlist.backend, tracks: tracks, index: idx))
                         .frame(height: 26)
                         .contextMenu(menuItems: TracksContextMenu(tracks: tracks, idx: idx, selected: selected).callAsFunction)
                         .tag(idx)
@@ -30,7 +30,7 @@ struct TracksView: View {
             
             Button.invisible {
                 if let idx = selected.one {
-                    player.play(PlayHistory(context: .playlist(playlist, tracks: tracks, index: idx)))
+                    player.play(PlayHistory(context: .playlist(playlist.backend, tracks: tracks, index: idx)))
                 }
                 else {
                     let tracks = selected.compactMap { self.tracks[$0] }
@@ -39,11 +39,11 @@ struct TracksView: View {
             }
             .keyboardShortcut(.return, modifiers: [])
         }
-        .onReceive(playlist.tracks()) {
+        .onReceive(playlist.backend.tracks()) {
             self.tracks = $0
         }
         .frame(minWidth: 200, maxWidth: .infinity, minHeight: 50, maxHeight: .infinity)
-        .onDrop(of: ContentInterpreter.types, delegate: PlaylistDropInterpreter(library.interpreter, parent : playlist))
+        .onDrop(of: ContentInterpreter.types, delegate: PlaylistDropInterpreter(library.interpreter, parent : playlist.backend))
     }
 }
 //

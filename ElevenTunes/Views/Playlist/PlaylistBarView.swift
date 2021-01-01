@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PlaylistBarView: View {
-    @State var playlist: AnyPlaylist
+    let playlist: Playlist
     @State var tracks: [AnyTrack] = []
 
     var body: some View {
@@ -18,7 +18,7 @@ struct PlaylistBarView: View {
         }
             .frame(minWidth: 200)
             .frame(height: 20)
-            .onReceive(playlist.tracks()) { tracks = $0 }
+            .onReceive(playlist.backend.tracks()) { tracks = $0 }
     }
 }
 

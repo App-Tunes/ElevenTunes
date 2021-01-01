@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 
 struct PlayTrackView: View {
-    @State var track: AnyTrack
+    let track: Track
     @State var context: PlayHistoryContext
 
     @Environment(\.player) private var player: Player!

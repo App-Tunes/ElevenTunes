@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct TrackRowView: View {
-    @State var track: AnyTrack
+    let track: Track
     @State var context: PlayHistoryContext
     
     var body: some View {

@@ -28,7 +28,7 @@ struct ContentView: View {
             PlayerBarView()
                 .frame(maxWidth: .infinity)
 
-            NavigatorView(directory: library.mainPlaylist)
+            NavigatorView(directory: Playlist(library.mainPlaylist))
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .layoutPriority(2)
         }

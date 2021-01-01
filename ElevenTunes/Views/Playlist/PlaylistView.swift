@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PlaylistView: View {
-    @State var playlist: AnyPlaylist
+    let playlist: Playlist
     @Environment(\.library) var library: Library!
     
     @State var contentMask: PlaylistContentMask = []
@@ -38,8 +38,8 @@ struct PlaylistView: View {
 //            TrackInfoView()
         }
         .listStyle(DefaultListStyle())
-        .onReceive(playlist.cacheMask()) { contentMask = $0 }
-        .onReceive(playlist.tracks()) { _ in }  // Request tracks to load
+        .onReceive(playlist.backend.cacheMask()) { contentMask = $0 }
+        .onReceive(playlist.backend.tracks()) { _ in }  // Request tracks to load
     }
 }
 
