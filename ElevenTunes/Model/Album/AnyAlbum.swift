@@ -11,5 +11,5 @@ import SwiftUI
 class TransientAlbum: TransientPlaylist {
     override var type: PlaylistType { .album }
     
-    override var icon: Image { Image(systemName: "smallcircle.circle") }
+    override var icon: Image { Image(systemName: "opticaldisc") }
 }
