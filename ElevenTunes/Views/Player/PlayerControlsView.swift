@@ -48,7 +48,7 @@ struct PlayerControlsView: View {
                 Button(action: {
                     player.backwards()
                 }) {
-                    Image(systemName: "backward.end.fill")
+                    Image(systemName: "backward.fill")
                 }
                     .buttonStyle(BorderlessButtonStyle())
                     .disabled(previous == nil && current == nil)
@@ -66,7 +66,7 @@ struct PlayerControlsView: View {
                     player.forwards()
                 }) {
                     ZStack {
-                        Image(systemName: "forward.end.fill")
+                        Image(systemName: "forward.fill")
                             .blinking(opacity: (1, 0.65), animates: player.$isAlmostNext)
                     }
                 }
