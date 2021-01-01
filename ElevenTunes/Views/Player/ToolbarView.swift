@@ -13,7 +13,8 @@ struct ToolbarView: View {
     var body: some View {
         HStack {
             PlayingTrackView(player: player)
-                .frame(width: 200, alignment: .leading)
+                .frame(width: 300, alignment: .leading)
+                .padding(.leading)
             
             PlayerControlsView(player: player)
         }
