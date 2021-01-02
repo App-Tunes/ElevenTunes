@@ -92,24 +92,24 @@ extension SpotifyAudioEmitter: ActiveStateQueryingAudioEndpoint {
                 let delegate = self.delegate
                 
                 guard let context = context else {
-                    delegate?.endpointDidStop(self)
+                    delegate?.endpointSwitchedFocus(self, state: .init(isPlaying: false, currentTime: nil), at: nil)
                     return
                 }
                 
+                let state = PlayerState(isPlaying: context.isPlaying, currentTime: context.progressMS.map { TimeInterval($0) / 1000 })
+
                 switch context.item {
                 case .track(let track):
                     guard track.id == self.track.id else {
                         // It's playing something else. So the track stopped lol
-                        delegate?.endpointDidStop(self)
+                        delegate?.endpointSwitchedFocus(self, state: state, at: context.timestamp)
                         return
                     }
-                    
-                    let state = PlayerState(isPlaying: context.isPlaying, currentTime: context.progressMS.map { TimeInterval($0) / 1000 })
-                    
+                                        
                     delegate?.endpoint(self, updatedState: state, at: context.timestamp)
                 default:
                     // We don't handle episodes (are they returned as tracks?) yet
-                    delegate?.endpointDidStop(self)
+                    delegate?.endpointSwitchedFocus(self, state: state, at: context.timestamp)
                 }
             }
             .store(in: &cancellables)

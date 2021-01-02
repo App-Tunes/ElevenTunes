@@ -24,10 +24,13 @@ protocol ActiveStateQueryingAudioEndpoint: RemoteAudioEndpoint {
 
 protocol RemoteAudioEndpointDelegate: AnyObject {
     func endpointDidStop(_ endpoint: RemoteAudioEndpoint)
+    func endpointSwitchedFocus(_ endpoint: RemoteAudioEndpoint, state: PlayerState?, at date: Date?)
     func endpoint(_ endpoint: RemoteAudioEndpoint, updatedState state: PlayerState, at date: Date?)
 }
 
 class RemoteAudioEmitter: AnyAudioEmitter {
+    static let queryTime: TimeInterval = 10
+    
     weak var delegate: AudioEmitterDelegate?
     let endpoint: RemoteAudioEndpoint
         
@@ -44,7 +47,7 @@ class RemoteAudioEmitter: AnyAudioEmitter {
         self.endpoint.delegate = self
         
         if let endpoint = endpoint as? ActiveStateQueryingAudioEndpoint {
-            stateQueryTimer = Timer(timeInterval: 10, repeats: true, block: { _ in
+            stateQueryTimer = Timer(timeInterval: Self.queryTime, repeats: true, block: { _ in
                 endpoint.queryState()
             })
             RunLoop.main.add(stateQueryTimer!, forMode: .default)
@@ -115,16 +118,36 @@ extension RemoteAudioEmitter: RemoteAudioEndpointDelegate {
         delegate?.emitterDidStop(self)
     }
     
+    func endpointSwitchedFocus(_ endpoint: RemoteAudioEndpoint, state: PlayerState?, at date: Date?) {
+        guard let lastStartDate = lastStartDate else {
+            // Who cares, we're paused
+            return
+        }
+        
+        // Stop playing by pausing, TODO Emit an error message too
+        // Best guess at stop time
+        lastStartTime += max(0, Date().timeIntervalSince(lastStartDate) - Self.queryTime)
+        self.lastStartDate = nil
+
+        delegate?.emitterUpdatedState(self)
+    }
+    
     func endpoint(_ endpoint: RemoteAudioEndpoint, updatedState state: PlayerState, at date: Date?) {
         if let date = date, date < clientStateDate {
             // This info is outdated
             return
         }
         
-        // if nil, we are a radio-like thing: time is not important.
-        // we may reuse our known time
-        lastStartTime = state.currentTime ?? lastStartTime
-        lastStartDate = state.isPlaying ? Date() : nil
+        if let time = state.currentTime {
+            lastStartTime = time
+            lastStartDate = state.isPlaying ? Date() : nil
+        }
+        else {
+            if let lastStartDate = lastStartDate {
+                lastStartTime += Date().timeIntervalSince(lastStartDate)
+            }
+            lastStartDate = state.isPlaying ? Date() : nil
+        }
         
         delegate?.emitterUpdatedState(self)
     }
