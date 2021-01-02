@@ -42,17 +42,20 @@ class LibraryDocument: NSPersistentDocument {
             styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
             backing: .buffered, defer: false)
 
-        window.toolbarStyle = .unified
         window.toolbar = NSToolbar()
+        window.toolbarStyle = .unifiedCompact
         window.titlebarAppearsTransparent = true
-        // We have to make our own. The default one clobbers the views, even if it looks cool
-        window.titleVisibility = .hidden
 
         window.isReleasedWhenClosed = false
         window.center()
         window.contentView = NSHostingView(rootView: contentView)
         let windowController = NSWindowController(window: window)
         self.addWindowController(windowController)
+        
+        // So it doesn't cover the rest of the GUI
+        if !window.constrainMaxTitleSize(110) {
+            appLogger.error("Failed to constrain window title size")
+        }
     }
     
     override func configurePersistentStoreCoordinator(for url: URL, ofType fileType: String, modelConfiguration configuration: String?, storeOptions: [String : Any]? = nil) throws {
