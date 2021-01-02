@@ -12,7 +12,7 @@ struct MilkyImageView: View {
     
     var body: some View {
         Image(nsImage: image ?? NSImage())
-            .resizable().aspectRatio(contentMode: .fill)
+            .resizable()
             .visualEffectOnTop(material: .underWindowBackground, blendingMode: .withinWindow, emphasized: true)
     }
 }
