@@ -15,6 +15,7 @@ struct PlaylistBarView: View {
         GeometryReader { geo in
             Text("\(tracks.count) tracks")
                 .position(x: geo.size.width / 2, y: geo.size.height / 2 - 5)
+                .foregroundColor(.secondary)
         }
             .frame(minWidth: 200)
             .frame(height: 20)
