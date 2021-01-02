@@ -36,7 +36,7 @@ struct PlayingTrackView: View {
             .cornerRadius(5)
 
             if let current = current {
-                TrackCellView(track: current, showType: false)
+                TrackCellView(track: current)
             }
             else {
                 Text("Nothing Playing").opacity(0.5)
