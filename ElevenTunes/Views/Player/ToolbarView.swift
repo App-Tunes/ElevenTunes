@@ -14,7 +14,7 @@ struct ToolbarView: View {
         HStack {
             PlayingTrackView(player: player)
                 .frame(minWidth: 200, maxWidth: .infinity, alignment: .leading)
-                .padding(.leading)
+                .padding([.leading, .trailing])
                 .layoutPriority(2)
             
             PlayerControlsView(player: player)

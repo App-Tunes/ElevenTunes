@@ -49,6 +49,20 @@ struct TrackCellView: View {
                 }
                 .padding(.vertical, 4)
             }
+            
+            Spacer()
+            
+            let key = attributes[TrackAttribute.key]
+            let tempo = attributes[TrackAttribute.bpm]
+            
+            Text(key?.title ?? "")
+                .foregroundColor(key?.color ?? .clear)
+                .frame(width: 30, alignment: .center)
+                .padding(.leading)
+            
+            Text(tempo?.title ?? "")
+                .foregroundColor(tempo?.color ?? .clear)
+                .frame(width: 50, alignment: .trailing)
         }
         .lineLimit(1)
         .onReceive(track.backend.artists()) { artists = $0 }

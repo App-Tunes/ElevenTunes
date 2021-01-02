@@ -124,11 +124,12 @@ public class SpotifyTrack: RemoteTrack {
             .eraseToAnyPublisher()
     }
     
-    func extractAttributes(from track: ExistingSpotifyTrack) {
-        self._attributes.value =
+    func extractAttributes(from track: ExistingSpotifyTrack, features: AudioFeatures? = nil) {
+        self._attributes.value.merge(
             .init([
                 .title: track.info.name
             ])
+        )
         
         if let album = track.info.album, let albumID = album.id {
             self._album.value = SpotifyAlbum(albumID, album: album, spotify: spotify)
@@ -140,6 +141,15 @@ public class SpotifyTrack: RemoteTrack {
                     .title: $0.name
                 ]))
             }
+        
+        if let features = features {
+            self._attributes.value.merge(
+                .init([
+                    .bpm: Tempo(features.tempo),
+                    .key: MusicalKey(features.key)
+                ])
+            )
+        }
     }
     
     public override func load(atLeast mask: TrackContentMask) {
@@ -148,10 +158,11 @@ public class SpotifyTrack: RemoteTrack {
             
             spotify.api.track(token)
                 .compactMap(ExistingSpotifyTrack.init)
+                .zip(spotify.api.trackAudioFeatures(token))
                 .onMain()
                 .fulfillingAny(.minimal, of: promise)
-                .sink(receiveCompletion: appLogErrors) { [unowned self] track in
-                    self.extractAttributes(from: track)
+                .sink(receiveCompletion: appLogErrors) { [unowned self] (track, features) in
+                    self.extractAttributes(from: track, features: features)
                 }
                 .store(in: &cancellables)
         }
