@@ -13,7 +13,7 @@ struct ToolbarView: View {
     var body: some View {
         HStack {
             PlayingTrackView(player: player)
-                .frame(minWidth: 200, maxWidth: .infinity, alignment: .leading)
+                .frame(minWidth: 250, maxWidth: .infinity, alignment: .leading)
                 .padding([.leading, .trailing])
                 .layoutPriority(2)
             
