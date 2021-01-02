@@ -14,9 +14,12 @@ class SettingsWindowController: NSWindowController {
             contentRect: NSRect(x: 0, y: 0, width: 480, height: 300),
             styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
             backing: .buffered, defer: false)
+        window.toolbarStyle = .preference
+        window.toolbar = NSToolbar()
         window.isReleasedWhenClosed = false
+        window.titlebarAppearsTransparent = true
         window.center()
-        window.contentView = NSHostingView(rootView: content)
+        window.contentView = NSHostingView(rootView: content.edgesIgnoringSafeArea(.top))
         super.init(window: window)
     }
     
