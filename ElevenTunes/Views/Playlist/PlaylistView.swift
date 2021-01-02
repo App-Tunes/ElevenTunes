@@ -15,11 +15,7 @@ struct PlaylistView: View {
 
     var body: some View {
         HSplitView {
-            VStack {
-//                FilterBarView()
-                
-//                Divider()
-                
+            ZStack(alignment: .bottom) {
                 if !contentMask.isSuperset(of: [.minimal, .tracks]) {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
@@ -27,10 +23,10 @@ struct PlaylistView: View {
                 else {
                     TracksView(playlist: playlist)
                     
-                    Divider()
-                    
-                    PlaylistBarView(playlist: playlist)
-                        .layoutPriority(2)
+                    VStack(spacing: 0) {
+                        Divider()
+                        PlaylistBarView(playlist: playlist)
+                    }
                 }
             }
                 .layoutPriority(2)

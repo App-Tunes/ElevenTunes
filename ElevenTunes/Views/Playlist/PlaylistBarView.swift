@@ -18,7 +18,9 @@ struct PlaylistBarView: View {
                 .foregroundColor(.secondary)
         }
             .frame(minWidth: 200)
-            .frame(height: 20)
+            .padding(.top, 6)
+            .frame(height: 25)
+            .visualEffectBackground(material: .headerView, blendingMode: .withinWindow)
             .onReceive(playlist.backend.tracks()) { tracks = $0 }
     }
 }

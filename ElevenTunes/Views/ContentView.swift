@@ -29,9 +29,13 @@ struct ContentView: View {
         
         HSplitView {
             ZStack(alignment: .top) {
-                List(selection: $selection) {
-                    NavigatorView(directory: Playlist(library.mainPlaylist))
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                VStack(spacing: 0) {
+                    List(selection: $selection) {
+                        NavigatorView(directory: Playlist(library.mainPlaylist))
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
+                                        
+                    NavigationBarView()
                 }
 
                 VisualEffectView(material: .sidebar, blendingMode: .behindWindow, emphasized: false)

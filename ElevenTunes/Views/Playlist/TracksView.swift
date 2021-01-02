@@ -26,6 +26,10 @@ struct TracksView: View {
                         .contextMenu(menuItems: TracksContextMenu(tracks: tracks, idx: idx, selected: selected).callAsFunction)
                         .tag(idx)
                 }
+                
+                Spacer()
+                    // For bottom bar
+                    .frame(height: 25)
             }
             
             Button.invisible {

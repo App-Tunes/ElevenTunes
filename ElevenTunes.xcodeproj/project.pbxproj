@@ -34,6 +34,7 @@
 		802DBA39259FEACB00EA6DB7 /* MultiPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802DBA38259FEACB00EA6DB7 /* MultiPlaylist.swift */; };
 		802DBA4C259FED1D00EA6DB7 /* PlaylistMultiplicityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802DBA4B259FED1D00EA6DB7 /* PlaylistMultiplicityView.swift */; };
 		802DBA5D25A0BB8A00EA6DB7 /* NSWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802DBA5C25A0BB8A00EA6DB7 /* NSWindow.swift */; };
+		802DBA6225A1175200EA6DB7 /* NavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802DBA6125A1175200EA6DB7 /* NavigationBarView.swift */; };
 		802E2BC12594DE1F00CB91EC /* LibraryDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2BC02594DE1F00CB91EC /* LibraryDocument.swift */; };
 		802E2C9D2595FEB900CB91EC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 802E2C9C2595FEB800CB91EC /* Main.storyboard */; };
 		802E2CA22595FEC700CB91EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2CA12595FEC700CB91EC /* AppDelegate.swift */; };
@@ -186,6 +187,7 @@
 		802DBA38259FEACB00EA6DB7 /* MultiPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiPlaylist.swift; sourceTree = "<group>"; };
 		802DBA4B259FED1D00EA6DB7 /* PlaylistMultiplicityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistMultiplicityView.swift; sourceTree = "<group>"; };
 		802DBA5C25A0BB8A00EA6DB7 /* NSWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSWindow.swift; sourceTree = "<group>"; };
+		802DBA6125A1175200EA6DB7 /* NavigationBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarView.swift; sourceTree = "<group>"; };
 		802E2BC02594DE1F00CB91EC /* LibraryDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryDocument.swift; sourceTree = "<group>"; };
 		802E2C9C2595FEB800CB91EC /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		802E2CA12595FEC700CB91EC /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -487,6 +489,7 @@
 				80D653CA25993C72007221D5 /* PlaylistRowView.swift */,
 				802DBA26259FCBA600EA6DB7 /* NavigationSearchBar.swift */,
 				80D6DAB5259E389600879BCF /* PlaylistsContextMenu.swift */,
+				802DBA6125A1175200EA6DB7 /* NavigationBarView.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -1004,6 +1007,7 @@
 				80050839259792000055FB2D /* CDPublisher.swift in Sources */,
 				806B27EE258D7D880091EA4D /* Player.swift in Sources */,
 				806B2796258D5D540091EA4D /* PlaylistsView.swift in Sources */,
+				802DBA6225A1175200EA6DB7 /* NavigationBarView.swift in Sources */,
 				80151EF52593C98500D9539A /* SpotifyDeviceView.swift in Sources */,
 				80ED7691258FF41200B8B9C3 /* Array.swift in Sources */,
 				80AD69892588285F00192BED /* PlayerBarView.swift in Sources */,
