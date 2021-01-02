@@ -18,7 +18,8 @@ struct PlaylistRowView: View {
             if !contentMask.contains(.minimal) {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle())
-                    .scaleEffect(0.5)
+                    .scaleEffect(0.4)
+                    .frame(width: 15, height: 15)
             }
             else {
                 playlist.backend.icon
