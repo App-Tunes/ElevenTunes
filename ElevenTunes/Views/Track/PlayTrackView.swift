@@ -16,11 +16,20 @@ struct PlayTrackView: View {
     @State var current: AnyTrack?
     @State var next: AnyTrack?
 
+    @State var isHovering = false
+    
     var body: some View {
         Button(action: {
             player.play(PlayHistory(context: context))
         }) {
-            ZStack {
+            ZStack(alignment: .center) {
+                Rectangle()
+                    .fill(Color.black)
+                    .opacity(0.7)
+                    // TODO Extremely hacky but I can't get it to autofill otherwise rn
+                    .frame(width: 28, height: 28)
+                    .opacity((isHovering || [next?.id, current?.id].contains(track.id)) ? 1 : 0)
+
                 if track.id == next?.id {
                     Image(systemName: "play.fill")
                         .blinking(
@@ -35,8 +44,10 @@ struct PlayTrackView: View {
                 }
                 
                 Image(systemName: "play")
+                    .opacity(isHovering ? 1 : 0)
             }
         }
+        .onHover { isHovering = $0 }
         .buttonStyle(BorderlessButtonStyle())
         .onReceive(player.$current) { self.current = $0 }
         .onReceive(player.$next) { self.next = $0 }
