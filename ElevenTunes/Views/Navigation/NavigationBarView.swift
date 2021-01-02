@@ -10,9 +10,6 @@ import SwiftUI
 struct NavigationBarView: View {
     var body: some View {
         HStack {
-            Spacer()
-                .frame(width: 8)
-
             Button {
                 // TODO Change view
             } label: {
@@ -20,9 +17,42 @@ struct NavigationBarView: View {
             }
             .buttonStyle(BorderlessButtonStyle())
             .disabled(true)
+            .padding(.leading, 8)
             
             Spacer()
                 .frame(width: 20)
+                    
+            Button {
+                // TODO Library View
+            } label: {
+                Image(systemName: "house")
+            }
+            .buttonStyle(BorderlessButtonStyle())
+            .disabled(true)
+
+            Spacer()
+                .frame(width: 20)
+
+            Button {
+                // TODO Navigator: Back
+            } label: {
+                Image(systemName: "chevron.backward")
+            }
+            .buttonStyle(BorderlessButtonStyle())
+            .disabled(true)
+
+            Spacer()
+                .frame(width: 15)
+
+            Button {
+                // TODO Navigator: Forward
+            } label: {
+                Image(systemName: "chevron.forward")
+            }
+            .buttonStyle(BorderlessButtonStyle())
+            .disabled(true)
+
+            Spacer()
             
             Button {
                 // TODO Add playlist
@@ -39,8 +69,7 @@ struct NavigationBarView: View {
             }
             .buttonStyle(BorderlessButtonStyle())
             .disabled(true)
-            
-            Spacer()
+            .padding(.trailing, 8)
         }
             .frame(maxWidth: .infinity)
             .frame(height: 25)
