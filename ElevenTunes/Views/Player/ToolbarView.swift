@@ -19,6 +19,9 @@ struct ToolbarView: View {
             
             PlayerControlsView(player: player)
                 .padding(.top, 8)
+
+            PlayHistoryAccessorView()
+                .padding(.top, 8)
                 .padding(.trailing)
         }
     }
