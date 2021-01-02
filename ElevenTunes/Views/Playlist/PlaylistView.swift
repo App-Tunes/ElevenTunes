@@ -23,10 +23,7 @@ struct PlaylistView: View {
                 else {
                     TracksView(playlist: playlist)
                     
-                    VStack(spacing: 0) {
-                        Divider()
-                        PlaylistBarView(playlist: playlist)
-                    }
+                    PlaylistBarView(playlist: playlist)
                 }
             }
                 .layoutPriority(2)
