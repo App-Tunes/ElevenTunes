@@ -42,7 +42,7 @@ struct PlaylistBarView: View {
                 .frame(width: 8)
         }
             .frame(minWidth: 200)
-            .frame(height: 25)
+            .frame(height: 30)
             .visualEffectBackground(material: .headerView, blendingMode: .withinWindow)
             .onReceive(playlist.backend.tracks()) { tracks = $0 }
             .onReceive(playlist.backend.attributes()) { attributes = $0 }

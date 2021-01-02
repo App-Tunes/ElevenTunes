@@ -72,7 +72,7 @@ struct NavigationBarView: View {
             .padding(.trailing, 8)
         }
             .frame(maxWidth: .infinity)
-            .frame(height: 25)
+            .frame(height: 30)
             .visualEffectBackground(material: .sidebar)
     }
 }
