@@ -66,6 +66,7 @@ class RemoteImageCollection {
                     }
                     .tryMap { try NSImage(data: $0).unwrap(orThrow: RemoteError.notAnImage) }
                     .fulfillingAny(.preview, of: promise)
+                    .onMain()
                     .sink { [weak self] result in
                         switch result {
                         case .success(let image):
