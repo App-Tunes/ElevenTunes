@@ -32,7 +32,7 @@ struct PlayingTrackView: View {
                     Image(systemName: "music.note")
                 }
             }
-            .frame(width: 24, height: 24)
+            .frame(width: 28, height: 28)
             .cornerRadius(5)
 
             if let current = current {
