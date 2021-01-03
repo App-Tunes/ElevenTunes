@@ -20,13 +20,16 @@ struct PlaylistRowView: View {
                     .progressViewStyle(CircularProgressViewStyle())
                     .scaleEffect(0.4)
                     .frame(width: 15, height: 15)
+                    // This is the dumbest shit but for whatever reason,
+                    // if it's missing SwiftUI HStack won't add auto-spacing
+                    .padding(.trailing, 0.001)
             }
             else {
                 playlist.backend.icon
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 15, height: 15)
                     .foregroundColor(playlist.backend.accentColor)
+                    .frame(width: 15, height: 15)
             }
 
             if contentMask.contains(.minimal) {
@@ -38,6 +41,7 @@ struct PlaylistRowView: View {
                     .opacity(0.5)
             }
         }
+        .frame(height: 15)
         .contextMenu(menuItems: PlaylistsContextMenu(playlist: playlist.backend).callAsFunction)
         .onReceive(playlist.backend.cacheMask()) { contentMask = $0 }
         .onReceive(playlist.backend.attributes()) { attributes = $0 }
