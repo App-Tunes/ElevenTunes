@@ -23,7 +23,6 @@ struct PlaylistSectionView: View {
                     }
                 }
                 .tag(playlist)
-                .padding(.bottom, 5)
             }
             else {
                 DisclosureGroup {
