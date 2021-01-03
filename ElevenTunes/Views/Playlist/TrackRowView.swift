@@ -12,16 +12,22 @@ struct TrackRowView: View {
     let track: Track
     
     @State var context: PlayHistoryContext
+    @State var cacheMask: TrackContentMask = .init()
     @State var image: NSImage?
-    
+
     var body: some View {
         HStack {
             ZStack(alignment: .center) {
                 Rectangle()
                     .fill(Color.black)
                     .opacity(0.2)
-                                
-                if let image = image {
+                              
+                if !cacheMask.contains(.minimal) {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle())
+                        .scaleEffect(0.5, anchor: .center)
+                }
+                else if let image = image {
                     Image(nsImage: image)
                         .resizable().scaledToFit()
                 }
@@ -38,5 +44,6 @@ struct TrackRowView: View {
             TrackCellView(track: track)
         }
         .onReceive(track.backend.previewImage()) { image = $0 }
+        .onReceive(track.backend.cacheMask()) { cacheMask = $0 }
     }
 }
