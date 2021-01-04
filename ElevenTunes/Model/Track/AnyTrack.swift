@@ -17,6 +17,7 @@ public struct TrackContentMask: OptionSet, Hashable {
     }
     
     static let minimal = TrackContentMask(rawValue: 1 << 0)
+    static let analysis = TrackContentMask(rawValue: 1 << 1)
     // More to come? In any case, bools aren't more efficient anyway
 }
 

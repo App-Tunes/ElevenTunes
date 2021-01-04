@@ -47,7 +47,7 @@ public class RemoteTrack: AnyTrack {
             TrackContentMask(), subjects: [
                 (_artists.$demand, .minimal),
                 (_album.$demand, .minimal),
-                (_attributes.$demand, .minimal)
+                (_attributes.$demand, TrackContentMask([.minimal, .analysis]))
             ]
         ).combineLatest(contentSet.$features)
         .map { $0.subtracting($1) }

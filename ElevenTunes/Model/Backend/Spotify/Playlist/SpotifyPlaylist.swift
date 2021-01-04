@@ -39,7 +39,8 @@ public class SpotifyPlaylistToken: SpotifyURIPlaylistToken {
 
 public class SpotifyPlaylist: SpotifyURIPlaylist<SpotifyPlaylistToken> {
     static let minimalQueryFilters = "offset,total,items(track(\(MinimalSpotifyTrack.filters)))"
-    
+    static let detailedQueryFilters = "offset,total,items(track(\(DetailedSpotifyTrack.filters)))"
+
     override init(_ token: SpotifyPlaylistToken, spotify: Spotify) {
         super.init(token, spotify: spotify)
     }
@@ -55,17 +56,18 @@ public class SpotifyPlaylist: SpotifyURIPlaylist<SpotifyPlaylistToken> {
         return attributes
     }
     
-    static func viewableTracks(_ uris: [SpotifyTrackToken], spotify: Spotify) -> AnyPublisher<[SpotifyTrack], Error> {
+    func viewableTracks(_ uris: [SpotifyTrackToken], spotify: Spotify) -> AnyPublisher<[SpotifyTrack], Error> {
         guard !uris.isEmpty else {
             return Just([]).eraseError().eraseToAnyPublisher()
         }
         
-        let split = min(50, uris.count)
+        let split = min(100, uris.count)
         
-        return spotify.api.tracks(Array(uris[..<split]))
+        return spotify.api.filteredPlaylistItems(token, filters: SpotifyPlaylist.detailedQueryFilters, additionalTypes: [.track])
+            .decodeSpotifyObject(MinimalPagingObject<MinimalPlaylistItemContainer<DetailedSpotifyTrack>>.self)
             .zip(Just(uris[split...]).eraseError()).map { (full, partial) in
-                full.compactMap(ExistingSpotifyTrack.init)
-                    .map { SpotifyTrack(track: $0, spotify: spotify) }
+                full.items
+                    .map { SpotifyTrack(track: $0.track, spotify: spotify) }
                 + partial.map { SpotifyTrack($0, spotify: spotify) }
             }
             .eraseToAnyPublisher()
@@ -97,7 +99,7 @@ public class SpotifyPlaylist: SpotifyURIPlaylist<SpotifyPlaylistToken> {
                     .collect()
                     .map { $0.flatMap { $0.items }.map { $0.track } }
                     // Collapse the first few instantly, so they can be viewed quickly.
-                    .flatMap { SpotifyPlaylist.viewableTracks($0.map { SpotifyTrackToken($0.id) }, spotify: spotify) }
+                    .flatMap { self.viewableTracks($0.map { SpotifyTrackToken($0.id) }, spotify: spotify) }
                     .onMain()
                     .fulfillingAny(.tracks, of: promise)
                     .sink(receiveCompletion: appLogErrors(_:)) { tracks in
