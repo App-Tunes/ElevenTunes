@@ -61,6 +61,12 @@ public class RemoteTrack: AnyTrack {
 
     public func invalidateCaches(_ mask: TrackContentMask) {
         contentSet.subtract(mask)
+        
+        if mask.contains(.minimal) {
+            // Let's be safe and invalidate these too
+            _album.value?.invalidateCaches(.all)
+            _artists.value.forEach { $0.invalidateCaches(.all) }
+        }
     }
     
     public func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
