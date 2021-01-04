@@ -55,8 +55,8 @@ extension DBPlaylist: SelfChangeWatcher {
             backendP = backend
         }
         
-        if changes.keys.contains("isDirectory") {
-            isDirectoryP = isDirectory
+        if changes.keys.contains("contentType") {
+            contentTypeP = contentType
         }
         
         if changes.keys.contains("tracks") {

@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="20B29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DBAlbum" representedClassName="DBAlbum" syncable="YES" codeGenerationType="class">
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="artists" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="DBArtist" inverseName="albums" inverseEntity="DBArtist"/>
+        <relationship name="tracks" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="DBTrack" inverseName="album" inverseEntity="DBTrack"/>
+    </entity>
+    <entity name="DBArtist" representedClassName="DBArtist" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="albums" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DBAlbum" inverseName="artists" inverseEntity="DBAlbum"/>
+        <relationship name="playlists" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DBPlaylist" inverseName="artists" inverseEntity="DBPlaylist"/>
+    </entity>
     <entity name="DBPlaylist" representedClassName="DBPlaylist" syncable="YES">
         <attribute name="backend" optional="YES" attributeType="Transformable" valueTransformerName="PlaylistBackendTransformer" customClassName=".PersistentPlaylist"/>
         <attribute name="backendCacheMask" attributeType="Integer 16" valueTransformerName="LoadLevelTransformer" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="backendID" attributeType="String" defaultValueString=""/>
+        <attribute name="contentType" attributeType="Integer 16" valueTransformerName="PlaylistContentTypeTransformer" defaultValueString="0" usesScalarValueType="YES" customClassName="PlaylistContentType"/>
         <attribute name="indexed" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
-        <attribute name="isDirectory" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
-        <attribute name="title" attributeType="String" defaultValueString="Unnamed Playlist" spotlightIndexingEnabled="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" spotlightIndexingEnabled="YES"/>
+        <relationship name="artists" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DBArtist" inverseName="playlists" inverseEntity="DBArtist"/>
         <relationship name="children" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="DBPlaylist" inverseName="parent" inverseEntity="DBPlaylist"/>
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DBPlaylist" inverseName="children" inverseEntity="DBPlaylist"/>
         <relationship name="tracks" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="DBTrack" inverseName="references" inverseEntity="DBTrack"/>
@@ -15,11 +26,14 @@
         <attribute name="backend" optional="YES" attributeType="Transformable" valueTransformerName="TrackBackendTransformer" customClassName=".PersistentTrack"/>
         <attribute name="backendCacheMask" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="backendID" attributeType="String" defaultValueString=""/>
-        <attribute name="title" attributeType="String" defaultValueString="Unnamed Track" spotlightIndexingEnabled="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" spotlightIndexingEnabled="YES"/>
+        <relationship name="album" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DBAlbum" inverseName="tracks" inverseEntity="DBAlbum"/>
         <relationship name="references" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DBPlaylist" inverseName="tracks" inverseEntity="DBPlaylist"/>
     </entity>
     <elements>
-        <element name="DBPlaylist" positionX="27" positionY="72" width="128" height="164"/>
-        <element name="DBTrack" positionX="18" positionY="63" width="128" height="104"/>
+        <element name="DBAlbum" positionX="72" positionY="189" width="128" height="74"/>
+        <element name="DBArtist" positionX="90" positionY="198" width="128" height="74"/>
+        <element name="DBPlaylist" positionX="27" positionY="72" width="128" height="179"/>
+        <element name="DBTrack" positionX="18" positionY="63" width="128" height="119"/>
     </elements>
 </model>

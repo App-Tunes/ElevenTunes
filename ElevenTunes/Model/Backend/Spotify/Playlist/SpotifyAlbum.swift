@@ -27,7 +27,7 @@ public class SpotifyAlbumToken: SpotifyURIPlaylistToken {
     }
 }
 
-public class SpotifyAlbum: SpotifyURIPlaylist<SpotifyAlbumToken> {
+public class SpotifyAlbum: SpotifyURIPlaylist<SpotifyAlbumToken>, AnyAlbum {
     @Published var previewImageURL: URL?
     let coverImages = RemoteImageCollection()
     
@@ -42,7 +42,7 @@ public class SpotifyAlbum: SpotifyURIPlaylist<SpotifyAlbumToken> {
         contentSet.insert(.minimal)
     }
     
-    public override var type: PlaylistType { .album }
+    public override var contentType: PlaylistContentType { .tracks }
     
     public override var icon: Image { Image(systemName: "opticaldisc") }
     

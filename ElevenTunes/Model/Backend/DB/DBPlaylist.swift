@@ -21,26 +21,23 @@ public class DBLibraryPlaylist: AnyPlaylist {
     let cache: DBPlaylist
     let backend: AnyPlaylist?
     let isIndexed: Bool
-    let isDirectory: Bool
+    let cachedContentType: PlaylistContentType
 
     var backendObservers = Set<AnyCancellable>()
 
     public var asToken: PlaylistToken { fatalError() }
 
-    init(library: Library, cache: DBPlaylist, backend: AnyPlaylist?, isIndexed: Bool, isDirectory: Bool) {
+    init(library: Library, cache: DBPlaylist, backend: AnyPlaylist?, isIndexed: Bool, contentType: PlaylistContentType) {
         self.library = library
         self.cache = cache
         self.backend = backend
         self.isIndexed = isIndexed
-        self.isDirectory = isDirectory
+        self.cachedContentType = contentType
     }
     
     public var id: String { cache.objectID.description }
     
     public var origin: URL? { nil }
-    
-    // DB artists and albums aren't supported yet
-    public var type: PlaylistType { backend?.type ?? .playlist }
     
     public var icon: Image {
         backend?.icon ?? Image(systemName: "music.note.list")
@@ -132,8 +129,8 @@ public class DBLibraryPlaylist: AnyPlaylist {
         _attributes
     }
     
-    public func supportsChildren() -> Bool {
-        backend?.supportsChildren() ?? isDirectory
+    public var contentType: PlaylistContentType {
+        backend?.contentType ?? cachedContentType
     }
     
     public func add(tracks: [TrackToken]) -> Bool {
@@ -153,7 +150,7 @@ public class DBLibraryPlaylist: AnyPlaylist {
 public class DBPlaylist: NSManagedObject {
     @Published var backendP: PlaylistToken? = nil
     @Published var isIndexedP: Bool = false
-    @Published var isDirectoryP: Bool = false
+    @Published var contentTypeP: PlaylistContentType = .hybrid
 
     @Published var cacheMaskP: PlaylistContentMask = []
     @Published var tracksP: [DBTrack] = []
@@ -166,7 +163,7 @@ public class DBPlaylist: NSManagedObject {
     func initialSetup() {
         backendP = backend
         isIndexedP = indexed
-        isDirectoryP = isDirectory
+        contentTypeP = contentType
 
         cacheMaskP = PlaylistContentMask(rawValue: backendCacheMask)
         tracksP = tracks.array as! [DBTrack]

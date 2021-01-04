@@ -21,7 +21,7 @@ class MultiPlaylist: AnyPlaylist {
     
     var asToken: PlaylistToken { fatalError() }
     
-    var type: PlaylistType { .playlist }
+    var contentType: PlaylistContentType { .tracks }
     
     var origin: URL? { nil }
     
@@ -63,10 +63,6 @@ class MultiPlaylist: AnyPlaylist {
                 ])
             }
             .eraseToAnyPublisher()
-    }
-    
-    func supportsChildren() -> Bool {
-        playlists.contains { $0.supportsChildren() }
     }
     
     func add(tracks: [TrackToken]) -> Bool { false }

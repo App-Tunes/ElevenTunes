@@ -15,9 +15,9 @@ extension Library {
         return cache.$backendP.map {
                 $0?.expand(self)
             }
-            .combineLatest(cache.$isIndexedP, cache.$isDirectoryP)
-            .map { (backend: AnyPlaylist?, isIndexed: Bool, isDirectory: Bool) -> AnyPlaylist in
-                DBLibraryPlaylist(library: self, cache: cache, backend: backend, isIndexed: isIndexed, isDirectory: isDirectory)
+            .combineLatest(cache.$isIndexedP, cache.$contentTypeP)
+            .map { (backend: AnyPlaylist?, isIndexed: Bool, contentType: PlaylistContentType) -> AnyPlaylist in
+                DBLibraryPlaylist(library: self, cache: cache, backend: backend, isIndexed: isIndexed, contentType: contentType)
             }
             .eraseToAnyPublisher()
     }

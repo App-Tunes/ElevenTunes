@@ -50,7 +50,7 @@ class LibraryPlaylist: AnyPlaylist {
         "Library" // TODO
     }
     
-    var type: PlaylistType { .playlist }
+    var contentType: PlaylistContentType { .hybrid }
     
     var origin: URL? { nil }
     

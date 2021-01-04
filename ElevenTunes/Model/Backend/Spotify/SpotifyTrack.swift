@@ -125,6 +125,8 @@ public class SpotifyTrack: RemoteTrack {
     }
     
     func extractAttributes(from track: ExistingSpotifyTrack, features: AudioFeatures? = nil) {
+        let spotify = self.spotify
+        
         self._attributes.value.merge(
             .init([
                 .title: track.info.name
@@ -137,9 +139,7 @@ public class SpotifyTrack: RemoteTrack {
         self._artists.value = (track.info.artists ?? [])
             .filter { $0.id != nil }
             .compactMap {
-                SpotifyArtist($0.id!, attributes: .init([
-                    .title: $0.name
-                ]))
+                SpotifyArtist($0.id!, artist: $0, spotify: spotify)
             }
         
         if let features = features {

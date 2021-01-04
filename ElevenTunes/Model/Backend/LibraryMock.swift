@@ -20,7 +20,7 @@ class LibraryMock {
     
     static func directory(_ title: String = "Mock Directory") -> TransientPlaylist {
         let children = self.children(title)
-        return TransientPlaylist(attributes: .init([
+        return TransientPlaylist(.playlists, attributes: .init([
             .title: title
         ]), children: children)
     }
@@ -30,7 +30,7 @@ class LibraryMock {
             "\(title) -> 1", "\(title) -> 2", "\(title) -> 3"
         ].map(track)
         
-        return TransientPlaylist(attributes: .init([
+        return TransientPlaylist(.tracks, attributes: .init([
             .title: title
         ]), tracks: tracks)
     }

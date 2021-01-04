@@ -17,7 +17,7 @@ extension DBPlaylist {
 
     @NSManaged public var backend: PlaylistToken?
     @NSManaged public var backendID: String
-    @NSManaged public var isDirectory: Bool
+    @NSManaged public var contentType: PlaylistContentType
     @NSManaged public var indexed: Bool
     @NSManaged public var backendCacheMask: Int16
     @NSManaged public var title: String?

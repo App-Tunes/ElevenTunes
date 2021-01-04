@@ -97,7 +97,7 @@ public class SpotifyUser: RemotePlaylist {
     
     public override var accentColor: Color { Spotify.color }
     
-    public override var type: PlaylistType { .artist }
+    public override var contentType: PlaylistContentType { .playlists }
     
     public override func supportsChildren() -> Bool { true }
     

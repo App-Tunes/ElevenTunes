@@ -24,18 +24,20 @@ public struct PlaylistContentMask: OptionSet, Hashable {
     public static let all          = PlaylistContentMask([.minimal, .tracks, .children, .attributes])
 }
 
-/// wat, you might say. but imagine the possibilities.
-/// An album is just a playlist you can't edit.
-/// An artist is just a folder you can't edit.
-/// Go ahead. Prove me wrong.
-public enum PlaylistType {
-    case playlist, artist, album
+@objc public enum PlaylistContentType: Int16 {
+    /// Can only contain tracks
+    case tracks
+    /// Can only contain playlists (as children)
+    case playlists
+    /// Can contain both tracks and playlists (e.g. filesystem folders, artists)
+    case hybrid
 }
 
 public protocol AnyPlaylist: AnyObject {
     var id: String { get }
     var asToken: PlaylistToken { get }
-    var type: PlaylistType { get }
+
+    var contentType: PlaylistContentType { get }
     
     var origin: URL? { get }
     
@@ -50,8 +52,6 @@ public protocol AnyPlaylist: AnyObject {
     func children() -> AnyPublisher<[AnyPlaylist], Never>
     func attributes() -> AnyPublisher<TypedDict<PlaylistAttribute>, Never>
 
-    func supportsChildren() -> Bool  // AKA isFertile
-    
     @discardableResult
     func add(tracks: [TrackToken]) -> Bool
     

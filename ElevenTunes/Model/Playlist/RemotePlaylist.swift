@@ -22,7 +22,7 @@ public class RemotePlaylist: AnyPlaylist {
     public var accentColor: Color { .primary }
     public var icon: Image { Image(systemName: "music.note.list") }
     
-    public var type: PlaylistType { .playlist }
+    public var contentType: PlaylistContentType { .tracks }
     
     public var hasCaches: Bool { true }
     public func supportsChildren() -> Bool { false }

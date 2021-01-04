@@ -15,7 +15,7 @@ struct PlaylistSectionView: View {
     var isTopLevel: Bool = false
     
     @ViewBuilder var _body: some View {
-        if playlist.backend.supportsChildren() {
+        if playlist.backend.contentType != .tracks {
             if isTopLevel {
                 Section(header: PlaylistRowView(playlist: playlist)) {
                     ForEach(children) { child in

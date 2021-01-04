@@ -8,8 +8,5 @@
 import Foundation
 import SwiftUI
 
-class TransientArtist: TransientPlaylist {
-    override var type: PlaylistType { .artist }
-    
-    override var icon: Image { Image(systemName: "person") }
+protocol AnyArtist: AnyPlaylist {
 }

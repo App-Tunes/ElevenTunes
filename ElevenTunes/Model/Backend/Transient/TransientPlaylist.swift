@@ -26,14 +26,15 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
     var icon: Image { Image(systemName: "music.note.list") }
     var accentColor: Color { .primary }
     
-    var type: PlaylistType { .playlist }
+    var contentType: PlaylistContentType
     
     var hasCaches: Bool { false }
     func invalidateCaches(_ mask: PlaylistContentMask) {}
     
     func supportsChildren() -> Bool { false }
 
-    init(attributes: TypedDict<PlaylistAttribute>, children: [AnyPlaylist] = [], tracks: [AnyTrack] = []) {
+    init(_ type: PlaylistContentType, attributes: TypedDict<PlaylistAttribute>, children: [AnyPlaylist] = [], tracks: [AnyTrack] = []) {
+        self.contentType = type
         _attributes = attributes
         _tracks = tracks
         _children = children
