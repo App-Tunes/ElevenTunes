@@ -10,7 +10,7 @@ import Combine
 import UniformTypeIdentifiers
 
 extension ContentInterpreter {
-    static func simple(matches: @escaping (URL) throws -> Bool, interpret: @escaping (URL) -> AnyPublisher<Content, Error>) -> ((URL) -> AnyPublisher<Content, Error>?) {
+    static func simple(matches: @escaping (URL) throws -> Bool, interpret: @escaping (URL) -> AnyPublisher<Content, Error>) -> Interpreter {
         return { url in
             if !((try? matches(url)) ?? false) { return nil }
             return interpret(url)
@@ -18,7 +18,7 @@ extension ContentInterpreter {
         }
     }
 
-    static func simple(matches: @escaping (URL) throws -> Bool, interpret: @escaping (URL) throws -> Content) -> ((URL) -> AnyPublisher<Content, Error>?) {
+    static func simple(matches: @escaping (URL) throws -> Bool, interpret: @escaping (URL) throws -> Content) -> Interpreter {
         return { url in
             if !((try? matches(url)) ?? false) { return nil }
             return Future { try interpret(url) }
@@ -32,51 +32,7 @@ extension ContentInterpreter {
         
         let register = { interpreter.interpreters.append($0) }
         
-        register(simple {
-            _ = try SpotifyTrackToken.trackID(fromURL: $0)
-            return true
-        } interpret: {
-            SpotifyTrackToken.create(spotify, fromURL: $0)
-                .map { Content.track($0) }
-                .eraseToAnyPublisher()
-        })
-        
-        register(simple {
-            _ = try SpotifyPlaylistToken.playlistID(fromURL: $0)
-            return true
-        } interpret: { (url: URL) -> AnyPublisher<Content, Error> in
-            SpotifyPlaylistToken.create(spotify, fromURL: url)
-                .map { Content.playlist($0) }
-                .eraseToAnyPublisher()
-        })
-        
-        register(simple {
-            _ = try SpotifyUserToken.userID(fromURL: $0)
-            return true
-        } interpret: { (url: URL) -> AnyPublisher<Content, Error> in
-            SpotifyUserToken.create(spotify, fromURL: url)
-                .map { Content.playlist($0) }
-                .eraseToAnyPublisher()
-        })
-        
-        register(simple {
-            _ = try SpotifyAlbumToken.playlistID(fromURL: $0)
-            return true
-        } interpret: { (url: URL) -> AnyPublisher<Content, Error> in
-            SpotifyAlbumToken.create(spotify, fromURL: url)
-                .map { Content.playlist($0) }
-                .eraseToAnyPublisher()
-        })
-
-        register(simple { $0.pathExtension == "m3u" } interpret: {
-            .playlist(try M3UPlaylistToken.create(fromURL: $0))
-        })
-        
-        register(simple {
-            try $0.isFileDirectory()
-        } interpret: {
-            .playlist(try DirectoryPlaylistToken.create(fromURL: $0))
-        })
+        interpreter.interpreters += defaultSpotify(spotify: spotify)
         
         register(simple(matches: FileVideoToken.understands) {
             .track(try FileVideoToken.create(fromURL: $0))

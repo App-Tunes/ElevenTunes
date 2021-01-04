@@ -130,6 +130,7 @@
 		80C9A18A259F9BDB00A038CC /* RemoteImageCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C9A189259F9BDB00A038CC /* RemoteImageCollection.swift */; };
 		80C9A18F259FA13000A038CC /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C9A18E259FA13000A038CC /* Optional.swift */; };
 		80C9A194259FA5E800A038CC /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C9A193259FA5E800A038CC /* VisualEffectView.swift */; };
+		80CD393625A3C4D0002C5A56 /* SpotifyInterpretation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80CD393525A3C4D0002C5A56 /* SpotifyInterpretation.swift */; };
 		80D653D825993CDC007221D5 /* PlaylistRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D653CA25993C72007221D5 /* PlaylistRowView.swift */; };
 		80D6DA66259B74AA00879BCF /* NSLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D6DA65259B74AA00879BCF /* NSLock.swift */; };
 		80D6DA7D259CD68500879BCF /* Library+Contents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D6DA7C259CD68500879BCF /* Library+Contents.swift */; };
@@ -292,6 +293,7 @@
 		80C9A189259F9BDB00A038CC /* RemoteImageCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageCollection.swift; sourceTree = "<group>"; };
 		80C9A18E259FA13000A038CC /* Optional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
 		80C9A193259FA5E800A038CC /* VisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
+		80CD393525A3C4D0002C5A56 /* SpotifyInterpretation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyInterpretation.swift; sourceTree = "<group>"; };
 		80D653CA25993C72007221D5 /* PlaylistRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistRowView.swift; sourceTree = "<group>"; };
 		80D6DA65259B74AA00879BCF /* NSLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLock.swift; sourceTree = "<group>"; };
 		80D6DA7C259CD68500879BCF /* Library+Contents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Library+Contents.swift"; sourceTree = "<group>"; };
@@ -620,6 +622,7 @@
 				8054C021259F8A4A00A7035A /* Playlist */,
 				802E2DA3259643AE00CB91EC /* SpotifyTrack.swift */,
 				806B28AB258ED4CE0091EA4D /* SpotifyAudioEmitter.swift */,
+				80CD393525A3C4D0002C5A56 /* SpotifyInterpretation.swift */,
 			);
 			path = Spotify;
 			sourceTree = "<group>";
@@ -1017,6 +1020,7 @@
 				80D653D825993CDC007221D5 /* PlaylistRowView.swift in Sources */,
 				802E2DAD259643AE00CB91EC /* SpotifyUser.swift in Sources */,
 				80AD6956258825FA00192BED /* ContentView.swift in Sources */,
+				80CD393625A3C4D0002C5A56 /* SpotifyInterpretation.swift in Sources */,
 				80D6DAA2259E28B300879BCF /* SpotifyArtist.swift in Sources */,
 				800C1217259B48620017A116 /* OptionSet.swift in Sources */,
 				806E20222596C26A003EEA83 /* RemoteTrack.swift in Sources */,

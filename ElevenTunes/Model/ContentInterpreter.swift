@@ -21,9 +21,11 @@ class ContentInterpreter {
         case invalidData
     }
     
+    typealias Interpreter = (URL) -> AnyPublisher<Content, Error>?
+    
     static let types: [UTType] = [.fileURL, .url, .m3uPlaylist]
 
-    var interpreters: [(URL) -> AnyPublisher<Content, Error>?] = []
+    var interpreters: [Interpreter] = []
     
     func interpret(urls: [URL]) -> AnyPublisher<[Content], Error>? {
         var publishers: [AnyPublisher<Content, Error>] = []
