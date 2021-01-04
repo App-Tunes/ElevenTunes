@@ -8,6 +8,31 @@
 import SwiftUI
 
 struct NavigationBarView: View {
+    var addFolderViews: some View {
+        HStack {
+            Button {
+                // TODO Add playlist
+            } label: {
+                Image(systemName: "music.note.list")
+            }
+            .disabled(true)
+
+            Button {
+                // TODO Add folder
+            } label: {
+                Image(systemName: "folder")
+            }
+            .disabled(true)
+
+            Button {
+                // TODO Add hybrid folder
+            } label: {
+                Image(systemName: "questionmark.folder")
+            }
+            .disabled(true)
+        }
+    }
+    
     var body: some View {
         HStack {
             Button {
@@ -15,7 +40,6 @@ struct NavigationBarView: View {
             } label: {
                 Image(systemName: "sidebar.left")
             }
-            .buttonStyle(BorderlessButtonStyle())
             .disabled(true)
             .padding(.leading, 8)
             
@@ -27,7 +51,6 @@ struct NavigationBarView: View {
             } label: {
                 Image(systemName: "house")
             }
-            .buttonStyle(BorderlessButtonStyle())
             .disabled(true)
 
             Spacer()
@@ -38,7 +61,6 @@ struct NavigationBarView: View {
             } label: {
                 Image(systemName: "chevron.backward")
             }
-            .buttonStyle(BorderlessButtonStyle())
             .disabled(true)
 
             Spacer()
@@ -49,28 +71,14 @@ struct NavigationBarView: View {
             } label: {
                 Image(systemName: "chevron.forward")
             }
-            .buttonStyle(BorderlessButtonStyle())
             .disabled(true)
 
             Spacer()
             
-            Button {
-                // TODO Add playlist
-            } label: {
-                Image(systemName: "music.note.list")
-            }
-            .buttonStyle(BorderlessButtonStyle())
-            .disabled(true)
-
-            Button {
-                // TODO Add folder
-            } label: {
-                Image(systemName: "folder")
-            }
-            .buttonStyle(BorderlessButtonStyle())
-            .disabled(true)
-            .padding(.trailing, 8)
+            addFolderViews
+                .padding(.trailing, 8)
         }
+            .buttonStyle(BorderlessButtonStyle())
             .frame(maxWidth: .infinity)
             .frame(height: 30)
             .visualEffectBackground(material: .sidebar)
