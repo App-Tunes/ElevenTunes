@@ -131,6 +131,8 @@
 		80C9A18F259FA13000A038CC /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C9A18E259FA13000A038CC /* Optional.swift */; };
 		80C9A194259FA5E800A038CC /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C9A193259FA5E800A038CC /* VisualEffectView.swift */; };
 		80CD393625A3C4D0002C5A56 /* SpotifyInterpretation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80CD393525A3C4D0002C5A56 /* SpotifyInterpretation.swift */; };
+		80CD393B25A3CD98002C5A56 /* Spotify+Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80CD393A25A3CD98002C5A56 /* Spotify+Cache.swift */; };
+		80CD395025A3CE99002C5A56 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80CD394F25A3CE99002C5A56 /* Dictionary.swift */; };
 		80D653D825993CDC007221D5 /* PlaylistRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D653CA25993C72007221D5 /* PlaylistRowView.swift */; };
 		80D6DA66259B74AA00879BCF /* NSLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D6DA65259B74AA00879BCF /* NSLock.swift */; };
 		80D6DA7D259CD68500879BCF /* Library+Contents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D6DA7C259CD68500879BCF /* Library+Contents.swift */; };
@@ -294,6 +296,8 @@
 		80C9A18E259FA13000A038CC /* Optional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
 		80C9A193259FA5E800A038CC /* VisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
 		80CD393525A3C4D0002C5A56 /* SpotifyInterpretation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyInterpretation.swift; sourceTree = "<group>"; };
+		80CD393A25A3CD98002C5A56 /* Spotify+Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Spotify+Cache.swift"; sourceTree = "<group>"; };
+		80CD394F25A3CE99002C5A56 /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		80D653CA25993C72007221D5 /* PlaylistRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistRowView.swift; sourceTree = "<group>"; };
 		80D6DA65259B74AA00879BCF /* NSLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLock.swift; sourceTree = "<group>"; };
 		80D6DA7C259CD68500879BCF /* Library+Contents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Library+Contents.swift"; sourceTree = "<group>"; };
@@ -354,6 +358,7 @@
 			children = (
 				806B28C7258F93D90091EA4D /* Spotify.swift */,
 				808D547F259F395C006F7435 /* Spotify+UI.swift */,
+				80CD393A25A3CD98002C5A56 /* Spotify+Cache.swift */,
 				806B2882258EA42D0091EA4D /* SpotifyAuthenticator.swift */,
 				80151EF92593E1EF00D9539A /* SpotifyDevices.swift */,
 			);
@@ -776,6 +781,7 @@
 			isa = PBXGroup;
 			children = (
 				80ED7690258FF41200B8B9C3 /* Array.swift */,
+				80CD394F25A3CE99002C5A56 /* Dictionary.swift */,
 				800C1203259A4AC10017A116 /* Set.swift */,
 				808A7630259405F200B0A9CE /* URL.swift */,
 				802E2DCE2596573900CB91EC /* NSOrderedSet.swift */,
@@ -969,6 +975,7 @@
 				802DBA5D25A0BB8A00EA6DB7 /* NSWindow.swift in Sources */,
 				80D6DA8B259D38E500879BCF /* CurrentValueSubjectPublishingDemand.swift in Sources */,
 				805FD8B525A128D600F32BFB /* Key.swift in Sources */,
+				80CD395025A3CE99002C5A56 /* Dictionary.swift in Sources */,
 				806E1FC22596A12C003EEA83 /* AnyTrack.swift in Sources */,
 				80C9A18A259F9BDB00A038CC /* RemoteImageCollection.swift in Sources */,
 				805FD8CF25A1348E00F32BFB /* PlayHistoryView.swift in Sources */,
@@ -1039,6 +1046,7 @@
 				80151EF52593C98500D9539A /* SpotifyDeviceView.swift in Sources */,
 				80ED7691258FF41200B8B9C3 /* Array.swift in Sources */,
 				80AD69892588285F00192BED /* PlayerBarView.swift in Sources */,
+				80CD393B25A3CD98002C5A56 /* Spotify+Cache.swift in Sources */,
 				806B2899258ED0CA0091EA4D /* AnyAudioEmitter.swift in Sources */,
 				802DBA27259FCBA600EA6DB7 /* NavigationSearchBar.swift in Sources */,
 				806B27F7258D7F910091EA4D /* PlayHistory.swift in Sources */,

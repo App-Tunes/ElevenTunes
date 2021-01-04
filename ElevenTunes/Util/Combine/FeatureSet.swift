@@ -25,6 +25,8 @@ class FeatureSet<Feature: Hashable, Set> where Set: SetAlgebra, Set.Element == F
     @Published private(set) var features = Set()
     @Published private(set) var blocked = Set()
 
+    var taken: Set { features.union(blocked) }
+    
     func contains(_ key: Feature) -> Bool { lock.perform { features.contains(key) } }
     
     @discardableResult
@@ -34,7 +36,7 @@ class FeatureSet<Feature: Hashable, Set> where Set: SetAlgebra, Set.Element == F
         }
         
         lock.lock()
-        let missing = features.subtracting(self.features.union(self.blocked))
+        let missing = features.subtracting(taken)
         
         if missing.isEmpty {
             lock.unlock()
@@ -68,6 +70,44 @@ class FeatureSet<Feature: Hashable, Set> where Set: SetAlgebra, Set.Element == F
         }
     }
     
+    @discardableResult
+    /// Calls the closure if the feature can be fulfilled
+    func fulfilling(_ feature: Feature, during closure: () -> Void) -> Bool {
+        lock.lock()
+        let shouldFulfill = !taken.contains(feature)
+        if !shouldFulfill {
+            lock.unlock()
+            return false
+        }
+        blocked.insert(feature)
+        lock.unlock()
+
+        closure()
+        
+        mark(feature)
+        
+        return true
+    }
+
+    @discardableResult
+    /// Calls the closure if any of the features can be fulfilled
+    func fulfillingAny(_ features: Set, during closure: () -> Void) -> Set {
+        lock.lock()
+        let missing = features.subtracting(taken)
+        if missing.isEmpty {
+            lock.unlock()
+            return []
+        }
+        blocked.formUnion(missing)
+        lock.unlock()
+
+        closure()
+        
+        markAll(missing)
+        
+        return missing
+    }
+
     fileprivate func unblock(_ feature: Feature) { lock.perform { _ = blocked.remove(feature) } }
     fileprivate func unblockAll(_ features: Set) { lock.perform { blocked.subtract(features) } }
 

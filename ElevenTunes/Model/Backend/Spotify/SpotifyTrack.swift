@@ -153,12 +153,11 @@ public class SpotifyTrack: RemoteTrack {
             ])
         )
         
-        if let album = track.album {
-            self._album.value = SpotifyAlbum(SpotifyAlbumToken(album.id), spotify: spotify)
-        }
+        self._album.value = track.album.map { spotify.album(SpotifyAlbumToken($0.id)) }
+
         self._artists.value = track.artists
             .map {
-                SpotifyArtist(SpotifyArtistToken($0.id), spotify: spotify)
+                spotify.artist(SpotifyArtistToken($0.id))
             }
     }
     

@@ -16,7 +16,7 @@ public class SpotifyArtistToken: SpotifyURIPlaylistToken {
     override class var urlComponent: String { "artist" }
     
     override func expand(_ context: Library) -> AnyPlaylist {
-        SpotifyArtist(self, spotify: context.spotify)
+        context.spotify.artist(self)
     }
     
     static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyArtistToken, Error> {
@@ -28,20 +28,18 @@ public class SpotifyArtistToken: SpotifyURIPlaylistToken {
 }
 
 public class SpotifyArtist: SpotifyURIPlaylist<SpotifyArtistToken>, AnyArtist {
-    convenience init(_ artistID: String, artist: SpotifyWebAPI.Artist, spotify: Spotify) {
-        self.init(SpotifyArtistToken(artistID), spotify: spotify)
-        self._attributes.value = SpotifyArtist.attributes(of: artist)
-        contentSet.insert(.minimal)
-    }
-    
     public override var contentType: PlaylistContentType { .hybrid }
     
     public override var icon: Image { Image(systemName: "person") }
     
-    static func attributes(of artist: SpotifyWebAPI.Artist) -> TypedDict<PlaylistAttribute> {
-        let attributes = TypedDict<PlaylistAttribute>()
-        attributes[PlaylistAttribute.title] = artist.name
-        return attributes
+    func offerCache(_ artist: SpotifyWebAPI.Artist) {
+        contentSet.fulfilling(.minimal) {
+            read(artist)
+        }
+    }
+    
+    func read(_ artist: SpotifyWebAPI.Artist) {
+        _attributes.value[PlaylistAttribute.title] = artist.name
     }
     
     public func bestImageForPreview(_ images: [SpotifyWebAPI.SpotifyImage]) -> URL? {
@@ -82,7 +80,7 @@ public class SpotifyArtist: SpotifyURIPlaylist<SpotifyArtistToken>, AnyArtist {
                     .collect()
                     .map { $0.flatMap { $0.items }}
                     .map { items in
-                        items.map { SpotifyAlbum($0.id!, album: $0, spotify: spotify) }
+                        items.map { spotify.album(SpotifyAlbumToken($0.id!), info: $0) }
                     }
                     .onMain()
                     .fulfillingAny(.children, of: promise)
@@ -96,7 +94,7 @@ public class SpotifyArtist: SpotifyURIPlaylist<SpotifyArtistToken>, AnyArtist {
                     .onMain()
                     .fulfillingAny([.minimal, .attributes], of: promise)
                     .sink(receiveCompletion: appLogErrors) { info in
-                        self._attributes.value = SpotifyArtist.attributes(of: info)
+                        self.read(info)
                     }
                     .store(in: &cancellables)
             }

@@ -16,7 +16,7 @@ public class SpotifyAlbumToken: SpotifyURIPlaylistToken {
     override class var urlComponent: String { "album" }
     
     override func expand(_ context: Library) -> AnyPlaylist {
-        SpotifyAlbum(self, spotify: context.spotify)
+        context.spotify.album(self)
     }
     
     static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyAlbumToken, Error> {
@@ -36,20 +36,18 @@ public class SpotifyAlbum: SpotifyURIPlaylist<SpotifyAlbumToken>, AnyAlbum {
         coverImages.delegate = self
     }
     
-    convenience init(_ albumID: String, album: SpotifyWebAPI.Album, spotify: Spotify) {
-        self.init(SpotifyAlbumToken(albumID), spotify: spotify)
-        self._attributes.value = SpotifyAlbum.attributes(of: album)
-        contentSet.insert(.minimal)
-    }
-    
     public override var contentType: PlaylistContentType { .tracks }
     
     public override var icon: Image { Image(systemName: "opticaldisc") }
     
-    static func attributes(of album: SpotifyWebAPI.Album) -> TypedDict<PlaylistAttribute> {
-        let attributes = TypedDict<PlaylistAttribute>()
-        attributes[PlaylistAttribute.title] = album.name
-        return attributes
+    func offerCache(_ album: SpotifyWebAPI.Album) {
+        contentSet.fulfilling(.minimal) {
+            read(album)
+        }
+    }
+    
+    func read(_ album: SpotifyWebAPI.Album) {
+        _attributes.value[PlaylistAttribute.title] = album.name
     }
     
     public func bestImageForPreview(_ images: [SpotifyWebAPI.SpotifyImage]) -> URL? {
@@ -90,7 +88,10 @@ public class SpotifyAlbum: SpotifyURIPlaylist<SpotifyAlbumToken>, AnyAlbum {
                     .collect()
                     .map { $0.flatMap { $0.items } }
                     .map { items in
-                        items.map { SpotifyTrack(track: DetailedSpotifyTrack.from($0), spotify: spotify) }
+                        items.map {
+                            var track = DetailedSpotifyTrack.from($0)
+                            track.album = .init(id: token.id)  // Album requests don't return albums
+                            return SpotifyTrack(track: track, spotify: spotify) }
                     }
                     .onMain()
                     .fulfillingAny(.tracks, of: promise)
@@ -104,7 +105,7 @@ public class SpotifyAlbum: SpotifyURIPlaylist<SpotifyAlbumToken>, AnyAlbum {
                     .onMain()
                     .fulfillingAny([.minimal, .attributes], of: promise)
                     .sink(receiveCompletion: appLogErrors) { info in
-                        self._attributes.value = SpotifyAlbum.attributes(of: info)
+                        self.read(info)
                         self.previewImageURL = info.images.flatMap(self.bestImageForPreview(_:))
                     }
                     .store(in: &cancellables)

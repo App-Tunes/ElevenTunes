@@ -54,6 +54,10 @@ class Spotify {
     
     var cancellables = Set<AnyCancellable>()
     
+    // TODO This is a reference cycle :|
+    var artistCaches: [SpotifyArtistToken: SpotifyArtist] = [:]
+    var albumCaches: [SpotifyAlbumToken: SpotifyAlbum] = [:]
+
     init() {
         let api = SpotifyAPI(
             authorizationManager: AuthorizationCodeFlowManager(
