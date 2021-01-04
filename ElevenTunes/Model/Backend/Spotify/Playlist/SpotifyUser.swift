@@ -99,8 +99,6 @@ public class SpotifyUser: RemotePlaylist {
     
     public override var contentType: PlaylistContentType { .playlists }
     
-    public override func supportsChildren() -> Bool { true }
-    
     static func attributes(of user: SpotifyWebAPI.SpotifyUser) -> TypedDict<PlaylistAttribute> {
         let attributes = TypedDict<PlaylistAttribute>()
         attributes[PlaylistAttribute.title] = user.displayName ?? user.id

@@ -31,8 +31,6 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
     var hasCaches: Bool { false }
     func invalidateCaches(_ mask: PlaylistContentMask) {}
     
-    func supportsChildren() -> Bool { false }
-
     init(_ type: PlaylistContentType, attributes: TypedDict<PlaylistAttribute>, children: [AnyPlaylist] = [], tracks: [AnyTrack] = []) {
         self.contentType = type
         _attributes = attributes

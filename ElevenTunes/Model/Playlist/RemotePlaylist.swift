@@ -25,7 +25,6 @@ public class RemotePlaylist: AnyPlaylist {
     public var contentType: PlaylistContentType { .tracks }
     
     public var hasCaches: Bool { true }
-    public func supportsChildren() -> Bool { false }
     
     public func cacheMask() -> AnyPublisher<PlaylistContentMask, Never> {
         contentSet.$features.eraseToAnyPublisher()

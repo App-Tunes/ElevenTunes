@@ -100,9 +100,7 @@ class LibraryPlaylist: AnyPlaylist {
     }
     
     var icon: Image { Image(systemName: "house.fill" ) }
-    
-    func supportsChildren() -> Bool { true }  // lol imagine if this were false
-    
+        
     @discardableResult
     func add(tracks: [TrackToken]) -> Bool {
         // Fetch requests auto-update content

@@ -62,7 +62,7 @@ public class DirectoryPlaylist: RemotePlaylist {
     public override var icon: Image { DirectoryPlaylist._icon }
     public override var accentColor: Color { SystemUI.color }
         
-    public override func supportsChildren() -> Bool { true }
+    public override var contentType: PlaylistContentType { .hybrid }
     
     init(_ token: DirectoryPlaylistToken, library: Library) {
         self.library = library
