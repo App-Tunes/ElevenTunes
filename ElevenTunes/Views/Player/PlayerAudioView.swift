@@ -20,6 +20,7 @@ struct PlayerAudioView: View {
             
             Image(systemName: "speaker.wave.3.fill")
                 .font(.system(size: 10))
+                .foregroundColor(.secondary)
             
             Button(action: {
                 
