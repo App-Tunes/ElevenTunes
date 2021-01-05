@@ -49,9 +49,8 @@ class FeatureSet<Feature: Hashable, Set> where Set: SetAlgebra, Set.Element == F
         let promise = Promise(parent: self, features: missing)
         closure(promise)
         
-        lock.lock()
-        self.blocked.subtract(promise.unfulfilledFeatures)
-        lock.unlock()
+        // The promises will self-abandon unfulfilled features
+        // upon deinit.
         
         return true
     }
@@ -209,6 +208,12 @@ extension FeatureSet {
             }
 
             return Promise(parent: parent, features: fulfilling)
+        }
+        
+        deinit {
+            if !unfulfilledFeatures.isEmpty {
+                parent.unblockAll(unfulfilledFeatures)
+            }
         }
     }
 }
