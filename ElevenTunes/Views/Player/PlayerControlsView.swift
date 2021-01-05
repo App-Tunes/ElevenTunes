@@ -17,25 +17,14 @@ struct PlayerControlsView: View {
 
     @State var isPlaying: Bool = false
     
-    var body: some View {
+    var playStateControls: some View {
         HStack {
-            Button(action: {
-                
-            }) {
-                Image(systemName: "shuffle")
-                    .font(.system(size: 14))
-            }
-                .buttonStyle(BorderlessButtonStyle())
-                .disabled(true)
-                .padding(.trailing, 3)
-
             Button(action: {
                 player.backwards()
             }) {
                 Image(systemName: "backward.fill")
                     .font(.system(size: 16))
             }
-                .buttonStyle(BorderlessButtonStyle())
                 .disabled(previous == nil && current == nil)
 
             Button(action: {
@@ -44,7 +33,6 @@ struct PlayerControlsView: View {
                 Image(systemName: isPlaying ? "pause.fill" : "play.fill")
                     .font(.system(size: 24))
             }
-                .buttonStyle(BorderlessButtonStyle())
                 .keyboardShortcut(.space, modifiers: [])
 
             Button(action: {
@@ -56,8 +44,22 @@ struct PlayerControlsView: View {
                         .font(.system(size: 16))
                 }
             }
-                .buttonStyle(BorderlessButtonStyle())
                 .disabled(next == nil && current == nil)
+        }
+    }
+    
+    var body: some View {
+        HStack {
+            playStateControls
+                .padding(.trailing, 5)
+
+            Button(action: {
+                
+            }) {
+                Image(systemName: "shuffle")
+                    .font(.system(size: 14))
+            }
+                .disabled(true)
             
             Button(action: {
                 
@@ -65,13 +67,12 @@ struct PlayerControlsView: View {
                 Image(systemName: "repeat")
                     .font(.system(size: 14))
             }
-                .buttonStyle(BorderlessButtonStyle())
                 .disabled(true)
-                .padding(.leading, 3)
             
             PlayerAudioView(player: player)
                 .padding(.leading)
         }
+        .buttonStyle(BorderlessButtonStyle())
         .onReceive(player.$previous) { self.previous = $0 }
         .onReceive(player.$current) { self.current = $0 }
         .onReceive(player.$next) { self.next = $0 }
