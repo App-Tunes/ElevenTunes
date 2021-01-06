@@ -40,7 +40,18 @@ public class DBLibraryPlaylist: AnyPlaylist {
     public var origin: URL? { nil }
     
     public var icon: Image {
-        backend?.icon ?? Image(systemName: "music.note.list")
+        if let backend = backend {
+            return backend.icon
+        }
+        
+        switch cachedContentType {
+        case .tracks:
+            return Image(systemName: "music.note.list")
+        case .playlists:
+            return Image(systemName: "folder")
+        case .hybrid:
+            return Image(systemName: "questionmark.folder")
+        }
     }
     
     public var accentColor: Color {
