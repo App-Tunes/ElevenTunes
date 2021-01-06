@@ -10,10 +10,18 @@ import AppKit
 class DocumentController: NSDocumentController {
     override func makeUntitledDocument(ofType typeName: String) throws -> NSDocument {
         let doc = LibraryDocument()
-//        doc.library.mainPlaylist.add(children: [
-//            LibraryMock.playlist("Playlist 1"),
-//            LibraryMock.playlist("Playlist 2")
-//        ])
+        
+        let defaultPlaylistsModel = [
+            TransientPlaylist(.playlists, attributes: .init([
+                .title: "Playlists"
+            ]))
+        ]
+        let (_, playlists) = Library.convert(
+            DirectLibrary(allPlaylists: defaultPlaylistsModel),
+            context: doc.managedObjectContext!
+        )
+        doc.library.defaultPlaylist = playlists[0]
+
         return doc
     }
     

@@ -83,6 +83,7 @@ extension Library {
             if let backend = backend as? TransientPlaylist {
                 let dbPlaylist = DBPlaylist(entity: playlistModel, insertInto: context)
                 
+                dbPlaylist.contentType = backend.contentType
                 dbPlaylist.addToTracks(NSOrderedSet(array: backend._tracks.map { tracksByID[$0.id]! }))
                 dbPlaylist.merge(attributes: backend._attributes)
                 playlistChildren[dbPlaylist] = backend._children.map { $0.asToken.id }

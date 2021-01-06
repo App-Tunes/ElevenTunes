@@ -19,29 +19,43 @@ struct DirectLibrary: AnyLibrary {
 }
 
 public class Library {
+    static let defaultPlaylistKey = "defaultPlaylist"
+    
     let managedObjectContext: NSManagedObjectContext
 
     var _mainPlaylist: LibraryPlaylist! = nil
     var mainPlaylist: LibraryPlaylist { _mainPlaylist }
         
-    let spotify: Spotify
+    let settings: LibrarySettingsLevel
     let interpreter: ContentInterpreter
     
     let player: Player
-
-    init(managedObjectContext: NSManagedObjectContext, spotify: Spotify) {
+    
+    var defaultPlaylist: DBPlaylist? {
+        didSet { settings.defaultPlaylist = defaultPlaylist?.objectID.uriRepresentation() }
+    }
+    
+    init(managedObjectContext: NSManagedObjectContext, settings: LibrarySettingsLevel) {
         self.managedObjectContext = managedObjectContext
-        self.spotify = spotify
-        self.interpreter = ContentInterpreter.createDefault(spotify: spotify)
+        self.settings = settings
+        self.interpreter = ContentInterpreter.createDefault(spotify: settings.spotify)
 
-        let playContext = PlayContext(spotify: spotify)
+        let playContext = PlayContext(spotify: settings.spotify)
         
         player = Player(context: playContext)
-
+        
+        func getPlaylist(_ uri: URL?) -> DBPlaylist? {
+            uri.flatMap { managedObjectContext.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: $0) }
+                .flatMap { managedObjectContext.object(with: $0) } as? DBPlaylist
+        }
+        
+        defaultPlaylist = getPlaylist(settings.defaultPlaylist)
         _mainPlaylist = LibraryPlaylist(library: self, playContext: playContext)
 
         NotificationCenter.default.addObserver(self, selector: #selector(objectsDidChange), name: .NSManagedObjectContextObjectsDidChange, object: managedObjectContext)
     }
+    
+    var spotify: Spotify { settings.spotify }
         
     func `import`(library: AnyLibrary) {
         mainPlaylist.add(children: library.allPlaylists)
