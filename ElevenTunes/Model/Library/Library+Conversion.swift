@@ -26,7 +26,7 @@ extension Library {
     }
     
 
-    static func convert(_ library: DirectLibrary, context: NSManagedObjectContext) -> ([DBTrack], [DBPlaylist]) {
+    static func convert(_ library: AnyLibrary, context: NSManagedObjectContext) -> ([DBTrack], [DBPlaylist]) {
         guard let model = context.persistentStoreCoordinator?.managedObjectModel else {
             fatalError("Failed to find model in MOC")
         }
@@ -107,11 +107,31 @@ extension Library {
         for (playlist, children) in playlistChildren {
             playlist.addToChildren(NSOrderedSet(array: children.map { playlistsByID[$0]! }))
         }
-                    
+        
         // Finally, gather back what was originally asked
         return (
             library.allTracks.map { tracksByID[$0.id]! },
             library.allPlaylists.map { playlistsByID[$0.id]! }
         )
+    }
+    
+    static func `import`(_ dlibrary: AnyLibrary, to parent: DBPlaylist) {
+        // Fetch requests auto-update content
+        parent.managedObjectContext!.performChildTask(concurrencyType: .privateQueueConcurrencyType) { context in
+            let (_, playlists) = Library.convert(
+                dlibrary,
+                context: context
+            )
+
+            let parent = context.translate(parent)
+            playlists.forEach { $0.parent = parent }
+
+            do {
+                try context.save()
+            }
+            catch let error {
+                appLogger.error("Failed import: \(error)")
+            }
+        }
     }
 }

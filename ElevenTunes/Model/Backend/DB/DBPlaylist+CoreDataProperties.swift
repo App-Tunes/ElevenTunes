@@ -9,12 +9,20 @@
 import Foundation
 import CoreData
 
-
 extension DBPlaylist {
     @nonobjc public class func createFetchRequest() -> NSFetchRequest<DBPlaylist> {
         return NSFetchRequest<DBPlaylist>(entityName: "DBPlaylist")
     }
 
+    @nonobjc public class func createFetchRequest(id: UUID) -> NSFetchRequest<DBPlaylist> {
+        let request = self.createFetchRequest()
+        request.predicate = NSPredicate(format: "uuid = %@", id as CVarArg)
+        return request
+    }
+
+    /// Why? Because objectID may change based on store etc.
+    /// UUID is nice and reliable. It shall never change.
+    @NSManaged public var uuid: UUID
     @NSManaged public var backend: PlaylistToken?
     @NSManaged public var backendID: String
     @NSManaged public var contentType: PlaylistContentType

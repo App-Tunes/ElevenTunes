@@ -15,7 +15,7 @@ class LibrarySettingsLevel: SettingsLevel, Codable {
         case defaultPlaylist
     }
     
-    var defaultPlaylist: URL?
+    var defaultPlaylist: UUID?
     
     init() {
         
@@ -23,7 +23,7 @@ class LibrarySettingsLevel: SettingsLevel, Codable {
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        defaultPlaylist = try container.decodeIfPresent(URL.self, forKey: .defaultPlaylist)
+        defaultPlaylist = try container.decodeIfPresent(UUID.self, forKey: .defaultPlaylist)
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -34,22 +34,23 @@ class LibrarySettingsLevel: SettingsLevel, Codable {
     var spotify: Spotify { GlobalSettingsLevel.instance.spotify }
 }
 
-class LibraryDocument: BSManagedDocument {
+@objc(LibraryDocument) class LibraryDocument: BSManagedDocument {
     override init() {
         settings = LibrarySettingsLevel()
         super.init()
         fileType = "ivorius.eleventunes.library"
-        _library = Library(managedObjectContext: managedObjectContext!, settings: settings)
-    }
-
-    @Published var settings: LibrarySettingsLevel {
-        didSet {
-            _library = Library(managedObjectContext: managedObjectContext!, settings: settings)
-        }
+        managedObjectContext.automaticallyMergesChangesFromParent = true
+        // Don't init library; read will be called
     }
     
-    private var _library: Library?
-    var library: Library { _library! }
+    init(settings: LibrarySettingsLevel) {
+        self.settings = settings
+        super.init()
+        fileType = "ivorius.eleventunes.library"
+        managedObjectContext.automaticallyMergesChangesFromParent = true
+    }
+
+    @Published var settings: LibrarySettingsLevel
 
     override class var autosavesInPlace: Bool {
         return true
@@ -58,6 +59,7 @@ class LibraryDocument: BSManagedDocument {
     override func makeWindowControllers() {
         // Create the SwiftUI view and set the context as the value for the managedObjectContext environment keyPath.
         // Add `@Environment(\.managedObjectContext)` in the views that will need the context.
+        let library = Library(managedObjectContext: managedObjectContext, settings: settings)
         let contentView = ContentView()
             .environment(\.managedObjectContext, self.managedObjectContext!)
             .environment(\.library, library)
@@ -85,6 +87,18 @@ class LibraryDocument: BSManagedDocument {
         }
     }
     
+    func `import`(_ dlibrary: AnyLibrary) -> Bool {
+        guard let defaultPlaylistID = settings.defaultPlaylist else {
+            return false
+        }
+        guard let playlist = try? managedObjectContext.fetch(DBPlaylist.createFetchRequest(id: defaultPlaylistID)).first else {
+            return false
+        }
+                
+        Library.import(dlibrary, to: playlist)
+        return true
+    }
+
     override func additionalContent(for absoluteURL: URL!, saveOperation: NSDocument.SaveOperationType) throws -> Any {
         settings
     }

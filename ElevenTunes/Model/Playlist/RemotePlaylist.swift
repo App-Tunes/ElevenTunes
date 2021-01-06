@@ -72,9 +72,7 @@ public class RemotePlaylist: AnyPlaylist {
         fatalError()
     }
     
-    public func add(tracks: [TrackToken]) -> Bool { false }
-    
-    public func add(children: [PlaylistToken]) -> Bool { false }
+    public func `import`(library: AnyLibrary) -> Bool { false }
     
     public func previewImage() -> AnyPublisher<NSImage?, Never> {
         Just(nil).eraseToAnyPublisher()

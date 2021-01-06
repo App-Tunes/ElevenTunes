@@ -133,12 +133,8 @@ public class DBLibraryPlaylist: AnyPlaylist {
         backend?.contentType ?? cachedContentType
     }
     
-    public func add(tracks: [TrackToken]) -> Bool {
-        false  // TODO
-    }
-    
-    public func add(children: [PlaylistToken]) -> Bool {
-        false  // TODO
+    public func `import`(library: AnyLibrary) -> Bool {
+        false  // TODO Ask backend
     }
     
     public func previewImage() -> AnyPublisher<NSImage?, Never> {
@@ -158,7 +154,10 @@ public class DBPlaylist: NSManagedObject {
     @Published var attributesP: TypedDict<PlaylistAttribute> = .init()
     
     public override func awakeFromFetch() { initialSetup() }
-    public override func awakeFromInsert() { initialSetup() }
+    public override func awakeFromInsert() {
+        uuid = UUID()
+        initialSetup()
+    }
     
     func initialSetup() {
         backendP = backend

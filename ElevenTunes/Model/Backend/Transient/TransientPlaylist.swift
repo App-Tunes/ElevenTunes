@@ -76,18 +76,8 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
         $_children.eraseToAnyPublisher()
     }
 
-    @discardableResult
-    func add(tracks: [TrackToken]) -> Bool {
-//        _tracks += tracks
-        // TODO
-        return true
-    }
-    
-    @discardableResult
-    func add(children: [PlaylistToken]) -> Bool {
-//        _children += children
-        // TODO
-        return true
+    func `import`(library: AnyLibrary) -> Bool {
+        return false  // TODO We can do this bois
     }
     
     func previewImage() -> AnyPublisher<NSImage?, Never> {

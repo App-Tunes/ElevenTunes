@@ -65,9 +65,7 @@ class MultiPlaylist: AnyPlaylist {
             .eraseToAnyPublisher()
     }
     
-    func add(tracks: [TrackToken]) -> Bool { false }
-    
-    func add(children: [PlaylistToken]) -> Bool { false }
+    func `import`(library: AnyLibrary) -> Bool { false }
     
     func previewImage() -> AnyPublisher<NSImage?, Never> {
         Just(nil).eraseToAnyPublisher()

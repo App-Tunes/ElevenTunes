@@ -27,12 +27,12 @@ extension ContentInterpreter {
     }
 
     // TODO Split up properly
-    static func createDefault(spotify: Spotify) -> ContentInterpreter {
+    static func createDefault(settings: SettingsLevel) -> ContentInterpreter {
         let interpreter = ContentInterpreter()
         
         let register = { interpreter.interpreters.append($0) }
         
-        interpreter.interpreters += defaultSpotify(spotify: spotify)
+        interpreter.interpreters += defaultSpotify(spotify: settings.spotify)
         
         register(simple(matches: FileVideoToken.understands) {
             .track(try FileVideoToken.create(fromURL: $0))

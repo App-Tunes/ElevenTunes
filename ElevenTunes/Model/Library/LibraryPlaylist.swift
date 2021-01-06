@@ -25,6 +25,9 @@ class LibraryPlaylist: AnyPlaylist {
         self.library = library
         
         _tracks = CDPublisher(request: DBTrack.createFetchRequest(), context: managedObjectContext)
+            // TODO Apparently, sometimes the same object is emitted twice
+            .map { $0.removeDuplicates() }
+            .removeDuplicates()
             .flatMap {
                 $0.map { [weak self] in self!.library!.track(cachedBy: $0) }
                     .combineLatest()
@@ -33,8 +36,12 @@ class LibraryPlaylist: AnyPlaylist {
             .eraseToAnyPublisher()
 
         _children = CDPublisher(request: LibraryPlaylist.playlistFetchRequest, context: managedObjectContext)
+            // TODO Apparently, sometimes the same object is emitted twice
+            .map { $0.removeDuplicates() }
+            .removeDuplicates()
             .flatMap {
-                $0.map { [weak self] in self!.library!.playlist(cachedBy: $0) }
+                $0
+                    .map { [weak self] in self!.library!.playlist(cachedBy: $0) }
                     .combineLatest()
             }
             .combineLatest($staticPlaylists.eraseError()).map { $1 + $0 }
@@ -100,46 +107,13 @@ class LibraryPlaylist: AnyPlaylist {
     }
     
     var icon: Image { Image(systemName: "house.fill" ) }
-        
-    @discardableResult
-    func add(tracks: [TrackToken]) -> Bool {
-        // Fetch requests auto-update content
-        let context = managedObjectContext.child(concurrencyType: .privateQueueConcurrencyType)
-        context.perform {
-            let _ = Library.convert(
-                DirectLibrary(allTracks: tracks),
-                context: context
-            )
             
-            do {
-                try context.save()
-            }
-            catch let error {
-                appLogger.error("Failed to import tracks: \(error)")
-            }
+    func `import`(library: AnyLibrary) -> Bool {
+        guard let defaultPlaylist = self.library?.defaultPlaylist else {
+            return false
         }
 
-        return true
-    }
-    
-    @discardableResult
-    func add(children: [PlaylistToken]) -> Bool {
-        // Fetch requests auto-update content
-        let context = managedObjectContext.child(concurrencyType: .privateQueueConcurrencyType)
-        context.perform {
-            let _ = Library.convert(
-                DirectLibrary(allPlaylists: children),
-                context: context
-            )
-
-            do {
-                try context.save()
-            }
-            catch let error {
-                appLogger.error("Failed to import playlists: \(error)")
-            }
-        }
-
+        Library.import(library, to: defaultPlaylist)
         return true
     }
 }

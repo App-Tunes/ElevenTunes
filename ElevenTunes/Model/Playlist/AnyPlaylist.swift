@@ -53,10 +53,7 @@ public protocol AnyPlaylist: AnyObject {
     func attributes() -> AnyPublisher<TypedDict<PlaylistAttribute>, Never>
 
     @discardableResult
-    func add(tracks: [TrackToken]) -> Bool
-    
-    @discardableResult
-    func add(children: [PlaylistToken]) -> Bool
+    func `import`(library: AnyLibrary) -> Bool
     
     func previewImage() -> AnyPublisher<NSImage?, Never>
 }

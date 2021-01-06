@@ -8,14 +8,14 @@
 import Cocoa
 import Combine
 
-protocol AnyLibrary {
+public protocol AnyLibrary {
     var allTracks: [TrackToken] { get }
     var allPlaylists: [PlaylistToken] { get }
 }
 
-struct DirectLibrary: AnyLibrary {
-    var allTracks: [TrackToken] = []
-    var allPlaylists: [PlaylistToken] = []
+public struct DirectLibrary: AnyLibrary {
+    public var allTracks: [TrackToken] = []
+    public var allPlaylists: [PlaylistToken] = []
 }
 
 public class Library {
@@ -32,24 +32,19 @@ public class Library {
     let player: Player
     
     var defaultPlaylist: DBPlaylist? {
-        didSet { settings.defaultPlaylist = defaultPlaylist?.objectID.uriRepresentation() }
+        didSet { settings.defaultPlaylist = defaultPlaylist?.uuid }
     }
     
     init(managedObjectContext: NSManagedObjectContext, settings: LibrarySettingsLevel) {
         self.managedObjectContext = managedObjectContext
         self.settings = settings
-        self.interpreter = ContentInterpreter.createDefault(spotify: settings.spotify)
+        self.interpreter = ContentInterpreter.createDefault(settings: settings)
 
         let playContext = PlayContext(spotify: settings.spotify)
         
         player = Player(context: playContext)
         
-        func getPlaylist(_ uri: URL?) -> DBPlaylist? {
-            uri.flatMap { managedObjectContext.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: $0) }
-                .flatMap { managedObjectContext.object(with: $0) } as? DBPlaylist
-        }
-        
-        defaultPlaylist = getPlaylist(settings.defaultPlaylist)
+        defaultPlaylist = settings.defaultPlaylist.flatMap { try? managedObjectContext.fetch(DBPlaylist.createFetchRequest(id: $0)).first }
         _mainPlaylist = LibraryPlaylist(library: self, playContext: playContext)
 
         NotificationCenter.default.addObserver(self, selector: #selector(objectsDidChange), name: .NSManagedObjectContextObjectsDidChange, object: managedObjectContext)
@@ -57,11 +52,6 @@ public class Library {
     
     var spotify: Spotify { settings.spotify }
         
-    func `import`(library: AnyLibrary) {
-        mainPlaylist.add(children: library.allPlaylists)
-        mainPlaylist.add(tracks: library.allTracks)
-    }
-    
     @objc func objectsDidChange(_ notification: NSNotification) {
         guard let userInfo = notification.userInfo else { return }
 

@@ -35,11 +35,10 @@ class PlaylistDropInterpreter: DropDelegate {
         
         let playlist = self.parent
         interpreted
-            .map { ContentInterpreter.collect(fromContents: $0) }
+            .map { ContentInterpreter.library(fromContents: $0, name: "Imported Items") }
             .onMain()
-            .sink(receiveCompletion: appLogErrors(_:)) { (tracks, playlists) in
-                playlist.add(tracks: tracks)
-                playlist.add(children: playlists)
+            .sink(receiveCompletion: appLogErrors(_:)) { library in
+                playlist.import(library: library)
             }
             .store(in: &cancellables)
 

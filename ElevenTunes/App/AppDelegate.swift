@@ -62,9 +62,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         do {
             let doc = try documentController.makeUntitledDocument(ofType: "library")
                 as! LibraryDocument
-            let library = doc.library
 
-            library.interpreter.interpret(urls: urls)?
+            let interpreter = ContentInterpreter.createDefault(settings: doc.settings)
+            interpreter.interpret(urls: urls)?
                 .map {
                     ContentInterpreter.library(fromContents: $0, name: "New Document")
                 }
@@ -81,7 +81,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         appLogger.error("Error interpreting urls: \(error)")
                     }
                 }) { library in
-                    doc.library.import(library: library)
+                    // TODO If import fails, wat do?
+                    _ = doc.import(library)
                 }
                 .store(in: &cancellables)
         }

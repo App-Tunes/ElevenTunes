@@ -9,8 +9,8 @@ import AppKit
 
 class DocumentController: NSDocumentController {
     override func makeUntitledDocument(ofType typeName: String) throws -> NSDocument {
-        let doc = LibraryDocument()
-        
+        let doc = LibraryDocument(settings: LibrarySettingsLevel())
+
         let defaultPlaylistsModel = [
             TransientPlaylist(.playlists, attributes: .init([
                 .title: "Playlists"
@@ -20,7 +20,7 @@ class DocumentController: NSDocumentController {
             DirectLibrary(allPlaylists: defaultPlaylistsModel),
             context: doc.managedObjectContext!
         )
-        doc.library.defaultPlaylist = playlists[0]
+        doc.settings.defaultPlaylist = playlists[0].uuid
 
         return doc
     }
