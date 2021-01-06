@@ -52,15 +52,12 @@ struct PlaylistSectionView: View {
 struct PlaylistsView: View {
     @State var directory: Playlist
     @State var topLevelChildren: [Playlist] = []
-        
-    @Environment(\.library) private var library: Library!
-    
+            
     var body: some View {
         ForEach(topLevelChildren) { category in
             PlaylistSectionView(playlist: category, isTopLevel: true)
         }
         .frame(minWidth: 0, maxWidth: 800, maxHeight: .infinity, alignment: .leading)
-        .onDrop(of: ContentInterpreter.types, delegate: PlaylistDropInterpreter(library.interpreter, parent: directory.backend))
         .onReceive(directory.backend.children()) { topLevelChildren = $0.map(Playlist.init) }
    }
 }

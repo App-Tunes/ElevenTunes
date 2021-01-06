@@ -11,10 +11,22 @@ import Combine
 struct NavigatorView: View {
     @State var directory: Playlist
         
+    @Binding var selection: Set<Playlist>
+
+    @Environment(\.library) private var library: Library!
+
     var body: some View {
-        NavigationSearchBar()
-            
-        PlaylistsView(directory: directory)
+        VStack(spacing: 0) {
+            List(selection: $selection) {
+                NavigationSearchBar()
+
+                PlaylistsView(directory: directory)
+            }
+                .contentShape(Rectangle())
+                .onDrop(of: ContentInterpreter.types, delegate: PlaylistDropInterpreter(library.interpreter, parent: directory.backend))
+
+            NavigationBarView()
+        }
     }
 }
 
