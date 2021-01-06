@@ -8,7 +8,7 @@
 import SwiftUI
 
 protocol SettingsLevel {
-    var spotify: Spotify? { get }
+    var spotify: Spotify { get }
 }
 
 struct SettingsLevelEnvironmentKey: EnvironmentKey {
@@ -34,10 +34,8 @@ struct SettingsView: View {
             GeneralSettingsView()
                 .tag(Tabs.general)
             
-            if let spotify = settingsLevel.spotify {
-                SpotifySettingsView(spotify: spotify)
-                    .tag(Tabs.spotify)
-            }
+            SpotifySettingsView(spotify: settingsLevel.spotify)
+                .tag(Tabs.spotify)
         }
         .padding(20)
         .frame(width: 500)

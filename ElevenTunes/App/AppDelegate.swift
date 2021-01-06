@@ -9,8 +9,15 @@ import Cocoa
 import SwiftUI
 import Combine
 
-struct GlobalSettingsLevel: SettingsLevel {
-    var spotify: Spotify?
+class GlobalSettingsLevel: SettingsLevel {
+    static var instance: SettingsLevel { _instance }
+    static var _instance: SettingsLevel!
+    
+    init(spotify: Spotify) {
+        self.spotify = spotify
+    }
+    
+    var spotify: Spotify
 }
 
 @main
@@ -24,11 +31,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     override init() {
         ValueTransformer.setValueTransformer(PlaylistBackendTransformer(), forName: .playlistBackendName)
         ValueTransformer.setValueTransformer(TrackBackendTransformer(), forName: .trackBackendName)
-
+        
         let spotify = Spotify()
         self.spotify = spotify
-        
-        let settingsView = SettingsView().environment(\.settingsLevel, GlobalSettingsLevel(spotify: spotify))
+
+        GlobalSettingsLevel._instance = GlobalSettingsLevel(spotify: spotify)
+
+        let settingsView = SettingsView().environment(\.settingsLevel, GlobalSettingsLevel.instance)
         self.settingsWC = .init(content: AnyView(settingsView))
     }
     

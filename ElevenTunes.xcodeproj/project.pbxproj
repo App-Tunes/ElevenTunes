@@ -28,6 +28,7 @@
 		80151EE82593C92A00D9539A /* SpotifyAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80151EE72593C92A00D9539A /* SpotifyAuthView.swift */; };
 		80151EF52593C98500D9539A /* SpotifyDeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80151EF42593C98500D9539A /* SpotifyDeviceView.swift */; };
 		80151EFA2593E1EF00D9539A /* SpotifyDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80151EF92593E1EF00D9539A /* SpotifyDevices.swift */; };
+		801B4F5125A60A0E0053BFC4 /* BSManagedDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 801B4F5025A60A0E0053BFC4 /* BSManagedDocument.m */; };
 		802DBA22259FA9B000EA6DB7 /* Gradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802DBA21259FA9B000EA6DB7 /* Gradient.swift */; };
 		802DBA27259FCBA600EA6DB7 /* NavigationSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802DBA26259FCBA600EA6DB7 /* NavigationSearchBar.swift */; };
 		802DBA32259FDA9900EA6DB7 /* Wrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802DBA31259FDA9900EA6DB7 /* Wrappers.swift */; };
@@ -188,6 +189,8 @@
 		80151EE72593C92A00D9539A /* SpotifyAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAuthView.swift; sourceTree = "<group>"; };
 		80151EF42593C98500D9539A /* SpotifyDeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyDeviceView.swift; sourceTree = "<group>"; };
 		80151EF92593E1EF00D9539A /* SpotifyDevices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyDevices.swift; sourceTree = "<group>"; };
+		801B4F4F25A60A0E0053BFC4 /* BSManagedDocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BSManagedDocument.h; sourceTree = "<group>"; };
+		801B4F5025A60A0E0053BFC4 /* BSManagedDocument.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BSManagedDocument.m; sourceTree = "<group>"; };
 		802DBA21259FA9B000EA6DB7 /* Gradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gradient.swift; sourceTree = "<group>"; };
 		802DBA26259FCBA600EA6DB7 /* NavigationSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationSearchBar.swift; sourceTree = "<group>"; };
 		802DBA31259FDA9900EA6DB7 /* Wrappers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wrappers.swift; sourceTree = "<group>"; };
@@ -442,6 +445,8 @@
 			children = (
 				8053381525989A7A006F06DC /* NSManagedObjectContext.swift */,
 				8053381D2598A871006F06DC /* NSManagedObject.swift */,
+				801B4F4F25A60A0E0053BFC4 /* BSManagedDocument.h */,
+				801B4F5025A60A0E0053BFC4 /* BSManagedDocument.m */,
 			);
 			path = "Core Data";
 			sourceTree = "<group>";
@@ -985,6 +990,7 @@
 				80D6DAA7259E2AE100879BCF /* SpotifyAlbum.swift in Sources */,
 				80C9A178259F8FD300A038CC /* MilkyImageView.swift in Sources */,
 				806E1FD32596A5FA003EEA83 /* Playlist+Attributes.swift in Sources */,
+				801B4F5125A60A0E0053BFC4 /* BSManagedDocument.m in Sources */,
 				806B2836258E4B4F0091EA4D /* PlayerControlsView.swift in Sources */,
 				80D6DAB1259E31C800879BCF /* TracksContextMenu.swift in Sources */,
 				802E2DAB259643AE00CB91EC /* SpotifyPlaylist.swift in Sources */,

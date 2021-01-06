@@ -16,4 +16,16 @@ class DocumentController: NSDocumentController {
 //        ])
         return doc
     }
+    
+    override var defaultType: String? { "ivorius.eleventunes.library" }
+    
+    override var documentClassNames: [String] { ["LibraryDocument"] }
+    
+    override func documentClass(forType typeName: String) -> AnyClass? {
+        if typeName == "ivorius.eleventunes.library" {
+            return LibraryDocument.self
+        }
+        
+        return super.documentClass(forType: typeName)
+    }
 }

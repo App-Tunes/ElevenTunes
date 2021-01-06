@@ -9,16 +9,13 @@ import Cocoa
 import Combine
 import SwiftUI
 
-class LibraryDocument: NSPersistentDocument {
+class LibraryDocument: BSManagedDocument {
     override init() {
         super.init()
-        let defaultContext = managedObjectContext!
-        let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-        context.persistentStoreCoordinator = defaultContext.persistentStoreCoordinator
-        context.name = defaultContext.name
-        managedObjectContext = context
-        
-        _library = Library(managedObjectContext: context, spotify: AppDelegate.shared.spotify)
+        fileType = "ivorius.eleventunes.library"
+        let settings = GlobalSettingsLevel.instance
+        _library = Library(managedObjectContext: managedObjectContext!, spotify: settings.spotify)
+        Swift.print(managedObjectContext.concurrencyType.rawValue)
     }
         
     private var _library: Library?
@@ -27,7 +24,7 @@ class LibraryDocument: NSPersistentDocument {
     override class var autosavesInPlace: Bool {
         return true
     }
-
+    
     override func makeWindowControllers() {
         // Create the SwiftUI view and set the context as the value for the managedObjectContext environment keyPath.
         // Add `@Environment(\.managedObjectContext)` in the views that will need the context.
@@ -56,12 +53,5 @@ class LibraryDocument: NSPersistentDocument {
         if !window.constrainMaxTitleSize(110) {
             appLogger.error("Failed to constrain window title size")
         }
-    }
-    
-    override func configurePersistentStoreCoordinator(for url: URL, ofType fileType: String, modelConfiguration configuration: String?, storeOptions: [String : Any]? = nil) throws {
-        var options = storeOptions ?? [:]
-        options[NSMigratePersistentStoresAutomaticallyOption] = true
-        options[NSInferMappingModelAutomaticallyOption] = true
-        try super.configurePersistentStoreCoordinator(for: url, ofType: fileType, modelConfiguration: configuration, storeOptions: options)
     }
 }
