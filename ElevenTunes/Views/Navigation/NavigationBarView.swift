@@ -8,28 +8,43 @@
 import SwiftUI
 
 struct NavigationBarView: View {
+    @Environment(\.library) private var library: Library!
+    
+    func createPlaylist(_ playlist: TransientPlaylist) {
+        let success = library.mainPlaylist.import(library: DirectLibrary(allPlaylists: [playlist]))
+        if !success {
+            NSAlert.warning(title: "Creation failure", text: "Failed to create new playlist")
+        }
+    }
+    
     var addFolderViews: some View {
         HStack {
             Button {
-                // TODO Add playlist
+                let playlist = TransientPlaylist(.tracks, attributes: .init([
+                    .title: "New Playlist"
+                ]))
+                createPlaylist(playlist)
             } label: {
                 Image(systemName: "music.note.list")
             }
-            .disabled(true)
 
             Button {
-                // TODO Add folder
+                let playlist = TransientPlaylist(.playlists, attributes: .init([
+                    .title: "New Folder"
+                ]))
+                createPlaylist(playlist)
             } label: {
                 Image(systemName: "folder")
             }
-            .disabled(true)
 
             Button {
-                // TODO Add hybrid folder
+                let playlist = TransientPlaylist(.hybrid, attributes: .init([
+                    .title: "New Hybrid Folder"
+                ]))
+                createPlaylist(playlist)
             } label: {
                 Image(systemName: "questionmark.folder")
             }
-            .disabled(true)
         }
     }
     

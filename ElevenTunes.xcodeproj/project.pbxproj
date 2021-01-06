@@ -105,6 +105,7 @@
 		806E20222596C26A003EEA83 /* RemoteTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E20212596C26A003EEA83 /* RemoteTrack.swift */; };
 		806E202825975A0E003EEA83 /* MockTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E202725975A0E003EEA83 /* MockTrack.swift */; };
 		806E203025975A15003EEA83 /* TransientPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E202F25975A15003EEA83 /* TransientPlaylist.swift */; };
+		808445D525A663CC00E27EC8 /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808445D425A663CC00E27EC8 /* Alerts.swift */; };
 		808A761F2593F2EA00B0A9CE /* ContentInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808A761E2593F2EA00B0A9CE /* ContentInterpreter.swift */; };
 		808A76242593FF4900B0A9CE /* ContentInterpreter+Interpreters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808A76232593FF4900B0A9CE /* ContentInterpreter+Interpreters.swift */; };
 		808A7631259405F200B0A9CE /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808A7630259405F200B0A9CE /* URL.swift */; };
@@ -265,6 +266,7 @@
 		806E20212596C26A003EEA83 /* RemoteTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTrack.swift; sourceTree = "<group>"; };
 		806E202725975A0E003EEA83 /* MockTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTrack.swift; sourceTree = "<group>"; };
 		806E202F25975A15003EEA83 /* TransientPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransientPlaylist.swift; sourceTree = "<group>"; };
+		808445D425A663CC00E27EC8 /* Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
 		808A761E2593F2EA00B0A9CE /* ContentInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentInterpreter.swift; sourceTree = "<group>"; };
 		808A76232593FF4900B0A9CE /* ContentInterpreter+Interpreters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentInterpreter+Interpreters.swift"; sourceTree = "<group>"; };
 		808A7630259405F200B0A9CE /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
@@ -380,6 +382,7 @@
 			isa = PBXGroup;
 			children = (
 				802DBA5C25A0BB8A00EA6DB7 /* NSWindow.swift */,
+				808445D425A663CC00E27EC8 /* Alerts.swift */,
 			);
 			path = AppKit;
 			sourceTree = "<group>";
@@ -964,6 +967,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				808A761F2593F2EA00B0A9CE /* ContentInterpreter.swift in Sources */,
+				808445D525A663CC00E27EC8 /* Alerts.swift in Sources */,
 				8054BFFA259F6A2700A7035A /* PlayingTrackView.swift in Sources */,
 				805338322598D5F9006F06DC /* DBTrack+Changes.swift in Sources */,
 				806E20012596B6C3003EEA83 /* RemotePlaylist.swift in Sources */,
