@@ -107,7 +107,14 @@ extension Library {
         for (playlist, children) in playlistChildren {
             playlist.addToChildren(NSOrderedSet(array: children.map { playlistsByID[$0]! }))
         }
-        
+     
+        // ================= Awake Objects =====================
+        // (awakeFromInsert was before this, but we aren't on main thread, so watchers
+        // didn't have a chance to trigger)
+
+        playlistsByID.values.forEach { $0.initialSetup() }
+        tracksByID.values.forEach { $0.initialSetup() }
+
         // Finally, gather back what was originally asked
         return (
             library.allTracks.map { tracksByID[$0.id]! },
