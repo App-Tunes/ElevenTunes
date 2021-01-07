@@ -20,8 +20,7 @@ extension EnvironmentValues {
 
 struct ContentView: View {
     @State var isImporting: Bool = false
-    
-    @Environment(\.library) var library: Library!
+    @State var mainPlaylist: Playlist
 
     @State var selection = Set<Playlist>()
 
@@ -29,7 +28,7 @@ struct ContentView: View {
         
         HSplitView {
             ZStack(alignment: .top) {
-                NavigatorView(directory: Playlist(library.mainPlaylist), selection: $selection)
+                NavigatorView(directory: mainPlaylist, selection: $selection)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
 
                 VisualEffectView(material: .sidebar, blendingMode: .behindWindow, emphasized: false)

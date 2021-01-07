@@ -35,7 +35,7 @@ public class DBLibraryPlaylist: AnyPlaylist {
         self.cachedContentType = contentType
     }
     
-    public var id: String { cache.objectID.description }
+    public var id: String { cache.uuid.uuidString }
     
     public var origin: URL? { nil }
     
@@ -102,7 +102,11 @@ public class DBLibraryPlaylist: AnyPlaylist {
             let library = self.library
             
             return cache.$tracksP
-                .flatMap { $0.map(library.track).combineLatest() }
+                .flatMap {
+                    $0.count == 0
+                        ? Just([]).eraseToAnyPublisher()
+                        : $0.map(library.track).combineLatest().eraseToAnyPublisher()
+                }
                 .eraseToAnyPublisher()
         }
         
@@ -118,7 +122,11 @@ public class DBLibraryPlaylist: AnyPlaylist {
             // Everything is cached
             let library = self.library
             return cache.$childrenP
-                .flatMap { $0.map(library.playlist).combineLatest() }
+                .flatMap {
+                    $0.count == 0
+                        ? Just([]).eraseToAnyPublisher()
+                        : $0.map(library.playlist).combineLatest().eraseToAnyPublisher()
+                }
                 .eraseToAnyPublisher()
         }
         

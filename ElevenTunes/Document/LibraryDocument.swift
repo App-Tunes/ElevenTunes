@@ -60,7 +60,7 @@ class LibrarySettingsLevel: SettingsLevel, Codable {
         // Create the SwiftUI view and set the context as the value for the managedObjectContext environment keyPath.
         // Add `@Environment(\.managedObjectContext)` in the views that will need the context.
         let library = Library(managedObjectContext: managedObjectContext, settings: settings)
-        let contentView = ContentView()
+        let contentView = ContentView(mainPlaylist: Playlist(library.mainPlaylist))
             .environment(\.managedObjectContext, self.managedObjectContext!)
             .environment(\.library, library)
             .environment(\.player, library.player)

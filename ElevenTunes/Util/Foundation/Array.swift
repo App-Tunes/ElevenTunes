@@ -32,14 +32,28 @@ extension Array {
     mutating func prepend(_ element: Element) {
         self = [element] + self
     }
-}
-
-extension Array where Element:Equatable {
-    func removeDuplicates() -> [Element] {
+    
+    func removeDuplicates<T: Hashable>(by: (Element) -> T) -> [Element] {
         var result = [Element]()
+        var set = Set<T>()
 
         for value in self {
-            if result.contains(value) == false {
+            if set.insert(by(value)).inserted {
+                result.append(value)
+            }
+        }
+
+        return result
+    }
+}
+
+extension Array where Element: Hashable {
+    func removeDuplicates() -> [Element] {
+        var result = [Element]()
+        var set = Set<Element>()
+
+        for value in self {
+            if set.insert(value).inserted {
                 result.append(value)
             }
         }

@@ -37,7 +37,7 @@ class LibraryPlaylist: AnyPlaylist {
 
         _children = CDPublisher(request: LibraryPlaylist.playlistFetchRequest, context: managedObjectContext)
             // TODO Apparently, sometimes the same object is emitted twice
-            .map { $0.removeDuplicates() }
+            .map { $0.removeDuplicates { $0.uuid } }
             .removeDuplicates()
             .flatMap {
                 $0
