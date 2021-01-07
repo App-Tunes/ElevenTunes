@@ -11,13 +11,18 @@ struct PlaylistMultiplicityView: View {
     let playlists: [Playlist]
     
     var body: some View {
-        if let playlist = playlists.one {
+        let showPlaylists = playlists.filter { $0.backend.contentType != .playlists }
+        
+        if showPlaylists.isEmpty {
+            // TODO What do show? Certainly not tracks lol
+        }
+        else if let playlist = playlists.one {
             PlaylistView(playlist: playlist)
         }
         // TODO Currently freezes the view in an infinite loop
         // need caches.
-//        else if playlists.count < 5 {
-//            PlaylistView(playlist: Playlist(MultiPlaylist(playlists.map { $0.backend })))
+//        else if showPlaylists.count < 5 {
+//            PlaylistView(playlist: Playlist(MultiPlaylist(showPlaylists.map { $0.backend })))
 //        }
     }
 }
