@@ -85,8 +85,8 @@ public class SpotifyTrackToken: TrackToken, SpotifyURIConvertible {
     
     static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyTrackToken, Error> {
         return Future { try trackID(fromURL: url) }
-            .flatMap { uri in
-                spotify.api.track(uri).compactMap(ExistingSpotifyTrack.init)
+            .flatMap {
+                spotify.api.track(SpotifyTrackToken($0)).compactMap(ExistingSpotifyTrack.init)
             }
             .map { SpotifyTrackToken($0.id) }
             .eraseToAnyPublisher()

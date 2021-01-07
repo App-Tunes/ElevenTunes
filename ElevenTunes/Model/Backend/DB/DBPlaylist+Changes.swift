@@ -56,23 +56,23 @@ extension DBPlaylist: SelfChangeWatcher {
         }
         
         if changes.keys.contains("contentType") {
-            contentTypeP = contentType
+            contentTypeP ?= contentType
         }
         
         if changes.keys.contains("tracks") {
-            tracksP = tracks.array as! [DBTrack]
+            tracksP ?= tracks.array as! [DBTrack]
         }
 
         if changes.keys.contains("children") {
-            childrenP = children.array as! [DBPlaylist]
+            childrenP ?= self.children.array as! [DBPlaylist]
         }
 
         if changes.keys.contains("backendCacheMask") {
-            cacheMaskP = PlaylistContentMask(rawValue: backendCacheMask)
+            cacheMaskP ?= PlaylistContentMask(rawValue: backendCacheMask)
         }
 
         if changes.keys.contains("indexed") {
-            isIndexedP = indexed
+            isIndexedP ?= indexed
         }
     }
 }

@@ -26,6 +26,9 @@ struct TracksView: View {
                         .contextMenu(menuItems: TracksContextMenu(tracks: tracks, idx: idx, selected: selected).callAsFunction)
                         .tag(idx)
                 }
+                .onMove { (source, dest) in
+                    print(source)
+                }
                 
                 Spacer()
                     // For bottom bar
@@ -47,6 +50,7 @@ struct TracksView: View {
             self.tracks = $0
         }
         .frame(minWidth: 200, maxWidth: .infinity, minHeight: 50, maxHeight: .infinity)
+        .contentShape(Rectangle())
         .onDrop(of: ContentInterpreter.types, delegate: PlaylistDropInterpreter(library.interpreter, parent : playlist.backend))
     }
 }

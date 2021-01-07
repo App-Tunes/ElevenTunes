@@ -15,7 +15,7 @@ extension DBTrack: SelfChangeWatcher {
             attributesP = cachedAttributes
         }
         
-        if changes.keys.contains("backend") {
+        if changes.keys.contains("backend"), backendP != backend {
             if backend != nil {
                 // Invalidate stuff we stored for the backend
                 if backendCacheMask != 0 { backendCacheMask = 0 }
@@ -27,7 +27,7 @@ extension DBTrack: SelfChangeWatcher {
         }
 
         if changes.keys.contains("backendCacheMask") {
-            cacheMaskP = TrackContentMask(rawValue: backendCacheMask)
+            cacheMaskP ?= TrackContentMask(rawValue: backendCacheMask)
         }
     }
 }
