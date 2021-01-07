@@ -25,11 +25,11 @@ struct ContentView: View {
     @State var selection = Set<Playlist>()
 
     var body: some View {
-        
         HSplitView {
             ZStack(alignment: .top) {
                 NavigatorView(directory: mainPlaylist, selection: $selection)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .listStyle(SidebarListStyle())
 
                 VisualEffectView(material: .sidebar, blendingMode: .behindWindow, emphasized: false)
                     .frame(height: 50)
@@ -43,17 +43,14 @@ struct ContentView: View {
                 PlayerBarView()
                     .frame(maxWidth: .infinity)
 
-                HStack {
-                    PlaylistMultiplicityView(playlists: selection.sorted { $0.id < $1.id })
-                }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                PlaylistMultiplicityView(playlists: selection.sorted { $0.id < $1.id })
+                    .frame(minWidth: 200, idealWidth: 250, maxWidth: .infinity, minHeight: 100, idealHeight: 400, maxHeight: .infinity)
                     .layoutPriority(2)
             }
                 .preferredColorScheme(.dark)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .layoutPriority(2)
         }
-        .listStyle(SidebarListStyle())
     }
 }
 
