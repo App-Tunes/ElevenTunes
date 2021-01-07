@@ -26,6 +26,7 @@ struct NavigationBarView: View {
                 createPlaylist(playlist)
             } label: {
                 Image(systemName: "music.note.list")
+                    .badge(systemName: "plus.circle.fill")
             }
 
             Button {
@@ -35,6 +36,7 @@ struct NavigationBarView: View {
                 createPlaylist(playlist)
             } label: {
                 Image(systemName: "folder")
+                    .badge(systemName: "plus.circle.fill")
             }
 
             Button {
@@ -44,6 +46,7 @@ struct NavigationBarView: View {
                 createPlaylist(playlist)
             } label: {
                 Image(systemName: "questionmark.folder")
+                    .badge(systemName: "plus.circle.fill")
             }
         }
     }
