@@ -51,13 +51,7 @@ class LibrarySettingsLevel: SettingsLevel, Codable {
     }
 
     @Published var settings: LibrarySettingsLevel
-
-    override class var autosavesInPlace: Bool {
-        return true
-    }
     
-    override var isDocumentEdited: Bool { false }
-
     override func makeWindowControllers() {
         // Create the SwiftUI view and set the context as the value for the managedObjectContext environment keyPath.
         // Add `@Environment(\.managedObjectContext)` in the views that will need the context.
@@ -87,6 +81,8 @@ class LibrarySettingsLevel: SettingsLevel, Codable {
         if !window.constrainMaxTitleSize(110) {
             appLogger.error("Failed to constrain window title size")
         }
+        
+        updateChangeCount(.changeCleared)
     }
     
     func `import`(_ dlibrary: AnyLibrary) -> Bool {

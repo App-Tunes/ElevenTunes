@@ -21,7 +21,10 @@ class DocumentController: NSDocumentController {
             context: doc.managedObjectContext!
         )
         doc.settings.defaultPlaylist = playlists[0].uuid
-
+        
+        /// All initial object creation should NOT be undoable.
+        doc.undoManager?.removeAllActions()
+        
         return doc
     }
     
