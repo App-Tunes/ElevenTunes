@@ -122,16 +122,30 @@ extension Library {
         )
     }
     
-    static func `import`(_ dlibrary: AnyLibrary, to parent: DBPlaylist) {
+    static func `import`(_ dlibrary: AnyLibrary, to parent: DBPlaylist) -> Bool {
+        guard !dlibrary.allTracks.isEmpty || !dlibrary.allPlaylists.isEmpty else {
+            return false  // lol why bother bro
+        }
+        
+        let contentType = parent.contentType
+        guard dlibrary.allTracks.isEmpty || contentType != .playlists else {
+            return false  // Can't contain tracks
+        }
+        
+        guard dlibrary.allPlaylists.isEmpty || contentType != .tracks else {
+            return false  // Can't contain playlists
+        }
+        
         // Fetch requests auto-update content
         parent.managedObjectContext!.performChildTask(concurrencyType: .privateQueueConcurrencyType) { context in
-            let (_, playlists) = Library.convert(
+            let (tracks, playlists) = Library.convert(
                 dlibrary,
                 context: context
             )
 
             let parent = context.translate(parent)
-            playlists.forEach { $0.parent = parent }
+            parent?.addToChildren(NSOrderedSet(array: playlists))
+            parent?.addToTracks(NSOrderedSet(array: tracks))
 
             do {
                 try context.save()
@@ -140,5 +154,7 @@ extension Library {
                 appLogger.error("Failed import: \(error)")
             }
         }
+        
+        return true
     }
 }

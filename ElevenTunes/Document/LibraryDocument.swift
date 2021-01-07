@@ -93,8 +93,7 @@ class LibrarySettingsLevel: SettingsLevel, Codable {
             return false
         }
                 
-        Library.import(dlibrary, to: playlist)
-        return true
+        return Library.import(dlibrary, to: playlist)
     }
 
     override func additionalContent(for absoluteURL: URL!, saveOperation: NSDocument.SaveOperationType) throws -> Any {

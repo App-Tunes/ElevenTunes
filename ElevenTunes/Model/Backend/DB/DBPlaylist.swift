@@ -155,8 +155,7 @@ public class DBLibraryPlaylist: AnyPlaylist {
     public func `import`(library: AnyLibrary) -> Bool {
         guard let backend = backend else {
             // We have no backend, let's fucking gooo
-            Library.import(library, to: cache)
-            return true
+            return Library.import(library, to: cache)
         }
         
         // Backend is responsible for resetting caches etc.

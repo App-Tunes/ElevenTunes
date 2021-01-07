@@ -113,7 +113,6 @@ class LibraryPlaylist: AnyPlaylist {
             return false
         }
 
-        Library.import(library, to: defaultPlaylist)
-        return true
+        return Library.import(library, to: defaultPlaylist)
     }
 }
