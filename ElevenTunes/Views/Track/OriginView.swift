@@ -9,71 +9,65 @@ import SwiftUI
 import Combine
 
 struct ArtistCellView: View {
-    let artist: AnyPlaylist
+    let artist: Playlist
 
-    @State var contentMask: PlaylistContentMask = []
-    @State var attributes: TypedDict<PlaylistAttribute> = .init()
+	@State var title: PlaylistAttributes.ValueSnapshot<String?> = .missing()
 
     var body: some View {
         HStack {
-            if contentMask.contains(.minimal) {
-                if let url = artist.origin {
+			if title.state.isVersioned {
+                if let url = artist.backend.origin {
                     UnderlinedLink(
-                        description: attributes[PlaylistAttribute.title] ?? "Unknown Artist",
+                        description: title.value ?? "Unknown Artist",
                         destination: url
                     )
                 }
                 else {
-                    Text(attributes[PlaylistAttribute.title] ?? "Unknown Artist")
+                    Text(title.value ?? "Unknown Artist")
                 }
             }
             else {
-                Text(attributes[PlaylistAttribute.title] ?? "...")
+				Text(title.value ?? "...")
                     .opacity(0.5)
             }
         }
-        .onReceive(artist.attributes()) { attributes = $0 }
-        .onReceive(artist.cacheMask()) { contentMask = $0 }
+		.onReceive(artist.backend.attributes.filtered(toJust: PlaylistAttribute.title)) { title = $0 }
     }
 }
 
 struct AlbumCellView: View {
-    let album: AnyPlaylist
+    let album: Playlist
     
-    @State var contentMask: PlaylistContentMask = []
-    @State var attributes: TypedDict<PlaylistAttribute> = .init()
+	@State var title: PlaylistAttributes.ValueSnapshot<String?> = .missing()
     
     var body: some View {
-        HStack {
-            album.icon
+		HStack {
+            album.backend.icon
             
-            if contentMask.contains(.minimal) {
-                if let url = album.origin {
+			if title.state.isVersioned {
+                if let url = album.backend.origin {
                     UnderlinedLink(
-                        description: attributes[PlaylistAttribute.title] ?? "Unknown Album",
+						description: title.value ?? "Unknown Album",
                         destination: url
                     )
                 }
                 else {
-                    Text(attributes[PlaylistAttribute.title] ?? "Unknown Album")
+                    Text(title.value ?? "Unknown Album")
                 }
             }
             else {
-                Text(attributes[PlaylistAttribute.title] ?? "...")
+                Text(title.value ?? "...")
                     .opacity(0.5)
             }
         }
-        .onReceive(album.attributes()) { attributes = $0 }
-        .onReceive(album.cacheMask()) { contentMask = $0 }
+		.onReceive(album.backend.attributes.filtered(toJust: PlaylistAttribute.title)) { title = $0 }
     }
 }
 
 struct TrackOriginView: View {
-    let artists: [AnyPlaylist]
-    let album: AnyPlaylist?
+    let artists: [Playlist]
+    let album: Playlist?
     
-    @State var albumAttributes: TypedDict<TrackAttribute> = .init()
-
     var body: some View {
         HStack {
             Image(systemName: "person.2")

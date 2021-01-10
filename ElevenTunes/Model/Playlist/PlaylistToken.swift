@@ -11,6 +11,8 @@ import SwiftUI
 
 public class PlaylistToken: NSObject, Codable {
     public var id: String { fatalError() }
+	
+	public var origin: URL? { nil }
 
     func expand(_ context: Library) -> AnyPlaylist { fatalError() }
 

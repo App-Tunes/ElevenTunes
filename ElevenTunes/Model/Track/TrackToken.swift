@@ -12,6 +12,8 @@ import SwiftUI
 public class TrackToken: NSObject, Codable {
     public var id: String { fatalError() }
     
+	var origin: URL? { nil }
+
     func expand(_ context: Library) -> AnyTrack { fatalError() }
     
     // NSObject gedöns

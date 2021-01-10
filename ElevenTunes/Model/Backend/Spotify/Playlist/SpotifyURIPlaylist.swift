@@ -24,7 +24,7 @@ public class SpotifyURIPlaylistToken: PlaylistToken, SpotifyURIConvertible {
     public override var id: String { spotifyID }
     
     public var uri: String { "spotify:\(Self.urlComponent):\(id)" }
-    public var origin: URL? { URL(string: "https://open.spotify.com/\(Self.urlComponent)/\(spotifyID)") }
+    public override var origin: URL? { URL(string: "https://open.spotify.com/\(Self.urlComponent)/\(spotifyID)") }
 
     public required init(_ spotifyID: String) {
         self.spotifyID = spotifyID
@@ -57,18 +57,10 @@ public class SpotifyURIPlaylistToken: PlaylistToken, SpotifyURIConvertible {
     class var urlComponent: String { fatalError() }
 }
 
-public class SpotifyURIPlaylist<Token: SpotifyURIPlaylistToken>: RemotePlaylist {
-    let token: Token
-    let spotify: Spotify
-    
-    init(_ token: Token, spotify: Spotify) {
-        self.token = token
-        self.spotify = spotify
-    }
-    
-    public override var accentColor: Color { Spotify.color }
+protocol SpotifyURIPlaylist: RemotePlaylist {
+	var spotify: Spotify { get }
+}
 
-    public override var asToken: PlaylistToken { token }
-    
-    public override var origin: URL? { token.origin }
+extension SpotifyURIPlaylist {
+	public var accentColor: Color { Spotify.color }
 }

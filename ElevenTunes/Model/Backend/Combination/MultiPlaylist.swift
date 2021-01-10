@@ -17,6 +17,13 @@ class MultiPlaylist: AnyPlaylist {
         self.playlists = playlists
     }
     
+    static func combine(_ versions: [PlaylistVersion?]) -> PlaylistVersion? {
+        guard let versions = versions.explodeMap({ $0 }) else {
+            return nil
+        }
+        return Hasher.combine(versions).description
+    }
+    
     var id: String { "multi:\(playlists.map { $0.id }.joined(separator: ":"))" }
     
     var asToken: PlaylistToken { fatalError() }
@@ -27,44 +34,57 @@ class MultiPlaylist: AnyPlaylist {
     
     var hasCaches: Bool { playlists.contains { $0.hasCaches } }
     
-    func invalidateCaches(_ mask: PlaylistContentMask) {
-        playlists.forEach { $0.invalidateCaches(mask) }
+    func invalidateCaches() {
+        playlists.forEach { $0.invalidateCaches() }
     }
+//
+//    func tracks() -> AnyPublisher<TracksSnapshot, Never> {
+//        playlists.map { $0.tracks() }
+//            .combineLatest()
+//            .map {
+//                TracksSnapshot(
+//                    $0.flatMap { $0.data },
+//                    version: MultiPlaylist.combine($0.map { $0.version })
+//                )
+//            }
+//            .eraseToAnyPublisher()
+//    }
+//
+//    func children() -> AnyPublisher<PlaylistsSnapshot, Never> {
+//        playlists.map { $0.children() }
+//            .combineLatest()
+//            .map {
+//                PlaylistsSnapshot(
+//                    $0.flatMap { $0.data },
+//                    version: MultiPlaylist.combine($0.map { $0.version })
+//                )
+//            }
+//            .eraseToAnyPublisher()
+//    }
+//
+//    func attributes() -> AnyPublisher<PlaylistAttributesSnapshot, Never> {
+//        playlists.map { $0.attributes() }
+//            .combineLatest()
+//            .map {
+//                PlaylistAttributesSnapshot(
+//                    TypedDict<PlaylistAttribute>([
+//                        .title: "Multiple Playlists"
+//                    ]),
+//                    version: MultiPlaylist.combine($0.map { $0.version })
+//                )
+//            }
+//            .eraseToAnyPublisher()
+//    }
     
-    func cacheMask() -> AnyPublisher<PlaylistContentMask, Never> {
-        playlists.map { $0.cacheMask() }
-            .combineLatest()
-            .map { masks in
-                masks.reduce(into: PlaylistContentMask.all) { $0.formIntersection($1) }
-            }
-            .eraseToAnyPublisher()
-    }
-    
-    func tracks() -> AnyPublisher<[AnyTrack], Never> {
-        playlists.map { $0.tracks() }
-            .combineLatest()
-            .map { $0.flatMap { $0 } }
-            .eraseToAnyPublisher()
-    }
-    
-    func children() -> AnyPublisher<[AnyPlaylist], Never> {
-        playlists.map { $0.children() }
-            .combineLatest()
-            .map { $0.flatMap { $0 } }
-            .eraseToAnyPublisher()
-    }
-    
-    func attributes() -> AnyPublisher<TypedDict<PlaylistAttribute>, Never> {
-        playlists.map { $0.cacheMask() }
-            .combineLatest()
-            .map { _ in
-                TypedDict<PlaylistAttribute>([
-                    .title: "Multiple Playlists"
-                ])
-            }
-            .eraseToAnyPublisher()
-    }
-    
+	func demand(_ demand: Set<PlaylistAttribute>) -> AnyCancellable {
+//		playlists.map { $0.demand(demand) }
+		fatalError()
+	}
+	
+	var attributes: AnyPublisher<PlaylistAttributes.Update, Never> {
+		fatalError() // TODO
+	}
+	
     func `import`(library: AnyLibrary) -> Bool { false }
     
     func previewImage() -> AnyPublisher<NSImage?, Never> {

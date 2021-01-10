@@ -78,6 +78,10 @@ public class CurrentValueSubjectPublishingDemand<Output, Failure: Error>: Subjec
         }
         subscriber.receive(subscription: subscription)
     }
+	
+	func onDemand() -> AnyPublisher<Bool, Never> {
+		$demand.map { $0 > 0 }.removeDuplicates().eraseToAnyPublisher()
+	}
 }
 
 extension CurrentValueSubjectPublishingDemand {

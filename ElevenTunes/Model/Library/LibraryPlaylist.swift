@@ -19,34 +19,39 @@ class LibraryPlaylist: AnyPlaylist {
     var cancellables = Set<AnyCancellable>()
     var library: Library?  // Weak because reference cycle
         
+	let _attributes: VolatileAttributes<PlaylistAttribute, PlaylistVersion> = .init()
+	
     init(library: Library, playContext: PlayContext) {
         self.managedObjectContext = library.managedObjectContext
         self.playContext = playContext
         self.library = library
         
-        _tracks = CDPublisher(request: DBTrack.createFetchRequest(), context: managedObjectContext)
-            // TODO Apparently, sometimes the same object is emitted twice
-            .map { $0.removeDuplicates() }
-            .removeDuplicates()
-            .flatMap {
-                $0.map { [weak self] in self!.library!.track(cachedBy: $0) }
-                    .combineLatest()
-            }
-            .replaceError(with: [])
-            .eraseToAnyPublisher()
-
-        _children = CDPublisher(request: LibraryPlaylist.playlistFetchRequest, context: managedObjectContext)
-            // TODO Apparently, sometimes the same object is emitted twice
-            .map { $0.removeDuplicates { $0.uuid } }
-            .removeDuplicates()
-            .flatMap {
-                $0
-                    .map { [weak self] in self!.library!.playlist(cachedBy: $0) }
-                    .combineLatest()
-            }
-            .combineLatest($staticPlaylists.eraseError()).map { $1 + $0 }
-            .replaceError(with: [])
-            .eraseToAnyPublisher()
+		// TODO
+//        _tracks = CDPublisher(request: DBTrack.createFetchRequest(), context: managedObjectContext)
+//            // TODO Apparently, sometimes the same object is emitted twice
+//            .map { $0.removeDuplicates() }
+//            .removeDuplicates()
+//            .flatMap {
+//                $0.map { [weak self] in self!.library!.track(cachedBy: $0) }
+//                    .combineLatest()
+//            }
+//            .replaceError(with: [])
+//            .map { TracksSnapshot($0) }
+//            .eraseToAnyPublisher()
+//
+//        _children = CDPublisher(request: LibraryPlaylist.playlistFetchRequest, context: managedObjectContext)
+//            // TODO Apparently, sometimes the same object is emitted twice
+//            .map { $0.removeDuplicates { $0.uuid } }
+//            .removeDuplicates()
+//            .flatMap {
+//                $0
+//                    .map { [weak self] in self!.library!.playlist(cachedBy: $0) }
+//                    .combineLatest()
+//            }
+//            .combineLatest($staticPlaylists.eraseError()).map { $1 + $0 }
+//            .replaceError(with: [])
+//            .map { PlaylistsSnapshot($0) }
+//            .eraseToAnyPublisher()
                 
         staticPlaylists = [
             SpotifyUser(spotify: library.spotify)
@@ -65,27 +70,20 @@ class LibraryPlaylist: AnyPlaylist {
     
     var hasCaches: Bool { false }
     
-    var asToken: PlaylistToken { fatalError()}
+    var asToken: PlaylistToken { fatalError() }
     
-    func cacheMask() -> AnyPublisher<PlaylistContentMask, Never> {
-        Just([.minimal, .children, .tracks, .attributes]).eraseToAnyPublisher()
-    }
-    
-    var _tracks: AnyPublisher<[AnyTrack], Never>!
-    func tracks() -> AnyPublisher<[AnyTrack], Never> {
-        _tracks
-    }
-    
-    var _children: AnyPublisher<[AnyPlaylist], Never>!
-    func children() -> AnyPublisher<[AnyPlaylist], Never> {
-        _children
-    }
-    
-    // TODO
-    @Published var _attributes: TypedDict<PlaylistAttribute> = .init()
-    func attributes() -> AnyPublisher<TypedDict<PlaylistAttribute>, Never> {
-        $_attributes.eraseToAnyPublisher()
-    }
+	func invalidateCaches() {
+		// We have no caches lol
+	}
+	
+	func demand(_ demand: Set<PlaylistAttribute>) -> AnyCancellable {
+		// TODO We may want to invalidate CD Publishers if there's no demand
+		AnyCancellable { }
+	}
+
+	var attributes: AnyPublisher<PlaylistAttributes.Update, Never> {
+		_attributes.$snapshot.eraseToAnyPublisher()
+	}
     
     func previewImage() -> AnyPublisher<NSImage?, Never> {
         Just(nil).eraseToAnyPublisher()
@@ -97,15 +95,7 @@ class LibraryPlaylist: AnyPlaylist {
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         return request
     }
-    
-    func load(atLeast mask: PlaylistContentMask, library: Library) {
-        // TODO Deep
-    }
-    
-    func invalidateCaches(_ mask: PlaylistContentMask) {
-        // We have no caches per se, everything is stream
-    }
-    
+        
     var icon: Image { Image(systemName: "house.fill" ) }
             
     func `import`(library: AnyLibrary) -> Bool {

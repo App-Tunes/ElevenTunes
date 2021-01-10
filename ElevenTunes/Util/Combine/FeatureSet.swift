@@ -117,6 +117,10 @@ class FeatureSet<Feature: Hashable, Set> where Set: SetAlgebra, Set.Element == F
     func subtract(_ features: Set) { lock.perform {
         self.features.subtract(features)
     } }
+	
+	func clear() { lock.perform {
+		self.features = []
+	} }
 }
 
 extension FeatureSet {

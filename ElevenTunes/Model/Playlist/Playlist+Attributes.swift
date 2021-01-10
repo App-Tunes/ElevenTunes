@@ -7,6 +7,8 @@
 
 import Foundation
 
+public typealias PlaylistVersion = String
+
 public class PlaylistAttribute: RawRepresentable, Hashable {
     class Typed<K>: PlaylistAttribute, TypedKey, CustomStringConvertible {
         typealias Value = K
@@ -21,5 +23,17 @@ public class PlaylistAttribute: RawRepresentable, Hashable {
 }
 
 extension PlaylistAttribute {
-    static let title = Typed<String>(rawValue: "title")
+//	static let version = Typed<PlaylistVersion>(rawValue: "version")
+	static let tracks = Typed<[AnyTrack]>(rawValue: "tracks")
+	static let children = Typed<[AnyPlaylist]>(rawValue: "children")
+
+	static let title = Typed<String>(rawValue: "title")
+}
+
+public typealias PlaylistAttributes = VolatileAttributes<PlaylistAttribute, PlaylistVersion>
+
+extension PlaylistAttribute {
+	static let common: Set<PlaylistAttribute> = [
+		.title
+	]
 }

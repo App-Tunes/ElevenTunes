@@ -21,7 +21,7 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
     var uuid = UUID()
     override var id: String { uuid.description }
     
-    var origin: URL? { nil }
+    override var origin: URL? { nil }
     
     var icon: Image { Image(systemName: "music.note.list") }
     var accentColor: Color { .primary }
@@ -29,14 +29,15 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
     var contentType: PlaylistContentType
     
     var hasCaches: Bool { false }
-    func invalidateCaches(_ mask: PlaylistContentMask) {}
+    func invalidateCaches() {}
+	
+	let _attributes: VolatileAttributes<PlaylistAttribute, PlaylistVersion> = .init()
     
-    init(_ type: PlaylistContentType, attributes: TypedDict<PlaylistAttribute>, children: [AnyPlaylist] = [], tracks: [AnyTrack] = []) {
+    init(_ type: PlaylistContentType, attributes: TypedDict<PlaylistAttribute>) {
         self.contentType = type
-        _attributes = attributes
-        _tracks = tracks
-        _children = children
+		version = UUID().uuidString
         super.init()
+		_attributes.update(attributes, state: .version(version))
     }
     
     public required init(from decoder: Decoder) throws {
@@ -56,25 +57,20 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
     override func expand(_ context: Library) -> AnyPlaylist { self }
     
     var asToken: PlaylistToken { self }
-
-    func cacheMask() -> AnyPublisher<PlaylistContentMask, Never> {
-        Just([.minimal, .children, .tracks, .attributes]).eraseToAnyPublisher()
-    }
     
-    @Published var _attributes: TypedDict<PlaylistAttribute> = .init()
-    func attributes() -> AnyPublisher<TypedDict<PlaylistAttribute>, Never> {
-        $_attributes.eraseToAnyPublisher()
+    func refreshVersion() {
+        version = UUID().uuidString
     }
 
-    @Published var _tracks: [AnyTrack]
-    func tracks() -> AnyPublisher<[AnyTrack], Never> {
-        $_tracks.eraseToAnyPublisher()
-    }
-    
-    @Published var _children: [AnyPlaylist]
-    func children() -> AnyPublisher<[AnyPlaylist], Never> {
-        $_children.eraseToAnyPublisher()
-    }
+    @Published var version: PlaylistVersion
+
+	func demand(_ demand: Set<PlaylistAttribute>) -> AnyCancellable {
+		AnyCancellable {}
+	}
+	
+	var attributes: AnyPublisher<PlaylistAttributes.Update, Never> {
+		_attributes.$snapshot.eraseToAnyPublisher()
+	}
 
     func `import`(library: AnyLibrary) -> Bool {
         return false  // TODO We can do this bois

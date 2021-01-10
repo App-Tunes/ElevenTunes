@@ -2,79 +2,43 @@
 //  RemotePlaylist.swift
 //  ElevenTunes
 //
-//  Created by Lukas Tenbrink on 26.12.20.
+//  Created by Lukas Tenbrink on 09.01.21.
 //
 
 import Foundation
 import Combine
-import SwiftUI
 
-public class RemotePlaylist: AnyPlaylist {
-    var cancellables = Set<AnyCancellable>()
-    
-    let contentSet: FeatureSet<PlaylistContentMask, PlaylistContentMask> = .init()
-    
-    public var id: String { asToken.id }
-    public var asToken: PlaylistToken { fatalError() }
-    
-    public var origin: URL? { nil }
+protocol RemotePlaylist: AnyPlaylist, RequestMapperDelegate {
+	associatedtype Token: PlaylistToken
+	typealias Requests = RequestMapper<PlaylistAttribute, PlaylistVersion, Self>
 
-    public var accentColor: Color { .primary }
-    public var icon: Image { Image(systemName: "music.note.list") }
-    
-    public var contentType: PlaylistContentType { .tracks }
-    
-    public var hasCaches: Bool { true }
-    
-    public func cacheMask() -> AnyPublisher<PlaylistContentMask, Never> {
-        contentSet.$features.eraseToAnyPublisher()
-    }
-    
-    public func invalidateCaches(_ mask: PlaylistContentMask) {
-        contentSet.subtract(mask)
-    }
-    
-    @Published var demandMask: PlaylistContentMask = []
-    
-    public var _tracks: CurrentValueSubjectPublishingDemand<[AnyTrack], Never> = .init([])
-    public func tracks() -> AnyPublisher<[AnyTrack], Never> {
-        _tracks.eraseToAnyPublisher()
-    }
-    
-    public var _children: CurrentValueSubjectPublishingDemand<[AnyPlaylist], Never> = .init([])
-    public func children() -> AnyPublisher<[AnyPlaylist], Never> {
-        _children.eraseToAnyPublisher()
-    }
-    
-    public var _attributes: CurrentValueSubjectPublishingDemand<TypedDict<PlaylistAttribute>, Never> = .init(.init())
-    public func attributes() -> AnyPublisher<TypedDict<PlaylistAttribute>, Never> {
-        _attributes.eraseToAnyPublisher()
-    }
-    
-    init() {
-        mergeDemandMask(
-            PlaylistContentMask(), subjects: [
-                (_tracks.$demand, .tracks),
-                (_children.$demand, .children),
-                (_attributes.$demand, .init([.minimal, .attributes]))
-            ]
-        ).combineLatest(contentSet.$features)
-        .map { $0.subtracting($1) }
-        .removeDuplicates()
-        // We may currently be in a feature change, let's defer this run
-        .debounce(for: .milliseconds(10), scheduler: RunLoop.main)
-        .sink { [weak self] in
-            self?.load(atLeast: $0)
-        }.store(in: &cancellables)
-    }
-    
-    public func load(atLeast mask: PlaylistContentMask) {
-        fatalError()
-    }
-    
-    public func `import`(library: AnyLibrary) -> Bool { false }
-    
-    public func previewImage() -> AnyPublisher<NSImage?, Never> {
-        Just(nil).eraseToAnyPublisher()
-    }
+	var mapper: Requests { get }
+	var token: Token { get }
+}
+
+extension RemotePlaylist {
+	public var attributes: AnyPublisher<PlaylistAttributes.Update, Never> {
+		mapper.attributes.$snapshot.eraseToAnyPublisher()
+	}
+	
+	public func demand(_ demand: Set<PlaylistAttribute>) -> AnyCancellable {
+		mapper.demand.add(demand)
+	}
+	
+	public var hasCaches: Bool { true }
+	
+	public func invalidateCaches() {
+		mapper.attributes.invalidate()
+	}
+	
+	public func `import`(library: AnyLibrary) -> Bool { false }
+	
+	public func previewImage() -> AnyPublisher<NSImage?, Never> {
+		Just(nil).eraseToAnyPublisher()
+	}
+
+	public var asToken: PlaylistToken { token }
+	public var origin: URL? { token.origin }
+
+	public var id: String { token.id }
 }

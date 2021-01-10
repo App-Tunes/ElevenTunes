@@ -64,8 +64,8 @@ public class RemoteTrack: AnyTrack {
         
         if mask.contains(.minimal) {
             // Let's be safe and invalidate these too
-            _album.value?.invalidateCaches(.all)
-            _artists.value.forEach { $0.invalidateCaches(.all) }
+            _album.value?.invalidateCaches()
+            _artists.value.forEach { $0.invalidateCaches() }
         }
     }
     

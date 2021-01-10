@@ -12,12 +12,14 @@
     </entity>
     <entity name="DBPlaylist" representedClassName="DBPlaylist" syncable="YES">
         <attribute name="backend" optional="YES" attributeType="Transformable" valueTransformerName="PlaylistBackendTransformer" customClassName=".PersistentPlaylist"/>
-        <attribute name="backendCacheMask" attributeType="Integer 16" valueTransformerName="LoadLevelTransformer" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="backendID" attributeType="String" defaultValueString=""/>
+        <attribute name="childrenVersion" optional="YES" attributeType="String"/>
         <attribute name="contentType" attributeType="Integer 16" valueTransformerName="PlaylistContentTypeTransformer" defaultValueString="0" usesScalarValueType="YES" customClassName="PlaylistContentType"/>
         <attribute name="indexed" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="title" optional="YES" attributeType="String" spotlightIndexingEnabled="YES"/>
+        <attribute name="tracksVersion" optional="YES" attributeType="String"/>
         <attribute name="uuid" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="version" optional="YES" attributeType="String"/>
         <relationship name="artists" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DBArtist" inverseName="playlists" inverseEntity="DBArtist"/>
         <relationship name="children" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="DBPlaylist" inverseName="parent" inverseEntity="DBPlaylist"/>
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DBPlaylist" inverseName="children" inverseEntity="DBPlaylist"/>
@@ -34,7 +36,7 @@
     <elements>
         <element name="DBAlbum" positionX="72" positionY="189" width="128" height="74"/>
         <element name="DBArtist" positionX="90" positionY="198" width="128" height="74"/>
-        <element name="DBPlaylist" positionX="27" positionY="72" width="128" height="194"/>
+        <element name="DBPlaylist" positionX="27" positionY="72" width="128" height="224"/>
         <element name="DBTrack" positionX="18" positionY="63" width="128" height="119"/>
     </elements>
 </model>

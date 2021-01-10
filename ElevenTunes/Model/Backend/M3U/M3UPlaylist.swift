@@ -11,37 +11,12 @@ import CoreData
 import SwiftUI
 import Combine
 
-public class M3UPlaylistToken: PlaylistToken {
+public class M3UPlaylistToken: FilePlaylistToken {
     enum InterpretationError: Error {
         case noFile
     }
 
-    enum CodingKeys: String, CodingKey {
-      case url
-    }
-
-    var url: URL
-    
-    init(_ url: URL) {
-        self.url = url
-        super.init()
-    }
-    
-    public override var id: String { url.absoluteString }
-
-    public required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        url = try container.decode(URL.self, forKey: .url)
-        try super.init(from: decoder)
-    }
-
-    public override func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(url, forKey: .url)
-        try super.encode(to: encoder)
-    }
-    
-    static func create(fromURL url: URL) throws -> M3UPlaylistToken {
+	static func create(fromURL url: URL) throws -> M3UPlaylistToken {
         if try url.isFileDirectory() {
             throw InterpretationError.noFile
         }
@@ -54,23 +29,32 @@ public class M3UPlaylistToken: PlaylistToken {
     }
 }
 
-public class M3UPlaylist: RemotePlaylist {
+public final class M3UPlaylist: RemotePlaylist {
     let library: Library
     let token: M3UPlaylistToken
     
+	enum Request {
+		case url, read
+	}
+	
+	let mapper = Requests(relation: [
+		.url: [.title],
+		.read: [.tracks, .children]
+	])
+	let loading = FeatureSet<Request, Set<Request>>()
+
     init(_ token: M3UPlaylistToken, library: Library) {
         self.library = library
         self.token = token
-        super.init()
-        loadMinimal()
-        contentSet.formUnion([.minimal, .attributes])
+		loadURLAttributes()
+        loading.insert(.url)
     }
     
-    public override var asToken: PlaylistToken { token }
-
-    public override var icon: Image { Image(systemName: "doc.text") }
+    public var icon: Image { Image(systemName: "doc.text") }
     
-    public override var accentColor: Color { SystemUI.color }
+    public var accentColor: Color { SystemUI.color }
+	
+	public var contentType: PlaylistContentType { .hybrid }
     
     public static func interpretFile(_ file: String, relativeTo directory: URL) -> [URL] {
         let lines = file.split(whereSeparator: \.isNewline)
@@ -102,45 +86,58 @@ public class M3UPlaylist: RemotePlaylist {
         return urls
     }
     
-    func loadMinimal() {
-        _attributes.value[PlaylistAttribute.title] = token.url.lastPathComponent
+    func loadURLAttributes() {
+		guard let modificationDate = try? token.url.modificationDate() else {
+			return
+		}
+		
+		mapper.attributes.update(.init([
+			.title: token.url.lastPathComponent
+		]), state: .version(modificationDate.isoFormat))
     }
     
-    public override func load(atLeast mask: PlaylistContentMask) {
-        contentSet.promise(mask) { promise in
-            let url = token.url
-            let library = self.library
-            let interpreter = library.interpreter
+//    public override func load(atLeast mask: PlaylistContentMask) {
+//        contentSet.promise(mask) { promise in
+//            let url = token.url
+//            let library = self.library
+//            let interpreter = library.interpreter
+//
+//            promise.fulfillingAny(.attributes) {
+//                loadAttributes()
+//            }
+//
+//            guard promise.includesAny([.tracks, .children]) else {
+//                return
+//            }
+//
+//            Future {
+//                try String(contentsOf: url)
+//            }
+//            .map { file in
+//                M3UPlaylist.interpretFile(file, relativeTo: url)
+//            }
+//            .flatMap {
+//                interpreter.interpret(urls: $0)
+//                    ?? Just([]).eraseError().eraseToAnyPublisher()
+//            }
+//            .map { (contents: [Content]) -> ([AnyTrack], [AnyPlaylist]) in
+//                let (tracks, children) = ContentInterpreter.collect(fromContents: contents)
+//
+//                return (tracks.map { $0.expand(library) }, children.map { $0.expand(library) })
+//            }
+//            .onMain()
+//            .fulfillingAny([.tracks, .children], of: promise)
+//            .tryMap { ($0, $1, try url.modificationDate().isoFormat) }
+//            .sink(receiveCompletion: appLogErrors(_:)) { [unowned self] (tracks, children, date) in
+//				self.tracks.update(tracks, version: date)
+//				self.children.update(children, version: date)
+//            }.store(in: &cancellables)
+//        }
+//    }
+}
 
-            promise.fulfillingAny([.minimal, .attributes]) {
-                loadMinimal()
-            }
-
-            guard promise.includesAny([.tracks, .children]) else {
-                return
-            }
-
-            Future {
-                try String(contentsOf: url)
-            }
-            .map { file in
-                M3UPlaylist.interpretFile(file, relativeTo: url)
-            }
-            .flatMap {
-                interpreter.interpret(urls: $0)
-                    ?? Just([]).eraseError().eraseToAnyPublisher()
-            }
-            .map { (contents: [Content]) -> ([AnyTrack], [AnyPlaylist]) in
-                let (tracks, children) = ContentInterpreter.collect(fromContents: contents)
-                
-                return (tracks.map { $0.expand(library) }, children.map { $0.expand(library) })
-            }
-            .onMain()
-            .fulfillingAny([.tracks, .children], of: promise)
-            .sink(receiveCompletion: appLogErrors(_:)) { [unowned self] (tracks, children) in
-                _tracks.value = tracks
-                _children.value = children
-            }.store(in: &cancellables)
-        }
-    }
+extension M3UPlaylist: RequestMapperDelegate {
+	func onDemand(_ requests: Set<Request>) {
+		// TODO
+	}
 }

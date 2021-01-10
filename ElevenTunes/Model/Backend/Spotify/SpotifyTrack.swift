@@ -150,7 +150,7 @@ public class SpotifyTrack: RemoteTrack {
         self._attributes.value.merge(
             .init([
                 .title: track.name
-            ])
+            ]), stronger: .right
         )
         
         self._album.value = track.album.map { spotify.album(SpotifyAlbumToken($0.id)) }
@@ -166,7 +166,7 @@ public class SpotifyTrack: RemoteTrack {
             .init([
                 .bpm: Tempo(features.tempo),
                 .key: MusicalKey(features.key)
-            ])
+            ]), stronger: .right
         )
     }
     

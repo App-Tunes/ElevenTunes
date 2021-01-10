@@ -38,8 +38,8 @@ extension ContentInterpreter {
             .track(try FileVideoToken.create(fromURL: $0))
         })
         
-        register(simple(matches: FileTrackToken.understands) {
-            .track(try FileTrackToken.create(fromURL: $0))
+        register(simple(matches: AVAudioTrackToken.understands) {
+            .track(try AVAudioTrackToken.create(fromURL: $0))
         })
 
         return interpreter

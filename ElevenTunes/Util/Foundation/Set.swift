@@ -8,9 +8,9 @@
 import Foundation
 
 extension Set {
-    func alIfContains(_ element: Element) -> Set<Element> {
-        contains(element) ? self : [element]
-    }
+	func alIfContains(_ element: Element) -> Set {
+		contains(element) ? self : [element]
+	}
 }
 
 extension Collection {

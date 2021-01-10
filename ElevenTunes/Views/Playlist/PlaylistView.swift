@@ -11,12 +11,12 @@ struct PlaylistView: View {
     let playlist: Playlist
     @Environment(\.library) var library: Library!
     
-    @State var contentMask: PlaylistContentMask = []
-
+    @State var tracks: [AnyTrack]? = nil
+    
     var body: some View {
         HSplitView {
             ZStack(alignment: .bottom) {
-                if !contentMask.isSuperset(of: [.minimal, .tracks]) {
+                if tracks == nil {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
                 }
@@ -31,8 +31,7 @@ struct PlaylistView: View {
 //            TrackInfoView()
         }
         .listStyle(DefaultListStyle())
-        .onReceive(playlist.backend.cacheMask()) { contentMask = $0 }
-        .onReceive(playlist.backend.tracks()) { _ in }  // Request tracks to load
+		.onReceive(playlist.backend.attributes.filtered(toJust: PlaylistAttribute.tracks)) { tracks = $0.value ?? [] }  // Request tracks to load
     }
 }
 

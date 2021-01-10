@@ -70,7 +70,17 @@ public class SpotifyUserToken: PlaylistToken {
     }
 }
 
-public class SpotifyUser: RemotePlaylist {
+public final class SpotifyUser: RemotePlaylist {
+	enum Request {
+		case info, playlists
+	}
+
+	let mapper = Requests(relation: [
+		.info: [.title],
+		.playlists: [.children]
+	])
+	let loading = FeatureSet<Request, Set<Request>>()
+
     let token: SpotifyUserToken
     let spotify: Spotify
     
@@ -82,7 +92,6 @@ public class SpotifyUser: RemotePlaylist {
     init(_ token: SpotifyUserToken, spotify: Spotify) {
         self.token = token
         self.spotify = spotify
-        super.init()
     }
 
 //    convenience init(_ user: SpotifyWebAPI.SpotifyUser, spotify: Spotify) {
@@ -90,71 +99,75 @@ public class SpotifyUser: RemotePlaylist {
 //        self._attributes.value = SpotifyUser.attributes(of: user.name)
 //        contentSet.formUnion([.tracks, .attributes])
 //    }
-
-    public override var asToken: PlaylistToken { token }
     
-    override public var icon: Image { Image(systemName: "person") }
+    public var icon: Image { Image(systemName: "person") }
     
-    public override var accentColor: Color { Spotify.color }
+    public var accentColor: Color { Spotify.color }
     
-    public override var contentType: PlaylistContentType { .playlists }
+    public var contentType: PlaylistContentType { .playlists }
     
     static func attributes(of user: SpotifyWebAPI.SpotifyUser) -> TypedDict<PlaylistAttribute> {
-        let attributes = TypedDict<PlaylistAttribute>()
+        var attributes = TypedDict<PlaylistAttribute>()
         attributes[PlaylistAttribute.title] = user.displayName ?? user.id
         return attributes
     }
             
-    public override func load(atLeast mask: PlaylistContentMask) {
-        contentSet.promise(mask) { promise in
-            // Tracks will always be []
-            promise.fulfill(.tracks)
-            
-            let uri = token.uri
-            let spotify = self.spotify
+//    public override func load(atLeast mask: PlaylistContentMask) {
+//        contentSet.promise(mask) { promise in
+//            // Tracks will always be []
+//            promise.fulfill(.tracks)
+//
+//            let uri = token.uri
+//            let spotify = self.spotify
+//
+//            if promise.includes(.children) {
+//                let count = 50
+//                let paginationLimit = 100
+//
+//                let playlistsAt = { (offset: Int) in
+//                    uri != nil
+//                        ? spotify.api.userPlaylists(for: uri!, limit: count, offset: offset)
+//                        : spotify.api.currentUserPlaylists(limit: count, offset: offset)
+//                }
+//
+//                playlistsAt(0)
+//                    .unfold(limit: paginationLimit) {
+//                        $0.offset + $0.items.count >= $0.total ? nil
+//                            : playlistsAt($0.offset + count)
+//                    }
+//                    .collect()
+//                    .map { $0.flatMap { $0.items } }
+//                    .map { items in
+//                        items.compactMap { item -> SpotifyPlaylist? in
+//                            SpotifyPlaylist(SpotifyPlaylistToken(item.id), spotify: spotify)
+//                        }
+//                    }
+//                    .onMain()
+//                    .fulfillingAny(.children, of: promise)
+//                    .sink(receiveCompletion: appLogErrors(_:)) { playlists in
+//                        self._children.value = .init(playlists)
+//                    }.store(in: &cancellables)
+//            }
+//
+//            if promise.includesAny([.attributes]) {
+//                let userProfile = uri != nil
+//                    ? spotify.api.userProfile(uri!)
+//                    : spotify.api.currentUserProfile()
+//
+//                userProfile.eraseToAnyPublisher()
+//                    .onMain()
+//                    .fulfillingAny(.attributes, of: promise)
+//                    .sink(receiveCompletion: appLogErrors) { info in
+//                        self._attributes.value = PlaylistAttributesSnapshot(SpotifyUser.attributes(of: info))
+//                    }
+//                    .store(in: &cancellables)
+//            }
+//        }
+//    }
+}
 
-            if promise.includes(.children) {
-                let count = 50
-                let paginationLimit = 100
-
-                let playlistsAt = { (offset: Int) in
-                    uri != nil
-                        ? spotify.api.userPlaylists(for: uri!, limit: count, offset: offset)
-                        : spotify.api.currentUserPlaylists(limit: count, offset: offset)
-                }
-                
-                playlistsAt(0)
-                    .unfold(limit: paginationLimit) {
-                        $0.offset + $0.items.count >= $0.total ? nil
-                            : playlistsAt($0.offset + count)
-                    }
-                    .collect()
-                    .map { $0.flatMap { $0.items } }
-                    .map { items in
-                        items.compactMap { item -> SpotifyPlaylist? in
-                            SpotifyPlaylist(SpotifyPlaylistToken(item.id), spotify: spotify)
-                        }
-                    }
-                    .onMain()
-                    .fulfillingAny(.children, of: promise)
-                    .sink(receiveCompletion: appLogErrors(_:)) { playlists in
-                        self._children.value = playlists
-                    }.store(in: &cancellables)
-            }
-            
-            if promise.includesAny([.minimal, .attributes]) {
-                let userProfile = uri != nil
-                    ? spotify.api.userProfile(uri!)
-                    : spotify.api.currentUserProfile()
-                
-                userProfile.eraseToAnyPublisher()
-                    .onMain()
-                    .fulfillingAny([.minimal, .attributes], of: promise)
-                    .sink(receiveCompletion: appLogErrors) { info in
-                        self._attributes.value = SpotifyUser.attributes(of: info)
-                    }
-                    .store(in: &cancellables)
-            }
-        }
-    }
+extension SpotifyUser: RequestMapperDelegate {
+	func onDemand(_ requests: Set<Request>) {
+		// TODO
+	}
 }

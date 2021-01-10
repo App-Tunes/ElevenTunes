@@ -45,6 +45,11 @@ extension Array {
 
         return result
     }
+    
+    func explodeMap<T>(_ map: (Element) -> T?) -> [T]? {
+        let map = compactMap(map)
+        return map.count == count ? map : nil
+    }
 }
 
 extension Array where Element: Hashable {

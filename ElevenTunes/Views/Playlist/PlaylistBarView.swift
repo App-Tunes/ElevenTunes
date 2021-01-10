@@ -9,9 +9,8 @@ import SwiftUI
 
 struct PlaylistBarView: View {
     let playlist: Playlist
-    @State var contentMask: PlaylistContentMask = []
-    @State var tracks: [AnyTrack] = []
-    @State var attributes: TypedDict<PlaylistAttribute> = .init()
+    @State var tracks: [Track]? = nil
+    @State var title: String?
 
     var body: some View {
         HStack {
@@ -22,12 +21,12 @@ struct PlaylistBarView: View {
             playlist.backend.icon
                 .foregroundColor(playlist.backend.accentColor)
             
-            Text(attributes[PlaylistAttribute.title] ?? "...")
+            Text(title ?? "...")
                 .foregroundColor(.secondary)
 
             Spacer()
 
-            Text("\(tracks.count) tracks")
+			Text(tracks != nil ? "\(tracks!.count) tracks" : "")
                 .foregroundColor(.secondary)
             
             Button {
@@ -44,8 +43,9 @@ struct PlaylistBarView: View {
             .frame(minWidth: 200)
             .frame(height: 30)
             .visualEffectBackground(material: .headerView, blendingMode: .withinWindow)
-            .onReceive(playlist.backend.tracks()) { tracks = $0 }
-            .onReceive(playlist.backend.attributes()) { attributes = $0 }
+			.onReceive(playlist.backend.attributes.filtered(toJust: PlaylistAttribute.tracks)) { snapshot in
+				tracks = (snapshot.value ?? []).map(Track.init)
+			}
     }
 }
 

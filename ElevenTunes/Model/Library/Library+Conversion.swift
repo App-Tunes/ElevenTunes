@@ -46,8 +46,11 @@ extension Library {
         // Unfold playlists
         for backend in flatSequence(first: library.allPlaylists, next: { backend in
             if let backend = backend as? TransientPlaylist {
-                allTracks.formUnion(backend._tracks.map { $0.asToken })
-                return backend._children.map { $0.asToken }
+				let attributes = backend._attributes.snapshot.0
+				let tracks = attributes[PlaylistAttribute.tracks].value ?? []
+				allTracks.formUnion(tracks.map(\.asToken))
+				let children = attributes[PlaylistAttribute.children].value ?? []
+				return children.map(\.asToken)
             }
             return []
         }) {
@@ -84,9 +87,16 @@ extension Library {
                 let dbPlaylist = DBPlaylist(entity: playlistModel, insertInto: context)
                 
                 dbPlaylist.contentType = backend.contentType
-                dbPlaylist.addToTracks(NSOrderedSet(array: backend._tracks.map { tracksByID[$0.id]! }))
-                dbPlaylist.merge(attributes: backend._attributes)
-                playlistChildren[dbPlaylist] = backend._children.map { $0.asToken.id }
+				
+				// TODO Cache this somewhere? This seems rather unsafe lol
+				let attributes = backend._attributes.snapshot.0
+				let tracks = attributes[PlaylistAttribute.tracks].value ?? []
+				let children = attributes[PlaylistAttribute.children].value ?? []
+
+				dbPlaylist.addToTracks(NSOrderedSet(array: tracks.map { tracksByID[$0.asToken.id]! }))
+				// TODO Extract secondary attributes
+//				dbPlaylist.attributes.update(attributes: attributes.extract())
+                playlistChildren[dbPlaylist] = children.map { $0.asToken.id }
                 
                 return dbPlaylist
             }

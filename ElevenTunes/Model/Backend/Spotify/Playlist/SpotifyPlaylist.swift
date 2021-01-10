@@ -37,25 +37,41 @@ public class SpotifyPlaylistToken: SpotifyURIPlaylistToken {
     }
 }
 
-public class SpotifyPlaylist: SpotifyURIPlaylist<SpotifyPlaylistToken> {
+public final class SpotifyPlaylist: SpotifyURIPlaylist {
     static let minimalQueryFilters = "offset,total,items(track(\(MinimalSpotifyTrack.filters)))"
     static let detailedQueryFilters = "offset,total,items(track(\(DetailedSpotifyTrack.filters)))"
 
-    override init(_ token: SpotifyPlaylistToken, spotify: Spotify) {
-        super.init(token, spotify: spotify)
+	enum Request {
+		case playlist, items
+	}
+	
+	let mapper = Requests(relation: [
+		.playlist: [.title],
+		.items: [.tracks]
+	])
+	let loading = FeatureSet<Request, Set<Request>>()
+	
+	let token: SpotifyPlaylistToken
+	let spotify: Spotify
+	
+    init(_ token: SpotifyPlaylistToken, spotify: Spotify) {
+		self.token = token
+		self.spotify = spotify
     }
     
-    init(playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>, spotify: Spotify) {
-        super.init(SpotifyPlaylistToken(playlist.id), spotify: spotify)
-        self._attributes.value = SpotifyPlaylist.attributes(of: playlist)
+    convenience init(playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>, spotify: Spotify) {
+        self.init(SpotifyPlaylistToken(playlist.id), spotify: spotify)
+		self.mapper.attributes.update(SpotifyPlaylist.attributes(of: playlist), state: .missing)
     }
+	
+	public var contentType: PlaylistContentType { .tracks }
 
     static func attributes(of playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>) -> TypedDict<PlaylistAttribute> {
-        let attributes = TypedDict<PlaylistAttribute>()
-        attributes[PlaylistAttribute.title] = playlist.name
-        return attributes
+        return .init([
+            .title: playlist.name
+        ])
     }
-    
+	    
     func viewableTracks(_ uris: [SpotifyTrackToken], spotify: Spotify) -> AnyPublisher<[SpotifyTrack], Error> {
         guard !uris.isEmpty else {
             return Just([]).eraseError().eraseToAnyPublisher()
@@ -73,49 +89,60 @@ public class SpotifyPlaylist: SpotifyURIPlaylist<SpotifyPlaylistToken> {
             .eraseToAnyPublisher()
     }
         
-    public override func load(atLeast mask: PlaylistContentMask) {
-        contentSet.promise(mask) { promise in
-            // Children will always be []
-            promise.fulfill(.children)
+//    public override func load(atLeast mask: PlaylistContentMask) {
+//        contentSet.promise(mask) { promise in
+//            // Children will always be []
+//            promise.fulfill(.children)
+//
+//            let spotify = self.spotify
+//            let token = self.token
+//
+//            if promise.includes(.tracks) {
+//                // There are actually playlists with up to 10.000 items lol
+//                let count = 100
+//                let paginationLimit = 100
+//
+//                let getItems = { (offset: Int) in
+//                    spotify.api.filteredPlaylistItems(token, filters: SpotifyPlaylist.minimalQueryFilters, additionalTypes: [.track], limit: count, offset: offset)
+//                        .decodeSpotifyObject(MinimalPagingObject<MinimalPlaylistItemContainer<MinimalSpotifyTrack>>.self)
+//                }
+//
+//                // funny how this is not part of the query
+//                let snapshotID = spotify.api.playlist(token)
+//                    .map { $0.snapshotId }
+//
+//                getItems(0)
+//                    .unfold(limit: paginationLimit) {
+//                        $0.offset + $0.items.count >= $0.total ? nil :
+//                        getItems($0.offset + count)
+//                    }
+//                    .collect()
+//                    .map { $0.flatMap { $0.items }.map { $0.track } }
+//                    // Collapse the first few instantly, so they can be viewed quickly.
+//                    .flatMap { self.viewableTracks($0.map { SpotifyTrackToken($0.id) }, spotify: spotify) }
+//                    .combineLatest(snapshotID)
+//                    .onMain()
+//                    .fulfillingAny(.tracks, of: promise)
+//                    .sink(receiveCompletion: appLogErrors(_:)) { (tracks, snapshotID) in
+//                        self._tracks.value = .init(tracks, version: snapshotID)
+//                    }.store(in: &cancellables)
+//            }
+//
+//            if promise.includesAny([.attributes]) {
+//                spotify.api.playlist(token).eraseToAnyPublisher()
+//                    .onMain()
+//                    .fulfillingAny([.attributes], of: promise)
+//                    .sink(receiveCompletion: appLogErrors) { info in
+//                        self._attributes.value = SpotifyPlaylist.attributes(of: info)
+//                    }
+//                    .store(in: &cancellables)
+//            }
+//        }
+//    }
+}
 
-            let spotify = self.spotify
-            let token = self.token
-
-            if promise.includes(.tracks) {
-                // There are actually playlists with up to 10.000 items lol
-                let count = 100
-                let paginationLimit = 100
-
-                let getItems = { (offset: Int) in
-                    spotify.api.filteredPlaylistItems(token, filters: SpotifyPlaylist.minimalQueryFilters, additionalTypes: [.track], limit: count, offset: offset)
-                        .decodeSpotifyObject(MinimalPagingObject<MinimalPlaylistItemContainer<MinimalSpotifyTrack>>.self)
-                }
-
-                getItems(0)
-                    .unfold(limit: paginationLimit) {
-                        $0.offset + $0.items.count >= $0.total ? nil :
-                        getItems($0.offset + count)
-                    }
-                    .collect()
-                    .map { $0.flatMap { $0.items }.map { $0.track } }
-                    // Collapse the first few instantly, so they can be viewed quickly.
-                    .flatMap { self.viewableTracks($0.map { SpotifyTrackToken($0.id) }, spotify: spotify) }
-                    .onMain()
-                    .fulfillingAny(.tracks, of: promise)
-                    .sink(receiveCompletion: appLogErrors(_:)) { tracks in
-                        self._tracks.value = tracks
-                    }.store(in: &cancellables)
-            }
-
-            if promise.includesAny([.minimal, .attributes]) {
-                spotify.api.playlist(token).eraseToAnyPublisher()
-                    .onMain()
-                    .fulfillingAny([.minimal, .attributes], of: promise)
-                    .sink(receiveCompletion: appLogErrors) { info in
-                        self._attributes.value = SpotifyPlaylist.attributes(of: info)
-                    }
-                    .store(in: &cancellables)
-            }
-        }
-    }
+extension SpotifyPlaylist: RequestMapperDelegate {
+	func onDemand(_ requests: Set<Request>) {
+		// TODO
+	}
 }

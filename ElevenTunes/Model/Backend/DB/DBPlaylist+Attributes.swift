@@ -8,21 +8,21 @@
 import Foundation
 
 extension DBPlaylist {
-    static let attributeProperties = Set([
-        "title"
-    ])
-
-    func merge(attributes: TypedDict<PlaylistAttribute>) {
-        guard !attributes.isEmpty else { return }
-        
-        if let title = attributes[PlaylistAttribute.title] { self.title = title }
-        
-        attributesP = cachedAttributes
-    }
-    
-    var cachedAttributes: TypedDict<PlaylistAttribute> {
-        let dict = TypedDict<PlaylistAttribute>()
-        dict[PlaylistAttribute.title] = title
-        return dict
-    }
+	enum AttributeGroup {
+		case tracks, children, attributes
+	}
+	
+	static let attributeGroups: SetRelation<PlaylistAttribute, AttributeGroup> = [
+		.tracks: [.tracks],
+		.children: [.children],
+		.attributes: [.title]
+	]
+	
+	static let keypathByAttribute: [PlaylistAttribute: String] = [
+		.title: "title",
+		.tracks: "tracks",
+		.children: "children"
+    ]
+	
+	static let attributeByKeypath: [String: PlaylistAttribute] = Dictionary(uniqueKeysWithValues: keypathByAttribute.map { ($1, $0) })
 }

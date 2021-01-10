@@ -10,12 +10,11 @@ import SwiftUI
 struct PlaylistRowView: View {
     @State var playlist: Playlist
 
-    @State var contentMask: PlaylistContentMask = []
-    @State var attributes: TypedDict<PlaylistAttribute> = .init()
+	@State var title: PlaylistAttributes.ValueSnapshot<String?> = .missing()
     
     var body: some View {
         HStack {
-            if !contentMask.contains(.minimal) {
+			if !title.state.isVersioned {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle())
                     .scaleEffect(0.4)
@@ -32,18 +31,17 @@ struct PlaylistRowView: View {
                     .frame(width: 15, height: 15)
             }
 
-            if contentMask.contains(.minimal) {
-                Text(attributes[PlaylistAttribute.title] ?? "Unknown Playlist")
+            if title.state.isVersioned {
+				Text(title.value ?? "Unknown Playlist")
 //                        .opacity((playlist.tracks.isEmpty && playlist.children.isEmpty) ? 0.6 : 1)
             }
             else {
-                Text(attributes[PlaylistAttribute.title] ?? "...")
+                Text(title.value ?? "...")
                     .opacity(0.5)
             }
         }
         .frame(height: 15)
         .contextMenu(menuItems: PlaylistsContextMenu(playlist: playlist.backend).callAsFunction)
-        .onReceive(playlist.backend.cacheMask()) { contentMask = $0 }
-        .onReceive(playlist.backend.attributes()) { attributes = $0 }
+		.onReceive(playlist.backend.attributes.filtered(toJust: PlaylistAttribute.title)) { title = $0 }
     }
 }

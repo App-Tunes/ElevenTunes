@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import CombineExt
 
 extension Publisher {
     func onMain() -> Publishers.ReceiveOn<Self, RunLoop> {
@@ -72,6 +73,11 @@ extension Publisher {
         } receiveValue: { value in
             receiveResult(.success(value))
         }
+    }
+    
+    func shareCurrentValue(_ initialValue: Output) -> Publishers.Autoconnect<Publishers.Multicast<Self, CurrentValueSubject<Self.Output, Self.Failure>>> {
+        multicast { CurrentValueSubject(initialValue) }
+            .autoconnect()
     }
 }
 

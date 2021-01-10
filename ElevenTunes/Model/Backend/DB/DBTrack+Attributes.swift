@@ -19,7 +19,7 @@ extension DBTrack {
     }
     
     var cachedAttributes: TypedDict<TrackAttribute> {
-        let dict = TypedDict<TrackAttribute>()
+        var dict = TypedDict<TrackAttribute>()
         dict[TrackAttribute.title] = title
         return dict
     }

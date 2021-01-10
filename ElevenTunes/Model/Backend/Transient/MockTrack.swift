@@ -44,8 +44,6 @@ class MockTrack: TrackToken, AnyTrack {
     let uuid = UUID()
     override var id: String { uuid.description }
     
-    var origin: URL? { nil }
-    
     override func expand(_ context: Library) -> AnyTrack { self }
     
     func cacheMask() -> AnyPublisher<TrackContentMask, Never> {

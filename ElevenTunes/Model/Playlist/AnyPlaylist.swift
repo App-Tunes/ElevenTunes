@@ -9,21 +9,6 @@ import Foundation
 import SwiftUI
 import Combine
 
-public struct PlaylistContentMask: OptionSet, Hashable {
-    public let rawValue: Int16
-    
-    public init(rawValue: Int16) {
-        self.rawValue = rawValue
-    }
-    
-    public static let minimal      = PlaylistContentMask(rawValue: 1 << 0)
-    public static let tracks       = PlaylistContentMask(rawValue: 1 << 1)
-    public static let children     = PlaylistContentMask(rawValue: 1 << 2)
-    public static let attributes   = PlaylistContentMask(rawValue: 1 << 3)
-    
-    public static let all          = PlaylistContentMask([.minimal, .tracks, .children, .attributes])
-}
-
 @objc public enum PlaylistContentType: Int16 {
     /// Can only contain tracks
     case tracks
@@ -45,12 +30,14 @@ public protocol AnyPlaylist: AnyObject {
     var accentColor: Color { get }
 
     var hasCaches: Bool { get }
-    func invalidateCaches(_ mask: PlaylistContentMask)
+	func invalidateCaches()
 
-    func cacheMask() -> AnyPublisher<PlaylistContentMask, Never>
-    func tracks() -> AnyPublisher<[AnyTrack], Never>
-    func children() -> AnyPublisher<[AnyPlaylist], Never>
-    func attributes() -> AnyPublisher<TypedDict<PlaylistAttribute>, Never>
+	/// Registers a persistent demand for some attributes. The playlist promises that it will try to
+	/// evolve the attribute's `State.missing` to some other state.
+	func demand(_ demand: Set<PlaylistAttribute>) -> AnyCancellable
+	/// A stream of attributes, and the last changed attribute identifiers. The identifiers are useful for ignoring
+	/// irrelevant updates.
+    var attributes: AnyPublisher<PlaylistAttributes.Update, Never> { get }
 
     @discardableResult
     func `import`(library: AnyLibrary) -> Bool
@@ -59,7 +46,7 @@ public protocol AnyPlaylist: AnyObject {
 }
 
 extension AnyPlaylist {
-    var icon: Image { Image(systemName: "music.note.list") }
+	public var icon: Image { Image(systemName: "music.note.list") }
     var accentColor: Color { .primary }
 }
 

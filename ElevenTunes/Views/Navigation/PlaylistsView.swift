@@ -43,8 +43,8 @@ struct PlaylistSectionView: View {
     
     var body: some View {
         _body
-        .onReceive(playlist.backend.children()) {
-            children = $0.map(Playlist.init)
+			.onReceive(playlist.backend.attributes.filtered(toJust: PlaylistAttribute.children)) {
+            children = ($0.value ?? []).map(Playlist.init)
         }
     }
 }
@@ -58,7 +58,7 @@ struct PlaylistsView: View {
             PlaylistSectionView(playlist: category, isTopLevel: true)
         }
         .frame(minWidth: 0, maxWidth: 800, maxHeight: .infinity, alignment: .leading)
-        .onReceive(directory.backend.children()) { topLevelChildren = $0.map(Playlist.init) }
+		.onReceive(directory.backend.attributes.filtered(toJust: PlaylistAttribute.children)) { topLevelChildren = ($0.value ?? []).map(Playlist.init) }
    }
 }
 

@@ -10,7 +10,7 @@ import SwiftUI
 struct TracksView: View {
     let playlist: Playlist
     
-    @State var tracks: [AnyTrack] = []
+	@State var tracks: [AnyTrack] = []
     
     @State var selected: Set<Int> = []
 
@@ -40,14 +40,14 @@ struct TracksView: View {
                     player.play(PlayHistory(context: .playlist(playlist.backend, tracks: tracks, index: idx)))
                 }
                 else {
-                    let tracks = selected.compactMap { self.tracks[$0] }
+					let tracks = selected.compactMap { self.tracks[safe: $0] }
                     player.play(PlayHistory(tracks.shuffled()))
                 }
             }
             .keyboardShortcut(.return, modifiers: [])
         }
-        .onReceive(playlist.backend.tracks()) {
-            self.tracks = $0
+		.onReceive(playlist.backend.attributes.filtered(toJust: PlaylistAttribute.tracks)) {
+			self.tracks = $0.value ?? []
         }
         .frame(minWidth: 200, idealWidth: 250, maxWidth: .infinity, minHeight: 50, idealHeight: 150, maxHeight: .infinity)
         .contentShape(Rectangle())

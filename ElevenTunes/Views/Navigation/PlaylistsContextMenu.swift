@@ -22,7 +22,7 @@ class PlaylistsContextMenu {
         AnyView(VStack {
             if playlist.hasCaches {
                 Button(action: {
-                    self.playlist.invalidateCaches(.all)
+                    self.playlist.invalidateCaches()
                 }) {
                     Image(systemName: "arrow.clockwise")
                     Text("Reload Metadata")

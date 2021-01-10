@@ -12,4 +12,8 @@ extension URL {
         if !isFileURL { return false }
         return try self.resourceValues(forKeys: [.isDirectoryKey]).isDirectory ?? false
     }
+    
+    func modificationDate() throws -> Date {
+        return try self.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate!
+    }
 }

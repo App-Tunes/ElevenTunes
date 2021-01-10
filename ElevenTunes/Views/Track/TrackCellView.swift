@@ -12,8 +12,8 @@ struct TrackCellView: View {
     let track: Track
 
     @State var contentMask: TrackContentMask = []
-    @State var artists: [AnyPlaylist] = []
-    @State var album: AnyPlaylist? = nil
+    @State var artists: [Playlist] = []
+    @State var album: Playlist? = nil
     @State var attributes: TypedDict<TrackAttribute> = .init()
 
     @Environment(\.library) var library: Library!
@@ -63,8 +63,8 @@ struct TrackCellView: View {
         }
         .lineLimit(1)
         .opacity(contentMask.contains(.minimal) ? 1 : 0.5)
-        .onReceive(track.backend.artists()) { artists = $0 }
-        .onReceive(track.backend.album()) { album = $0 }
+        .onReceive(track.backend.artists()) { artists = $0.map(Playlist.init) }
+        .onReceive(track.backend.album()) { album = $0.map(Playlist.init) }
         .onReceive(track.backend.attributes()) { attributes = $0 }
         .onReceive(track.backend.cacheMask()) { contentMask = $0 }
     }
