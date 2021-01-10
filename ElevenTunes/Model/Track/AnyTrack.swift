@@ -17,7 +17,7 @@ public protocol AnyTrack: AnyObject {
 
 	func invalidateCaches()
 
-	/// Registers a persistent demand for some attributes. The playlist promises that it will try to
+	/// Registers a persistent demand for some attributes. The track promises that it will try to
 	/// evolve the attribute's `State.missing` to some other state.
 	func demand(_ demand: Set<TrackAttribute>) -> AnyCancellable
 	/// A stream of attributes, and the last changed attribute identifiers. The identifiers are useful for ignoring
