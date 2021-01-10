@@ -11,10 +11,13 @@ import Combine
 struct TrackCellView: View {
     let track: Track
 
-    @State var contentMask: TrackContentMask = []
+	@State var hasBasicInfo: Bool = false
     @State var artists: [Playlist] = []
     @State var album: Playlist? = nil
-    @State var attributes: TypedDict<TrackAttribute> = .init()
+    
+	@State var title: String?
+	@State var tempo: Tempo?
+	@State var key: MusicalKey?
 
     @Environment(\.library) var library: Library!
 
@@ -28,13 +31,13 @@ struct TrackCellView: View {
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 12, height: 12)
 
-                    if !contentMask.contains(.minimal) {
-                        Text(attributes[TrackAttribute.title] ?? "...")
+                    if !hasBasicInfo {
+                        Text(title ?? "...")
                             .font(.system(size: 13))
                             .frame(alignment: .bottom)
                     }
                     else {
-                        Text(attributes[TrackAttribute.title] ?? "Unknown Track")
+                        Text(title ?? "Unknown Track")
                             .font(.system(size: 13))
                             .frame(alignment: .bottom)
                     }
@@ -49,9 +52,6 @@ struct TrackCellView: View {
 
             Spacer()
             
-            let key = attributes[TrackAttribute.key]
-            let tempo = attributes[TrackAttribute.bpm]
-            
             Text(key?.title ?? "")
                 .foregroundColor(key?.color ?? .clear)
                 .frame(width: 30, alignment: .center)
@@ -62,10 +62,9 @@ struct TrackCellView: View {
                 .frame(width: 50, alignment: .trailing)
         }
         .lineLimit(1)
-        .opacity(contentMask.contains(.minimal) ? 1 : 0.5)
-        .onReceive(track.backend.artists()) { artists = $0.map(Playlist.init) }
-        .onReceive(track.backend.album()) { album = $0.map(Playlist.init) }
-        .onReceive(track.backend.attributes()) { attributes = $0 }
-        .onReceive(track.backend.cacheMask()) { contentMask = $0 }
+        .opacity(hasBasicInfo ? 1 : 0.5)
+		.onReceive(track.backend.attributes) { (snapshot, _) in
+			hasBasicInfo = snapshot[TrackAttribute.title].state.isVersioned
+		}
     }
 }

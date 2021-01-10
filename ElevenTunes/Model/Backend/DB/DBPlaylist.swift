@@ -124,10 +124,6 @@ public class DBLibraryPlaylist: AnyPlaylist {
         // Backend is responsible for resetting caches etc.
         return backend.import(library: library)
     }
-    
-    public func previewImage() -> AnyPublisher<NSImage?, Never> {
-        backend?.previewImage() ?? Just(nil).eraseToAnyPublisher()
-    }
 }
 
 @objc(DBPlaylist)
@@ -150,9 +146,6 @@ public class DBPlaylist: NSManagedObject {
         contentTypeP = contentType
 
 		// TODO
-//        cacheMaskP = PlaylistContentMask(rawValue: backendCacheMask)
-//        tracksP = tracks.array as! [DBTrack]
-//        childrenP = children.array as! [DBPlaylist]
-//        attributesP = cachedAttributes
+//		initialize content
     }
 }

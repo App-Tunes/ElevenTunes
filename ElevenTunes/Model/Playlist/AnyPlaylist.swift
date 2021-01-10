@@ -41,8 +41,6 @@ public protocol AnyPlaylist: AnyObject {
 
     @discardableResult
     func `import`(library: AnyLibrary) -> Bool
-    
-    func previewImage() -> AnyPublisher<NSImage?, Never>
 }
 
 extension AnyPlaylist {

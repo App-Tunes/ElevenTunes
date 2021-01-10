@@ -28,6 +28,8 @@ extension PlaylistAttribute {
 	static let children = Typed<[AnyPlaylist]>(rawValue: "children")
 
 	static let title = Typed<String>(rawValue: "title")
+	
+	static let previewImage = Typed<NSImage>(rawValue: "previewImage")
 }
 
 public typealias PlaylistAttributes = VolatileAttributes<PlaylistAttribute, PlaylistVersion>

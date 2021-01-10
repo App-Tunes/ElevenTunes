@@ -26,9 +26,7 @@ class TracksContextMenu {
     func callAsFunction() -> AnyView {
         AnyView(VStack {
             Button(action: {
-                for track in self.stracks {
-                    track.invalidateCaches([.minimal])
-                }
+				self.stracks.forEach { $0.invalidateCaches() }
             }) {
                 Image(systemName: "arrow.clockwise")
                 Text("Reload Metadata")

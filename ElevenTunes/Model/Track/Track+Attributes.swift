@@ -7,6 +7,8 @@
 
 import Foundation
 
+public typealias TrackVersion = String
+
 public class TrackAttribute: RawRepresentable, Hashable {
     class Typed<K>: TrackAttribute, TypedKey, CustomStringConvertible {
         typealias Value = K
@@ -21,7 +23,15 @@ public class TrackAttribute: RawRepresentable, Hashable {
 }
 
 extension TrackAttribute {
-    static let title = Typed<String>(rawValue: "title")
+	static let artists = Typed<[AnyArtist]>(rawValue: "artists")
+	static let album = Typed<AnyAlbum>(rawValue: "album")
+
+	static let title = Typed<String>(rawValue: "title")
+	
     static let key = Typed<MusicalKey>(rawValue: "key")
     static let bpm = Typed<Tempo>(rawValue: "bpm")
+
+	static let previewImage = Typed<NSImage>(rawValue: "previewImage")
 }
+
+public typealias TrackAttributes = VolatileAttributes<TrackAttribute, TrackVersion>

@@ -9,37 +9,29 @@ import Foundation
 import SwiftUI
 import Combine
 
-public struct TrackContentMask: OptionSet, Hashable {
-    public let rawValue: Int16
-    
-    public init(rawValue: Int16) {
-        self.rawValue = rawValue
-    }
-    
-    static let minimal = TrackContentMask(rawValue: 1 << 0)
-    static let analysis = TrackContentMask(rawValue: 1 << 1)
-    // More to come? In any case, bools aren't more efficient anyway
-}
-
 public protocol AnyTrack: AnyObject {
     var id: String { get }
     var asToken: TrackToken { get }
     
     var origin: URL? { get }
 
-    func cacheMask() -> AnyPublisher<TrackContentMask, Never>
-    func artists() -> AnyPublisher<[AnyPlaylist], Never>
-    func album() -> AnyPublisher<AnyPlaylist?, Never>
-    func attributes() -> AnyPublisher<TypedDict<TrackAttribute>, Never>
+	func invalidateCaches()
+
+	/// Registers a persistent demand for some attributes. The playlist promises that it will try to
+	/// evolve the attribute's `State.missing` to some other state.
+	func demand(_ demand: Set<TrackAttribute>) -> AnyCancellable
+	/// A stream of attributes, and the last changed attribute identifiers. The identifiers are useful for ignoring
+	/// irrelevant updates.
+	var attributes: AnyPublisher<TrackAttributes.Update, Never> { get }
 
     func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error>
     
     var icon: Image { get }
     var accentColor: Color { get }
+}
 
-    func previewImage() -> AnyPublisher<NSImage?, Never>
-
-    func invalidateCaches(_ mask: TrackContentMask)
+extension AnyTrack {
+	public var icon: Image { Image(systemName: "music.note") }
 }
 
 class TrackBackendTypedCodable: TypedCodable<String> {

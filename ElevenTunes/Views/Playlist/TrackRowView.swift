@@ -12,8 +12,7 @@ struct TrackRowView: View {
     let track: Track
     
     @State var context: PlayHistoryContext
-    @State var cacheMask: TrackContentMask = .init()
-    @State var image: NSImage?
+	@State var image: TrackAttributes.ValueSnapshot<NSImage?> = .missing()
 
     var body: some View {
         HStack {
@@ -22,12 +21,12 @@ struct TrackRowView: View {
                     .fill(Color.black)
                     .opacity(0.2)
                               
-                if !cacheMask.contains(.minimal) {
+				if !image.state.isVersioned {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
                         .scaleEffect(0.5, anchor: .center)
                 }
-                else if let image = image {
+				else if let image = image.value {
                     Image(nsImage: image)
                         .resizable().scaledToFit()
                 }
@@ -43,7 +42,8 @@ struct TrackRowView: View {
 
             TrackCellView(track: track)
         }
-        .onReceive(track.backend.previewImage()) { image = $0 }
-        .onReceive(track.backend.cacheMask()) { cacheMask = $0 }
+		.onReceive(track.backend.attributes.filtered(toJust: TrackAttribute.previewImage)) {
+			image = $0
+		}
     }
 }

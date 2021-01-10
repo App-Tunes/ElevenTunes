@@ -18,7 +18,8 @@ extension DBTrack {
 
     @NSManaged public var backend: TrackToken?
     @NSManaged public var backendID: String
-    @NSManaged public var title: String?
+	@NSManaged public var version: String?
+	@NSManaged public var title: String?
     @NSManaged public var backendCacheMask: Int16
     @NSManaged public var references: NSSet
 

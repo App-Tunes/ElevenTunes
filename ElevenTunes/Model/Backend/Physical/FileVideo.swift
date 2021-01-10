@@ -30,38 +30,38 @@ public class FileVideoToken: FileTrackToken {
     }
 }
 
-public class FileVideo: RemoteTrack {
-    let token: FileVideoToken
+public final class FileVideo: FileTrack {
+    public let token: FileVideoToken
     
+	enum Request {
+		case url, analyze
+	}
+	
+	let mapper = Requests(relation: [
+		.url: [.title],
+		.analyze: [.bpm, .key]
+	])
+	let loading = FeatureSet<Request, Set<Request>>()
+
     init(_ token: FileVideoToken) {
         self.token = token
-        super.init()
-        _attributes.value[TrackAttribute.title] = token.url.lastPathComponent
-        contentSet.insert(.minimal)
+		loadURL()
+		loading.insert(.url)
     }
-    
-    public override var asToken: TrackToken { token }
-    
-    public override var icon: Image { Image(systemName: "video") }
-    
-    public override var accentColor: Color { SystemUI.color }
         
-    public override func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
-        // TODO Return video emitter when possible
-        let url = token.url
-        return Future {
-            let player = try AVAudioPlayer(contentsOf: url)
-            player.prepareToPlay()
-            return AVAudioPlayerEmitter(player)
-        }
-            .eraseToAnyPublisher()
-    }
-    
-    public override func load(atLeast mask: TrackContentMask) {
-        contentSet.promise(mask) { promise in
-            promise.fulfilling(.minimal) {
-                _attributes.value[TrackAttribute.title] = token.url.lastPathComponent
-            }
-        }
-    }
+    public var icon: Image { Image(systemName: "video") }
+
+//    public func load(atLeast mask: TrackContentMask) {
+//        contentSet.promise(mask) { promise in
+//            promise.fulfilling(.minimal) {
+//                _attributes.value[TrackAttribute.title] = token.url.lastPathComponent
+//            }
+//        }
+//    }
+}
+
+extension FileVideo: RequestMapperDelegate {
+	func onDemand(_ requests: Set<Request>) {
+		// TODO
+	}
 }

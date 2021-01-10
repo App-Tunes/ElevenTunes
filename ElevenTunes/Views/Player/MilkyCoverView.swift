@@ -22,15 +22,20 @@ struct PlayerMilkyCoverView: View {
 struct MilkyCoverView: View {
     var track: AnyTrack?
     
-    @State var image: NSImage? = nil
+	@State var image: NSImage? = nil
 
+	var liveImage: AnyPublisher<NSImage?, Never>? {
+		track?.attributes
+			.filtered(toJust: TrackAttribute.previewImage)
+			.map(\.value)
+			.eraseToAnyPublisher()
+	}
+	
     var body: some View {
         MilkyImageView(image: image)
-            .onReceive(track?.previewImage(), default: nil) { image in
-                withAnimation(.linear(duration: 0.5)) {
-                    self.image = image
-                }
-            }
+			.onReceive(liveImage, default: nil) { (img: NSImage?) in
+				image = img
+			}
     }
 }
 

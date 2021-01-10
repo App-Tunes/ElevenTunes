@@ -54,6 +54,10 @@ public class SpotifyTrackToken: TrackToken, SpotifyURIConvertible {
     public override var id: String { trackID }
     
     public var uri: String { "spotify:track:\(id)" }
+	
+	override var origin: URL? {
+		URL(string: "https://open.spotify.com/track/\(trackID)")
+	}
 
     init(_ uri: String) {
         self.trackID = uri
@@ -97,33 +101,35 @@ public class SpotifyTrackToken: TrackToken, SpotifyURIConvertible {
     }
 }
 
-public class SpotifyTrack: RemoteTrack {
+public final class SpotifyTrack: RemoteTrack {
     let spotify: Spotify
-    let token: SpotifyTrackToken
-            
+    public let token: SpotifyTrackToken
+	
+	enum Request {
+		case track, analysis
+	}
+	
+	let mapper = Requests(relation: [
+		.track: [.title],
+		.analysis: [.bpm, .key]
+	])
+	let loading = FeatureSet<Request, Set<Request>>()
+
     init(_ token: SpotifyTrackToken, spotify: Spotify) {
         self.token = token
         self.spotify = spotify
-        super.init()
     }
 
     init(track: DetailedSpotifyTrack, spotify: Spotify) {
         self.token = SpotifyTrackToken(track.id)
         self.spotify = spotify
-        super.init()
         self.extractAttributes(from: track)
-        contentSet.insert(.minimal)
+        loading.insert(.track)
     }
-
-    public override var asToken: TrackToken { token }
     
-    public override var accentColor: Color { Spotify.color }
-    
-    public override var origin: URL? {
-        URL(string: "https://open.spotify.com/track/\(token.trackID)")
-    }
-
-    public override func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
+    public var accentColor: Color { Spotify.color }
+	    
+    public func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
         let spotify = context.spotify
         
         let spotifyTrack = spotify.api.track(token)
@@ -145,54 +151,53 @@ public class SpotifyTrack: RemoteTrack {
     }
     
     func extractAttributes(from track: DetailedSpotifyTrack) {
-        let spotify = self.spotify
-        
-        self._attributes.value.merge(
-            .init([
-                .title: track.name
-            ]), stronger: .right
-        )
-        
-        self._album.value = track.album.map { spotify.album(SpotifyAlbumToken($0.id)) }
-
-        self._artists.value = track.artists
-            .map {
-                spotify.artist(SpotifyArtistToken($0.id))
-            }
+		mapper.attributes.update(.init([
+			.title: track.name,
+		]), state: .version(""))
+//        self._album.value = track.album.map { spotify.album(SpotifyAlbumToken($0.id)) }
+//
+//        self._artists.value = track.artists
+//            .map {
+//                spotify.artist(SpotifyArtistToken($0.id))
+//            }
     }
     
     func extractAttributes(from features: AudioFeatures) {
-        self._attributes.value.merge(
-            .init([
-                .bpm: Tempo(features.tempo),
-                .key: MusicalKey(features.key)
-            ]), stronger: .right
-        )
+		mapper.attributes.update(.init([
+			.bpm: Tempo(features.tempo),
+			.key: MusicalKey(features.key)
+		]), state: .version(""))
     }
-    
-    public override func load(atLeast mask: TrackContentMask) {
-        contentSet.promise(mask) { promise in
-            let spotify = self.spotify
-            
-            if promise.includes(.minimal) {
-                spotify.api.track(token)
-                    .onMain()
-                    .fulfillingAny(.minimal, of: promise)
-                    .sink(receiveCompletion: appLogErrors) { [unowned self] track in
-                        self.extractAttributes(from: DetailedSpotifyTrack.from(track))
-                    }
-                    .store(in: &cancellables)
-            }
-            
-            if promise.includes(.analysis) {
-                spotify.api.trackAudioFeatures(token)
-                    .onMain()
-                    .fulfillingAny(.analysis, of: promise)
-                    .sink(receiveCompletion: appLogErrors) { [unowned self] features in
-                        self.extractAttributes(from: features)
-                    }
-                    .store(in: &cancellables)
-            }
-        }
-    }
+//
+//    public override func load(atLeast mask: TrackContentMask) {
+//        contentSet.promise(mask) { promise in
+//            let spotify = self.spotify
+//
+//            if promise.includes(.minimal) {
+//                spotify.api.track(token)
+//                    .onMain()
+//                    .fulfillingAny(.minimal, of: promise)
+//                    .sink(receiveCompletion: appLogErrors) { [unowned self] track in
+//                        self.extractAttributes(from: DetailedSpotifyTrack.from(track))
+//                    }
+//                    .store(in: &cancellables)
+//            }
+//
+//            if promise.includes(.analysis) {
+//                spotify.api.trackAudioFeatures(token)
+//                    .onMain()
+//                    .fulfillingAny(.analysis, of: promise)
+//                    .sink(receiveCompletion: appLogErrors) { [unowned self] features in
+//                        self.extractAttributes(from: features)
+//                    }
+//                    .store(in: &cancellables)
+//            }
+//        }
+//    }
+}
+
+extension SpotifyTrack: RequestMapperDelegate {
+	func onDemand(_ requests: Set<Request>) {
+		// TODO
+	}
 }

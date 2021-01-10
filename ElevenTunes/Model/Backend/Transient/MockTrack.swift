@@ -16,11 +16,14 @@ class MockTrack: TrackToken, AnyTrack {
         case attributes
     }
 
-    init(attributes: TypedDict<TrackAttribute>) {
-        _attributes = attributes
-        super.init()
-    }
-    
+	let _attributes: VolatileAttributes<TrackAttribute, TrackVersion> = .init()
+	
+	init(attributes: TypedDict<TrackAttribute>) {
+		version = UUID().uuidString
+		super.init()
+		_attributes.update(attributes, state: .version(version))
+	}
+
     public required init(from decoder: Decoder) throws {
         fatalError()
 //        let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -45,33 +48,24 @@ class MockTrack: TrackToken, AnyTrack {
     override var id: String { uuid.description }
     
     override func expand(_ context: Library) -> AnyTrack { self }
-    
-    func cacheMask() -> AnyPublisher<TrackContentMask, Never> {
-        Just(.minimal).eraseToAnyPublisher()
-    }
-    
-    @Published var _artists: [AnyPlaylist] = []
-    func artists() -> AnyPublisher<[AnyPlaylist], Never> {
-        $_artists.eraseToAnyPublisher()
-    }
 
-    @Published var _album: AnyPlaylist? = nil
-    func album() -> AnyPublisher<AnyPlaylist?, Never> {
-        $_album.eraseToAnyPublisher()
-    }
+	func refreshVersion() {
+		version = UUID().uuidString
+	}
 
-    @Published var _attributes: TypedDict<TrackAttribute> = .init()
-    func attributes() -> AnyPublisher<TypedDict<TrackAttribute>, Never> {
-        $_attributes.eraseToAnyPublisher()
-    }
+	@Published var version: TrackVersion
+
+	func demand(_ demand: Set<TrackAttribute>) -> AnyCancellable {
+		AnyCancellable {}
+	}
+	
+	var attributes: AnyPublisher<TrackAttributes.Update, Never> {
+		_attributes.$snapshot.eraseToAnyPublisher()
+	}
 
     func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
         Fail(error: MockError()).eraseToAnyPublisher()
     }
     
-    func invalidateCaches(_ mask: TrackContentMask) { }
-    
-    func previewImage() -> AnyPublisher<NSImage?, Never> {
-        Just(nil).eraseToAnyPublisher()
-    }
+    func invalidateCaches() { }
 }

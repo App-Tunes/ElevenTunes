@@ -62,7 +62,8 @@ extension Library {
         func convertTrack(_ backend: TrackToken) -> DBTrack {
             if let backend = backend as? MockTrack {
                 let dbTrack = DBTrack(entity: trackModel, insertInto: context)
-                dbTrack.merge(attributes: backend._attributes)
+				// TODO Extract attributes
+//                dbTrack.merge(attributes: backend._attributes)
                 return dbTrack
             }
             

@@ -29,35 +29,38 @@ public class AVAudioTrackToken: FileTrackToken {
 	}
 }
 
-public class AVAudioTrack: RemoteTrack {
-	let token: AVAudioTrackToken
+public final class AVAudioTrack: FileTrack {
+	public let token: AVAudioTrackToken
 	
+	enum Request {
+		case url, analyze
+	}
+	
+	let mapper = Requests(relation: [
+		.url: [.title],
+		.analyze: [.bpm, .key]
+	])
+	let loading = FeatureSet<Request, Set<Request>>()
+
 	init(_ token: AVAudioTrackToken) {
 		self.token = token
-		super.init()
-		_attributes.value[TrackAttribute.title] = token.url.lastPathComponent
-		contentSet.insert(.minimal)
-	}
-		 
-	public override var id: String { token.id }
-	
-	public override var accentColor: Color { SystemUI.color }
-		
-	public override func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
-		let url = token.url
-		return Future {
-			let player = try AVAudioPlayer(contentsOf: url)
-			player.prepareToPlay()
-			return AVAudioPlayerEmitter(player)
-		}
-			.eraseToAnyPublisher()
+		loadURL()
+		loading.insert(.url)
 	}
 	
-	public override func load(atLeast mask: TrackContentMask) {
-		contentSet.promise(mask) { promise in
-			promise.fulfilling(.minimal) {
-				_attributes.value[TrackAttribute.title] = token.url.lastPathComponent
-			}
-		}
+	public var icon: Image { Image(systemName: "video") }
+
+//    public func load(atLeast mask: TrackContentMask) {
+//        contentSet.promise(mask) { promise in
+//            promise.fulfilling(.minimal) {
+//                _attributes.value[TrackAttribute.title] = token.url.lastPathComponent
+//            }
+//        }
+//    }
+}
+
+extension AVAudioTrack: RequestMapperDelegate {
+	func onDemand(_ requests: Set<Request>) {
+		// TODO
 	}
 }

@@ -8,19 +8,18 @@
 import Foundation
 
 extension DBTrack {
-    static let attributeProperties = Set([
-        "title"
-    ])
-
-    func merge(attributes: TypedDict<TrackAttribute>) {
-        if let title = attributes[TrackAttribute.title] { self.title = title }
-        
-        attributesP = cachedAttributes
-    }
-    
-    var cachedAttributes: TypedDict<TrackAttribute> {
-        var dict = TypedDict<TrackAttribute>()
-        dict[TrackAttribute.title] = title
-        return dict
-    }
+	enum AttributeGroup {
+		case info
+		// TODO Analysis Group
+	}
+	
+	static let attributeGroups: SetRelation<TrackAttribute, AttributeGroup> = [
+		.info: [.title]
+	]
+	
+	static let keypathByAttribute: [TrackAttribute: String] = [
+		.title: "title"
+	]
+	
+	static let attributeByKeypath: [String: TrackAttribute] = Dictionary(uniqueKeysWithValues: keypathByAttribute.map { ($1, $0) })
 }

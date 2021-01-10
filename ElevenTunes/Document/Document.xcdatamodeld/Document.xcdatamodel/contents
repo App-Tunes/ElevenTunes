@@ -30,6 +30,7 @@
         <attribute name="backendCacheMask" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="backendID" attributeType="String" defaultValueString=""/>
         <attribute name="title" optional="YES" attributeType="String" spotlightIndexingEnabled="YES"/>
+        <attribute name="version" optional="YES" attributeType="String"/>
         <relationship name="album" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DBAlbum" inverseName="tracks" inverseEntity="DBAlbum"/>
         <relationship name="references" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DBPlaylist" inverseName="tracks" inverseEntity="DBPlaylist"/>
     </entity>
@@ -37,6 +38,6 @@
         <element name="DBAlbum" positionX="72" positionY="189" width="128" height="74"/>
         <element name="DBArtist" positionX="90" positionY="198" width="128" height="74"/>
         <element name="DBPlaylist" positionX="27" positionY="72" width="128" height="224"/>
-        <element name="DBTrack" positionX="18" positionY="63" width="128" height="119"/>
+        <element name="DBTrack" positionX="18" positionY="63" width="128" height="134"/>
     </elements>
 </model>

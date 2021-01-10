@@ -15,7 +15,7 @@ struct PlayingTrackView: View {
 
     @State var current: Track?
     @State var attributes: TypedDict<TrackAttribute> = .init()
-    @State var image: NSImage?
+	@State var image: TrackAttributes.ValueSnapshot<NSImage?> = .missing()
 
     var body: some View {
         HStack {
@@ -24,7 +24,7 @@ struct PlayingTrackView: View {
                     .fill(Color.black)
                     .opacity(0.2)
                 
-                if let image = image {
+				if let image = image.value {
                     Image(nsImage: image)
                         .resizable().scaledToFit()
                 }
@@ -44,6 +44,6 @@ struct PlayingTrackView: View {
         }
         .padding(.top, 8)
         .onReceive(player.$current) { self.current = Track($0) }
-        .onReceive(current?.backend.previewImage(), default: nil) { self.image = $0 }
+		.onReceive(current?.backend.attributes.filtered(toJust: TrackAttribute.previewImage), default: .missing()) { self.image = $0 }
     }
 }

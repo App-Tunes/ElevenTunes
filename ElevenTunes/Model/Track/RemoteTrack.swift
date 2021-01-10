@@ -9,77 +9,37 @@ import Foundation
 import Combine
 import SwiftUI
 
-public class RemoteTrack: AnyTrack {
-    var cancellables = Set<AnyCancellable>()
+protocol RemoteTrack: AnyTrack, RequestMapperDelegate {
+	associatedtype Token: TrackToken
+	typealias Requests = RequestMapper<TrackAttribute, TrackVersion, Self>
 
-    public var asToken: TrackToken { fatalError() }
-    public var id: String { asToken.id }
+	var mapper: Requests { get }
+	var token: Token { get }
+}
 
-    public var icon: Image { Image(systemName: "music.note") }
-    
-    public var accentColor: Color { .primary }
-    
-    public var origin: URL? { nil }
-    
-    let contentSet: FeatureSet<TrackContentMask, TrackContentMask> = .init()
-    
-    public func cacheMask() -> AnyPublisher<TrackContentMask, Never> {
-        contentSet.$features.eraseToAnyPublisher()
-    }
+extension RemoteTrack {
+	public var attributes: AnyPublisher<TrackAttributes.Update, Never> {
+		mapper.attributes.$snapshot.eraseToAnyPublisher()
+	}
+	
+	public func demand(_ demand: Set<TrackAttribute>) -> AnyCancellable {
+		mapper.demand.add(demand)
+	}
+	
+	public var hasCaches: Bool { true }
+	
+	public func invalidateCaches() {
+		mapper.attributes.invalidate()
+	}
+	
+	public func `import`(library: AnyLibrary) -> Bool { false }
+	
+	public func previewImage() -> AnyPublisher<NSImage?, Never> {
+		Just(nil).eraseToAnyPublisher()
+	}
 
-    public var _artists: CurrentValueSubjectPublishingDemand<[AnyPlaylist], Never> = .init([])
-    public func artists() -> AnyPublisher<[AnyPlaylist], Never> {
-        _artists.eraseToAnyPublisher()
-    }
-    
-    public var _album: CurrentValueSubjectPublishingDemand<AnyPlaylist?, Never> = .init(nil)
-    public func album() -> AnyPublisher<AnyPlaylist?, Never> {
-        _album.eraseToAnyPublisher()
-    }
-    
-    public var _attributes: CurrentValueSubjectPublishingDemand<TypedDict<TrackAttribute>, Never> = .init(.init())
-    public func attributes() -> AnyPublisher<TypedDict<TrackAttribute>, Never> {
-        _attributes.eraseToAnyPublisher()
-    }
-    
-    init() {
-        mergeDemandMask(
-            TrackContentMask(), subjects: [
-                (_artists.$demand, .minimal),
-                (_album.$demand, .minimal),
-                (_attributes.$demand, TrackContentMask([.minimal, .analysis]))
-            ]
-        ).combineLatest(contentSet.$features)
-        .map { $0.subtracting($1) }
-        .removeDuplicates()
-        // We may currently be in a feature change, let's defer this run
-        .debounce(for: .milliseconds(10), scheduler: RunLoop.main)
-        .sink { [weak self] in
-            self?.load(atLeast: $0)
-        }.store(in: &cancellables)
-    }
+	public var asToken: TrackToken { token }
+	public var origin: URL? { token.origin }
 
-    public func invalidateCaches(_ mask: TrackContentMask) {
-        contentSet.subtract(mask)
-        
-        if mask.contains(.minimal) {
-            // Let's be safe and invalidate these too
-            _album.value?.invalidateCaches()
-            _artists.value.forEach { $0.invalidateCaches() }
-        }
-    }
-    
-    public func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
-        fatalError()
-    }
-    
-    public func load(atLeast mask: TrackContentMask) {
-        fatalError()
-    }
-    
-    public func previewImage() -> AnyPublisher<NSImage?, Never> {
-        album().flatMap {
-            $0?.previewImage() ?? Just(nil).eraseToAnyPublisher()
-        }.eraseToAnyPublisher()
-    }
+	public var id: String { token.id }
 }
