@@ -22,12 +22,25 @@ public class DBLibraryTrack: AnyTrack {
     
     var backendObservers = Set<AnyCancellable>()
 
+	var cancellables: Set<AnyCancellable> = []
+
     init(library: Library, cache: DBTrack, backend: AnyTrack?) {
         self.library = library
         self.cache = cache
         self.backend = backend
-    }
-    
+		setupObservers()
+	}
+	
+	func setupObservers() {
+		guard let backend = backend else {
+			return
+		}
+		
+		backend.attributes
+			.sink(receiveValue: cache.onUpdate)
+			.store(in: &cancellables)
+	}
+
     public var asToken: TrackToken { fatalError() }
     
     public var id: String { cache.objectID.description }

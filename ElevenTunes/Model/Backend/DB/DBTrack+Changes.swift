@@ -12,7 +12,6 @@ extension DBTrack: SelfChangeWatcher {
 		let affectedGroups = DBTrack.attributeGroups.any(update.change)
 		
 		let attributes = update.0
-		let context = managedObjectContext!
 				
 		if affectedGroups.contains(.info) {
 			let snapshot = attributes.extract(DBTrack.attributeGroups[.info]!)

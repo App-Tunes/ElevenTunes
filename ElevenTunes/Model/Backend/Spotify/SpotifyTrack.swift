@@ -117,12 +117,12 @@ public final class SpotifyTrack: RemoteTrack {
     init(_ token: SpotifyTrackToken, spotify: Spotify) {
         self.token = token
         self.spotify = spotify
+		mapper.delegate = self
     }
 
-    init(track: DetailedSpotifyTrack, spotify: Spotify) {
-        self.token = SpotifyTrackToken(track.id)
-        self.spotify = spotify
-        self.extractAttributes(from: track)
+    convenience init(track: DetailedSpotifyTrack, spotify: Spotify) {
+		self.init(SpotifyTrackToken(track.id), spotify: spotify)
+		mapper.attributes.update(extractAttributes(from: track), state: .version(""))
 		mapper.requestFeatureSet.insert(.track)
     }
     
@@ -149,10 +149,11 @@ public final class SpotifyTrack: RemoteTrack {
             .eraseToAnyPublisher()
     }
     
-    func extractAttributes(from track: DetailedSpotifyTrack) {
-		mapper.attributes.update(.init([
+    func extractAttributes(from track: DetailedSpotifyTrack) -> TypedDict<TrackAttribute> {
+		.init([
 			.title: track.name,
-		]), state: .version(""))
+		])
+		// TODO Album and artists
 //        self._album.value = track.album.map { spotify.album(SpotifyAlbumToken($0.id)) }
 //
 //        self._artists.value = track.artists
@@ -161,43 +162,35 @@ public final class SpotifyTrack: RemoteTrack {
 //            }
     }
     
-    func extractAttributes(from features: AudioFeatures) {
-		mapper.attributes.update(.init([
+    func extractAttributes(from features: AudioFeatures) -> TypedDict<TrackAttribute> {
+		.init([
 			.bpm: Tempo(features.tempo),
 			.key: MusicalKey(features.key)
-		]), state: .version(""))
+		])
     }
-//
-//    public override func load(atLeast mask: TrackContentMask) {
-//        contentSet.promise(mask) { promise in
-//            let spotify = self.spotify
-//
-//            if promise.includes(.minimal) {
-//                spotify.api.track(token)
-//                    .onMain()
-//                    .fulfillingAny(.minimal, of: promise)
-//                    .sink(receiveCompletion: appLogErrors) { [unowned self] track in
-//                        self.extractAttributes(from: DetailedSpotifyTrack.from(track))
-//                    }
-//                    .store(in: &cancellables)
-//            }
-//
-//            if promise.includes(.analysis) {
-//                spotify.api.trackAudioFeatures(token)
-//                    .onMain()
-//                    .fulfillingAny(.analysis, of: promise)
-//                    .sink(receiveCompletion: appLogErrors) { [unowned self] features in
-//                        self.extractAttributes(from: features)
-//                    }
-//                    .store(in: &cancellables)
-//            }
-//        }
-//    }
 }
 
 extension SpotifyTrack: RequestMapperDelegate {
 	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<TrackAttribute, TrackVersion>.ValueGroupSnapshot, Error> {
-		// TODO
-		fatalError()
+		switch request {
+		case .track:
+			return spotify.api.track(token)
+				.map { [unowned self] track in
+					.init(
+						self.extractAttributes(from: DetailedSpotifyTrack.from(track)),
+						state: .version("")
+					)
+				}
+				.eraseToAnyPublisher()
+		case .analysis:
+			return spotify.api.trackAudioFeatures(token)
+				.map { [unowned self] features in
+					.init(
+						self.extractAttributes(from: features),
+						state: .version("")
+					)
+				}
+				.eraseToAnyPublisher()
+		}
 	}
 }
