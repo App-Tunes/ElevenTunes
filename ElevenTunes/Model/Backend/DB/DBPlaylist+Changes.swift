@@ -58,18 +58,21 @@ extension DBPlaylist: SelfChangeWatcher {
 		
 		if affectedGroups.contains(.attributes) {
 			let snapshot = attributes.extract(DBPlaylist.attributeGroups[.attributes]!)
-			let attributes = snapshot.value
 
 			switch snapshot.state {
 			case .version(let version):
-				for (key, value) in attributes.contents {
-					let keyPath = DBPlaylist.keypathByAttribute[key]!
-					self.setValue(value, forKey: keyPath)
-				}
+				unpack(update: snapshot.value)
 				self.version = version
 			default:
 				break  // TODO Handle errors etc.?
 			}
+		}
+	}
+	
+	func unpack(update: TypedDict<PlaylistAttribute>) {
+		for (key, value) in update.contents {
+			let keyPath = DBPlaylist.keypathByAttribute[key]!
+			self.setValue(value, forKey: keyPath)
 		}
 	}
 	

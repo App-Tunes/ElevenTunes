@@ -156,6 +156,7 @@
 		80D6DAAC259E2CBF00879BCF /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D6DAAB259E2CBF00879BCF /* Link.swift */; };
 		80D6DAB1259E31C800879BCF /* TracksContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D6DAB0259E31C800879BCF /* TracksContextMenu.swift */; };
 		80D6DAB6259E389600879BCF /* PlaylistsContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D6DAB5259E389600879BCF /* PlaylistsContextMenu.swift */; };
+		80E0AD7425AC5D3100274597 /* WhileActive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E0AD7325AC5D3100274597 /* WhileActive.swift */; };
 		80E7D84E25A7AB1A00413630 /* SetIfDifferent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E7D84D25A7AB1A00413630 /* SetIfDifferent.swift */; };
 		80ED767B258FD5B600B8B9C3 /* PlaylistInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80ED767A258FD5B600B8B9C3 /* PlaylistInterpreter.swift */; };
 		80ED7691258FF41200B8B9C3 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80ED7690258FF41200B8B9C3 /* Array.swift */; };
@@ -333,6 +334,7 @@
 		80D6DAAB259E2CBF00879BCF /* Link.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Link.swift; sourceTree = "<group>"; };
 		80D6DAB0259E31C800879BCF /* TracksContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksContextMenu.swift; sourceTree = "<group>"; };
 		80D6DAB5259E389600879BCF /* PlaylistsContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsContextMenu.swift; sourceTree = "<group>"; };
+		80E0AD7325AC5D3100274597 /* WhileActive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhileActive.swift; sourceTree = "<group>"; };
 		80E7D84D25A7AB1A00413630 /* SetIfDifferent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetIfDifferent.swift; sourceTree = "<group>"; };
 		80ED767A258FD5B600B8B9C3 /* PlaylistInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistInterpreter.swift; sourceTree = "<group>"; };
 		80ED7688258FDFD700B8B9C3 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -483,6 +485,7 @@
 				808D548C259F3BC9006F7435 /* Color.swift */,
 				80C9A184259F916F00A038CC /* Combine.swift */,
 				802DBA21259FA9B000EA6DB7 /* Gradient.swift */,
+				80E0AD7325AC5D3100274597 /* WhileActive.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -1101,6 +1104,7 @@
 				80151EF52593C98500D9539A /* SpotifyDeviceView.swift in Sources */,
 				80ED7691258FF41200B8B9C3 /* Array.swift in Sources */,
 				80AD69892588285F00192BED /* PlayerBarView.swift in Sources */,
+				80E0AD7425AC5D3100274597 /* WhileActive.swift in Sources */,
 				80CD393B25A3CD98002C5A56 /* Spotify+Cache.swift in Sources */,
 				806B2899258ED0CA0091EA4D /* AnyAudioEmitter.swift in Sources */,
 				802DBA27259FCBA600EA6DB7 /* NavigationSearchBar.swift in Sources */,

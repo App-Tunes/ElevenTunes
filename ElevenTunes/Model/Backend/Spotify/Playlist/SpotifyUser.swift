@@ -86,11 +86,13 @@ public final class SpotifyUser: RemotePlaylist {
     init(spotify: Spotify) {
         self.token = SpotifyUserToken(nil)
         self.spotify = spotify
+		mapper.delegate = self
     }
     
     init(_ token: SpotifyUserToken, spotify: Spotify) {
         self.token = token
         self.spotify = spotify
+		mapper.delegate = self
     }
 
 //    convenience init(_ user: SpotifyWebAPI.SpotifyUser, spotify: Spotify) {
@@ -167,7 +169,46 @@ public final class SpotifyUser: RemotePlaylist {
 
 extension SpotifyUser: RequestMapperDelegate {
 	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.ValueGroupSnapshot, Error> {
-		// TODO
-		fatalError()
+		let uri = token.uri
+		let spotify = self.spotify
+
+		switch request {
+		case .info:
+			let userProfile = uri != nil
+				? spotify.api.userProfile(uri!)
+				: spotify.api.currentUserProfile()
+
+			return userProfile
+				.map { .init(SpotifyUser.attributes(of: $0), state: .version("")) }
+				.eraseToAnyPublisher()
+		case .playlists:
+			let count = 50
+			let paginationLimit = 100
+
+			let playlistsAt = { (offset: Int) in
+				uri != nil
+					? spotify.api.userPlaylists(for: uri!, limit: count, offset: offset)
+					: spotify.api.currentUserPlaylists(limit: count, offset: offset)
+			}
+
+			return playlistsAt(0)
+				.unfold(limit: paginationLimit) {
+					$0.offset + $0.items.count >= $0.total ? nil
+						: playlistsAt($0.offset + count)
+				}
+				.collect()
+				.map { $0.flatMap { $0.items } }
+				.map { items in
+					items.compactMap { item -> SpotifyPlaylist? in
+						SpotifyPlaylist(SpotifyPlaylistToken(item.id), spotify: spotify)
+					}
+				}
+				.map {
+					.init(TypedDict([
+						.children: $0
+					]), state: .version(""))
+				}
+				.eraseToAnyPublisher()
+		}
 	}
 }

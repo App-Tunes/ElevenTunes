@@ -40,8 +40,9 @@ struct PlaylistRowView: View {
                     .opacity(0.5)
             }
         }
-        .frame(height: 15)
         .contextMenu(menuItems: PlaylistsContextMenu(playlist: playlist.backend).callAsFunction)
-		.onReceive(playlist.backend.attributes.filtered(toJust: PlaylistAttribute.title)) { title = $0 }
+		.whileActive(playlist.backend.demand([.title]))
+		.onReceive(playlist.backend.attributes.filtered(toJust: PlaylistAttribute.title)) { title ?= $0 }
+		.frame(height: 15)
     }
 }

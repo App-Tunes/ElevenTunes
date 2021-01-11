@@ -43,9 +43,11 @@ struct PlaylistSectionView: View {
     
     var body: some View {
         _body
+			.id(playlist.id)
+			.whileActive(playlist.backend.demand([PlaylistAttribute.children]))
 			.onReceive(playlist.backend.attributes.filtered(toJust: PlaylistAttribute.children)) {
-            children = ($0.value ?? []).map(Playlist.init)
-        }
+				children ?= ($0.value ?? []).map(Playlist.init)
+			}
     }
 }
 
@@ -54,11 +56,16 @@ struct PlaylistsView: View {
     @State var topLevelChildren: [Playlist] = []
             
     var body: some View {
-        ForEach(topLevelChildren) { category in
-            PlaylistSectionView(playlist: category, isTopLevel: true)
-        }
-        .frame(minWidth: 0, maxWidth: 800, maxHeight: .infinity, alignment: .leading)
-		.onReceive(directory.backend.attributes.filtered(toJust: PlaylistAttribute.children)) { topLevelChildren = ($0.value ?? []).map(Playlist.init) }
+		ForEach(topLevelChildren) { category in
+			PlaylistSectionView(playlist: category, isTopLevel: true)
+		}
+		
+		Text("") // FIXME WTF, apparently updates aren't executed on empty views???
+			.whileActive(directory.backend.demand([PlaylistAttribute.children]))
+			.onReceive(directory.backend.attributes.filtered(toJust: PlaylistAttribute.children)) {
+				topLevelChildren ?= ($0.value ?? []).map(Playlist.init)
+			}
+			.frame(minWidth: 0, maxWidth: 800, maxHeight: .infinity, alignment: .leading)
    }
 }
 

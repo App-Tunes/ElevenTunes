@@ -62,13 +62,14 @@ class RequestMapper<Attribute: AnyObject & Hashable, Version: Hashable, Delegate
 			let promisedAttributes = relation[request]!
 
 			guard let delegate = delegate else {
-				appLogger.critical("Request \(request) demanded without a delegate registered!")
+				appLogger.critical("Request '\(request)' of \(Delegate.self) demanded without a delegate registered!")
 				attributes.updateEmpty(promisedAttributes, state: .error(DesignError.noDelegate))
 				return
 			}
 			
 			delegate
 				.onDemand(request)
+				.onMain()
 				.fulfillingAny([request], of: promise)
 				.sink { result in
 					switch result {

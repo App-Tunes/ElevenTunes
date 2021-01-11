@@ -62,8 +62,9 @@ extension Library {
         func convertTrack(_ backend: TrackToken) -> DBTrack {
             if let backend = backend as? MockTrack {
                 let dbTrack = DBTrack(entity: trackModel, insertInto: context)
-				// TODO Extract attributes
-//                dbTrack.merge(attributes: backend._attributes)
+				let attributes = backend._attributes.snapshot.0
+				let secondaryAttributes = attributes.filter(DBTrack.attributeGroups[.info]!.contains)
+				dbTrack.onUpdate((secondaryAttributes, change: []))
                 return dbTrack
             }
             
@@ -95,8 +96,9 @@ extension Library {
 				let children = attributes[PlaylistAttribute.children].value ?? []
 
 				dbPlaylist.addToTracks(NSOrderedSet(array: tracks.map { tracksByID[$0.asToken.id]! }))
-				// TODO Extract secondary attributes
-//				dbPlaylist.attributes.update(attributes: attributes.extract())
+				let secondaryAttributes = attributes.attributes.filter(DBPlaylist.attributeGroups[.attributes]!.contains)
+				dbPlaylist.unpack(update: secondaryAttributes)
+				dbPlaylist.version = ""
                 playlistChildren[dbPlaylist] = children.map { $0.asToken.id }
                 
                 return dbPlaylist

@@ -126,6 +126,10 @@ extension VolatileAttributes {
 			)
 			return snapshot
 		}
+		
+		public func filter(_ isIncluded: (Key) -> Bool) -> Snapshot {
+			Snapshot(attributes.filter(isIncluded), states: states.filter { isIncluded($0.key) })
+		}
 	}
 }
 
@@ -167,10 +171,18 @@ extension VolatileAttributes {
 			if case .version(let lversion) = lhs, case .version(let rversion) = rhs {
 				return lversion == rversion
 			}
+			if case .error(let lerror) = lhs, case .error(let rerror) = rhs {
+				// Eh, good enough.
+				return ObjectIdentifier(lerror as AnyObject) == ObjectIdentifier(rerror as AnyObject)
+			}
 			if case .missing = lhs, case .missing = rhs { return true }
 			return false
 		}
 	}
+}
+
+extension VolatileAttributes.ValueSnapshot: Equatable where Value: Equatable {
+	
 }
 
 extension Publisher {

@@ -145,7 +145,19 @@ public class DBPlaylist: NSManagedObject {
         isIndexedP = indexed
         contentTypeP = contentType
 
-		// TODO
-//		initialize content
+		var update = TypedDict<PlaylistAttribute>()
+		var empty: Set<PlaylistAttribute> = []
+		for (attributeKey, attribute) in DBPlaylist.attributeByKeypath {
+			// TODO Can we make this type-safe?
+			if let value = value(forKey: attributeKey) {
+				update[unsafe: attribute] = value
+			}
+			else {
+				empty.insert(attribute)
+			}
+		}
+		let state: PlaylistAttributes.State = .version(version ?? "")
+		attributes.update(update, state: state)
+		attributes.updateEmpty(empty, state: state)
     }
 }

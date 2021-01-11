@@ -30,6 +30,7 @@ struct PlaylistView: View {
                         
 //            TrackInfoView()
         }
+		.id(playlist.id)
         .listStyle(DefaultListStyle())
 		.onReceive(playlist.backend.attributes.filtered(toJust: PlaylistAttribute.tracks)) { tracks = $0.value ?? [] }  // Request tracks to load
     }
