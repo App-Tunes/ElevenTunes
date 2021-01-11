@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PlaylistRowView: View {
-    @State var playlist: Playlist
+    let playlist: Playlist
 
 	@State var title: PlaylistAttributes.ValueSnapshot<String?> = .missing()
     

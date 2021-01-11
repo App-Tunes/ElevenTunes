@@ -9,8 +9,8 @@ import SwiftUI
 import Combine
 
 struct WhileActive<Content: View>: View {
-	@State var content: Content
-	@State var cancellable: AnyCancellable
+	let content: Content
+	let cancellable: AnyCancellable
 	
     var body: some View {
         content

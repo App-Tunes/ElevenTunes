@@ -181,9 +181,7 @@ extension VolatileAttributes {
 	}
 }
 
-extension VolatileAttributes.ValueSnapshot: Equatable where Value: Equatable {
-	
-}
+extension VolatileAttributes.ValueSnapshot: Equatable where Value: Equatable { }
 
 extension Publisher {
 //	func publisher(_ attributes: Set<Key>) -> AnyPublisher<Snapshot, Never> {
