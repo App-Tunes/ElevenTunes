@@ -8,10 +8,6 @@
 import Foundation
 import Combine
 
-enum VolatileAttributeError: Error {
-	case unknownAttribute
-}
-
 public class VolatileAttributes<Key: AnyObject & Hashable, Version: Hashable> {
 	public typealias Update = (Snapshot, change: Set<Key>)
 	

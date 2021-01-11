@@ -16,6 +16,10 @@ protocol RequestMapperDelegate: AnyObject {
 }
 
 class RequestMapper<Attribute: AnyObject & Hashable, Version: Hashable, Delegate: RequestMapperDelegate> where Delegate.Snapshot == VolatileAttributes<Attribute, Version>.ValueGroupSnapshot {
+	enum DesignError: Error {
+		case noDelegate, unknownAttribute
+	}
+	
 	let demand = KeyedDemand<Attribute>()
 	let attributes = VolatileAttributes<Attribute, Version>()
 	let relation: SetRelation<Attribute, Delegate.Request>
@@ -42,34 +46,44 @@ class RequestMapper<Attribute: AnyObject & Hashable, Version: Hashable, Delegate
 				
 				// Register unknown as error (don't know how to provide...)
 				// TODO Maybe it would be better to map this elsehow, we'll see
-				attributes.updateEmpty(unknown, state: .error(VolatileAttributeError.unknownAttribute))
+				attributes.updateEmpty(unknown, state: .error(DesignError.unknownAttribute))
 				
 				// Ask delegate to compute the rest
-				for request in requests {
-					let promisedAttributes = self.relation[request]!
-					
-					// Only ask to fulfill the request if we don't do it already
-					self.requestFeatureSet.promise([request]) { promise in
-						self.delegate?
-							.onDemand(request)
-							.fulfillingAny([request], of: promise)
-							.sink { result in
-								switch result {
-								case .failure(let error):
-									self.attributes.updateEmpty(promisedAttributes, state: .error(error))
-								case .success(let snapshot):
-									// snapshot may provide more if unexpectedly there was more,
-									// or less if the version doesn't have an attribute
-									let allKeys = promisedAttributes.union(snapshot.value.keys)
-									let fullSnapshot = VolatileAttributes<Attribute, Version>.Snapshot(snapshot.value, states: Dictionary(uniqueKeysWithValues: allKeys.map { ($0, snapshot.state) }))
-									
-									attributes.update(fullSnapshot, change: allKeys)
-								}
-							}
-							.store(in: &self.cancellables)
-					}
-				}
+				requests.forEach(self.demandRequest)
 			}
 			.store(in: &cancellables)
+	}
+	
+	func demandRequest(_ request: Delegate.Request) {
+		let attributes = self.attributes
+		
+		// Only ask to fulfill the request if we don't do it already
+		requestFeatureSet.promise([request]) { promise in
+			let promisedAttributes = relation[request]!
+
+			guard let delegate = delegate else {
+				appLogger.critical("Request \(request) demanded without a delegate registered!")
+				attributes.updateEmpty(promisedAttributes, state: .error(DesignError.noDelegate))
+				return
+			}
+			
+			delegate
+				.onDemand(request)
+				.fulfillingAny([request], of: promise)
+				.sink { result in
+					switch result {
+					case .failure(let error):
+						attributes.updateEmpty(promisedAttributes, state: .error(error))
+					case .success(let snapshot):
+						// snapshot may provide more if unexpectedly there was more,
+						// or less if the version doesn't have an attribute
+						let allKeys = promisedAttributes.union(snapshot.value.keys)
+						let fullSnapshot = VolatileAttributes<Attribute, Version>.Snapshot(snapshot.value, states: Dictionary(uniqueKeysWithValues: allKeys.map { ($0, snapshot.state) }))
+						
+						attributes.update(fullSnapshot, change: allKeys)
+					}
+				}
+				.store(in: &cancellables)
+		}
 	}
 }
