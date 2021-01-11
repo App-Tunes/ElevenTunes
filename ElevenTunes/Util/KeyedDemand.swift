@@ -55,7 +55,7 @@ public class KeyedDemand<Feature: Hashable> {
 
 		for feature in features {
 			var currentDemand = updatedDemand[feature, default: 0]
-			currentDemand -= 1
+			currentDemand += value
 			
 			if currentDemand < 0 {
 				appLogger.error("Fucked up demand calculation")
