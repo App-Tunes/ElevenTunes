@@ -40,12 +40,11 @@ public final class AVAudioTrack: FileTrack {
 		.url: [.title],
 		.analyze: [.bpm, .key]
 	])
-	let loading = FeatureSet<Request, Set<Request>>()
 
 	init(_ token: AVAudioTrackToken) {
 		self.token = token
 		loadURL()
-		loading.insert(.url)
+		mapper.requestFeatureSet.insert(.url)
 	}
 	
 	public var icon: Image { Image(systemName: "video") }
@@ -60,7 +59,8 @@ public final class AVAudioTrack: FileTrack {
 }
 
 extension AVAudioTrack: RequestMapperDelegate {
-	func onDemand(_ requests: Set<Request>) {
+	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<TrackAttribute, TrackVersion>.ValueGroupSnapshot, Error> {
 		// TODO
+		fatalError()
 	}
 }

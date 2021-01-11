@@ -40,13 +40,12 @@ public final class DirectoryPlaylist: RemotePlaylist {
 		.url: [.title],
 		.read: [.tracks, .children]
 	])
-	let loading = FeatureSet<Request, Set<Request>>()
 
     init(_ token: DirectoryPlaylistToken, library: Library) {
         self.library = library
         self.token = token
 		loadURL()
-        loading.insert(.url)
+		mapper.requestFeatureSet.insert(.url)
     }
     
 	static let _icon: Image = Image(systemName: "folder")
@@ -108,7 +107,8 @@ public final class DirectoryPlaylist: RemotePlaylist {
 }
 
 extension DirectoryPlaylist: RequestMapperDelegate {
-	func onDemand(_ requests: Set<Request>) {
+	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.ValueGroupSnapshot, Error> {
 		// TODO
+		fatalError()
 	}
 }

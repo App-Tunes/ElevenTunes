@@ -41,13 +41,12 @@ public final class M3UPlaylist: RemotePlaylist {
 		.url: [.title],
 		.read: [.tracks, .children]
 	])
-	let loading = FeatureSet<Request, Set<Request>>()
 
     init(_ token: M3UPlaylistToken, library: Library) {
         self.library = library
         self.token = token
 		loadURLAttributes()
-        loading.insert(.url)
+		mapper.requestFeatureSet.insert(.url)
     }
     
     public var icon: Image { Image(systemName: "doc.text") }
@@ -137,7 +136,8 @@ public final class M3UPlaylist: RemotePlaylist {
 }
 
 extension M3UPlaylist: RequestMapperDelegate {
-	func onDemand(_ requests: Set<Request>) {
+	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.ValueGroupSnapshot, Error> {
 		// TODO
+		fatalError()
 	}
 }

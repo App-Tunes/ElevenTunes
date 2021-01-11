@@ -79,7 +79,6 @@ public final class SpotifyUser: RemotePlaylist {
 		.info: [.title],
 		.playlists: [.children]
 	])
-	let loading = FeatureSet<Request, Set<Request>>()
 
     let token: SpotifyUserToken
     let spotify: Spotify
@@ -167,7 +166,8 @@ public final class SpotifyUser: RemotePlaylist {
 }
 
 extension SpotifyUser: RequestMapperDelegate {
-	func onDemand(_ requests: Set<Request>) {
+	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.ValueGroupSnapshot, Error> {
 		// TODO
+		fatalError()
 	}
 }

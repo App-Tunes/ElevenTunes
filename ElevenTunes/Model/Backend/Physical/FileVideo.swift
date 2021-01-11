@@ -41,12 +41,11 @@ public final class FileVideo: FileTrack {
 		.url: [.title],
 		.analyze: [.bpm, .key]
 	])
-	let loading = FeatureSet<Request, Set<Request>>()
 
     init(_ token: FileVideoToken) {
         self.token = token
 		loadURL()
-		loading.insert(.url)
+		mapper.requestFeatureSet.insert(.url)
     }
         
     public var icon: Image { Image(systemName: "video") }
@@ -61,7 +60,8 @@ public final class FileVideo: FileTrack {
 }
 
 extension FileVideo: RequestMapperDelegate {
-	func onDemand(_ requests: Set<Request>) {
+	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<TrackAttribute, TrackVersion>.ValueGroupSnapshot, Error> {
 		// TODO
+		fatalError()
 	}
 }

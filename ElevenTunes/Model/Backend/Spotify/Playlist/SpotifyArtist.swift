@@ -36,7 +36,6 @@ public final class SpotifyArtist: SpotifyURIPlaylist, AnyArtist {
 		.info: [.title],
 		.playlists: [.children]
 	])
-	let loading = FeatureSet<Request, Set<Request>>()
 	
 	let token: SpotifyArtistToken
 	let spotify: Spotify
@@ -51,7 +50,7 @@ public final class SpotifyArtist: SpotifyURIPlaylist, AnyArtist {
     public var icon: Image { Image(systemName: "person") }
     
     func offerCache(_ artist: SpotifyWebAPI.Artist) {
-        loading.fulfilling(.info) {
+		mapper.requestFeatureSet.fulfilling(.info) {
             read(artist)
         }
     }
@@ -123,7 +122,8 @@ public final class SpotifyArtist: SpotifyURIPlaylist, AnyArtist {
 }
 
 extension SpotifyArtist: RequestMapperDelegate {
-	func onDemand(_ requests: Set<Request>) {
-		// TODO
+	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.ValueGroupSnapshot, Error> {
+		 // TODO
+		fatalError()
 	}
 }

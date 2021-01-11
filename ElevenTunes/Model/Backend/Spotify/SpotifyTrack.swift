@@ -113,7 +113,6 @@ public final class SpotifyTrack: RemoteTrack {
 		.track: [.title],
 		.analysis: [.bpm, .key]
 	])
-	let loading = FeatureSet<Request, Set<Request>>()
 
     init(_ token: SpotifyTrackToken, spotify: Spotify) {
         self.token = token
@@ -124,7 +123,7 @@ public final class SpotifyTrack: RemoteTrack {
         self.token = SpotifyTrackToken(track.id)
         self.spotify = spotify
         self.extractAttributes(from: track)
-        loading.insert(.track)
+		mapper.requestFeatureSet.insert(.track)
     }
     
     public var accentColor: Color { Spotify.color }
@@ -197,7 +196,8 @@ public final class SpotifyTrack: RemoteTrack {
 }
 
 extension SpotifyTrack: RequestMapperDelegate {
-	func onDemand(_ requests: Set<Request>) {
+	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<TrackAttribute, TrackVersion>.ValueGroupSnapshot, Error> {
 		// TODO
+		fatalError()
 	}
 }

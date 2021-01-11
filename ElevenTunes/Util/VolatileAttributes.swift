@@ -8,6 +8,10 @@
 import Foundation
 import Combine
 
+enum VolatileAttributeError: Error {
+	case unknownAttribute
+}
+
 public class VolatileAttributes<Key: AnyObject & Hashable, Version: Hashable> {
 	public typealias Update = (Snapshot, change: Set<Key>)
 	
@@ -16,7 +20,7 @@ public class VolatileAttributes<Key: AnyObject & Hashable, Version: Hashable> {
 	private var attributes: TypedDict<Key> = .init()
 	private var states: [Key: State] = [:]
 	
-	@Published var snapshot: Update = (.init(), [])
+	@Published private(set) var snapshot: Update = (.init(), [])
 	
 	var knownKeys: Set<Key> {
 		lock.perform { Set(states.filter { $0.value != .missing }.map { $0.key }) }
@@ -42,6 +46,10 @@ public class VolatileAttributes<Key: AnyObject & Hashable, Version: Hashable> {
 		}
 		
 		self.snapshot = (snapshot, change: attributes)
+	}
+	
+	func update(_ snapshot: Snapshot, change: Set<Key>) {
+		self.snapshot = (snapshot, change: change)
 	}
 	
 	func invalidate() {
@@ -70,6 +78,8 @@ extension VolatileAttributes {
 		}
 	}
 	
+	public typealias ValueGroupSnapshot = ValueSnapshot<TypedDict<Key>>
+	
 	public class Snapshot {
 		private(set) var attributes: TypedDict<Key>
 		private(set) var states: [Key: State]
@@ -93,7 +103,7 @@ extension VolatileAttributes {
 			ValueSnapshot(attributes[key], state: states[key as! Key] ?? .missing)
 		}
 		
-		public func extract<C>(_ keys: C) -> ValueSnapshot<TypedDict<Key>> where C: Collection, C.Element == Key {
+		public func extract<C>(_ keys: C) -> ValueGroupSnapshot where C: Collection, C.Element == Key {
 			let attributes = self.attributes.filter(keys.contains)
 			let state: State? = keys
 				.map { states[$0] ?? .missing }

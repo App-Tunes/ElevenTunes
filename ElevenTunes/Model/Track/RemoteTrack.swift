@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import SwiftUI
 
-protocol RemoteTrack: AnyTrack, RequestMapperDelegate {
+protocol RemoteTrack: AnyTrack, RequestMapperDelegate where Snapshot == TrackAttributes.ValueGroupSnapshot {
 	associatedtype Token: TrackToken
 	typealias Requests = RequestMapper<TrackAttribute, TrackVersion, Self>
 

@@ -49,7 +49,6 @@ public final class SpotifyPlaylist: SpotifyURIPlaylist {
 		.playlist: [.title],
 		.items: [.tracks]
 	])
-	let loading = FeatureSet<Request, Set<Request>>()
 	
 	let token: SpotifyPlaylistToken
 	let spotify: Spotify
@@ -142,7 +141,8 @@ public final class SpotifyPlaylist: SpotifyURIPlaylist {
 }
 
 extension SpotifyPlaylist: RequestMapperDelegate {
-	func onDemand(_ requests: Set<Request>) {
+	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.ValueGroupSnapshot, Error> {
 		// TODO
+		fatalError()
 	}
 }

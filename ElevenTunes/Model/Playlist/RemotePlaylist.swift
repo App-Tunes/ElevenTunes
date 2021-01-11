@@ -8,8 +8,9 @@
 import Foundation
 import Combine
 
-protocol RemotePlaylist: AnyPlaylist, RequestMapperDelegate {
+protocol RemotePlaylist: AnyPlaylist, RequestMapperDelegate where Snapshot == PlaylistAttributes.ValueGroupSnapshot {
 	associatedtype Token: PlaylistToken
+	
 	typealias Requests = RequestMapper<PlaylistAttribute, PlaylistVersion, Self>
 
 	var mapper: Requests { get }
