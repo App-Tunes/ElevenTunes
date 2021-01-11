@@ -10,7 +10,7 @@ import SwiftUI
 struct TracksView: View {
     let playlist: Playlist
     
-	@State var tracks: [AnyTrack] = []
+	@State var tracks: [Track] = []
     
     @State var selected: Set<Int> = []
 
@@ -21,7 +21,7 @@ struct TracksView: View {
         ZStack {
             List(selection: $selected) {
                 ForEach(Array(tracks.enumerated()), id: \.0) { (idx, track) in
-                    TrackRowView(track: Track(track), context: .playlist(playlist.backend, tracks: tracks, index: idx))
+					TrackRowView(track: track, context: .playlist(playlist.backend, tracks: tracks.map(\.backend), index: idx))
                         .frame(height: 26)
                         .contextMenu(menuItems: TracksContextMenu(tracks: tracks, idx: idx, selected: selected).callAsFunction)
                         .tag(idx)
@@ -37,17 +37,18 @@ struct TracksView: View {
             
             Button.invisible {
                 if let idx = selected.one {
-                    player.play(PlayHistory(context: .playlist(playlist.backend, tracks: tracks, index: idx)))
+					player.play(PlayHistory(context: .playlist(playlist.backend, tracks: tracks.map(\.backend), index: idx)))
                 }
                 else {
 					let tracks = selected.compactMap { self.tracks[safe: $0] }
-                    player.play(PlayHistory(tracks.shuffled()))
+                    player.play(PlayHistory(tracks.map(\.backend).shuffled()))
                 }
             }
             .keyboardShortcut(.return, modifiers: [])
         }
+		.whileActive(playlist.backend.demand([.tracks]))
 		.onReceive(playlist.backend.attributes.filtered(toJust: PlaylistAttribute.tracks)) {
-			self.tracks = $0.value ?? []
+			self.tracks ?= ($0.value ?? []).map(Track.init)
         }
         .frame(minWidth: 200, idealWidth: 250, maxWidth: .infinity, minHeight: 50, idealHeight: 150, maxHeight: .infinity)
         .contentShape(Rectangle())

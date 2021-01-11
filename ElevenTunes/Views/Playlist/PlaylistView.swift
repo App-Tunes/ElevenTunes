@@ -11,12 +11,12 @@ struct PlaylistView: View {
     let playlist: Playlist
     @Environment(\.library) var library: Library!
     
-    @State var tracks: [AnyTrack]? = nil
+	@State var state: PlaylistAttributes.State = .missing
     
     var body: some View {
         HSplitView {
             ZStack(alignment: .bottom) {
-                if tracks == nil {
+				if !state.isKnown {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
                 }
@@ -32,7 +32,10 @@ struct PlaylistView: View {
         }
 		.id(playlist.id)
         .listStyle(DefaultListStyle())
-		.onReceive(playlist.backend.attributes.filtered(toJust: PlaylistAttribute.tracks)) { tracks = $0.value ?? [] }  // Request tracks to load
+		.whileActive(playlist.backend.demand([.tracks]))
+		.onReceive(playlist.backend.attributes.filtered(toJust: PlaylistAttribute.tracks)) {
+			state ?= $0.state
+		}
     }
 }
 
