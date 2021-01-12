@@ -43,6 +43,7 @@ public final class SpotifyArtist: SpotifyURIPlaylist, AnyArtist {
 	init(_ token: SpotifyArtistToken, spotify: Spotify) {
 		self.token = token
 		self.spotify = spotify
+		mapper.delegate = self
 	}
 
     public var contentType: PlaylistContentType { .hybrid }
@@ -51,14 +52,14 @@ public final class SpotifyArtist: SpotifyURIPlaylist, AnyArtist {
     
     func offerCache(_ artist: SpotifyWebAPI.Artist) {
 		mapper.requestFeatureSet.fulfilling(.info) {
-            read(artist)
+			mapper.attributes.update(read(artist), state: .version(""))
         }
     }
     
-    func read(_ artist: SpotifyWebAPI.Artist) {
-		mapper.attributes.update(.init([
-			PlaylistAttribute.title: artist.name
-		]), state: .version(""))
+    func read(_ artist: SpotifyWebAPI.Artist) -> TypedDict<PlaylistAttribute> {
+		.init([
+			.title: artist.name
+		])
     }
     
     public func bestImageForPreview(_ images: [SpotifyWebAPI.SpotifyImage]) -> URL? {
@@ -123,7 +124,39 @@ public final class SpotifyArtist: SpotifyURIPlaylist, AnyArtist {
 
 extension SpotifyArtist: RequestMapperDelegate {
 	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.ValueGroupSnapshot, Error> {
-		 // TODO
-		fatalError()
+		let spotify = self.spotify
+		let token = self.token
+
+		switch request {
+		case .info:
+			return spotify.api.artist(token)
+				.map(self.read)
+				.map { .init($0, state: .version("")) }
+				.eraseToAnyPublisher()
+		case .playlists:
+			let count = 50
+			let paginationLimit = 100
+
+			let getItems = { (offset: Int) in
+				spotify.api.artistAlbums(token, limit: count, offset: offset)
+			}
+
+			return getItems(0)
+				.unfold(limit: paginationLimit) {
+					$0.offset + $0.items.count >= $0.total ? nil :
+					getItems($0.offset + count)
+				}
+				.collect()
+				.map { $0.flatMap { $0.items }}
+				.map { items in
+					items.map { spotify.album(SpotifyAlbumToken($0.id!), info: $0) }
+				}
+				.map { albums in
+					.init(.init([
+						.children: albums
+					]), state: .version(""))
+				}
+				.eraseToAnyPublisher()
+		}
 	}
 }

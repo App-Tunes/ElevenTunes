@@ -110,7 +110,7 @@ public final class SpotifyTrack: RemoteTrack {
 	}
 	
 	let mapper = Requests(relation: [
-		.track: [.title],
+		.track: [.title, .album, .artists],
 		.analysis: [.bpm, .key]
 	])
 
@@ -152,14 +152,11 @@ public final class SpotifyTrack: RemoteTrack {
     func extractAttributes(from track: DetailedSpotifyTrack) -> TypedDict<TrackAttribute> {
 		.init([
 			.title: track.name,
+			.album: track.album.map { spotify.album(SpotifyAlbumToken($0.id)) },
+			.artists:  track.artists.map {
+				spotify.artist(SpotifyArtistToken($0.id))
+			}
 		])
-		// TODO Album and artists
-//        self._album.value = track.album.map { spotify.album(SpotifyAlbumToken($0.id)) }
-//
-//        self._artists.value = track.artists
-//            .map {
-//                spotify.artist(SpotifyArtistToken($0.id))
-//            }
     }
     
     func extractAttributes(from features: AudioFeatures) -> TypedDict<TrackAttribute> {

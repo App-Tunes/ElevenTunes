@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct MusicalKey {
+struct MusicalKey: Equatable {
     static let titles = [
         "C", "D♭", "D", "E♭", "E",
         "F", "G♭", "G", "A♭", "A", "B♭", "B"

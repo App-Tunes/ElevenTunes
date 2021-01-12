@@ -47,6 +47,7 @@ public final class SpotifyAlbum: SpotifyURIPlaylist, AnyAlbum {
 		self.token = token
 		self.spotify = spotify
         coverImages.delegate = self
+		mapper.delegate = self
     }
     
     public var contentType: PlaylistContentType { .tracks }
@@ -55,14 +56,14 @@ public final class SpotifyAlbum: SpotifyURIPlaylist, AnyAlbum {
     
     func offerCache(_ album: SpotifyWebAPI.Album) {
 		mapper.requestFeatureSet.fulfilling(.info) {
-            read(album)
+			mapper.attributes.update(read(album), state: .version(""))
         }
     }
     
-    func read(_ album: SpotifyWebAPI.Album) {
-		mapper.attributes.update(.init([
-            PlaylistAttribute.title: album.name
-		]), state: .version(""))
+    func read(_ album: SpotifyWebAPI.Album) -> TypedDict<PlaylistAttribute> {
+		.init([
+            .title: album.name
+		])
     }
     
     public func bestImageForPreview(_ images: [SpotifyWebAPI.SpotifyImage]) -> URL? {
@@ -77,66 +78,49 @@ public final class SpotifyAlbum: SpotifyURIPlaylist, AnyAlbum {
         
         return URL(string: image.url)
     }
-        
-//    public override func load(atLeast mask: PlaylistContentMask) {
-//        contentSet.promise(mask) { promise in
-//            // Children will always be []
-//            promise.fulfill(.children)
-//
-//            let spotify = self.spotify
-//            let token = self.token
-//
-//            if promise.includes(.tracks) {
-//                // There are actually playlists with up to 10.000 items lol
-//                let count = 50
-//                let paginationLimit = 100
-//
-//                let getItems = { (offset: Int) in
-//                    spotify.api.albumTracks(token, limit: count, offset: offset)
-//                }
-//
-//                getItems(0)
-//                    .unfold(limit: paginationLimit) {
-//                        $0.offset + $0.items.count >= $0.total ? nil :
-//                        getItems($0.offset + count)
-//                    }
-//                    .collect()
-//                    .map { $0.flatMap { $0.items } }
-//                    .map { items in
-//                        items.map {
-//                            var track = DetailedSpotifyTrack.from($0)
-//                            track.album = .init(id: token.id)  // Album requests don't return albums
-//                            return SpotifyTrack(track: track, spotify: spotify) }
-//                    }
-//                    .onMain()
-//                    .fulfillingAny(.tracks, of: promise)
-//                    .sink(receiveCompletion: appLogErrors(_:)) { tracks in
-//                        self._tracks.value = TracksSnapshot(tracks, version: "")
-//                    }.store(in: &cancellables)
-//            }
-//
-//            if promise.includes(.attributes) {
-//                spotify.api.album(token).eraseToAnyPublisher()
-//                    .onMain()
-//                    .fulfillingAny([.attributes], of: promise)
-//                    .sink(receiveCompletion: appLogErrors) { info in
-//                        self.read(info)
-//                        self.previewImageURL = info.images.flatMap(self.bestImageForPreview(_:))
-//                    }
-//                    .store(in: &cancellables)
-//            }
-//        }
-//    }
-    
-    public func previewImage() -> AnyPublisher<NSImage?, Never> {
-        coverImages.preview.eraseToAnyPublisher()
-    }
 }
 
 extension SpotifyAlbum: RequestMapperDelegate {
 	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.ValueGroupSnapshot, Error> {
-		// TODO
-		fatalError()
+		let spotify = self.spotify
+		let token = self.token
+
+		switch request {
+		case .info:
+			return spotify.api.album(token)
+				.map { info in
+					self.previewImageURL = info.images.flatMap(self.bestImageForPreview(_:))
+					return .init(self.read(info), state: .version(""))
+				}
+				.eraseToAnyPublisher()
+		case .tracks:
+			let count = 50
+			let paginationLimit = 100
+
+			let getItems = { (offset: Int) in
+				spotify.api.albumTracks(token, limit: count, offset: offset)
+			}
+
+			return getItems(0)
+				.unfold(limit: paginationLimit) {
+					$0.offset + $0.items.count >= $0.total ? nil :
+					getItems($0.offset + count)
+				}
+				.collect()
+				.map { $0.flatMap { $0.items } }
+				.map { items in
+					items.map { (model: SpotifyWebAPI.Track) -> SpotifyTrack in
+						var track = DetailedSpotifyTrack.from(model)
+						track.album = .init(id: token.id)  // Album requests don't return albums
+						return SpotifyTrack(track: track, spotify: spotify) }
+				}
+				.map { tracks in
+					.init(.init([
+						.tracks: tracks
+					]), state: .version(""))
+				}
+				.eraseToAnyPublisher()
+		}
 	}
 }
 

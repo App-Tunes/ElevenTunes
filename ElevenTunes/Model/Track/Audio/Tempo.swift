@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Tempo {
+struct Tempo: Equatable {
     var value: Double
     
     init(_ value: Double) {
