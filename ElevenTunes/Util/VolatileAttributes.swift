@@ -45,7 +45,14 @@ public class VolatileAttributes<Key: AnyObject & Hashable, Version: Hashable> {
 	}
 	
 	func update(_ snapshot: Snapshot, change: Set<Key>) {
-		self.snapshot = (snapshot, change: change)
+		let fullSnapshot = lock.perform { () -> Snapshot in
+			self.attributes.merge(snapshot.attributes, stronger: .right)
+			states.merge(snapshot.states) { $1 }
+
+			return Snapshot(self.attributes, states: states)
+		}
+		
+		self.snapshot = (fullSnapshot, change: change)
 	}
 	
 	func invalidate() {
