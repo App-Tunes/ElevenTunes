@@ -122,7 +122,7 @@ public final class SpotifyTrack: RemoteTrack {
 
     convenience init(track: DetailedSpotifyTrack, spotify: Spotify) {
 		self.init(SpotifyTrackToken(track.id), spotify: spotify)
-		mapper.attributes.update(extractAttributes(from: track), state: .version(""))
+		mapper.attributes.update(extractAttributes(from: track), state: .version(nil))
 		mapper.requestFeatureSet.insert(.track)
     }
     
@@ -175,7 +175,7 @@ extension SpotifyTrack: RequestMapperDelegate {
 				.map { [unowned self] track in
 					.init(
 						self.extractAttributes(from: DetailedSpotifyTrack.from(track)),
-						state: .version("")
+						state: .version(nil)
 					)
 				}
 				.eraseToAnyPublisher()
@@ -184,7 +184,7 @@ extension SpotifyTrack: RequestMapperDelegate {
 				.map { [unowned self] features in
 					.init(
 						self.extractAttributes(from: features),
-						state: .version("")
+						state: .version(nil)
 					)
 				}
 				.eraseToAnyPublisher()

@@ -86,8 +86,4 @@ class MultiPlaylist: AnyPlaylist {
 	}
 	
     func `import`(library: AnyLibrary) -> Bool { false }
-    
-    func previewImage() -> AnyPublisher<NSImage?, Never> {
-        Just(nil).eraseToAnyPublisher()
-    }
 }

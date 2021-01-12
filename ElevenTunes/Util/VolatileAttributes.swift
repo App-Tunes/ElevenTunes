@@ -23,6 +23,8 @@ public class VolatileAttributes<Key: AnyObject & Hashable, Version: Hashable> {
 	}
 	
 	func update(_ attributes: TypedDict<Key>, state: State) {
+		guard !attributes.isEmpty else { return }
+
 		let snapshot = lock.perform { () -> Snapshot in
 			self.attributes.merge(attributes, stronger: .right)
 			attributes.keys.forEach { states[$0] = state }
@@ -34,6 +36,8 @@ public class VolatileAttributes<Key: AnyObject & Hashable, Version: Hashable> {
 	}
 	
 	func updateEmpty(_ attributes: Set<Key>, state: State) {
+		guard !attributes.isEmpty else { return }
+		
 		let snapshot = lock.perform { () -> Snapshot in
 			self.attributes = self.attributes.filter { !attributes.contains($0) }
 			attributes.forEach { states[$0] = state }
@@ -45,6 +49,8 @@ public class VolatileAttributes<Key: AnyObject & Hashable, Version: Hashable> {
 	}
 	
 	func update(_ snapshot: Snapshot, change: Set<Key>) {
+		guard !snapshot.isEmpty else { return }
+
 		let fullSnapshot = lock.perform { () -> Snapshot in
 			self.attributes.merge(snapshot.attributes, stronger: .right)
 			states.merge(snapshot.states) { $1 }
@@ -101,6 +107,8 @@ extension VolatileAttributes {
 			.init(.init(), states: [:])
 		}
 		
+		var isEmpty: Bool { attributes.isEmpty && states.isEmpty }
+		
 		// Type hinting see TypedDict :(
 		public subscript<TK>(_ key: TK) -> ValueSnapshot<TK.Value?> where TK: TypedKey {
 			ValueSnapshot(attributes[key], state: states[key as! Key] ?? .missing)
@@ -142,8 +150,8 @@ extension VolatileAttributes {
 
 extension VolatileAttributes {
 	public enum State: Equatable {
-		/// The state is valid, and final for the version.
-		case version(Version)
+		/// The state is valid, and final for the version. If nil, the state is final for all versions.
+		case version(Version?)
 		/// The state has not been fetched yet. A load might be in process,
 		/// or has yet to be scheduled.
 		/// If a value is provided, it is a guess or a cache.
@@ -170,8 +178,18 @@ extension VolatileAttributes {
 			// Weirdest code ever lol
 			if case .error = lhs { return lhs }
 			if case .error = rhs { return rhs }
-			// This will either be missing or the same version
-			return lhs == rhs ? lhs : .missing
+			if case .missing = lhs { return .missing }
+			if case .missing = rhs { return .missing }
+			// Both are versioned. Collapse
+			if case .version(let lversion) = lhs, case .version(let rversion) = rhs {
+				if let lversion = lversion, let rversion = rversion {
+					// Missing because two different versions means one is out of date
+					return lversion == rversion ? lhs : .missing
+				}
+				return .version(lversion ?? rversion)
+			}
+			// Cannot reach here
+			fatalError()
 		}
 		
 		public static func == (lhs: State, rhs: State) -> Bool {

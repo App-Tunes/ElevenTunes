@@ -179,7 +179,7 @@ extension SpotifyUser: RequestMapperDelegate {
 				: spotify.api.currentUserProfile()
 
 			return userProfile
-				.map { .init(SpotifyUser.attributes(of: $0), state: .version("")) }
+				.map { .init(SpotifyUser.attributes(of: $0), state: .version(nil)) }
 				.eraseToAnyPublisher()
 		case .playlists:
 			let count = 50
@@ -206,7 +206,7 @@ extension SpotifyUser: RequestMapperDelegate {
 				.map {
 					.init(TypedDict([
 						.children: $0
-					]), state: .version(""))
+					]), state: .version(nil))
 				}
 				.eraseToAnyPublisher()
 		}

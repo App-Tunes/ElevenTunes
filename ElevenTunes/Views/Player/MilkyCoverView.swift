@@ -33,6 +33,7 @@ struct MilkyCoverView: View {
 	
     var body: some View {
         MilkyImageView(image: image)
+			.whileActive(track?.demand([.previewImage]))
 			.onReceive(liveImage, default: nil) { (img: NSImage?) in
 				image = img
 			}

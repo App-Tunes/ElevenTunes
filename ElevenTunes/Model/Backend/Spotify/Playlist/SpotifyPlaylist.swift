@@ -129,7 +129,7 @@ extension SpotifyPlaylist: RequestMapperDelegate {
 				.eraseToAnyPublisher()
 		case .playlist:
 			return spotify.api.playlist(token)
-				.map { .init(SpotifyPlaylist.attributes(of: $0), state: .version("")) }
+				.map { .init(SpotifyPlaylist.attributes(of: $0), state: .version(nil)) }
 				.eraseToAnyPublisher()
 		}
 	}

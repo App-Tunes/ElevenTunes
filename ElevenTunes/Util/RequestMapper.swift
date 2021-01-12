@@ -17,7 +17,7 @@ protocol RequestMapperDelegate: AnyObject {
 
 class RequestMapper<Attribute: AnyObject & Hashable, Version: Hashable, Delegate: RequestMapperDelegate> where Delegate.Snapshot == VolatileAttributes<Attribute, Version>.ValueGroupSnapshot {
 	enum DesignError: Error {
-		case noDelegate, unknownAttribute
+		case noDelegate
 	}
 	
 	let demand = KeyedDemand<Attribute>()
@@ -46,7 +46,7 @@ class RequestMapper<Attribute: AnyObject & Hashable, Version: Hashable, Delegate
 				
 				// Register unknown as error (don't know how to provide...)
 				// TODO Maybe it would be better to map this elsehow, we'll see
-				attributes.updateEmpty(unknown, state: .error(DesignError.unknownAttribute))
+				attributes.updateEmpty(unknown, state: .version(nil))
 				
 				// Ask delegate to compute the rest
 				requests.forEach(self.demandRequest)

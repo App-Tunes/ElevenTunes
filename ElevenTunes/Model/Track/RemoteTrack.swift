@@ -33,10 +33,6 @@ extension RemoteTrack {
 	}
 	
 	public func `import`(library: AnyLibrary) -> Bool { false }
-	
-	public func previewImage() -> AnyPublisher<NSImage?, Never> {
-		Just(nil).eraseToAnyPublisher()
-	}
 
 	public var asToken: TrackToken { token }
 	public var origin: URL? { token.origin }

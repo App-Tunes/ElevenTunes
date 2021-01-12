@@ -44,7 +44,7 @@ class LibraryPlaylist: AnyPlaylist {
 				case .success(let tracks):
 					self?._attributes.update(.init([
 						.tracks: tracks
-					]), state: .version(""))
+					]), state: .version(nil))
 				}
 			})
 
@@ -65,7 +65,7 @@ class LibraryPlaylist: AnyPlaylist {
 				case .success(let children):
 					self?._attributes.update(.init([
 						.children: children
-					]), state: .version(""))
+					]), state: .version(nil))
 				}
 			})
 
@@ -100,10 +100,6 @@ class LibraryPlaylist: AnyPlaylist {
 	var attributes: AnyPublisher<PlaylistAttributes.Update, Never> {
 		_attributes.$snapshot.eraseToAnyPublisher()
 	}
-    
-    func previewImage() -> AnyPublisher<NSImage?, Never> {
-        Just(nil).eraseToAnyPublisher()
-    }
 
     static var playlistFetchRequest: NSFetchRequest<DBPlaylist> {
         let request = DBPlaylist.createFetchRequest()

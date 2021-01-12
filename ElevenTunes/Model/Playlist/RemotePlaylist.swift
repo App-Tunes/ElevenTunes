@@ -33,10 +33,6 @@ extension RemotePlaylist {
 	}
 	
 	public func `import`(library: AnyLibrary) -> Bool { false }
-	
-	public func previewImage() -> AnyPublisher<NSImage?, Never> {
-		Just(nil).eraseToAnyPublisher()
-	}
 
 	public var asToken: PlaylistToken { token }
 	public var origin: URL? { token.origin }

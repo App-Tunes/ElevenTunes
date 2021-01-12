@@ -34,6 +34,6 @@ class SetRelation<Source: Hashable, Dest: Hashable>: ExpressibleByDictionaryLite
 	
 	func translate(_ source: Set<Source>) -> (Set<Dest>, unknown: Set<Source>) {
 		let known = any(source)
-		return (known, unknown: Set(known.flatMap { graph[$0]! }))
+		return (known, unknown: source.subtracting(Set(known.flatMap { graph[$0]! })))
 	}
 }

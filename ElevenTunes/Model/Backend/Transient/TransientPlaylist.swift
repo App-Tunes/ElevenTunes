@@ -75,8 +75,4 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
     func `import`(library: AnyLibrary) -> Bool {
         return false  // TODO We can do this bois
     }
-    
-    func previewImage() -> AnyPublisher<NSImage?, Never> {
-        Just(nil).eraseToAnyPublisher()
-    }
 }

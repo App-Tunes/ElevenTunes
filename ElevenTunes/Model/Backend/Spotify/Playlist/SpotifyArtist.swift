@@ -52,7 +52,7 @@ public final class SpotifyArtist: SpotifyURIPlaylist, AnyArtist {
     
     func offerCache(_ artist: SpotifyWebAPI.Artist) {
 		mapper.requestFeatureSet.fulfilling(.info) {
-			mapper.attributes.update(read(artist), state: .version(""))
+			mapper.attributes.update(read(artist), state: .version(nil))
         }
     }
     
@@ -85,7 +85,7 @@ extension SpotifyArtist: RequestMapperDelegate {
 		case .info:
 			return spotify.api.artist(token)
 				.map(self.read)
-				.map { .init($0, state: .version("")) }
+				.map { .init($0, state: .version(nil)) }
 				.eraseToAnyPublisher()
 		case .playlists:
 			let count = 50
@@ -108,7 +108,7 @@ extension SpotifyArtist: RequestMapperDelegate {
 				.map { albums in
 					.init(.init([
 						.children: albums
-					]), state: .version(""))
+					]), state: .version(nil))
 				}
 				.eraseToAnyPublisher()
 		}

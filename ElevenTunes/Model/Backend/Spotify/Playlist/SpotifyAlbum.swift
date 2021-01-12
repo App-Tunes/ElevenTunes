@@ -56,7 +56,7 @@ public final class SpotifyAlbum: SpotifyURIPlaylist, AnyAlbum {
     
     func offerCache(_ album: SpotifyWebAPI.Album) {
 		mapper.requestFeatureSet.fulfilling(.info) {
-			mapper.attributes.update(read(album), state: .version(""))
+			mapper.attributes.update(read(album), state: .version(nil))
         }
     }
     
@@ -90,7 +90,7 @@ extension SpotifyAlbum: RequestMapperDelegate {
 			return spotify.api.album(token)
 				.map { info in
 					self.previewImageURL = info.images.flatMap(self.bestImageForPreview(_:))
-					return .init(self.read(info), state: .version(""))
+					return .init(self.read(info), state: .version(nil))
 				}
 				.eraseToAnyPublisher()
 		case .tracks:
@@ -117,7 +117,7 @@ extension SpotifyAlbum: RequestMapperDelegate {
 				.map { tracks in
 					.init(.init([
 						.tracks: tracks
-					]), state: .version(""))
+					]), state: .version(nil))
 				}
 				.eraseToAnyPublisher()
 		}

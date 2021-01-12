@@ -10,7 +10,7 @@ import Combine
 
 struct WhileActive<Content: View>: View {
 	let content: Content
-	let cancellable: AnyCancellable
+	let cancellable: AnyCancellable?
 	
     var body: some View {
         content
@@ -18,7 +18,7 @@ struct WhileActive<Content: View>: View {
 }
 
 extension View {
-	func whileActive(_ cancellable: @autoclosure () -> AnyCancellable) -> WhileActive<Self> {
+	func whileActive(_ cancellable: @autoclosure () -> AnyCancellable?) -> WhileActive<Self> {
 		WhileActive(content: self, cancellable: cancellable())
 	}
 }

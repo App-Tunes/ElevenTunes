@@ -44,6 +44,7 @@ struct PlayingTrackView: View {
         }
         .padding(.top, 8)
         .onReceive(player.$current) { self.current = Track($0) }
+		.whileActive(current?.backend.demand([.previewImage]))
 		.onReceive(current?.backend.attributes.filtered(toJust: TrackAttribute.previewImage), default: .missing()) { self.image = $0 }
     }
 }

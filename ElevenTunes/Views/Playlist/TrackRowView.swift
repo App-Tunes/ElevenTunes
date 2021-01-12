@@ -20,7 +20,7 @@ struct TrackRowView: View {
                 Rectangle()
                     .fill(Color.black)
                     .opacity(0.2)
-                              
+				
 				if !image.state.isVersioned {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
@@ -42,6 +42,7 @@ struct TrackRowView: View {
 
             TrackCellView(track: track)
         }
+		.whileActive(track.backend.demand([.previewImage]))
 		.onReceive(track.backend.attributes.filtered(toJust: TrackAttribute.previewImage)) {
 			image = $0
 		}
