@@ -27,3 +27,12 @@ Playing media files is offloaded into a hierarchy of responsibility. In order:
 * **AudioEmitter**: Some sound-emitting node. This may not necessarily be local - but it is observable and controllable.
 * **AVFoundationAudioEmitter**: Classic local AudioEmitter, powered by AVFoundation.
 * **RemoteAudioEmitter**: Specialized AudioEmitter node that keeps a local cache for streamlined remote playback.
+
+### VolatileAttributes
+
+The main body of information propagation happens through VolatileAttributes. In this representation, any data object (e.g. Track, Playlist) may present any amount of data - as keyed by typed attribute keys. There are different layers using information in different formats - e.g. GUI, cache layer and backend interface (via requests). Each defines specific groups of data to be able to handle data properly - but since these groups are often unequal, in the interface each attribute must define its own load state. Handling these states gracefully is up to individual layers, although there are a bunch of logical utilities assisting in this.
+
+* **SetRelation**: Relationship between two sets. Often used to map e.g. requests to attributes.
+* **TypedDict**: A dictionary accessible through typed properties.
+* **KeyedDemand**: Keeps track of demand to inidivual attributes through auto-disposing demand objects. A view will maintain an active demand while shown, and if a cache is invalidated, information will auto-refresh through active demand.
+* **RequestMapper**: Implementation for mapping attribute demand to requests fetching remote properties. 
