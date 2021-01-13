@@ -43,6 +43,10 @@ struct PlaylistBarView: View {
             .frame(minWidth: 200)
             .frame(height: 30)
             .visualEffectBackground(material: .headerView, blendingMode: .withinWindow)
+			.whileActive(playlist.backend.demand([PlaylistAttribute.title]))
+			.onReceive(playlist.backend.attribute(PlaylistAttribute.title)) { snapshot in
+				title = snapshot.value
+			}
 			.onReceive(playlist.backend.attribute(PlaylistAttribute.tracks)) { snapshot in
 				tracks = (snapshot.value ?? []).map(Track.init)
 			}
