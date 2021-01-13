@@ -42,8 +42,7 @@ struct TrackRowView: View {
 
             TrackCellView(track: track)
         }
-		.whileActive(track.backend.demand([.previewImage]))
-		.onReceive(track.backend.attributes.filtered(toJust: TrackAttribute.previewImage)) {
+		.onReceive(track.backend.previewImage) {
 			image = $0
 		}
     }

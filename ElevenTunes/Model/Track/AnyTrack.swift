@@ -32,6 +32,44 @@ public protocol AnyTrack: AnyObject {
 
 extension AnyTrack {
 	public var icon: Image { Image(systemName: "music.note") }
+	
+	public func attribute<TK: TypedKey & TrackAttribute>(_ attribute: TK) -> AnyPublisher<VolatileSnapshot<TK.Value?, TrackVersion>, Never>  {
+		attributes.filtered(toJust: attribute)
+	}
+	
+	public var previewImage: AnyPublisher<VolatileSnapshot<NSImage?, String>, Never> {
+		let demand = self.demand([.previewImage])
+		
+		return attribute(TrackAttribute.previewImage)
+			.flatMap { (snapshot: TrackAttributes.ValueSnapshot<NSImage?>) -> AnyPublisher<VolatileSnapshot<NSImage?, String>, Never> in
+				_ = demand  // This is just to keep a reference to demand
+				
+				if !snapshot.state.isKnown || snapshot.value != nil {
+					// Reasonable to return the track's image
+					return Just(snapshot).eraseToAnyPublisher()
+				}
+				
+				// Refer to album image
+				return self.attribute(TrackAttribute.album)
+					.flatMap { albumSnapshot -> AnyPublisher<VolatileSnapshot<NSImage?, String>, Never> in
+						guard let album = albumSnapshot.value else {
+							// No album, can't ask, but we can propagate the state
+							return Just(.init(nil, state: albumSnapshot.state))
+								.eraseToAnyPublisher()
+						}
+						
+						let albumDemand = album.demand([PlaylistAttribute.previewImage])
+						return album.attribute(PlaylistAttribute.previewImage)
+							.map {
+								_ = albumDemand  // Keep reference to playlist demand too
+								return $0
+							}
+							.eraseToAnyPublisher()
+					}
+					.eraseToAnyPublisher()
+			}
+			.eraseToAnyPublisher()
+	}
 }
 
 class TrackBackendTypedCodable: TypedCodable<String> {

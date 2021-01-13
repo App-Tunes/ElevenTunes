@@ -32,7 +32,7 @@ struct ArtistCellView: View {
             }
         }
 		.whileActive(artist.backend.demand([.title]))
-		.onReceive(artist.backend.attributes.filtered(toJust: PlaylistAttribute.title)) { title = $0 }
+		.onReceive(artist.backend.attribute(PlaylistAttribute.title)) { title = $0 }
     }
 }
 
@@ -62,7 +62,7 @@ struct AlbumCellView: View {
             }
         }
 		.whileActive(album.backend.demand([.title]))
-		.onReceive(album.backend.attributes.filtered(toJust: PlaylistAttribute.title)) { title = $0 }
+		.onReceive(album.backend.attribute(PlaylistAttribute.title)) { title = $0 }
     }
 }
 

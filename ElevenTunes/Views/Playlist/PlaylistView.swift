@@ -33,7 +33,7 @@ struct PlaylistView: View {
 		.id(playlist.id)
         .listStyle(DefaultListStyle())
 		.whileActive(playlist.backend.demand([.tracks]))
-		.onReceive(playlist.backend.attributes.filtered(toJust: PlaylistAttribute.tracks)) {
+		.onReceive(playlist.backend.attribute(PlaylistAttribute.tracks)) {
 			state ?= $0.state
 		}
     }

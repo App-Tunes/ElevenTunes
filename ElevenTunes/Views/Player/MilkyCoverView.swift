@@ -25,15 +25,13 @@ struct MilkyCoverView: View {
 	@State var image: NSImage? = nil
 
 	var liveImage: AnyPublisher<NSImage?, Never>? {
-		track?.attributes
-			.filtered(toJust: TrackAttribute.previewImage)
+		track?.previewImage
 			.map(\.value)
 			.eraseToAnyPublisher()
 	}
 	
     var body: some View {
         MilkyImageView(image: image)
-			.whileActive(track?.demand([.previewImage]))
 			.onReceive(liveImage, default: nil) { (img: NSImage?) in
 				image = img
 			}

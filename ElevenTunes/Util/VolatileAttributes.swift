@@ -8,6 +8,84 @@
 import Foundation
 import Combine
 
+public enum VolatileState<Version: Hashable>: Equatable {
+	/// The state is valid, and final for the version. If nil, the state is final for all versions.
+	case version(Version?)
+	/// The state has not been fetched yet. A load might be in process,
+	/// or has yet to be scheduled.
+	/// If a value is provided, it is a guess or a cache.
+	case missing
+	/// An attempt at a fetch was made, but failed. A retry is recommended.
+	/// If a value is provided, it is a guess or a cache.
+	case error(Error)
+	
+	var isVersioned: Bool {
+		if case .version = self {
+			return true
+		}
+		return false
+	}
+	
+	var isKnown: Bool {
+		if case .missing = self {
+			return false
+		}
+		return true
+	}
+
+	static func combine(_ lhs: VolatileState?, _ rhs: VolatileState?) -> VolatileState? {
+		// Weirdest code ever lol
+		if case .error = lhs { return lhs }
+		if case .error = rhs { return rhs }
+		if case .missing = lhs { return .missing }
+		if case .missing = rhs { return .missing }
+		// Both are versioned. Collapse
+		if case .version(let lversion) = lhs, case .version(let rversion) = rhs {
+			if let lversion = lversion, let rversion = rversion {
+				// Missing because two different versions means one is out of date
+				return lversion == rversion ? lhs : .missing
+			}
+			return .version(lversion ?? rversion)
+		}
+		// Cannot reach here
+		fatalError()
+	}
+	
+	public static func == (lhs: VolatileState, rhs: VolatileState) -> Bool {
+		if case .version(let lversion) = lhs, case .version(let rversion) = rhs {
+			return lversion == rversion
+		}
+		if case .error(let lerror) = lhs, case .error(let rerror) = rhs {
+			// Eh, good enough.
+			return ObjectIdentifier(lerror as AnyObject) == ObjectIdentifier(rerror as AnyObject)
+		}
+		if case .missing = lhs, case .missing = rhs { return true }
+		return false
+	}
+}
+
+public struct VolatileSnapshot<Value, Version: Hashable> {
+	public typealias State = VolatileState<Version>
+	
+	var value: Value
+	var state: State
+	
+	init(_ value: Value, state: State) {
+		self.value = value
+		self.state = state
+	}
+	
+	static func missing(_ value: Value) -> VolatileSnapshot {
+		.init(value, state: .missing)
+	}
+
+	static func missing<V>() -> VolatileSnapshot where Value == Optional<V> {
+		.init(nil, state: .missing)
+	}
+}
+
+extension VolatileSnapshot: Equatable where Value: Equatable { }
+
 public class VolatileAttributes<Key: AnyObject & Hashable, Version: Hashable> {
 	public typealias Update = (Snapshot, change: Set<Key>)
 	
@@ -69,24 +147,8 @@ public class VolatileAttributes<Key: AnyObject & Hashable, Version: Hashable> {
 }
 
 extension VolatileAttributes {
-	public struct ValueSnapshot<Value> {
-		var value: Value
-		var state: State
-		
-		init(_ value: Value, state: State) {
-			self.value = value
-			self.state = state
-		}
-		
-		static func missing(_ value: Value) -> ValueSnapshot {
-			.init(value, state: .missing)
-		}
-
-		static func missing<V>() -> ValueSnapshot where Value == Optional<V> {
-			.init(nil, state: .missing)
-		}
-	}
-	
+	public typealias State = VolatileState<Version>
+	public typealias ValueSnapshot<Value> = VolatileSnapshot<Value, Version>
 	public typealias ValueGroupSnapshot = ValueSnapshot<TypedDict<Key>>
 	
 	public class Snapshot {
@@ -148,66 +210,6 @@ extension VolatileAttributes {
 	}
 }
 
-extension VolatileAttributes {
-	public enum State: Equatable {
-		/// The state is valid, and final for the version. If nil, the state is final for all versions.
-		case version(Version?)
-		/// The state has not been fetched yet. A load might be in process,
-		/// or has yet to be scheduled.
-		/// If a value is provided, it is a guess or a cache.
-		case missing
-		/// An attempt at a fetch was made, but failed. A retry is recommended.
-		/// If a value is provided, it is a guess or a cache.
-		case error(Error)
-		
-		var isVersioned: Bool {
-			if case .version = self {
-				return true
-			}
-			return false
-		}
-		
-		var isKnown: Bool {
-			if case .missing = self {
-				return false
-			}
-			return true
-		}
-
-		static func combine(_ lhs: State?, _ rhs: State?) -> State? {
-			// Weirdest code ever lol
-			if case .error = lhs { return lhs }
-			if case .error = rhs { return rhs }
-			if case .missing = lhs { return .missing }
-			if case .missing = rhs { return .missing }
-			// Both are versioned. Collapse
-			if case .version(let lversion) = lhs, case .version(let rversion) = rhs {
-				if let lversion = lversion, let rversion = rversion {
-					// Missing because two different versions means one is out of date
-					return lversion == rversion ? lhs : .missing
-				}
-				return .version(lversion ?? rversion)
-			}
-			// Cannot reach here
-			fatalError()
-		}
-		
-		public static func == (lhs: State, rhs: State) -> Bool {
-			if case .version(let lversion) = lhs, case .version(let rversion) = rhs {
-				return lversion == rversion
-			}
-			if case .error(let lerror) = lhs, case .error(let rerror) = rhs {
-				// Eh, good enough.
-				return ObjectIdentifier(lerror as AnyObject) == ObjectIdentifier(rerror as AnyObject)
-			}
-			if case .missing = lhs, case .missing = rhs { return true }
-			return false
-		}
-	}
-}
-
-extension VolatileAttributes.ValueSnapshot: Equatable where Value: Equatable { }
-
 extension Publisher {
 //	func publisher(_ attributes: Set<Key>) -> AnyPublisher<Snapshot, Never> {
 //		// Always push the initial value through, and from then on only if relevant
@@ -236,7 +238,7 @@ extension Publisher {
 			.eraseToAnyPublisher()
 	}
 	
-	func filtered<Key, TK: TypedKey, Version>(toJust key: TK) -> AnyPublisher<VolatileAttributes<Key, Version>.ValueSnapshot<TK.Value?>, Failure> where Output == VolatileAttributes<Key, Version>.Update {
+	func filtered<Key, TK: TypedKey, Version>(toJust key: TK) -> AnyPublisher<VolatileSnapshot<TK.Value?, Version>, Failure> where Output == VolatileAttributes<Key, Version>.Update {
 		filtered(toChanges: [key as! Key])
 			.map { $0[key] }
 			.eraseToAnyPublisher()

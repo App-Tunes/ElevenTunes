@@ -45,7 +45,7 @@ struct PlaylistSectionView: View {
         _body
 			.id(playlist.id)
 			.whileActive(playlist.backend.demand([PlaylistAttribute.children]))
-			.onReceive(playlist.backend.attributes.filtered(toJust: PlaylistAttribute.children)) {
+			.onReceive(playlist.backend.attribute(PlaylistAttribute.children)) {
 				children ?= ($0.value ?? []).map(Playlist.init)
 			}
     }
@@ -62,7 +62,7 @@ struct PlaylistsView: View {
 		
 		Text("") // FIXME WTF, apparently updates aren't executed on empty views???
 			.whileActive(directory.backend.demand([PlaylistAttribute.children]))
-			.onReceive(directory.backend.attributes.filtered(toJust: PlaylistAttribute.children)) {
+			.onReceive(directory.backend.attribute(PlaylistAttribute.children)) {
 				topLevelChildren ?= ($0.value ?? []).map(Playlist.init)
 			}
 			.frame(minWidth: 0, maxWidth: 800, maxHeight: .infinity, alignment: .leading)

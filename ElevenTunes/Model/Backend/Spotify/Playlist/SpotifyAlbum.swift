@@ -28,15 +28,13 @@ public class SpotifyAlbumToken: SpotifyURIPlaylistToken {
 }
 
 public final class SpotifyAlbum: SpotifyURIPlaylist, AnyAlbum {
-    @Published var previewImageURL: URL?
-    let coverImages = RemoteImageCollection()
-    
 	enum Request {
-		case info, tracks
+		case info, tracks, previewImage
 	}
 	
 	let mapper = Requests(relation: [
 		.info: [.title],
+		.previewImage: [.previewImage],
 		.tracks: [.tracks]
 	])
 	
@@ -46,7 +44,6 @@ public final class SpotifyAlbum: SpotifyURIPlaylist, AnyAlbum {
     init(_ token: SpotifyAlbumToken, spotify: Spotify) {
 		self.token = token
 		self.spotify = spotify
-        coverImages.delegate = self
 		mapper.delegate = self
     }
     
@@ -88,9 +85,8 @@ extension SpotifyAlbum: RequestMapperDelegate {
 		switch request {
 		case .info:
 			return spotify.api.album(token)
-				.map { info in
-					self.previewImageURL = info.images.flatMap(self.bestImageForPreview(_:))
-					return .init(self.read(info), state: .version(nil))
+				.map {
+					.init(self.read($0), state: .version(nil))
 				}
 				.eraseToAnyPublisher()
 		case .tracks:
@@ -120,16 +116,27 @@ extension SpotifyAlbum: RequestMapperDelegate {
 					]), state: .version(nil))
 				}
 				.eraseToAnyPublisher()
+		case .previewImage:
+			// TODO Don't do this request twice
+			return spotify.api.album(token)
+				.tryMap {
+					try $0.images.flatMap(self.bestImageForPreview(_:))
+						.unwrap(orThrow: RemoteImageCollection.RemoteError.noURL)
+				}
+				.flatMap { (url: URL) -> AnyPublisher<Data, Error> in
+					URLSession.shared.dataTaskPublisher(for: url)
+						.map { (data, response) in data }
+						.eraseError()
+						.eraseToAnyPublisher()
+				}
+				.tryMap { try NSImage(data: $0).unwrap(orThrow: RemoteImageCollection.RemoteError.notAnImage) }
+				.map { (image: NSImage) -> VolatileAttributes<PlaylistAttribute, PlaylistVersion>.ValueGroupSnapshot in
+					.init(.init([
+						.previewImage: image
+					]), state: .version(nil))
+				}
+				.eraseError()
+				.eraseToAnyPublisher()
 		}
 	}
-}
-
-extension SpotifyAlbum: RemoteImageCollectionDelegate {
-    func url(for feature: RemoteImageCollection.Feature) -> AnyPublisher<URL?, Error> {
-		// TODO Push demand
-        attributes.combineLatest($previewImageURL)
-            .map { $1 }
-            .eraseError()
-            .eraseToAnyPublisher()
-    }
 }

@@ -46,6 +46,10 @@ public protocol AnyPlaylist: AnyObject {
 extension AnyPlaylist {
 	public var icon: Image { Image(systemName: "music.note.list") }
     var accentColor: Color { .primary }
+	
+	public func attribute<TK: TypedKey & PlaylistAttribute>(_ attribute: TK) -> AnyPublisher<VolatileSnapshot<TK.Value?, PlaylistVersion>, Never>  {
+		attributes.filtered(toJust: attribute)
+	}
 }
 
 class PlaylistBackendTypedCodable: TypedCodable<String> {
