@@ -105,17 +105,31 @@ extension DBPlaylist: SelfChangeWatcher {
 		// TODO Can we automate this somehow?
 		let updateGroups = DBPlaylist.attributeGroups.any(Set(update.keys))
 		
+		func appropriateState(_ version: PlaylistVersion?) -> VolatileState<PlaylistVersion> {
+			guard backend != nil else {
+				return .version(nil)
+			}
+			
+			return version != nil ? .version(version!) : .missing
+		}
+		
 		if updateGroups.contains(.tracks) || changes.keys.contains("tracksVersion") {
-			let state: PlaylistAttributes.State = tracksVersion != nil ? .version(tracksVersion!) : .missing
-			attributes.update(update.filter(DBPlaylist.attributeGroups[.tracks]!.contains), state: state)
+			attributes.update(
+				update.filter(DBPlaylist.attributeGroups[.tracks]!.contains),
+				state: appropriateState(tracksVersion)
+			)
 		}
 		if updateGroups.contains(.children) || changes.keys.contains("childrenVersion") {
-			let state: PlaylistAttributes.State = childrenVersion != nil ? .version(childrenVersion!) : .missing
-			attributes.update(update.filter(DBPlaylist.attributeGroups[.children]!.contains), state: state)
+			attributes.update(
+				update.filter(DBPlaylist.attributeGroups[.children]!.contains),
+				state: appropriateState(childrenVersion)
+			)
 		}
 		if updateGroups.contains(.attributes) || changes.keys.contains("version") {
-			let state: PlaylistAttributes.State = version != nil ? .version(version!) : .missing
-			attributes.update(update.filter(DBPlaylist.attributeGroups[.attributes]!.contains), state: state)
+			attributes.update(
+				update.filter(DBPlaylist.attributeGroups[.attributes]!.contains),
+				state: appropriateState(version)
+			)
 		}
 
         if changes.keys.contains("indexed") {

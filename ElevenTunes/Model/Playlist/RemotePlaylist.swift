@@ -29,7 +29,7 @@ extension RemotePlaylist {
 	public var hasCaches: Bool { true }
 	
 	public func invalidateCaches() {
-		mapper.attributes.invalidate()
+		mapper.invalidateCaches()
 	}
 	
 	public func `import`(library: AnyLibrary) -> Bool { false }

@@ -40,18 +40,28 @@ class RequestMapper<Attribute: AnyObject & Hashable, Version: Hashable, Delegate
 			// this may avoid generating a request
 			.map { $0.subtracting(attributes.knownKeys) }
 			.removeDuplicates()
-			.map(relation.translate)
-			.sink { [weak self] (requests, unknown) in
-				guard let self = self else { return }
-				
-				// Register unknown as error (don't know how to provide...)
-				// TODO Maybe it would be better to map this elsehow, we'll see
-				attributes.updateEmpty(unknown, state: .version(nil))
-				
-				// Ask delegate to compute the rest
-				requests.forEach(self.demandRequest)
+			.sink { [weak self] demand in
+				self?.onDemand(demand)
 			}
 			.store(in: &cancellables)
+	}
+	
+	func invalidateCaches() {
+		attributes.invalidate()
+		requestFeatureSet.clear()
+		
+		onDemand(Set(demand.demand.keys))
+	}
+	
+	private func onDemand(_ attributes: Set<Attribute>) {
+		let (requests, unknown) = relation.translate(attributes)
+		
+		// Register unknown as error (don't know how to provide...)
+		// TODO Maybe it would be better to map this elsehow, we'll see
+		self.attributes.updateEmpty(unknown, state: .version(nil))
+		
+		// Ask delegate to compute the rest
+		requests.forEach(demandRequest)
 	}
 	
 	func demandRequest(_ request: Delegate.Request) {
