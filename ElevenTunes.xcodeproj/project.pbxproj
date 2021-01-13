@@ -122,6 +122,7 @@
 		808D5480259F395C006F7435 /* Spotify+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808D547F259F395C006F7435 /* Spotify+UI.swift */; };
 		808D5485259F3A4A006F7435 /* SystemUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808D5484259F3A4A006F7435 /* SystemUI.swift */; };
 		808D548D259F3BC9006F7435 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808D548C259F3BC9006F7435 /* Color.swift */; };
+		8097F6DA25AE76250072E847 /* TrackImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8097F6D925AE76250072E847 /* TrackImageView.swift */; };
 		80AD6952258825FA00192BED /* ElevenTunesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AD6951258825FA00192BED /* ElevenTunesApp.swift */; };
 		80AD6956258825FA00192BED /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AD6955258825FA00192BED /* ContentView.swift */; };
 		80AD6958258825FD00192BED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80AD6957258825FD00192BED /* Assets.xcassets */; };
@@ -294,6 +295,7 @@
 		808D547F259F395C006F7435 /* Spotify+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Spotify+UI.swift"; sourceTree = "<group>"; };
 		808D5484259F3A4A006F7435 /* SystemUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemUI.swift; sourceTree = "<group>"; };
 		808D548C259F3BC9006F7435 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		8097F6D925AE76250072E847 /* TrackImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackImageView.swift; sourceTree = "<group>"; };
 		80AD694E258825FA00192BED /* ElevenTunes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ElevenTunes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		80AD6951258825FA00192BED /* ElevenTunesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevenTunesApp.swift; sourceTree = "<group>"; };
 		80AD6955258825FA00192BED /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -508,6 +510,7 @@
 				80AD699F258828F400192BED /* TrackInfoView.swift */,
 				8054C00C259F6DE600A7035A /* PlayTrackView.swift */,
 				8054BFFF259F6DA000A7035A /* TrackCellView.swift */,
+				8097F6D925AE76250072E847 /* TrackImageView.swift */,
 				8054C007259F6DC900A7035A /* OriginView.swift */,
 				80C9A189259F9BDB00A038CC /* RemoteImageCollection.swift */,
 				802DBA4B259FED1D00EA6DB7 /* PlaylistMultiplicityView.swift */,
@@ -1022,6 +1025,7 @@
 				802E2DC6259644FF00CB91EC /* M3UPlaylist.swift in Sources */,
 				808A763625940EE400B0A9CE /* ContentInterpreter+SwiftUI.swift in Sources */,
 				802DBA5D25A0BB8A00EA6DB7 /* NSWindow.swift in Sources */,
+				8097F6DA25AE76250072E847 /* TrackImageView.swift in Sources */,
 				80D6DA8B259D38E500879BCF /* CurrentValueSubjectPublishingDemand.swift in Sources */,
 				805FD8B525A128D600F32BFB /* Key.swift in Sources */,
 				80CD395025A3CE99002C5A56 /* Dictionary.swift in Sources */,
