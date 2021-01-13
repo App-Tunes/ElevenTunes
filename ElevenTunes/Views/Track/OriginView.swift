@@ -33,6 +33,7 @@ struct ArtistCellView: View {
         }
 		.whileActive(artist.backend.demand([.title]))
 		.onReceive(artist.backend.attribute(PlaylistAttribute.title)) { title = $0 }
+		.id(artist.id)
     }
 }
 
@@ -63,6 +64,7 @@ struct AlbumCellView: View {
         }
 		.whileActive(album.backend.demand([.title]))
 		.onReceive(album.backend.attribute(PlaylistAttribute.title)) { title = $0 }
+		.id(album.id)
     }
 }
 

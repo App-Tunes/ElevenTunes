@@ -37,5 +37,6 @@ struct PlayingTrackView: View {
         }
         .padding(.top, 8)
         .onReceive(player.$current) { self.current = Track($0) }
+		.id(current?.id)
     }
 }
