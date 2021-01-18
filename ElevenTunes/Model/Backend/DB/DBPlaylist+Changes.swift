@@ -14,46 +14,47 @@ extension DBPlaylist: SelfChangeWatcher {
 		let attributes = update.0
 		let context = managedObjectContext!
 		
+		func appropriateVersion(forState state: PlaylistAttributes.State) -> PlaylistVersion? {
+			switch state {
+			case .version(let version):
+				return version
+			default:
+				return nil
+			}
+		}
+		
 		if affectedGroups.contains(.tracks) {
 			let snapshot = attributes[PlaylistAttribute.tracks]
 			let tracks = snapshot.value ?? []
-			
-			switch snapshot.state {
-			case .version(let version):
-				let old = self.tracks.array as! [DBTrack]
-				let oldIDs = old.map(\.backendID)
-				if indexed, oldIDs != tracks.map(\.id) {
-					// TODO We might be able to use caches if we don't call asToken
-					// TODO Only let it re-use old tracks
-					let (dbTracks, _) = Library.convert(DirectLibrary(allTracks: tracks.map(\.asToken)), context: context)
-					self.tracks = NSOrderedSet(array: dbTracks)
-					Library.prune(tracks: old, context: context)
-				}
-				self.tracksVersion = version
-			default:
-				break  // TODO Handle errors etc.?
+
+			let old = self.tracks.array as! [DBTrack]
+			let oldIDs = old.map(\.backendID)
+			if indexed, oldIDs != tracks.map(\.id) {
+				// TODO We might be able to use caches if we don't call asToken
+				// TODO Only let it re-use old tracks
+				let (dbTracks, _) = Library.convert(DirectLibrary(allTracks: tracks.map(\.asToken)), context: context)
+				self.tracks = NSOrderedSet(array: dbTracks)
+				Library.prune(tracks: old, context: context)
 			}
+
+			self.tracksVersion ?= appropriateVersion(forState: snapshot.state)
 		}
 		
 		if affectedGroups.contains(.children) {
 			let snapshot = attributes[PlaylistAttribute.children]
 			let children = snapshot.value ?? []
 			
-			switch snapshot.state {
-			case .version(let version):
-				let old = self.children.array as! [DBPlaylist]
-				let oldIDs = old.map(\.backendID)
-				if indexed, oldIDs != children.map(\.id) {
-					// TODO We might be able to use caches if we don't call asToken
-					// TODO Only let it re-use old playlists
-					let (_, dbPlaylists) = Library.convert(DirectLibrary(allPlaylists: children.map(\.asToken)), context: context)
-					self.children = NSOrderedSet(array: dbPlaylists)
-					Library.prune(playlists: old, context: context)
-				}
-				self.childrenVersion = version
-			default:
-				break  // TODO Handle errors etc.?
+			let old = self.children.array as! [DBPlaylist]
+			let oldIDs = old.map(\.backendID)
+			if indexed, oldIDs != children.map(\.id) {
+				// TODO We might be able to use caches if we don't call asToken
+				// TODO Only let it re-use old playlists
+				let (_, dbPlaylists) = Library.convert(DirectLibrary(allPlaylists: children.map(\.asToken)), context: context)
+				self.children = NSOrderedSet(array: dbPlaylists)
+				Library.prune(playlists: old, context: context)
 			}
+
+			self.childrenVersion ?= appropriateVersion(forState: snapshot.state)
 		}
 		
 		let nonRawAttributes: [PlaylistAttribute] = [.tracks, .children]
@@ -70,14 +71,7 @@ extension DBPlaylist: SelfChangeWatcher {
 		
 		if affectedGroups.contains(.attributes) {
 			let group = rawAttributes.extract(DBPlaylist.attributeGroups[.attributes]!)
-			switch group.state {
-			case .version(let version):
-				self.version = version
-			default:
-				// TODO Handle
-				self.version = nil
-				break
-			}
+			self.version ?= appropriateVersion(forState: group.state)
 		}
 	}
 	

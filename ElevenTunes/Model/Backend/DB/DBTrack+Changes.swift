@@ -14,6 +14,15 @@ extension DBTrack: SelfChangeWatcher {
 		let nonRawAttributes: [TrackAttribute] = []
 		let rawAttributes = update.0.filter { !nonRawAttributes.contains($0) }
 		
+		func appropriateVersion(forState state: PlaylistAttributes.State) -> PlaylistVersion? {
+			switch state {
+			case .version(let version):
+				return version
+			default:
+				return nil
+			}
+		}
+
 		for attribute in update.change {
 			guard let keyPath = DBTrack.keypathByAttribute[attribute] else {
 				continue
@@ -25,14 +34,7 @@ extension DBTrack: SelfChangeWatcher {
 		
 		if affectedGroups.contains(.info) {
 			let group = rawAttributes.extract(DBTrack.attributeGroups[.info]!)
-			switch group.state {
-			case .version(let version):
-				self.version = version
-			default:
-				// TODO Handle
-				self.version = nil
-				break
-			}
+			version ?= appropriateVersion(forState: group.state)
 		}
 	}
 	
