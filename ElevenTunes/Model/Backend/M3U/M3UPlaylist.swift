@@ -94,50 +94,42 @@ public final class M3UPlaylist: RemotePlaylist {
 			return .empty(state: .error(error))
 		}
     }
-    
-//    public override func load(atLeast mask: PlaylistContentMask) {
-//        contentSet.promise(mask) { promise in
-//            let url = token.url
-//            let library = self.library
-//            let interpreter = library.interpreter
-//
-//            promise.fulfillingAny(.attributes) {
-//                loadAttributes()
-//            }
-//
-//            guard promise.includesAny([.tracks, .children]) else {
-//                return
-//            }
-//
-//            Future {
-//                try String(contentsOf: url)
-//            }
-//            .map { file in
-//                M3UPlaylist.interpretFile(file, relativeTo: url)
-//            }
-//            .flatMap {
-//                interpreter.interpret(urls: $0)
-//                    ?? Just([]).eraseError().eraseToAnyPublisher()
-//            }
-//            .map { (contents: [Content]) -> ([AnyTrack], [AnyPlaylist]) in
-//                let (tracks, children) = ContentInterpreter.collect(fromContents: contents)
-//
-//                return (tracks.map { $0.expand(library) }, children.map { $0.expand(library) })
-//            }
-//            .onMain()
-//            .fulfillingAny([.tracks, .children], of: promise)
-//            .tryMap { ($0, $1, try url.modificationDate().isoFormat) }
-//            .sink(receiveCompletion: appLogErrors(_:)) { [unowned self] (tracks, children, date) in
-//				self.tracks.update(tracks, version: date)
-//				self.children.update(children, version: date)
-//            }.store(in: &cancellables)
-//        }
-//    }
 }
 
 extension M3UPlaylist: RequestMapperDelegate {
 	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.PartialGroupSnapshot, Error> {
-		// TODO
-		fatalError()
+		let url = token.url
+		let library = self.library
+		let interpreter = library.interpreter
+		
+		switch request {
+		case .url:
+			return Future {
+				self.urlAttributes()
+			}.eraseToAnyPublisher()
+		case .read:
+			return Future {
+				try String(contentsOf: url)
+			}
+			.map { file in
+				M3UPlaylist.interpretFile(file, relativeTo: url)
+			}
+			.flatMap {
+				interpreter.interpret(urls: $0)
+					?? Just([]).eraseError().eraseToAnyPublisher()
+			}
+			.map { (contents: [Content]) -> ([AnyTrack], [AnyPlaylist]) in
+				let (tracks, children) = ContentInterpreter.collect(fromContents: contents)
+
+				return (tracks.map { $0.expand(library) }, children.map { $0.expand(library) })
+			}
+			.tryMap { ($0, $1, try url.modificationDate().isoFormat) }
+			.map { (tracks, children, version) in
+				return .init(.unsafe([
+					.tracks: tracks,
+					.children: children
+				]), state: .version(version))
+			}.eraseToAnyPublisher()
+		}
 	}
 }
