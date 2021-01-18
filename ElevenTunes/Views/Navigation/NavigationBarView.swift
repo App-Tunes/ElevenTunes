@@ -20,7 +20,7 @@ struct NavigationBarView: View {
     var addFolderViews: some View {
         HStack {
             Button {
-                let playlist = TransientPlaylist(.tracks, attributes: .init([
+                let playlist = TransientPlaylist(.tracks, attributes: .unsafe([
                     .title: "New Playlist"
                 ]))
                 createPlaylist(playlist)
@@ -30,7 +30,7 @@ struct NavigationBarView: View {
             }
 
             Button {
-                let playlist = TransientPlaylist(.playlists, attributes: .init([
+                let playlist = TransientPlaylist(.playlists, attributes: .unsafe([
                     .title: "New Folder"
                 ]))
                 createPlaylist(playlist)
@@ -40,7 +40,7 @@ struct NavigationBarView: View {
             }
 
             Button {
-                let playlist = TransientPlaylist(.hybrid, attributes: .init([
+                let playlist = TransientPlaylist(.hybrid, attributes: .unsafe([
                     .title: "New Hybrid Folder"
                 ]))
                 createPlaylist(playlist)

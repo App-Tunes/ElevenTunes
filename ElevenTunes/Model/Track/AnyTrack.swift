@@ -33,15 +33,15 @@ public protocol AnyTrack: AnyObject {
 extension AnyTrack {
 	public var icon: Image { Image(systemName: "music.note") }
 	
-	public func attribute<TK: TypedKey & TrackAttribute>(_ attribute: TK) -> AnyPublisher<VolatileSnapshot<TK.Value?, TrackVersion>, Never>  {
+	public func attribute<TK: TypedKey & TrackAttribute>(_ attribute: TK) -> AnyPublisher<VolatileSnapshot<TK.Value, TrackVersion>, Never>  {
 		attributes.filtered(toJust: attribute)
 	}
 	
-	public var previewImage: AnyPublisher<VolatileSnapshot<NSImage?, String>, Never> {
+	public var previewImage: AnyPublisher<VolatileSnapshot<NSImage, String>, Never> {
 		let demand = self.demand([.previewImage])
 		
 		return attribute(TrackAttribute.previewImage)
-			.flatMap { (snapshot: TrackAttributes.ValueSnapshot<NSImage?>) -> AnyPublisher<VolatileSnapshot<NSImage?, String>, Never> in
+			.flatMap { (snapshot: TrackAttributes.ValueSnapshot<NSImage>) -> AnyPublisher<VolatileSnapshot<NSImage, String>, Never> in
 				_ = demand  // This is just to keep a reference to demand
 				
 				if !snapshot.state.isKnown || snapshot.value != nil {
@@ -51,7 +51,7 @@ extension AnyTrack {
 				
 				// Refer to album image
 				return self.attribute(TrackAttribute.album)
-					.flatMap { albumSnapshot -> AnyPublisher<VolatileSnapshot<NSImage?, String>, Never> in
+					.flatMap { (albumSnapshot: VolatileSnapshot<AnyAlbum, String>) -> AnyPublisher<VolatileSnapshot<NSImage, String>, Never> in
 						guard let album = albumSnapshot.value else {
 							// No album, can't ask, but we can propagate the state
 							return Just(.init(nil, state: albumSnapshot.state))

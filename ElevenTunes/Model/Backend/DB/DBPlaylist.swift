@@ -83,13 +83,13 @@ public class DBLibraryPlaylist: AnyPlaylist {
 	lazy var _attributes: AnyPublisher<PlaylistAttributes.Update, Never> = {
 		guard let backend = backend else {
 			// Everything is always 'cached'
-			return cache.attributes.$snapshot.eraseToAnyPublisher()
+			return cache.attributes.$update.eraseToAnyPublisher()
 		}
 		
 		// Depending on setup, other values will be in cache.attributes.
 		// This does not affect our logic here.
 		return backend.attributes
-			.combineLatest(cache.attributes.$snapshot)
+			.combineLatest(cache.attributes.$update)
 			.compactMap { (backend, cache) -> PlaylistAttributes.Update in
 				// TODO If change comes from cache, not from backend, 'change' value will be wrong.
 				return (backend.0.merging(cache: cache.0), change: backend.change)
@@ -145,19 +145,18 @@ public class DBPlaylist: NSManagedObject {
         isIndexedP = indexed
         contentTypeP = contentType
 
-		var update = TypedDict<PlaylistAttribute>()
+		var update = [PlaylistAttribute: Any?]()
 		var empty: Set<PlaylistAttribute> = []
 		for (attributeKey, attribute) in DBPlaylist.attributeByKeypath {
 			// TODO Can we make this type-safe?
 			if let value = value(forKey: attributeKey) {
-				update[unsafe: attribute] = value
+				update[attribute] = value
 			}
 			else {
 				empty.insert(attribute)
 			}
 		}
 		let state: PlaylistAttributes.State = .version(version ?? "")
-		attributes.update(update, state: state)
-		attributes.updateEmpty(empty, state: state)
+		attributes.update(.unsafe(update, state: state))
     }
 }

@@ -18,6 +18,12 @@ extension DBPlaylist {
 		.attributes: [.title]
 	]
 	
+	static let versionByAttribute: [AttributeGroup: KeyPath<DBPlaylist, PlaylistVersion?>] = [
+		.tracks: \Self.tracksVersion,
+		.children: \Self.childrenVersion,
+		.attributes: \Self.version
+	]
+	
 	static let keypathByAttribute: [PlaylistAttribute: String] = [
 		.title: "title",
 		.tracks: "tracks",

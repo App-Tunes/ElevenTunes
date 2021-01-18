@@ -52,15 +52,13 @@ public final class SpotifyAlbum: SpotifyURIPlaylist, AnyAlbum {
     public var icon: Image { Image(systemName: "opticaldisc") }
     
     func offerCache(_ album: SpotifyWebAPI.Album) {
-		mapper.requestFeatureSet.fulfilling(.info) {
-			mapper.attributes.update(read(album), state: .version(nil))
-        }
+		mapper.offer(.info, update: read(album))
     }
     
-    func read(_ album: SpotifyWebAPI.Album) -> TypedDict<PlaylistAttribute> {
-		.init([
+	func read(_ album: SpotifyWebAPI.Album) -> PlaylistAttributes.PartialGroupSnapshot {
+		.init(.unsafe([
             .title: album.name
-		])
+		]), state: .version(nil))
     }
     
     public func bestImageForPreview(_ images: [SpotifyWebAPI.SpotifyImage]) -> URL? {
@@ -78,16 +76,14 @@ public final class SpotifyAlbum: SpotifyURIPlaylist, AnyAlbum {
 }
 
 extension SpotifyAlbum: RequestMapperDelegate {
-	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.ValueGroupSnapshot, Error> {
+	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.PartialGroupSnapshot, Error> {
 		let spotify = self.spotify
 		let token = self.token
 
 		switch request {
 		case .info:
 			return spotify.api.album(token)
-				.map {
-					.init(self.read($0), state: .version(nil))
-				}
+				.map { self.read($0) }
 				.eraseToAnyPublisher()
 		case .tracks:
 			let count = 50
@@ -111,7 +107,7 @@ extension SpotifyAlbum: RequestMapperDelegate {
 						return SpotifyTrack(track: track, spotify: spotify) }
 				}
 				.map { tracks in
-					.init(.init([
+					.init(.unsafe([
 						.tracks: tracks
 					]), state: .version(nil))
 				}
@@ -130,8 +126,8 @@ extension SpotifyAlbum: RequestMapperDelegate {
 						.eraseToAnyPublisher()
 				}
 				.tryMap { try NSImage(data: $0).unwrap(orThrow: RemoteImageCollection.RemoteError.notAnImage) }
-				.map { (image: NSImage) -> VolatileAttributes<PlaylistAttribute, PlaylistVersion>.ValueGroupSnapshot in
-					.init(.init([
+				.map { (image: NSImage) -> VolatileAttributes<PlaylistAttribute, PlaylistVersion>.PartialGroupSnapshot in
+					.init(.unsafe([
 						.previewImage: image
 					]), state: .version(nil))
 				}

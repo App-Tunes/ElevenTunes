@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-protocol RemotePlaylist: AnyPlaylist, RequestMapperDelegate where Snapshot == PlaylistAttributes.ValueGroupSnapshot {
+protocol RemotePlaylist: AnyPlaylist, RequestMapperDelegate where Snapshot == PlaylistAttributes.PartialGroupSnapshot {
 	associatedtype Token: PlaylistToken
 	
 	typealias Requests = RequestMapper<PlaylistAttribute, PlaylistVersion, Self>
@@ -19,7 +19,7 @@ protocol RemotePlaylist: AnyPlaylist, RequestMapperDelegate where Snapshot == Pl
 
 extension RemotePlaylist {
 	public var attributes: AnyPublisher<PlaylistAttributes.Update, Never> {
-		mapper.attributes.$snapshot.eraseToAnyPublisher()
+		mapper.attributes.$update.eraseToAnyPublisher()
 	}
 	
 	public func demand(_ demand: Set<PlaylistAttribute>) -> AnyCancellable {

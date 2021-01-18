@@ -44,8 +44,8 @@ public final class DirectoryPlaylist: RemotePlaylist {
     init(_ token: DirectoryPlaylistToken, library: Library) {
         self.library = library
         self.token = token
-		loadURL()
-		mapper.requestFeatureSet.insert(.url)
+		
+		mapper.offer(.url, update: loadURL())
     }
     
 	static let _icon: Image = Image(systemName: "folder")
@@ -54,14 +54,15 @@ public final class DirectoryPlaylist: RemotePlaylist {
 		
 	public var contentType: PlaylistContentType { .hybrid }
 
-    func loadURL() {
-		guard let modificationDate = try? token.url.modificationDate() else {
-			return
+	func loadURL() -> PlaylistAttributes.PartialGroupSnapshot {
+		do {
+			return .init(.unsafe([
+				.title: token.url.lastPathComponent
+		 ]), state: .version(try token.url.modificationDate().isoFormat))
 		}
-		
-		mapper.attributes.update(.init([
-			.title: token.url.lastPathComponent
-		]), state: .version(modificationDate.isoFormat))
+		catch let error {
+			return .empty(state: .error(error))
+		}
     }
     
 //    public override func load(atLeast mask: PlaylistContentMask) {
@@ -107,7 +108,7 @@ public final class DirectoryPlaylist: RemotePlaylist {
 }
 
 extension DirectoryPlaylist: RequestMapperDelegate {
-	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.ValueGroupSnapshot, Error> {
+	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.PartialGroupSnapshot, Error> {
 		// TODO
 		fatalError()
 	}

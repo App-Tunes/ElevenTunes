@@ -46,7 +46,7 @@ extension Library {
         // Unfold playlists
         for backend in flatSequence(first: library.allPlaylists, next: { backend in
             if let backend = backend as? TransientPlaylist {
-				let attributes = backend._attributes.snapshot.0
+				let attributes = backend._attributes.snapshot
 				let tracks = attributes[PlaylistAttribute.tracks].value ?? []
 				allTracks.formUnion(tracks.map(\.asToken))
 				let children = attributes[PlaylistAttribute.children].value ?? []
@@ -62,7 +62,7 @@ extension Library {
         func convertTrack(_ backend: TrackToken) -> DBTrack {
             if let backend = backend as? MockTrack {
                 let dbTrack = DBTrack(entity: trackModel, insertInto: context)
-				let attributes = backend._attributes.snapshot.0
+				let attributes = backend._attributes.snapshot
 				let secondaryAttributes = attributes.filter(DBTrack.attributeGroups[.info]!.contains)
 				dbTrack.onUpdate((secondaryAttributes, change: []))
                 return dbTrack
@@ -91,13 +91,13 @@ extension Library {
                 dbPlaylist.contentType = backend.contentType
 				
 				// TODO Cache this somewhere? This seems rather unsafe lol
-				let attributes = backend._attributes.snapshot.0
+				let attributes = backend._attributes.snapshot
 				let tracks = attributes[PlaylistAttribute.tracks].value ?? []
 				let children = attributes[PlaylistAttribute.children].value ?? []
 
 				dbPlaylist.addToTracks(NSOrderedSet(array: tracks.map { tracksByID[$0.asToken.id]! }))
-				let secondaryAttributes = attributes.attributes.filter(DBPlaylist.attributeGroups[.attributes]!.contains)
-				dbPlaylist.unpack(update: secondaryAttributes)
+				let secondaryAttributes = attributes.filter(DBPlaylist.attributeGroups[.attributes]!.contains)
+				dbPlaylist.onUpdate((secondaryAttributes, []))
 				dbPlaylist.version = ""
                 playlistChildren[dbPlaylist] = children.map { $0.asToken.id }
                 

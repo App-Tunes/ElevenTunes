@@ -45,8 +45,7 @@ public final class M3UPlaylist: RemotePlaylist {
     init(_ token: M3UPlaylistToken, library: Library) {
         self.library = library
         self.token = token
-		loadURLAttributes()
-		mapper.requestFeatureSet.insert(.url)
+		mapper.offer(.url, update: urlAttributes())
     }
     
     public var icon: Image { Image(systemName: "doc.text") }
@@ -85,14 +84,15 @@ public final class M3UPlaylist: RemotePlaylist {
         return urls
     }
     
-    func loadURLAttributes() {
-		guard let modificationDate = try? token.url.modificationDate() else {
-			return
+	func urlAttributes() -> PlaylistAttributes.PartialGroupSnapshot {
+		do {
+			return .init(.unsafe([
+				.title: token.url.lastPathComponent
+			]), state: .version(try token.url.modificationDate().isoFormat))
 		}
-		
-		mapper.attributes.update(.init([
-			.title: token.url.lastPathComponent
-		]), state: .version(modificationDate.isoFormat))
+		catch let error {
+			return .empty(state: .error(error))
+		}
     }
     
 //    public override func load(atLeast mask: PlaylistContentMask) {
@@ -136,7 +136,7 @@ public final class M3UPlaylist: RemotePlaylist {
 }
 
 extension M3UPlaylist: RequestMapperDelegate {
-	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.ValueGroupSnapshot, Error> {
+	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.PartialGroupSnapshot, Error> {
 		// TODO
 		fatalError()
 	}

@@ -20,9 +20,13 @@ public struct TypedDict<K: AnyObject & Hashable> {
     
     init() { }
     
-    init(_ dict: [K: Any?]) {
+    private init(_ dict: [K: Any?]) {
         self.contents = dict.compactMapValues { $0 }
     }
+	
+	public static func unsafe(_ dict: [K: Any?]) -> TypedDict {
+		TypedDict(dict)
+	}
 	
 	public var count: Int { contents.count }
 	

@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import SwiftUI
 
-protocol RemoteTrack: AnyTrack, RequestMapperDelegate where Snapshot == TrackAttributes.ValueGroupSnapshot {
+protocol RemoteTrack: AnyTrack, RequestMapperDelegate where Snapshot == TrackAttributes.PartialGroupSnapshot {
 	associatedtype Token: TrackToken
 	typealias Requests = RequestMapper<TrackAttribute, TrackVersion, Self>
 
@@ -19,7 +19,7 @@ protocol RemoteTrack: AnyTrack, RequestMapperDelegate where Snapshot == TrackAtt
 
 extension RemoteTrack {
 	public var attributes: AnyPublisher<TrackAttributes.Update, Never> {
-		mapper.attributes.$snapshot.eraseToAnyPublisher()
+		mapper.attributes.$update.eraseToAnyPublisher()
 	}
 	
 	public func demand(_ demand: Set<TrackAttribute>) -> AnyCancellable {
@@ -29,7 +29,7 @@ extension RemoteTrack {
 	public var hasCaches: Bool { true }
 	
 	public func invalidateCaches() {
-		let snapshot = mapper.attributes.snapshot.0.attributes
+		let snapshot = mapper.attributes.snapshot.attributes
 		
 		snapshot[TrackAttribute.artists]?.forEach { $0.invalidateCaches() }
 		snapshot[TrackAttribute.album]?.invalidateCaches()

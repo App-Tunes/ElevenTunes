@@ -10,7 +10,7 @@ import SwiftUI
 struct PlaylistRowView: View {
     let playlist: Playlist
 
-	@State var title: PlaylistAttributes.ValueSnapshot<String?> = .missing()
+	@State var title: PlaylistAttributes.ValueSnapshot<String> = .missing()
     
     var body: some View {
         HStack {

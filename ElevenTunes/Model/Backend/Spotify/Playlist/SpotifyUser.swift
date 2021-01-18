@@ -168,7 +168,7 @@ public final class SpotifyUser: RemotePlaylist {
 }
 
 extension SpotifyUser: RequestMapperDelegate {
-	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.ValueGroupSnapshot, Error> {
+	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.PartialGroupSnapshot, Error> {
 		let uri = token.uri
 		let spotify = self.spotify
 
@@ -204,7 +204,7 @@ extension SpotifyUser: RequestMapperDelegate {
 					}
 				}
 				.map {
-					.init(TypedDict([
+					.init(.unsafe([
 						.children: $0
 					]), state: .version(nil))
 				}

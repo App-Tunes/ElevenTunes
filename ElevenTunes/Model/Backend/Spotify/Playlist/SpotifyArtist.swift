@@ -51,15 +51,13 @@ public final class SpotifyArtist: SpotifyURIPlaylist, AnyArtist {
     public var icon: Image { Image(systemName: "person") }
     
     func offerCache(_ artist: SpotifyWebAPI.Artist) {
-		mapper.requestFeatureSet.fulfilling(.info) {
-			mapper.attributes.update(read(artist), state: .version(nil))
-        }
+		mapper.offer(.info, update: read(artist))
     }
     
-    func read(_ artist: SpotifyWebAPI.Artist) -> TypedDict<PlaylistAttribute> {
-		.init([
+	func read(_ artist: SpotifyWebAPI.Artist) -> PlaylistAttributes.PartialGroupSnapshot {
+		.init(.unsafe([
 			.title: artist.name
-		])
+		]), state: .version(nil))
     }
     
     public func bestImageForPreview(_ images: [SpotifyWebAPI.SpotifyImage]) -> URL? {
@@ -77,7 +75,7 @@ public final class SpotifyArtist: SpotifyURIPlaylist, AnyArtist {
 }
 
 extension SpotifyArtist: RequestMapperDelegate {
-	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.ValueGroupSnapshot, Error> {
+	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.PartialGroupSnapshot, Error> {
 		let spotify = self.spotify
 		let token = self.token
 
@@ -85,7 +83,6 @@ extension SpotifyArtist: RequestMapperDelegate {
 		case .info:
 			return spotify.api.artist(token)
 				.map(self.read)
-				.map { .init($0, state: .version(nil)) }
 				.eraseToAnyPublisher()
 		case .playlists:
 			let count = 50
@@ -106,7 +103,7 @@ extension SpotifyArtist: RequestMapperDelegate {
 					items.map { spotify.album(SpotifyAlbumToken($0.id!), info: $0) }
 				}
 				.map { albums in
-					.init(.init([
+					.init(.unsafe([
 						.children: albums
 					]), state: .version(nil))
 				}

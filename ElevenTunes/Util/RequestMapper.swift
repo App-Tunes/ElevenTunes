@@ -15,7 +15,23 @@ protocol RequestMapperDelegate: AnyObject {
 	func onDemand(_ request: Request) -> AnyPublisher<Snapshot, Error>
 }
 
-class RequestMapper<Attribute: AnyObject & Hashable, Version: Hashable, Delegate: RequestMapperDelegate> where Delegate.Snapshot == VolatileAttributes<Attribute, Version>.ValueGroupSnapshot {
+extension VolatileAttributes {
+	struct PartialGroupSnapshot {
+		let attributes: TypedDict<Key>
+		let state: State
+		
+		init(_ attributes: TypedDict<Key>, state: State) {
+			self.attributes = attributes
+			self.state = state
+		}
+		
+		static func empty(state: State) -> PartialGroupSnapshot {
+			return .init(.init(), state: state)
+		}
+	}
+}
+
+class RequestMapper<Attribute: AnyObject & Hashable, Version: Hashable, Delegate: RequestMapperDelegate> where Delegate.Snapshot == VolatileAttributes<Attribute, Version>.PartialGroupSnapshot {
 	enum DesignError: Error {
 		case noDelegate
 	}
@@ -53,6 +69,26 @@ class RequestMapper<Attribute: AnyObject & Hashable, Version: Hashable, Delegate
 		onDemand(Set(demand.demand.keys))
 	}
 	
+	func offer(_ request: Delegate.Request, update snapshot: @autoclosure () -> Delegate.Snapshot) {
+		guard let promisedAttributes = relation[request] else {
+			return
+		}
+		
+		requestFeatureSet.fulfilling(request) {
+			let snapshot = snapshot()
+			
+			// snapshot may provide more if unexpectedly there was more,
+			// or less if the version doesn't have an attribute
+			let allKeys = promisedAttributes.union(snapshot.attributes.keys)
+			let fullSnapshot = VolatileAttributes<Attribute, Version>.Snapshot(
+				snapshot.attributes,
+				states: Dictionary(uniqueKeysWithValues: allKeys.map { ($0, snapshot.state) })
+			)
+			
+			attributes.update(fullSnapshot)
+		}
+	}
+	
 	private func onDemand(_ attributes: Set<Attribute>) {
 		let (requests, unknown) = relation.translate(attributes)
 		
@@ -88,10 +124,13 @@ class RequestMapper<Attribute: AnyObject & Hashable, Version: Hashable, Delegate
 					case .success(let snapshot):
 						// snapshot may provide more if unexpectedly there was more,
 						// or less if the version doesn't have an attribute
-						let allKeys = promisedAttributes.union(snapshot.value.keys)
-						let fullSnapshot = VolatileAttributes<Attribute, Version>.Snapshot(snapshot.value, states: Dictionary(uniqueKeysWithValues: allKeys.map { ($0, snapshot.state) }))
+						let allKeys = promisedAttributes.union(snapshot.attributes.keys)
+						let fullSnapshot = VolatileAttributes<Attribute, Version>.Snapshot(
+							snapshot.attributes,
+							states: Dictionary(uniqueKeysWithValues: allKeys.map { ($0, snapshot.state) })
+						)
 						
-						attributes.update(fullSnapshot, change: allKeys)
+						attributes.update(fullSnapshot)
 					}
 				}
 				.store(in: &cancellables)

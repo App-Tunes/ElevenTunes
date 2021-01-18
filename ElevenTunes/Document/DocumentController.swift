@@ -12,7 +12,7 @@ class DocumentController: NSDocumentController {
         let doc = LibraryDocument(settings: LibrarySettingsLevel())
 
         let defaultPlaylistsModel = [
-            TransientPlaylist(.playlists, attributes: .init([
+            TransientPlaylist(.playlists, attributes: .unsafe([
                 .title: "Playlists"
             ]))
         ]

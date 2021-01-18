@@ -58,13 +58,14 @@ extension FileTrack {
 			.eraseToAnyPublisher()
 	}
 	
-	func loadURL() {
-		guard let modificationDate = try? token.url.modificationDate() else {
-			return
+	func loadURL() -> TrackAttributes.PartialGroupSnapshot {
+		do {
+			return .init(.unsafe([
+				.title: token.url.lastPathComponent
+			]), state: .version(try token.url.modificationDate().isoFormat))
 		}
-		
-		mapper.attributes.update(.init([
-			.title: token.url.lastPathComponent
-		]), state: .version(modificationDate.isoFormat))
+		catch let error {
+			return .empty(state: .error(error))
+		}
 	}
 }

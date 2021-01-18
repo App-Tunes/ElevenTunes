@@ -11,7 +11,7 @@ import Combine
 struct ArtistCellView: View {
     let artist: Playlist
 
-	@State var title: PlaylistAttributes.ValueSnapshot<String?> = .missing()
+	@State var title: PlaylistAttributes.ValueSnapshot<String> = .missing()
 
     var body: some View {
         HStack {
@@ -40,7 +40,7 @@ struct ArtistCellView: View {
 struct AlbumCellView: View {
     let album: Playlist
     
-	@State var title: PlaylistAttributes.ValueSnapshot<String?> = .missing()
+	@State var title: PlaylistAttributes.ValueSnapshot<String> = .missing()
     
     var body: some View {
 		HStack {

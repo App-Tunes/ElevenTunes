@@ -59,7 +59,7 @@ public final class AVAudioTrack: FileTrack {
 }
 
 extension AVAudioTrack: RequestMapperDelegate {
-	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<TrackAttribute, TrackVersion>.ValueGroupSnapshot, Error> {
+	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<TrackAttribute, TrackVersion>.PartialGroupSnapshot, Error> {
 		// TODO
 		fatalError()
 	}

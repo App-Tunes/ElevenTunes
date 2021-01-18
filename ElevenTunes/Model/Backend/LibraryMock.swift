@@ -20,7 +20,7 @@ class LibraryMock {
     
     static func directory(_ title: String = "Mock Directory") -> TransientPlaylist {
         let children = self.children(title)
-        return TransientPlaylist(.playlists, attributes: .init([
+        return TransientPlaylist(.playlists, attributes: .unsafe([
             .title: title,
 			.children: children
         ]))
@@ -31,14 +31,14 @@ class LibraryMock {
             "\(title) -> 1", "\(title) -> 2", "\(title) -> 3",
         ].map(track)
         
-        return TransientPlaylist(.tracks, attributes: .init([
+        return TransientPlaylist(.tracks, attributes: .unsafe([
             .title: title,
 			.tracks: tracks
         ]))
     }
     
     static func track(_ title: String) -> MockTrack {
-        MockTrack(attributes: .init([
+        MockTrack(attributes: .unsafe([
             .title: title
         ]))
     }

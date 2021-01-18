@@ -42,9 +42,11 @@ class LibraryPlaylist: AnyPlaylist {
 				case .failure(let error):
 					self?._attributes.updateEmpty([.tracks], state: .error(error))
 				case .success(let tracks):
-					self?._attributes.update(.init([
-						.tracks: tracks
-					]), state: .version(nil))
+					self?._attributes.update(.unsafe([
+							.tracks: tracks
+						],
+						state: .version(nil)
+					))
 				}
 			})
 
@@ -63,9 +65,11 @@ class LibraryPlaylist: AnyPlaylist {
 				case .failure(let error):
 					self?._attributes.updateEmpty([.children], state: .error(error))
 				case .success(let children):
-					self?._attributes.update(.init([
-						.children: children
-					]), state: .version(nil))
+					self?._attributes.update(.unsafe([
+							.children: children
+						],
+						state: .version(nil)
+					))
 				}
 			})
 
@@ -98,7 +102,7 @@ class LibraryPlaylist: AnyPlaylist {
 	}
 
 	var attributes: AnyPublisher<PlaylistAttributes.Update, Never> {
-		_attributes.$snapshot.eraseToAnyPublisher()
+		_attributes.$update.eraseToAnyPublisher()
 	}
 
     static var playlistFetchRequest: NSFetchRequest<DBPlaylist> {

@@ -60,7 +60,7 @@ public final class FileVideo: FileTrack {
 }
 
 extension FileVideo: RequestMapperDelegate {
-	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<TrackAttribute, TrackVersion>.ValueGroupSnapshot, Error> {
+	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<TrackAttribute, TrackVersion>.PartialGroupSnapshot, Error> {
 		// TODO
 		fatalError()
 	}

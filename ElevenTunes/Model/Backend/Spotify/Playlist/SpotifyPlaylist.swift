@@ -61,13 +61,13 @@ public final class SpotifyPlaylist: SpotifyURIPlaylist {
     
     convenience init(playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>, spotify: Spotify) {
         self.init(SpotifyPlaylistToken(playlist.id), spotify: spotify)
-		self.mapper.attributes.update(SpotifyPlaylist.attributes(of: playlist), state: .missing)
+		self.mapper.offer(.playlist, update: .init(SpotifyPlaylist.attributes(of: playlist), state: .missing))
     }
 	
 	public var contentType: PlaylistContentType { .tracks }
 
     static func attributes(of playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>) -> TypedDict<PlaylistAttribute> {
-        return .init([
+        return .unsafe([
             .title: playlist.name
         ])
     }
@@ -91,7 +91,7 @@ public final class SpotifyPlaylist: SpotifyURIPlaylist {
 }
 
 extension SpotifyPlaylist: RequestMapperDelegate {
-	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.ValueGroupSnapshot, Error> {
+	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.PartialGroupSnapshot, Error> {
 		let spotify = self.spotify
 		let token = self.token
 
@@ -122,7 +122,7 @@ extension SpotifyPlaylist: RequestMapperDelegate {
 				.flatMap { self.viewableTracks($0.map { SpotifyTrackToken($0.id) }, spotify: spotify) }
 				.combineLatest(snapshotID)
 				.map { (tracks, snapshotID) in
-					.init(.init([
+					.init(.unsafe([
 						PlaylistAttribute.tracks: tracks
 					]), state: .version(snapshotID))
 				}

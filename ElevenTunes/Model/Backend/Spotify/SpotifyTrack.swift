@@ -122,8 +122,7 @@ public final class SpotifyTrack: RemoteTrack {
 
     convenience init(track: DetailedSpotifyTrack, spotify: Spotify) {
 		self.init(SpotifyTrackToken(track.id), spotify: spotify)
-		mapper.attributes.update(extractAttributes(from: track), state: .version(nil))
-		mapper.requestFeatureSet.insert(.track)
+		mapper.offer(.track, update: .init(extractAttributes(from: track), state: .version(nil)))
     }
     
     public var accentColor: Color { Spotify.color }
@@ -150,7 +149,7 @@ public final class SpotifyTrack: RemoteTrack {
     }
     
     func extractAttributes(from track: DetailedSpotifyTrack) -> TypedDict<TrackAttribute> {
-		.init([
+		.unsafe([
 			.title: track.name,
 			.album: track.album.map { spotify.album(SpotifyAlbumToken($0.id)) },
 			.artists:  track.artists.map {
@@ -160,7 +159,7 @@ public final class SpotifyTrack: RemoteTrack {
     }
     
     func extractAttributes(from features: AudioFeatures) -> TypedDict<TrackAttribute> {
-		.init([
+		.unsafe([
 			.bpm: Tempo(features.tempo),
 			.key: MusicalKey(features.key)
 		])
@@ -168,7 +167,7 @@ public final class SpotifyTrack: RemoteTrack {
 }
 
 extension SpotifyTrack: RequestMapperDelegate {
-	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<TrackAttribute, TrackVersion>.ValueGroupSnapshot, Error> {
+	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<TrackAttribute, TrackVersion>.PartialGroupSnapshot, Error> {
 		switch request {
 		case .track:
 			return spotify.api.track(token)

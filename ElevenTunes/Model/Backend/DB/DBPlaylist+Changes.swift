@@ -56,52 +56,60 @@ extension DBPlaylist: SelfChangeWatcher {
 			}
 		}
 		
+		let nonRawAttributes: [PlaylistAttribute] = [.tracks, .children]
+		let rawAttributes = update.0.filter { !nonRawAttributes.contains($0) }
+		
+		for attribute in update.change {
+			guard let keyPath = DBPlaylist.keypathByAttribute[attribute] else {
+				continue
+			}
+			
+			// TODO How to type-safe this?
+			self.setValue(rawAttributes.attributes[unsafe: attribute], forKey: keyPath)
+		}
+		
 		if affectedGroups.contains(.attributes) {
-			let snapshot = attributes.extract(DBPlaylist.attributeGroups[.attributes]!)
-
-			switch snapshot.state {
+			let group = rawAttributes.extract(DBPlaylist.attributeGroups[.attributes]!)
+			switch group.state {
 			case .version(let version):
-				unpack(update: snapshot.value)
 				self.version = version
 			default:
-				break  // TODO Handle errors etc.?
+				// TODO Handle
+				self.version = nil
+				break
 			}
-		}
-	}
-	
-	func unpack(update: TypedDict<PlaylistAttribute>) {
-		for (key, value) in update.contents {
-			let keyPath = DBPlaylist.keypathByAttribute[key]!
-			self.setValue(value, forKey: keyPath)
 		}
 	}
 	
     func onSelfChange() {
-        let changes = changedValues()
-
-		// TODO
-        
-        if changes.keys.contains("backend") {
-            if let backend = backend, backend.id != backendID {
-                // Invalidate stuff we stored for the backend
-                backendID = backend.id
-                if tracks.firstObject != nil { tracks = NSOrderedSet() }
+		let changes = changedValues()
+		
+		if changes.keys.contains("backend") {
+			if let backend = backend, backend.id != backendID {
+				// Invalidate stuff we stored for the backend
+				backendID = backend.id
+				if tracks.firstObject != nil { tracks = NSOrderedSet() }
 				if children.firstObject != nil { children = NSOrderedSet() }
 				childrenVersion ?= nil
 				tracksVersion ?= nil
 				version ?= nil
-            }
-            
-            backendP = backend
-        }
-        
-		var update = TypedDict<PlaylistAttribute>()
-		for (key, change) in changes {
-			if let attribute = DBPlaylist.attributeByKeypath[key] {
-				// TODO Can we make this type-safe?
-				update[unsafe: attribute] = change
 			}
+			
+			backendP = backend
 		}
+
+        if changes.keys.contains("indexed") {
+            isIndexedP ?= indexed
+        }
+		
+		collectUpdate(changes)
+    }
+	
+	func collectUpdate(_ changes: [String: Any]) {
+		let update = Dictionary(uniqueKeysWithValues: changes.compactMap { (name, value) in
+			DBPlaylist.attributeByKeypath[name].map { ($0, value) }
+		})
+		
 		// TODO Can we automate this somehow?
 		let updateGroups = DBPlaylist.attributeGroups.any(Set(update.keys))
 		
@@ -113,27 +121,18 @@ extension DBPlaylist: SelfChangeWatcher {
 			return version != nil ? .version(version!) : .missing
 		}
 		
-		if updateGroups.contains(.tracks) || changes.keys.contains("tracksVersion") {
-			attributes.update(
-				update.filter(DBPlaylist.attributeGroups[.tracks]!.contains),
-				state: appropriateState(tracksVersion)
-			)
+		var snapshot = PlaylistAttributes.Snapshot()
+				
+		for (group, versionKeyPath) in DBPlaylist.versionByAttribute {
+			let versionKeyName = NSExpression(forKeyPath: versionKeyPath).keyPath
+			if updateGroups.contains(group) || changes.keys.contains(versionKeyName) {
+				let groupMembers = DBPlaylist.attributeGroups[group]!
+				
+				snapshot = snapshot.merging(update: VolatileAttributes.GroupSnapshot.unsafe(
+					update.filter { groupMembers.contains($0.key) },
+					state: appropriateState(self[keyPath: versionKeyPath])
+				).explode())
+			}
 		}
-		if updateGroups.contains(.children) || changes.keys.contains("childrenVersion") {
-			attributes.update(
-				update.filter(DBPlaylist.attributeGroups[.children]!.contains),
-				state: appropriateState(childrenVersion)
-			)
-		}
-		if updateGroups.contains(.attributes) || changes.keys.contains("version") {
-			attributes.update(
-				update.filter(DBPlaylist.attributeGroups[.attributes]!.contains),
-				state: appropriateState(version)
-			)
-		}
-
-        if changes.keys.contains("indexed") {
-            isIndexedP ?= indexed
-        }
-    }
+	}
 }

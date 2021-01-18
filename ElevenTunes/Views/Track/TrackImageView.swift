@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TrackImageView: View {
 	let track: Track?
-	@State var image: TrackAttributes.ValueSnapshot<NSImage?> = .missing()
+	@State var image: TrackAttributes.ValueSnapshot<NSImage> = .missing()
 
     var body: some View {
 		Group {

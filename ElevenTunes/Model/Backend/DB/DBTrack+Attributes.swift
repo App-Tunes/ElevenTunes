@@ -21,5 +21,9 @@ extension DBTrack {
 		.title: "title"
 	]
 	
+	static let versionByAttribute: [AttributeGroup: KeyPath<DBTrack, TrackVersion?>] = [
+		.info: \Self.version
+	]
+
 	static let attributeByKeypath: [String: TrackAttribute] = Dictionary(uniqueKeysWithValues: keypathByAttribute.map { ($1, $0) })
 }

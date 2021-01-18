@@ -62,13 +62,13 @@ public class DBLibraryTrack: AnyTrack {
 	lazy var _attributes: AnyPublisher<TrackAttributes.Update, Never> = {
 		guard let backend = backend else {
 			// Everything is always 'cached'
-			return cache.attributes.$snapshot.eraseToAnyPublisher()
+			return cache.attributes.$update.eraseToAnyPublisher()
 		}
 		
 		// Depending on setup, other values will be in cache.attributes.
 		// This does not affect our logic here.
 		return backend.attributes
-			.combineLatest(cache.attributes.$snapshot)
+			.combineLatest(cache.attributes.$update)
 			.compactMap { (backend, cache) -> TrackAttributes.Update in
 				// TODO If change comes from cache, not from backend, 'change' value will be wrong.
 				return (backend.0.merging(cache: cache.0), change: backend.change)

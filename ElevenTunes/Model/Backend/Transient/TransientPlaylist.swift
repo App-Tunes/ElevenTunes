@@ -37,7 +37,7 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
         self.contentType = type
 		version = UUID().uuidString
         super.init()
-		_attributes.update(attributes, state: .version(version))
+		_attributes.update(.init(keys: Set(attributes.keys), attributes: attributes, state: .version(version)))
     }
     
     public required init(from decoder: Decoder) throws {
@@ -69,7 +69,7 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
 	}
 	
 	var attributes: AnyPublisher<PlaylistAttributes.Update, Never> {
-		_attributes.$snapshot.eraseToAnyPublisher()
+		_attributes.$update.eraseToAnyPublisher()
 	}
 
     func `import`(library: AnyLibrary) -> Bool {

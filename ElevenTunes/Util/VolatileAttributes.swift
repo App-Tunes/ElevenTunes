@@ -67,20 +67,16 @@ public enum VolatileState<Version: Hashable>: Equatable {
 public struct VolatileSnapshot<Value, Version: Hashable> {
 	public typealias State = VolatileState<Version>
 	
-	var value: Value
+	var value: Value?
 	var state: State
 	
-	init(_ value: Value, state: State) {
+	init(_ value: Value?, state: State) {
 		self.value = value
 		self.state = state
 	}
 	
-	static func missing(_ value: Value) -> VolatileSnapshot {
+	static func missing(_ value: Value? = nil) -> VolatileSnapshot {
 		.init(value, state: .missing)
-	}
-
-	static func missing<V>() -> VolatileSnapshot where Value == Optional<V> {
-		.init(nil, state: .missing)
 	}
 }
 
@@ -91,57 +87,37 @@ public class VolatileAttributes<Key: AnyObject & Hashable, Version: Hashable> {
 	
 	private let lock = NSLock()
 
-	private var attributes: TypedDict<Key> = .init()
-	private var states: [Key: State] = [:]
-	
-	@Published private(set) var snapshot: Update = (.init(), [])
+	@Published private(set) var snapshot: Snapshot = .init()
+	@Published private(set) var update: Update = (.init(), [])
 	
 	var knownKeys: Set<Key> {
-		lock.perform { Set(states.filter { $0.value != .missing }.map { $0.key }) }
+		lock.perform { snapshot.knownKeys }
 	}
-	
-	func update(_ attributes: TypedDict<Key>, state: State) {
-		guard !attributes.isEmpty else { return }
 
-		let snapshot = lock.perform { () -> Snapshot in
-			self.attributes.merge(attributes, stronger: .right)
-			attributes.keys.forEach { states[$0] = state }
-			
-			return Snapshot(self.attributes, states: states)
-		}
-		
-		self.snapshot = (snapshot, change: Set(attributes.keys))
+	func update(_ group: GroupSnapshot) {
+		update(Snapshot(group: group))
 	}
 	
-	func updateEmpty(_ attributes: Set<Key>, state: State) {
-		guard !attributes.isEmpty else { return }
-		
-		let snapshot = lock.perform { () -> Snapshot in
-			self.attributes = self.attributes.filter { !attributes.contains($0) }
-			attributes.forEach { states[$0] = state }
-			
-			return Snapshot(self.attributes, states: states)
-		}
-		
-		self.snapshot = (snapshot, change: attributes)
+	func updateEmpty(_ keys: Set<Key>, state: State) {
+		update(Snapshot(group: GroupSnapshot(keys: keys, attributes: .init(), state: state)))
 	}
-	
-	func update(_ snapshot: Snapshot, change: Set<Key>) {
+
+	func update(_ snapshot: Snapshot) {
 		guard !snapshot.isEmpty else { return }
 
 		let fullSnapshot = lock.perform { () -> Snapshot in
-			self.attributes.merge(snapshot.attributes, stronger: .right)
-			states.merge(snapshot.states) { $1 }
+			self.snapshot = self.snapshot.merging(update: snapshot)
 
-			return Snapshot(self.attributes, states: states)
+			return self.snapshot
 		}
 		
-		self.snapshot = (fullSnapshot, change: change)
+		self.update = (fullSnapshot, change: Set(snapshot.states.keys))
 	}
 	
 	func invalidate() {
 		lock.perform {
-			states = states.mapValues { State.combine($0, .missing)! }
+			snapshot = snapshot.invalidated()
+			update = (snapshot, Set(snapshot.states.keys))
 		}
 	}
 }
@@ -149,40 +125,75 @@ public class VolatileAttributes<Key: AnyObject & Hashable, Version: Hashable> {
 extension VolatileAttributes {
 	public typealias State = VolatileState<Version>
 	public typealias ValueSnapshot<Value> = VolatileSnapshot<Value, Version>
-	public typealias ValueGroupSnapshot = ValueSnapshot<TypedDict<Key>>
+
+	public struct GroupSnapshot {
+		let keys: Set<Key>
+		let attributes: TypedDict<Key>
+		let state: State
+		
+		init(keys: Set<Key>, attributes: TypedDict<Key>, state: State) {
+			self.keys = keys
+			self.attributes = attributes
+			self.state = state
+		}
+		
+		public static func unsafe(_ attributes: [Key: Any?], state: State) -> GroupSnapshot {
+			GroupSnapshot(keys: Set(attributes.keys), attributes: .unsafe(attributes), state: state)
+		}
+		
+		func explode() -> Snapshot { Snapshot(group: self) }
+	}
 	
 	public class Snapshot {
-		private(set) var attributes: TypedDict<Key>
-		private(set) var states: [Key: State]
-		
-		init(_ attributes: TypedDict<Key>, states: [Key: State]) {
-			self.attributes = attributes
-			self.states = states
-		}
+		let attributes: TypedDict<Key>
+		let states: [Key: State]
 		
 		init() {
 			attributes = .init()
 			states = [:]
 		}
 		
-		static func empty() -> Snapshot {
-			.init(.init(), states: [:])
+		init(_ attributes: TypedDict<Key>, states: [Key: State]) {
+			self.attributes = attributes
+			self.states = states
+		}
+		
+		convenience init(group: GroupSnapshot) {
+			self.init(group.attributes, states: Dictionary(uniqueKeysWithValues: group.keys.map {
+				($0, group.state)
+			}))
 		}
 		
 		var isEmpty: Bool { attributes.isEmpty && states.isEmpty }
 		
+		var keys: Dictionary<Key, State>.Keys { states.keys }
+		
+		var knownKeys: Set<Key> {
+			Set(states.filter { $0.value != .missing }.map { $0.key })
+		}
+		
+		func invalidated() -> Snapshot {
+			Snapshot(attributes, states: states.mapValues { _ in State.missing })
+		}
+		
 		// Type hinting see TypedDict :(
-		public subscript<TK>(_ key: TK) -> ValueSnapshot<TK.Value?> where TK: TypedKey {
+		public subscript<TK>(_ key: TK) -> ValueSnapshot<TK.Value> where TK: TypedKey {
 			ValueSnapshot(attributes[key], state: states[key as! Key] ?? .missing)
 		}
 		
-		public func extract<C>(_ keys: C) -> ValueGroupSnapshot where C: Collection, C.Element == Key {
+		public func extract<C>(_ keys: C) -> GroupSnapshot where C: Collection, C.Element == Key {
 			let attributes = self.attributes.filter(keys.contains)
 			let state: State? = keys
 				.map { states[$0] ?? .missing }
 				.reduce(into: nil) { $0 = $1 }
 			
-			return ValueSnapshot(attributes, state: state ?? .missing)
+			return GroupSnapshot(keys: Set(keys), attributes: attributes, state: state ?? .missing)
+		}
+		
+		/// Merges the snapshots according to 'update' logic
+		public func merging(update: Snapshot) -> Snapshot {
+			// Merging by "update" logic just means we're the cache lol
+			return update.merging(cache: self)
 		}
 		
 		/// Merges the snapshots according to 'cache' logic
@@ -190,7 +201,7 @@ extension VolatileAttributes {
 			let notMissing = attributes.filter { (states[$0] ?? .missing).isKnown }
 			let justMissing = attributes.filter { !(states[$0] ?? .missing).isKnown }
 
-			let snapshot = Snapshot(
+			return Snapshot(
 				// Merge attributes - ours trumps cache. If ours are marked as 'missing',
 				// cache trumps ours since ours is just a guess.
 				notMissing
@@ -201,7 +212,6 @@ extension VolatileAttributes {
 					.filter { $0.value.isKnown }
 					.merging(cache.states) { (l, r) in l }
 			)
-			return snapshot
 		}
 		
 		public func filter(_ isIncluded: (Key) -> Bool) -> Snapshot {
@@ -238,7 +248,7 @@ extension Publisher {
 			.eraseToAnyPublisher()
 	}
 	
-	func filtered<Key, TK: TypedKey, Version>(toJust key: TK) -> AnyPublisher<VolatileSnapshot<TK.Value?, Version>, Failure> where Output == VolatileAttributes<Key, Version>.Update {
+	func filtered<Key, TK: TypedKey, Version>(toJust key: TK) -> AnyPublisher<VolatileSnapshot<TK.Value, Version>, Failure> where Output == VolatileAttributes<Key, Version>.Update {
 		filtered(toChanges: [key as! Key])
 			.map { $0[key] }
 			.eraseToAnyPublisher()

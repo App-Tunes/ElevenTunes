@@ -21,7 +21,7 @@ class MockTrack: TrackToken, AnyTrack {
 	init(attributes: TypedDict<TrackAttribute>) {
 		version = UUID().uuidString
 		super.init()
-		_attributes.update(attributes, state: .version(version))
+		_attributes.update(.init(keys: Set(attributes.keys), attributes: attributes, state: .version(version)))
 	}
 
     public required init(from decoder: Decoder) throws {
@@ -60,7 +60,7 @@ class MockTrack: TrackToken, AnyTrack {
 	}
 	
 	var attributes: AnyPublisher<TrackAttributes.Update, Never> {
-		_attributes.$snapshot.eraseToAnyPublisher()
+		_attributes.$update.eraseToAnyPublisher()
 	}
 
     func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {

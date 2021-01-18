@@ -11,29 +11,33 @@ extension DBTrack: SelfChangeWatcher {
 	func onUpdate(_ update: TrackAttributes.Update) {
 		let affectedGroups = DBTrack.attributeGroups.any(update.change)
 		
-		let attributes = update.0
-				
+		let nonRawAttributes: [TrackAttribute] = []
+		let rawAttributes = update.0.filter { !nonRawAttributes.contains($0) }
+		
+		for attribute in update.change {
+			guard let keyPath = DBTrack.keypathByAttribute[attribute] else {
+				continue
+			}
+			
+			// TODO How to type-safe this?
+			self.setValue(rawAttributes.attributes[unsafe: attribute], forKey: keyPath)
+		}
+		
 		if affectedGroups.contains(.info) {
-			let snapshot = attributes.extract(DBTrack.attributeGroups[.info]!)
-			let attributes = snapshot.value
-
-			switch snapshot.state {
+			let group = rawAttributes.extract(DBTrack.attributeGroups[.info]!)
+			switch group.state {
 			case .version(let version):
-				for (key, value) in attributes.contents {
-					let keyPath = DBTrack.keypathByAttribute[key]!
-					self.setValue(value, forKey: keyPath)
-				}
 				self.version = version
 			default:
-				break  // TODO Handle errors etc.?
+				// TODO Handle
+				self.version = nil
+				break
 			}
 		}
 	}
 	
 	func onSelfChange() {
 		let changes = changedValues()
-
-		// TODO
 		
 		if changes.keys.contains("backend") {
 			if let backend = backend, backend.id != backendID {
@@ -45,19 +49,37 @@ extension DBTrack: SelfChangeWatcher {
 			backendP = backend
 		}
 		
-		var update = TypedDict<TrackAttribute>()
-		for (key, change) in changes {
-			if let attribute = DBTrack.attributeByKeypath[key] {
-				// TODO Can we make this type-safe?
-				update[unsafe: attribute] = change
-			}
-		}
+		collectUpdate(changes)
+	}
+	
+	func collectUpdate(_ changes: [String: Any]) {
+		let update = Dictionary(uniqueKeysWithValues: changes.compactMap { (name, value) in
+			DBTrack.attributeByKeypath[name].map { ($0, value) }
+		})
+		
 		// TODO Can we automate this somehow?
 		let updateGroups = DBTrack.attributeGroups.any(Set(update.keys))
 		
-		if updateGroups.contains(.info) || changes.keys.contains("version") {
-			let state: TrackAttributes.State = version != nil ? .version(version!) : .missing
-			attributes.update(update.filter(DBTrack.attributeGroups[.info]!.contains), state: state)
+		func appropriateState(_ version: TrackVersion?) -> VolatileState<TrackVersion> {
+			guard backend != nil else {
+				return .version(nil)
+			}
+			
+			return version != nil ? .version(version!) : .missing
+		}
+		
+		var snapshot = TrackAttributes.Snapshot()
+				
+		for (group, versionKeyPath) in DBTrack.versionByAttribute {
+			let versionKeyName = NSExpression(forKeyPath: versionKeyPath).keyPath
+			if updateGroups.contains(group) || changes.keys.contains(versionKeyName) {
+				let groupMembers = DBTrack.attributeGroups[group]!
+				
+				snapshot = snapshot.merging(update: VolatileAttributes.GroupSnapshot.unsafe(
+					update.filter { groupMembers.contains($0.key) },
+					state: appropriateState(self[keyPath: versionKeyPath])
+				).explode())
+			}
 		}
 	}
 }
