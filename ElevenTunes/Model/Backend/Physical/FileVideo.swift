@@ -44,8 +44,7 @@ public final class FileVideo: FileTrack {
 
     init(_ token: FileVideoToken) {
         self.token = token
-		loadURL()
-		mapper.requestFeatureSet.insert(.url)
+		mapper.offer(.url, update: loadURL())
     }
         
     public var icon: Image { Image(systemName: "video") }

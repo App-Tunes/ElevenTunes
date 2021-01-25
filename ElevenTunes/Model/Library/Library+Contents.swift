@@ -17,7 +17,7 @@ extension Library {
             }
             .combineLatest(cache.$isIndexedP, cache.$contentTypeP)
             .map { (backend: AnyPlaylist?, isIndexed: Bool, contentType: PlaylistContentType) -> AnyPlaylist in
-                DBLibraryPlaylist(library: self, cache: cache, backend: backend, isIndexed: isIndexed, contentType: contentType)
+                BranchingPlaylist(library: self, cache: cache, backend: backend, isIndexed: isIndexed, contentType: contentType)
             }
             .eraseToAnyPublisher()
     }
@@ -29,7 +29,7 @@ extension Library {
                 $0?.expand(self)
             }
             .map { backend in
-                DBLibraryTrack(library: self, cache: cache, backend: backend)
+                BranchingTrack(library: self, cache: cache, backend: backend)
             }
             .eraseToAnyPublisher()
     }

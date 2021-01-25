@@ -43,8 +43,7 @@ public final class AVAudioTrack: FileTrack {
 
 	init(_ token: AVAudioTrackToken) {
 		self.token = token
-		loadURL()
-		mapper.requestFeatureSet.insert(.url)
+		mapper.offer(.url, update: loadURL())
 	}
 	
 	public var icon: Image { Image(systemName: "video") }
