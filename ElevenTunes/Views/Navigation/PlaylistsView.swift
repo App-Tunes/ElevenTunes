@@ -45,8 +45,10 @@ struct PlaylistSectionView: View {
         _body
 			.id(playlist.id)
 			.whileActive(playlist.backend.demand([PlaylistAttribute.children]))
-			.onReceive(playlist.backend.attribute(PlaylistAttribute.children)) {
-				children ?= ($0.value ?? []).map(Playlist.init)
+			.onReceive(playlist.backend.attribute(PlaylistAttribute.children)) { newValue in
+				withAnimation {
+					children ?= (newValue.value ?? []).map(Playlist.init)
+				}
 			}
     }
 }
