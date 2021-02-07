@@ -25,9 +25,7 @@ class MultiPlaylist: AnyPlaylist {
     }
     
     var id: String { "multi:\(playlists.map { $0.id }.joined(separator: ":"))" }
-    
-    var asToken: PlaylistToken { fatalError() }
-    
+        
     var contentType: PlaylistContentType { .tracks }
     
     var origin: URL? { nil }
@@ -40,7 +38,7 @@ class MultiPlaylist: AnyPlaylist {
 //
 //    func tracks() -> AnyPublisher<TracksSnapshot, Never> {
 //        playlists.map { $0.tracks() }
-//            .combineLatest()
+//            .combineLatestOrJust()
 //            .map {
 //                TracksSnapshot(
 //                    $0.flatMap { $0.data },
@@ -52,7 +50,7 @@ class MultiPlaylist: AnyPlaylist {
 //
 //    func children() -> AnyPublisher<PlaylistsSnapshot, Never> {
 //        playlists.map { $0.children() }
-//            .combineLatest()
+//            .combineLatestOrJust()
 //            .map {
 //                PlaylistsSnapshot(
 //                    $0.flatMap { $0.data },
@@ -64,7 +62,7 @@ class MultiPlaylist: AnyPlaylist {
 //
 //    func attributes() -> AnyPublisher<PlaylistAttributesSnapshot, Never> {
 //        playlists.map { $0.attributes() }
-//            .combineLatest()
+//            .combineLatestOrJust()
 //            .map {
 //                PlaylistAttributesSnapshot(
 //                    TypedDict<PlaylistAttribute>([
@@ -85,5 +83,7 @@ class MultiPlaylist: AnyPlaylist {
 		fatalError() // TODO
 	}
 	
-    func `import`(library: AnyLibrary) -> Bool { false }
+	func `import`(library: UninterpretedLibrary) throws {
+		
+	}
 }

@@ -11,7 +11,6 @@ import Combine
 
 public protocol AnyTrack: AnyObject {
     var id: String { get }
-    var asToken: TrackToken { get }
     
     var origin: URL? { get }
 
@@ -41,8 +40,8 @@ extension AnyTrack {
 		let demand = self.demand([.previewImage])
 		
 		return attribute(TrackAttribute.previewImage)
+			.attach(demand)
 			.flatMap { (snapshot: TrackAttributes.ValueSnapshot<NSImage>) -> AnyPublisher<VolatileSnapshot<NSImage, String>, Never> in
-				_ = demand  // This is just to keep a reference to demand
 				
 				if !snapshot.state.isKnown || snapshot.value != nil {
 					// Reasonable to return the track's image
@@ -60,31 +59,11 @@ extension AnyTrack {
 						
 						let albumDemand = album.demand([PlaylistAttribute.previewImage])
 						return album.attribute(PlaylistAttribute.previewImage)
-							.map {
-								_ = albumDemand  // Keep reference to playlist demand too
-								return $0
-							}
+							.attach(albumDemand)
 							.eraseToAnyPublisher()
 					}
 					.eraseToAnyPublisher()
 			}
 			.eraseToAnyPublisher()
 	}
-}
-
-class TrackBackendTypedCodable: TypedCodable<String> {
-    static let _registry = CodableRegistry<String>()
-        .register(MockTrack.self, for: "mock")
-        .register(FileTrackToken.self, for: "file")
-        .register(FileVideoToken.self, for: "videofile")
-        .register(SpotifyTrackToken.self, for: "spotify")
-
-    override class var registry: CodableRegistry<String> { _registry }
-}
-
-@objc(TrackBackendTransformer)
-class TrackBackendTransformer: TypedJSONCodableTransformer<String, TrackBackendTypedCodable> {}
-
-extension NSValueTransformerName {
-    static let trackBackendName = NSValueTransformerName(rawValue: "TrackBackendTransformer")
 }

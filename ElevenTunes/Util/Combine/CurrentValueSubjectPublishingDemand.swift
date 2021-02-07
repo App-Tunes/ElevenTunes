@@ -152,7 +152,7 @@ func mergeDemandMask<Set>(_ initialValue: Set, subjects: [(Published<Subscribers
                 ($0, mask)
             }
         }
-        .combineLatest()
+        .combineLatestOrJust()
         // Combine masks
         .map {
             $0.compactMap { (demand, mask) in

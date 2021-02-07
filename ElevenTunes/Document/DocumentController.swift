@@ -9,18 +9,21 @@ import AppKit
 
 class DocumentController: NSDocumentController {
     override func makeUntitledDocument(ofType typeName: String) throws -> NSDocument {
-        let doc = LibraryDocument(settings: LibrarySettingsLevel())
+		let doc = LibraryDocument(settings: LibrarySettingsLevel())
 
-        let defaultPlaylistsModel = [
-            TransientPlaylist(.playlists, attributes: .unsafe([
-                .title: "Playlists"
-            ]))
-        ]
-        let (_, playlists) = Library.convert(
-            DirectLibrary(allPlaylists: defaultPlaylistsModel),
-            context: doc.managedObjectContext!
-        )
-        doc.settings.defaultPlaylist = playlists[0].uuid
+		guard
+			let model = doc.managedObjectContext!.persistentStoreCoordinator?.managedObjectModel,
+			let playlistModel = model.entitiesByName["DBPlaylist"]
+		else {
+			fatalError("Failed to find model in MOC")
+		}
+
+		let defaultPlaylist = DBPlaylist(entity: playlistModel, insertInto: doc.managedObjectContext!)
+		defaultPlaylist.title = "Playlists"
+		defaultPlaylist.contentType = .playlists
+		defaultPlaylist.initialSetup()
+			
+		doc.settings.defaultPlaylist = defaultPlaylist.uuid
         
         /// All initial object creation should NOT be undoable.
         doc.undoManager?.removeAllActions()

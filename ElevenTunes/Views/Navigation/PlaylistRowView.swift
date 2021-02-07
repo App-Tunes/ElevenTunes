@@ -14,7 +14,7 @@ struct PlaylistRowView: View {
     
     var body: some View {
         HStack {
-			if !title.state.isVersioned {
+			if title.state != .valid {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle())
                     .scaleEffect(0.4)
@@ -31,7 +31,7 @@ struct PlaylistRowView: View {
                     .frame(width: 15, height: 15)
             }
 
-            if title.state.isVersioned {
+			if title.state == .valid {
 				Text(title.value ?? "Unknown Playlist")
 //                        .opacity((playlist.tracks.isEmpty && playlist.children.isEmpty) ? 0.6 : 1)
             }

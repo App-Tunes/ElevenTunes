@@ -14,112 +14,60 @@ protocol SelfChangeWatcher {
 	func onSelfChange()
 }
 
+enum PartialPlaylistMask {
+	case full
+	case none
+}
+
 public class BranchingPlaylist: AnyPlaylist {
-	let library: Library
-	let cache: DBPlaylist
-	let backend: AnyPlaylist?
-	let isIndexed: Bool
-	let cachedContentType: PlaylistContentType
-
-	public var asToken: PlaylistToken { fatalError() }
-
+	private(set) var cache: DBPlaylist
+	
+	let primary: AnyPlaylist
+	let secondary: [AnyPlaylist]
+	
 	var cancellables: Set<AnyCancellable> = []
 	
-	init(library: Library, cache: DBPlaylist, backend: AnyPlaylist?, isIndexed: Bool, contentType: PlaylistContentType) {
-		self.library = library
+	init(cache: DBPlaylist, primary: AnyPlaylist, secondary: [AnyPlaylist], contentType: PlaylistContentType) {
 		self.cache = cache
-		self.backend = backend
-		self.isIndexed = isIndexed
-		self.cachedContentType = contentType
-		setupObservers()
+		self.primary = primary
+		self.secondary = secondary
 	}
 	
-	func setupObservers() {
-		guard let backend = backend else {
-			return
-		}
-		
-		backend.attributes
-			.sink(receiveValue: cache.onUpdate)
-			.store(in: &cancellables)
-	}
+	public var id: String { primary.id }
 	
-	public var id: String { cache.uuid.uuidString }
+	public var origin: URL? { primary.origin }
 	
-	public var origin: URL? { nil }
+	public var icon: Image { primary.icon }
 	
-	public var icon: Image {
-		if let backend = backend {
-			return backend.icon
-		}
-		
-		switch cachedContentType {
-		case .tracks:
-			return Image(systemName: "music.note.list")
-		case .playlists:
-			return Image(systemName: "folder")
-		case .hybrid:
-			return Image(systemName: "questionmark.folder")
-		}
-	}
+	public var accentColor: Color { primary.accentColor }
 	
-	public var accentColor: Color {
-		backend?.accentColor ?? .secondary
-	}
+	public var hasCaches: Bool { primary.hasCaches }
 	
-	public var hasCaches: Bool { backend != nil }
-	
-	public func invalidateCaches() {
-		guard let backend = backend else {
-			return  // No caches here!
-		}
-		
-		// TODO Invalidate our caches
-		backend.invalidateCaches()
-	}
+	public func invalidateCaches() { primary.invalidateCaches() }
 
-	lazy var _attributes: AnyPublisher<PlaylistAttributes.Update, Never> = {
-		guard let backend = backend else {
-			// Everything is always 'cached'
-			return cache.attributes.$update.eraseToAnyPublisher()
-		}
-		
-		// Depending on setup, other values will be in cache.attributes.
-		// This does not affect our logic here.
-		return backend.attributes
-			.combineLatest(cache.attributes.$update)
-			.compactMap { (backend, cache) -> PlaylistAttributes.Update in
-				// TODO If change comes from cache, not from backend, 'change' value will be wrong.
-				return (backend.0.merging(cache: cache.0), change: backend.change)
-			}.eraseToAnyPublisher()
-	}()
 	public var attributes: AnyPublisher<PlaylistAttributes.Update, Never> {
-		return _attributes
+		primary.attributes
 	}
 	
 	public func demand(_ demand: Set<PlaylistAttribute>) -> AnyCancellable {
-		guard let backend = backend else {
-			// TODO Only update the attributes if there's a watcher? Does that help?
-			return AnyCancellable {}
-		}
-		
-		// First figure out what we haven't cached yet
-		let missing = demand.subtracting(cache.attributes.knownKeys)
-		// Now explode so we get a cacheable package some time
-		return backend.demand(DBPlaylist.attributeGroups.explode(missing))
+		primary.demand(demand)
 	}
 	
 	public var contentType: PlaylistContentType {
-		backend?.contentType ?? cachedContentType
+		primary.contentType
 	}
 	
-	public func `import`(library: AnyLibrary) -> Bool {
-		guard let backend = backend else {
-			// We have no backend, let's fucking gooo
-			return Library.import(library, to: cache)
-		}
-		
-		// Backend is responsible for resetting caches etc.
-		return backend.import(library: library)
+	public func `import`(library: UninterpretedLibrary) throws {
+		try primary.import(library: library)
+	}
+}
+
+extension BranchingPlaylist: Hashable {
+	public static func == (lhs: BranchingPlaylist, rhs: BranchingPlaylist) -> Bool {
+		lhs.id == rhs.id
+	}
+	
+	public func hash(into hasher: inout Hasher) {
+		hasher.combine(id)
 	}
 }

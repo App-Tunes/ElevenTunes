@@ -21,7 +21,7 @@ class MockTrack: TrackToken, AnyTrack {
 	init(attributes: TypedDict<TrackAttribute>) {
 		version = UUID().uuidString
 		super.init()
-		_attributes.update(.init(keys: Set(attributes.keys), attributes: attributes, state: .version(version)))
+		_attributes.update(.init(keys: Set(attributes.keys), attributes: attributes, state: .valid))
 	}
 
     public required init(from decoder: Decoder) throws {
@@ -37,9 +37,7 @@ class MockTrack: TrackToken, AnyTrack {
 //        // TODO
 //        try super.encode(to: encoder)
     }
-    
-    var asToken: TrackToken { self }
-    
+        
     var icon: Image { Image(systemName: "questionmark") }
     
     var accentColor: Color { .primary}

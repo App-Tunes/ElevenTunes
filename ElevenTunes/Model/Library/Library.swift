@@ -8,26 +8,26 @@
 import Cocoa
 import Combine
 
-public protocol AnyLibrary {
-    var allTracks: [TrackToken] { get }
-    var allPlaylists: [PlaylistToken] { get }
+public struct UninterpretedLibrary {
+	public var tracks: [AnyTrack] = []
+	public var playlists: [AnyPlaylist] = []
 }
 
-public struct DirectLibrary: AnyLibrary {
-    public var allTracks: [TrackToken] = []
-    public var allPlaylists: [PlaylistToken] = []
+public struct InterpretedLibrary {
+	public var tracks: [BranchingTrack] = []
+	public var playlists: [BranchingPlaylist] = []
 }
 
 public class Library {
     static let defaultPlaylistKey = "defaultPlaylist"
     
     let managedObjectContext: NSManagedObjectContext
-
-    var _mainPlaylist: LibraryPlaylist! = nil
-    var mainPlaylist: LibraryPlaylist { _mainPlaylist }
+	
+	let playContext: PlayContext
         
     let settings: LibrarySettingsLevel
-    let interpreter: ContentInterpreter
+    var _interpreter: ContentInterpreter! = nil
+	var interpreter: ContentInterpreter { _interpreter }
     
     let player: Player
     
@@ -38,14 +38,15 @@ public class Library {
     init(managedObjectContext: NSManagedObjectContext, settings: LibrarySettingsLevel) {
         self.managedObjectContext = managedObjectContext
         self.settings = settings
-        self.interpreter = ContentInterpreter.createDefault(settings: settings)
 
         let playContext = PlayContext(spotify: settings.spotify)
+		self.playContext = playContext
         
         player = Player(context: playContext)
         
+		_interpreter = ContentInterpreter.createDefault(settings: settings, library: self)
+
         defaultPlaylist = settings.defaultPlaylist.flatMap { try? managedObjectContext.fetch(DBPlaylist.createFetchRequest(id: $0)).first }
-        _mainPlaylist = LibraryPlaylist(library: self, playContext: playContext)
 
         NotificationCenter.default.addObserver(self, selector: #selector(objectsDidChange), name: .NSManagedObjectContextObjectsDidChange, object: managedObjectContext)
     }

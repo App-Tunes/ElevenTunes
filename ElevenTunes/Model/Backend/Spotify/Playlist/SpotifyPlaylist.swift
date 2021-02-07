@@ -28,13 +28,6 @@ public class SpotifyPlaylistToken: SpotifyURIPlaylistToken {
     override func expand(_ context: Library) -> AnyPlaylist {
         SpotifyPlaylist(self, spotify: context.spotify)
     }
-    
-    static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyPlaylistToken, Error> {
-        return Future { try playlistID(fromURL: url) }
-            .flatMap { spotify.api.playlist(Self($0)) }
-            .map { SpotifyPlaylistToken($0.id) }
-            .eraseToAnyPublisher()
-    }
 }
 
 public final class SpotifyPlaylist: SpotifyURIPlaylist {
@@ -64,7 +57,19 @@ public final class SpotifyPlaylist: SpotifyURIPlaylist {
 		self.mapper.offer(.playlist, update: .init(SpotifyPlaylist.attributes(of: playlist), state: .missing))
     }
 	
+	static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyPlaylist, Error> {
+		return Future { try SpotifyPlaylistToken.playlistID(fromURL: url) }
+			.flatMap { spotify.api.playlist(SpotifyPlaylistToken($0)) }
+			.map { SpotifyPlaylistToken($0.id) }
+			.map { SpotifyPlaylist($0, spotify: spotify) }
+			.eraseToAnyPublisher()
+	}
+
 	public var contentType: PlaylistContentType { .tracks }
+	
+	public var id: String { token.id }
+	
+	public var origin: URL? { token.origin }
 
     static func attributes(of playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>) -> TypedDict<PlaylistAttribute> {
         return .unsafe([
@@ -124,12 +129,12 @@ extension SpotifyPlaylist: RequestMapperDelegate {
 				.map { (tracks, snapshotID) in
 					.init(.unsafe([
 						PlaylistAttribute.tracks: tracks
-					]), state: .version(snapshotID))
+					]), state: .valid)
 				}
 				.eraseToAnyPublisher()
 		case .playlist:
 			return spotify.api.playlist(token)
-				.map { .init(SpotifyPlaylist.attributes(of: $0), state: .version(nil)) }
+				.map { .init(SpotifyPlaylist.attributes(of: $0), state: .valid) }
 				.eraseToAnyPublisher()
 		}
 	}

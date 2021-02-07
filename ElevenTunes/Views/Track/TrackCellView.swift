@@ -65,7 +65,7 @@ struct TrackCellView: View {
         .opacity(hasBasicInfo ? 1 : 0.5)
 		.whileActive(track.backend.demand([.title, .bpm, .key, .album, .artists]))
 		.onReceive(track.backend.attributes) { (snapshot, _) in
-			hasBasicInfo ?= snapshot[TrackAttribute.title].state.isVersioned
+			hasBasicInfo ?= snapshot[TrackAttribute.title].state == .valid
 			title ?= snapshot[TrackAttribute.title].value
 			tempo ?= snapshot[TrackAttribute.bpm].value
 			key ?= snapshot[TrackAttribute.key].value

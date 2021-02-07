@@ -2,7 +2,7 @@
 //  DBTrack+CoreDataClass.swift
 //  ElevenTunes
 //
-//  Created by Lukas Tenbrink on 26.12.20.
+//  Created by Lukas Tenbrink on 25.01.21.
 //
 //
 
@@ -11,17 +11,27 @@ import CoreData
 
 @objc(DBTrack)
 public class DBTrack: NSManagedObject {
-    @Published var backendP: TrackToken?
-    
-	let attributes: VolatileAttributes<TrackAttribute, TrackVersion> = .init()
+	@objc public enum Representation: Int16 {
+		case none, av, spotify
+	}
 
-    public override func awakeFromFetch() { initialSetup() }
-    public override func awakeFromInsert() { initialSetup() }
+	public let attributes = TrackAttributes()
+	
+	@Published public var primaryRepresentationP: Representation = .none
+	@Published public var representationsP: [Representation: AnyTrackCache] = [:]
+	
+	public override func awakeFromFetch() { initialSetup() }
+	public override func awakeFromInsert() { initialSetup() }
+	
+	func initialSetup() {
+		primaryRepresentationP = primaryRepresentation
 
-    func initialSetup() {
-        backendP = backend
-        
-		// TODO
-//		initialize content
-    }
+		representationsP[.av] = avRepresentation
+		representationsP[.spotify] = spotifyRepresentation
+	}
+}
+
+protocol BranchableTrack {
+	@discardableResult
+	func store(in playlist: DBTrack) throws -> DBTrack.Representation
 }

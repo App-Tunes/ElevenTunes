@@ -15,7 +15,7 @@ struct ArtistCellView: View {
 
     var body: some View {
         HStack {
-			if title.state.isVersioned {
+			if title.state == .valid {
                 if let url = artist.backend.origin {
                     UnderlinedLink(
                         description: title.value ?? "Unknown Artist",
@@ -46,7 +46,7 @@ struct AlbumCellView: View {
 		HStack {
             album.backend.icon
             
-			if title.state.isVersioned {
+			if title.state == .valid {
                 if let url = album.backend.origin {
                     UnderlinedLink(
 						description: title.value ?? "Unknown Album",

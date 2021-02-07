@@ -9,28 +9,35 @@ import Foundation
 import Combine
 
 extension Library {
-    func playlist(cachedBy cache: DBPlaylist) -> AnyPublisher<AnyPlaylist, Never> {
-        _ = cache.backend // Fire Fault
-        
-        return cache.$backendP.map {
-                $0?.expand(self)
-            }
-            .combineLatest(cache.$isIndexedP, cache.$contentTypeP)
-            .map { (backend: AnyPlaylist?, isIndexed: Bool, contentType: PlaylistContentType) -> AnyPlaylist in
-                BranchingPlaylist(library: self, cache: cache, backend: backend, isIndexed: isIndexed, contentType: contentType)
-            }
-            .eraseToAnyPublisher()
+    func playlist(cachedBy cache: DBPlaylist) -> AnyPublisher<BranchingPlaylist, Never> {
+		_ = cache.primaryRepresentation  // Fire fault
+		
+		return cache.$primaryRepresentationP
+			.combineLatest(cache.$representationsP, cache.$contentTypeP)
+			.map { (primary, representations, contentType) in
+				let secondaries = representations.filter { $0.key != primary }.values
+				
+				return BranchingPlaylist(
+					cache: cache,
+					primary: representations[primary]?.expand(library: self) ?? JustCachePlaylist(cache, library: self),
+					secondary: secondaries.map { $0.expand(library: self) },
+					contentType: contentType
+				)
+			}.eraseToAnyPublisher()
     }
     
-    func track(cachedBy cache: DBTrack) -> AnyPublisher<AnyTrack, Never> {
-        _ = cache.backend // Fire Fault
-        
-        return cache.$backendP.map {
-                $0?.expand(self)
-            }
-            .map { backend in
-                BranchingTrack(library: self, cache: cache, backend: backend)
-            }
-            .eraseToAnyPublisher()
+	func track(cachedBy cache: DBTrack) -> AnyPublisher<BranchingTrack, Never> {
+		_ = cache.primaryRepresentation  // Fire fault
+		
+		return cache.$primaryRepresentationP.combineLatest(cache.$representationsP)
+			.map { (primary, representations) in
+				let secondaries = representations.filter { $0.key != primary }.values
+				
+				return BranchingTrack(
+					cache: cache,
+					primary: representations[primary]?.expand(library: self) ?? JustCacheTrack(cache),
+					secondary: secondaries.map { $0.expand(library: self) }
+				)
+			}.eraseToAnyPublisher()
     }
 }

@@ -17,7 +17,7 @@ struct TrackImageView: View {
 				if case .error = image.state {
 					Image(systemName: "exclamationmark.triangle")
 				}
-				else if !image.state.isVersioned {
+				else if image.state  != .valid {
 					ProgressView()
 						.progressViewStyle(CircularProgressViewStyle())
 						.scaleEffect(0.5, anchor: .center)

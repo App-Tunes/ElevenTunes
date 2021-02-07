@@ -1,43 +1,69 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="20B29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="DBAlbum" representedClassName="DBAlbum" syncable="YES" codeGenerationType="class">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="20C69" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DBAlbum" representedClassName="DBAlbum" syncable="YES">
         <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="artists" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="DBArtist" inverseName="albums" inverseEntity="DBArtist"/>
         <relationship name="tracks" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="DBTrack" inverseName="album" inverseEntity="DBTrack"/>
     </entity>
-    <entity name="DBArtist" representedClassName="DBArtist" syncable="YES" codeGenerationType="class">
+    <entity name="DBArtist" representedClassName="DBArtist" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="albums" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DBAlbum" inverseName="artists" inverseEntity="DBAlbum"/>
         <relationship name="playlists" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DBPlaylist" inverseName="artists" inverseEntity="DBPlaylist"/>
     </entity>
+    <entity name="DBAVTrack" representedClassName="DBAVTrack" syncable="YES">
+        <attribute name="isVideo" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="url" attributeType="URI"/>
+        <relationship name="owner" maxCount="1" deletionRule="Nullify" destinationEntity="DBTrack" inverseName="avRepresentation" inverseEntity="DBTrack"/>
+    </entity>
+    <entity name="DBDirectoryPlaylist" representedClassName="DBDirectoryPlaylist" syncable="YES">
+        <attribute name="fileChangedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="url" attributeType="URI"/>
+        <relationship name="owner" maxCount="1" deletionRule="Nullify" destinationEntity="DBPlaylist" inverseName="directoryRepresentation" inverseEntity="DBPlaylist"/>
+    </entity>
+    <entity name="DBM3UPlaylist" representedClassName="DBM3UPlaylist" syncable="YES">
+        <attribute name="fileChangedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="url" attributeType="URI"/>
+        <relationship name="owner" maxCount="1" deletionRule="Nullify" destinationEntity="DBPlaylist" inverseName="m3uRepresentation" inverseEntity="DBPlaylist"/>
+    </entity>
     <entity name="DBPlaylist" representedClassName="DBPlaylist" syncable="YES">
-        <attribute name="backend" optional="YES" attributeType="Transformable" valueTransformerName="PlaylistBackendTransformer" customClassName=".PersistentPlaylist"/>
-        <attribute name="backendID" attributeType="String" defaultValueString=""/>
-        <attribute name="childrenVersion" optional="YES" attributeType="String"/>
         <attribute name="contentType" attributeType="Integer 16" valueTransformerName="PlaylistContentTypeTransformer" defaultValueString="0" usesScalarValueType="YES" customClassName="PlaylistContentType"/>
-        <attribute name="indexed" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="primaryRepresentation" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="title" optional="YES" attributeType="String" spotlightIndexingEnabled="YES"/>
-        <attribute name="tracksVersion" optional="YES" attributeType="String"/>
         <attribute name="uuid" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="version" optional="YES" attributeType="String"/>
         <relationship name="artists" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DBArtist" inverseName="playlists" inverseEntity="DBArtist"/>
         <relationship name="children" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="DBPlaylist" inverseName="parent" inverseEntity="DBPlaylist"/>
+        <relationship name="directoryRepresentation" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DBDirectoryPlaylist" inverseName="owner" inverseEntity="DBDirectoryPlaylist"/>
+        <relationship name="m3uRepresentation" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DBM3UPlaylist" inverseName="owner" inverseEntity="DBM3UPlaylist"/>
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DBPlaylist" inverseName="children" inverseEntity="DBPlaylist"/>
+        <relationship name="spotifyRepresentation" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DBSpotifyPlaylist" inverseName="owner" inverseEntity="DBSpotifyPlaylist"/>
         <relationship name="tracks" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="DBTrack" inverseName="references" inverseEntity="DBTrack"/>
     </entity>
+    <entity name="DBSpotifyPlaylist" representedClassName="DBSpotifyPlaylist" syncable="YES">
+        <attribute name="snapshotID" optional="YES" attributeType="String"/>
+        <attribute name="spotifyID" attributeType="String"/>
+        <relationship name="owner" maxCount="1" deletionRule="Nullify" destinationEntity="DBPlaylist" inverseName="spotifyRepresentation" inverseEntity="DBPlaylist"/>
+    </entity>
+    <entity name="DBSpotifyTrack" representedClassName="DBSpotifyTrack" syncable="YES">
+        <attribute name="spotifyID" attributeType="String"/>
+        <relationship name="owner" maxCount="1" deletionRule="Nullify" destinationEntity="DBTrack" inverseName="spotifyRepresentation" inverseEntity="DBTrack"/>
+    </entity>
     <entity name="DBTrack" representedClassName="DBTrack" syncable="YES">
-        <attribute name="backend" optional="YES" attributeType="Transformable" valueTransformerName="TrackBackendTransformer" customClassName=".PersistentTrack"/>
-        <attribute name="backendCacheMask" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="backendID" attributeType="String" defaultValueString=""/>
+        <attribute name="primaryRepresentation" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="title" optional="YES" attributeType="String" spotlightIndexingEnabled="YES"/>
-        <attribute name="version" optional="YES" attributeType="String"/>
         <relationship name="album" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DBAlbum" inverseName="tracks" inverseEntity="DBAlbum"/>
+        <relationship name="avRepresentation" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DBAVTrack" inverseName="owner" inverseEntity="DBAVTrack"/>
         <relationship name="references" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DBPlaylist" inverseName="tracks" inverseEntity="DBPlaylist"/>
+        <relationship name="spotifyRepresentation" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DBSpotifyTrack" inverseName="owner" inverseEntity="DBSpotifyTrack"/>
     </entity>
     <elements>
         <element name="DBAlbum" positionX="72" positionY="189" width="128" height="74"/>
         <element name="DBArtist" positionX="90" positionY="198" width="128" height="74"/>
-        <element name="DBPlaylist" positionX="27" positionY="72" width="128" height="224"/>
-        <element name="DBTrack" positionX="18" positionY="63" width="128" height="134"/>
+        <element name="DBAVTrack" positionX="81" positionY="180" width="128" height="74"/>
+        <element name="DBDirectoryPlaylist" positionX="63" positionY="162" width="128" height="74"/>
+        <element name="DBM3UPlaylist" positionX="72" positionY="171" width="128" height="74"/>
+        <element name="DBPlaylist" positionX="27" positionY="72" width="128" height="194"/>
+        <element name="DBSpotifyPlaylist" positionX="54" positionY="153" width="128" height="74"/>
+        <element name="DBSpotifyTrack" positionX="99" positionY="198" width="128" height="59"/>
+        <element name="DBTrack" positionX="18" positionY="63" width="128" height="119"/>
     </elements>
 </model>

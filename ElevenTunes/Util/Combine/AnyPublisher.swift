@@ -79,6 +79,15 @@ extension Publisher {
         multicast { CurrentValueSubject(initialValue) }
             .autoconnect()
     }
+	
+	/// Attaches a cancellable to the stream - the stream will hold a reference to it until deallocated.
+	/// Will not cancel the cancellable if the stream simply terminates.
+	func attach(_ cancellable: AnyCancellable) -> Publishers.Map<Self, Self.Output> {
+		map {
+			_ = cancellable
+			return $0
+		}
+	}
 }
 
 extension Publisher where Failure == Never {
@@ -87,4 +96,13 @@ extension Publisher where Failure == Never {
             root?[keyPath: keyPath] = $0
         }
     }
+}
+
+public extension Collection where Element: Publisher {
+	func combineLatestOrJust() -> AnyPublisher<[Element.Output], Element.Failure> {
+		// Default behavior is Empty().......
+		count == 0
+			? Just([]).mapError { $0 as! Element.Failure }.eraseToAnyPublisher()
+			: combineLatest()
+	}
 }

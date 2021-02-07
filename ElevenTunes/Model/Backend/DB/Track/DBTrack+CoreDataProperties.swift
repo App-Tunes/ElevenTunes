@@ -2,7 +2,7 @@
 //  DBTrack+CoreDataProperties.swift
 //  ElevenTunes
 //
-//  Created by Lukas Tenbrink on 26.12.20.
+//  Created by Lukas Tenbrink on 25.01.21.
 //
 //
 
@@ -12,16 +12,16 @@ import CoreData
 
 extension DBTrack {
 
-    @nonobjc public class func createFetchRequest() -> NSFetchRequest<DBTrack> {
-        return NSFetchRequest<DBTrack>(entityName: "DBTrack")
-    }
+	@nonobjc public class func createFetchRequest() -> NSFetchRequest<DBTrack> {
+		return NSFetchRequest<DBTrack>(entityName: "DBTrack")
+	}
 
-    @NSManaged public var backend: TrackToken?
-    @NSManaged public var backendID: String
-	@NSManaged public var version: String?
-	@NSManaged public var title: String?
-    @NSManaged public var backendCacheMask: Int16
+    @NSManaged public var primaryRepresentation: Representation
+    @NSManaged public var title: String?
+    @NSManaged public var album: DBAlbum?
+    @NSManaged public var avRepresentation: DBAVTrack?
     @NSManaged public var references: NSSet
+    @NSManaged public var spotifyRepresentation: DBSpotifyTrack?
 
 }
 
@@ -39,5 +39,9 @@ extension DBTrack {
 
     @objc(removeReferences:)
     @NSManaged public func removeFromReferences(_ values: NSSet)
+
+}
+
+extension DBTrack : Identifiable {
 
 }

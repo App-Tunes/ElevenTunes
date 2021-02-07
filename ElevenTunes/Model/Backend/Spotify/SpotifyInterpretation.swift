@@ -9,14 +9,14 @@ import Foundation
 import Combine
 
 extension ContentInterpreter {
-    static func defaultSpotify(spotify: Spotify) -> [Interpreter] {
+    static func defaultSpotify() -> [Interpreter] {
         var interpreters: [Interpreter] = []
         
         interpreters.append(simple {
             _ = try SpotifyTrackToken.trackID(fromURL: $0)
             return true
-        } interpret: {
-            SpotifyTrackToken.create(spotify, fromURL: $0)
+        } interpret: { (url, settings) in
+			SpotifyTrack.create(settings.spotify, fromURL: url)
                 .map { Content.track($0) }
                 .eraseToAnyPublisher()
         })
@@ -24,8 +24,8 @@ extension ContentInterpreter {
         interpreters.append(simple {
             _ = try SpotifyPlaylistToken.playlistID(fromURL: $0)
             return true
-        } interpret: { (url: URL) -> AnyPublisher<Content, Error> in
-            SpotifyPlaylistToken.create(spotify, fromURL: url)
+        } interpret: { (url, settings) in
+			SpotifyPlaylist.create(settings.spotify, fromURL: url)
                 .map { Content.playlist($0) }
                 .eraseToAnyPublisher()
         })
@@ -33,8 +33,8 @@ extension ContentInterpreter {
         interpreters.append(simple {
             _ = try SpotifyUserToken.userID(fromURL: $0)
             return true
-        } interpret: { (url: URL) -> AnyPublisher<Content, Error> in
-            SpotifyUserToken.create(spotify, fromURL: url)
+        } interpret: { (url, settings) in
+			SpotifyUser.create(settings.spotify, fromURL: url)
                 .map { Content.playlist($0) }
                 .eraseToAnyPublisher()
         })
@@ -42,8 +42,8 @@ extension ContentInterpreter {
         interpreters.append(simple {
             _ = try SpotifyAlbumToken.playlistID(fromURL: $0)
             return true
-        } interpret: { (url: URL) -> AnyPublisher<Content, Error> in
-            SpotifyAlbumToken.create(spotify, fromURL: url)
+        } interpret: { (url, settings) in
+			SpotifyAlbum.create(settings.spotify, fromURL: url)
                 .map { Content.playlist($0) }
                 .eraseToAnyPublisher()
         })
@@ -51,20 +51,10 @@ extension ContentInterpreter {
         interpreters.append(simple {
             _ = try SpotifyArtistToken.playlistID(fromURL: $0)
             return true
-        } interpret: { (url: URL) -> AnyPublisher<Content, Error> in
-            SpotifyArtistToken.create(spotify, fromURL: url)
+        } interpret: { (url, settings) in
+			SpotifyArtist.create(settings.spotify, fromURL: url)
                 .map { Content.playlist($0) }
                 .eraseToAnyPublisher()
-        })
-
-        interpreters.append(simple { $0.pathExtension == "m3u" } interpret: {
-            .playlist(try M3UPlaylistToken.create(fromURL: $0))
-        })
-        
-        interpreters.append(simple {
-            try $0.isFileDirectory()
-        } interpret: {
-            .playlist(try DirectoryPlaylistToken.create(fromURL: $0))
         })
         
         return interpreters

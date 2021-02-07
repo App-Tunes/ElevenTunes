@@ -11,28 +11,14 @@ import CoreData
 import SwiftUI
 import Combine
 
-public class M3UPlaylistToken: FilePlaylistToken {
-    enum InterpretationError: Error {
-        case noFile
-    }
-
-	static func create(fromURL url: URL) throws -> M3UPlaylistToken {
-        if try url.isFileDirectory() {
-            throw InterpretationError.noFile
-        }
-        
-        return M3UPlaylistToken(url)
-    }
-    
-    override func expand(_ context: Library) -> AnyPlaylist {
-        M3UPlaylist(self, library: context)
-    }
-}
-
 public final class M3UPlaylist: RemotePlaylist {
-    let library: Library
-    let token: M3UPlaylistToken
-    
+	enum InterpretationError: Error {
+		case noFile
+	}
+
+	let url: URL
+	let library: Library
+
 	enum Request {
 		case url, read
 	}
@@ -42,18 +28,30 @@ public final class M3UPlaylist: RemotePlaylist {
 		.read: [.tracks, .children]
 	])
 
-    init(_ token: M3UPlaylistToken, library: Library) {
-        self.library = library
-        self.token = token
+	init(_ url: URL, library: Library) {
+        self.url = url
+		self.library = library
 		mapper.offer(.url, update: urlAttributes())
     }
     
+	static func create(fromURL url: URL, library: Library) throws -> M3UPlaylist {
+		if try url.isFileDirectory() {
+			throw InterpretationError.noFile
+		}
+		
+		return M3UPlaylist(url, library: library)
+	}
+
     public var icon: Image { Image(systemName: "doc.text") }
     
     public var accentColor: Color { SystemUI.color }
 	
 	public var contentType: PlaylistContentType { .hybrid }
     
+	public var origin: URL? { url }
+
+	public var id: String { url.absoluteString }
+
     public static func interpretFile(_ file: String, relativeTo directory: URL) -> [URL] {
         let lines = file.split(whereSeparator: \.isNewline)
         
@@ -87,8 +85,8 @@ public final class M3UPlaylist: RemotePlaylist {
 	func urlAttributes() -> PlaylistAttributes.PartialGroupSnapshot {
 		do {
 			return .init(.unsafe([
-				.title: token.url.lastPathComponent
-			]), state: .version(try token.url.modificationDate().isoFormat))
+				.title: url.lastPathComponent
+			]), state: .valid)
 		}
 		catch let error {
 			return .empty(state: .error(error))
@@ -98,7 +96,7 @@ public final class M3UPlaylist: RemotePlaylist {
 
 extension M3UPlaylist: RequestMapperDelegate {
 	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.PartialGroupSnapshot, Error> {
-		let url = token.url
+		let url = self.url
 		let library = self.library
 		let interpreter = library.interpreter
 		
@@ -118,17 +116,15 @@ extension M3UPlaylist: RequestMapperDelegate {
 				interpreter.interpret(urls: $0)
 					?? Just([]).eraseError().eraseToAnyPublisher()
 			}
-			.map { (contents: [Content]) -> ([AnyTrack], [AnyPlaylist]) in
-				let (tracks, children) = ContentInterpreter.collect(fromContents: contents)
-
-				return (tracks.map { $0.expand(library) }, children.map { $0.expand(library) })
+			.map { (contents: [Content]) -> UninterpretedLibrary in
+				ContentInterpreter.collect(fromContents: contents)
 			}
-			.tryMap { ($0, $1, try url.modificationDate().isoFormat) }
-			.map { (tracks, children, version) in
+			.tryMap { ($0, try url.modificationDate().isoFormat) }
+			.map { (library, version) in
 				return .init(.unsafe([
-					.tracks: tracks,
-					.children: children
-				]), state: .version(version))
+					.tracks: library.tracks,
+					.children: library.playlists
+				]), state: .valid)
 			}.eraseToAnyPublisher()
 		}
 	}

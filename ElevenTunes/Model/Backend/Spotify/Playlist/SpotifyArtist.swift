@@ -11,23 +11,16 @@ import SpotifyWebAPI
 import Combine
 
 public class SpotifyArtistToken: SpotifyURIPlaylistToken {
-    class NoArtistID: Error {}
-    
     override class var urlComponent: String { "artist" }
     
     override func expand(_ context: Library) -> AnyPlaylist {
         context.spotify.artist(self)
     }
-    
-    static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyArtistToken, Error> {
-        return Future { try playlistID(fromURL: url) }
-            .flatMap { spotify.api.artist(Self($0)) }
-            .tryMap { SpotifyArtistToken(try $0.id.unwrap(orThrow: NoArtistID())) }
-            .eraseToAnyPublisher()
-    }
 }
 
 public final class SpotifyArtist: SpotifyURIPlaylist, AnyArtist {
+	class NoArtistID: Error {}
+
 	enum Request {
 		case info, playlists
 	}
@@ -46,9 +39,21 @@ public final class SpotifyArtist: SpotifyURIPlaylist, AnyArtist {
 		mapper.delegate = self
 	}
 
+	static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyArtist, Error> {
+		return Future { try SpotifyArtistToken.playlistID(fromURL: url) }
+			.flatMap { spotify.api.artist(SpotifyArtistToken($0)) }
+			.tryMap { SpotifyArtistToken(try $0.id.unwrap(orThrow: NoArtistID())) }
+			.map { SpotifyArtist($0, spotify: spotify) }
+			.eraseToAnyPublisher()
+	}
+
     public var contentType: PlaylistContentType { .hybrid }
     
     public var icon: Image { Image(systemName: "person") }
+	
+	public var id: String { token.id }
+	
+	public var origin: URL? { token.origin }
     
     func offerCache(_ artist: SpotifyWebAPI.Artist) {
 		mapper.offer(.info, update: read(artist))
@@ -57,7 +62,7 @@ public final class SpotifyArtist: SpotifyURIPlaylist, AnyArtist {
 	func read(_ artist: SpotifyWebAPI.Artist) -> PlaylistAttributes.PartialGroupSnapshot {
 		.init(.unsafe([
 			.title: artist.name
-		]), state: .version(nil))
+		]), state: .valid)
     }
     
     public func bestImageForPreview(_ images: [SpotifyWebAPI.SpotifyImage]) -> URL? {
@@ -105,7 +110,7 @@ extension SpotifyArtist: RequestMapperDelegate {
 				.map { albums in
 					.init(.unsafe([
 						.children: albums
-					]), state: .version(nil))
+					]), state: .valid)
 				}
 				.eraseToAnyPublisher()
 		}

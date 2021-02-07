@@ -11,23 +11,16 @@ import SpotifyWebAPI
 import Combine
 
 public class SpotifyAlbumToken: SpotifyURIPlaylistToken {
-    class NoAlbumID: Error {}
-    
     override class var urlComponent: String { "album" }
     
     override func expand(_ context: Library) -> AnyPlaylist {
         context.spotify.album(self)
     }
-    
-    static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyAlbumToken, Error> {
-        return Future { try playlistID(fromURL: url) }
-            .flatMap { spotify.api.album(Self($0)) }
-            .tryMap { SpotifyAlbumToken(try $0.id.unwrap(orThrow: NoAlbumID())) }
-            .eraseToAnyPublisher()
-    }
 }
 
 public final class SpotifyAlbum: SpotifyURIPlaylist, AnyAlbum {
+	class NoAlbumID: Error {}
+
 	enum Request {
 		case info, tracks, previewImage
 	}
@@ -47,9 +40,21 @@ public final class SpotifyAlbum: SpotifyURIPlaylist, AnyAlbum {
 		mapper.delegate = self
     }
     
+	static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyAlbum, Error> {
+		return Future { try SpotifyAlbumToken.playlistID(fromURL: url) }
+			.flatMap { spotify.api.album(SpotifyAlbumToken($0)) }
+			.tryMap { SpotifyAlbumToken(try $0.id.unwrap(orThrow: NoAlbumID())) }
+			.map { SpotifyAlbum($0, spotify: spotify) }
+			.eraseToAnyPublisher()
+	}
+
     public var contentType: PlaylistContentType { .tracks }
     
     public var icon: Image { Image(systemName: "opticaldisc") }
+	
+	public var id: String { token.id }
+	
+	public var origin: URL? { token.origin }
     
     func offerCache(_ album: SpotifyWebAPI.Album) {
 		mapper.offer(.info, update: read(album))
@@ -58,7 +63,7 @@ public final class SpotifyAlbum: SpotifyURIPlaylist, AnyAlbum {
 	func read(_ album: SpotifyWebAPI.Album) -> PlaylistAttributes.PartialGroupSnapshot {
 		.init(.unsafe([
             .title: album.name
-		]), state: .version(nil))
+		]), state: .valid)
     }
     
     public func bestImageForPreview(_ images: [SpotifyWebAPI.SpotifyImage]) -> URL? {
@@ -109,7 +114,7 @@ extension SpotifyAlbum: RequestMapperDelegate {
 				.map { tracks in
 					.init(.unsafe([
 						.tracks: tracks
-					]), state: .version(nil))
+					]), state: .valid)
 				}
 				.eraseToAnyPublisher()
 		case .previewImage:
@@ -129,7 +134,7 @@ extension SpotifyAlbum: RequestMapperDelegate {
 				.map { (image: NSImage) -> VolatileAttributes<PlaylistAttribute, PlaylistVersion>.PartialGroupSnapshot in
 					.init(.unsafe([
 						.previewImage: image
-					]), state: .version(nil))
+					]), state: .valid)
 				}
 				.eraseError()
 				.eraseToAnyPublisher()

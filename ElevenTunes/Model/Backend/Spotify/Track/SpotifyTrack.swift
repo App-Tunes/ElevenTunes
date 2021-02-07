@@ -87,15 +87,6 @@ public class SpotifyTrackToken: TrackToken, SpotifyURIConvertible {
         return id
     }
     
-    static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyTrackToken, Error> {
-        return Future { try trackID(fromURL: url) }
-            .flatMap {
-                spotify.api.track(SpotifyTrackToken($0)).compactMap(ExistingSpotifyTrack.init)
-            }
-            .map { SpotifyTrackToken($0.id) }
-            .eraseToAnyPublisher()
-    }
-    
     override func expand(_ context: Library) -> AnyTrack {
         SpotifyTrack(self, spotify: context.spotify)
     }
@@ -122,10 +113,24 @@ public final class SpotifyTrack: RemoteTrack {
 
     convenience init(track: DetailedSpotifyTrack, spotify: Spotify) {
 		self.init(SpotifyTrackToken(track.id), spotify: spotify)
-		mapper.offer(.track, update: .init(extractAttributes(from: track), state: .version(nil)))
+		mapper.offer(.track, update: .init(extractAttributes(from: track), state: .valid))
     }
     
+	static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyTrack, Error> {
+		return Future { try SpotifyTrackToken.trackID(fromURL: url) }
+			.flatMap {
+				spotify.api.track(SpotifyTrackToken($0)).compactMap(ExistingSpotifyTrack.init)
+			}
+			.map { SpotifyTrackToken($0.id) }
+			.map { SpotifyTrack($0, spotify: spotify) }
+			.eraseToAnyPublisher()
+	}
+
     public var accentColor: Color { Spotify.color }
+	
+	public var id: String { token.id }
+	
+	public var origin: URL? { token.origin }
 	    
     public func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
         let spotify = context.spotify
@@ -174,7 +179,7 @@ extension SpotifyTrack: RequestMapperDelegate {
 				.map { [unowned self] track in
 					.init(
 						self.extractAttributes(from: DetailedSpotifyTrack.from(track)),
-						state: .version(nil)
+						state: .valid
 					)
 				}
 				.eraseToAnyPublisher()
@@ -183,7 +188,7 @@ extension SpotifyTrack: RequestMapperDelegate {
 				.map { [unowned self] features in
 					.init(
 						self.extractAttributes(from: features),
-						state: .version(nil)
+						state: .valid
 					)
 				}
 				.eraseToAnyPublisher()

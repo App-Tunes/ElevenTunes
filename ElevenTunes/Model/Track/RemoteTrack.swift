@@ -10,11 +10,9 @@ import Combine
 import SwiftUI
 
 protocol RemoteTrack: AnyTrack, RequestMapperDelegate where Snapshot == TrackAttributes.PartialGroupSnapshot {
-	associatedtype Token: TrackToken
 	typealias Requests = RequestMapper<TrackAttribute, TrackVersion, Self>
 
 	var mapper: Requests { get }
-	var token: Token { get }
 }
 
 extension RemoteTrack {
@@ -36,11 +34,4 @@ extension RemoteTrack {
 		
 		mapper.invalidateCaches()
 	}
-	
-	public func `import`(library: AnyLibrary) -> Bool { false }
-
-	public var asToken: TrackToken { token }
-	public var origin: URL? { token.origin }
-
-	public var id: String { token.id }
 }

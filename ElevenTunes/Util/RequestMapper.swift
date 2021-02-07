@@ -94,7 +94,7 @@ class RequestMapper<Attribute: AnyObject & Hashable, Version: Hashable, Delegate
 		
 		// Register unknown as error (don't know how to provide...)
 		// TODO Maybe it would be better to map this elsehow, we'll see
-		self.attributes.updateEmpty(unknown, state: .version(nil))
+		self.attributes.updateEmpty(unknown, state: .valid)
 		
 		// Ask delegate to compute the rest
 		requests.forEach(demandRequest)

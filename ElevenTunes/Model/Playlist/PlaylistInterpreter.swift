@@ -42,15 +42,23 @@ class PlaylistDropInterpreter: DropDelegate {
         let playlist = self.parent
         let context = self.context
         interpreted
-            .map { ContentInterpreter.library(fromContents: $0, name: "Imported Items") }
+            .tryMap { ContentInterpreter.collect(fromContents: $0) }
             .onMain()
             .sink(receiveCompletion: appLogErrors(_:)) { library in
-                if context == .tracks && !library.allPlaylists.isEmpty {
+                if context == .tracks && !library.playlists.isEmpty {
                     // TODO Ask if the user wants to add all tracks of the playlist?
                     return
                 }
                 
-                playlist.import(library: library)
+				do {
+					try playlist.import(library: library)
+				}
+				catch let error {
+					NSAlert.warning(
+						title: "Import Failure",
+						text: String(describing: error)
+					)
+				}
             }
             .store(in: &cancellables)
 

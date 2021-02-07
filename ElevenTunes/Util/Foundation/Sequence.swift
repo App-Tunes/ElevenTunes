@@ -8,7 +8,7 @@
 import Foundation
 
 func flatSequence<T>(first: [T], next: @escaping (T) -> [T]) -> UnfoldSequence<T, [T]> {
-    return sequence(state: first) { state in
+    sequence(state: first) { state in
         guard let object = state.popLast() else {
             return nil
         }

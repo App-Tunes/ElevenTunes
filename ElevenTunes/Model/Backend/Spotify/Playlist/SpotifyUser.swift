@@ -58,12 +58,6 @@ public class SpotifyUserToken: PlaylistToken {
         }
         return id
     }
-
-    static func create(_ spotify: Spotify, fromURL url: URL?) -> AnyPublisher<SpotifyUserToken, Error> {
-        return Future { try url.map { try userID(fromURL: $0) } }
-            .map { SpotifyUserToken($0) }
-            .eraseToAnyPublisher()
-    }
     
     override func expand(_ context: Library) -> AnyPlaylist {
         SpotifyUser(self, spotify: context.spotify)
@@ -95,6 +89,13 @@ public final class SpotifyUser: RemotePlaylist {
 		mapper.delegate = self
     }
 
+	static func create(_ spotify: Spotify, fromURL url: URL?) -> AnyPublisher<SpotifyUser, Error> {
+		return Future { try url.map { try SpotifyUserToken.userID(fromURL: $0) } }
+			.map { SpotifyUserToken($0) }
+			.map { SpotifyUser($0, spotify: spotify) }
+			.eraseToAnyPublisher()
+	}
+
 //    convenience init(_ user: SpotifyWebAPI.SpotifyUser, spotify: Spotify) {
 //        self.init(SpotifyUserToken(user.id), spotify: spotify)
 //        self._attributes.value = SpotifyUser.attributes(of: user.name)
@@ -106,65 +107,16 @@ public final class SpotifyUser: RemotePlaylist {
     public var accentColor: Color { Spotify.color }
     
     public var contentType: PlaylistContentType { .playlists }
+	
+	public var origin: URL? { token.origin }
+	
+	public var id: String { token.id }
     
     static func attributes(of user: SpotifyWebAPI.SpotifyUser) -> TypedDict<PlaylistAttribute> {
         var attributes = TypedDict<PlaylistAttribute>()
         attributes[PlaylistAttribute.title] = user.displayName ?? user.id
         return attributes
     }
-            
-//    public override func load(atLeast mask: PlaylistContentMask) {
-//        contentSet.promise(mask) { promise in
-//            // Tracks will always be []
-//            promise.fulfill(.tracks)
-//
-//            let uri = token.uri
-//            let spotify = self.spotify
-//
-//            if promise.includes(.children) {
-//                let count = 50
-//                let paginationLimit = 100
-//
-//                let playlistsAt = { (offset: Int) in
-//                    uri != nil
-//                        ? spotify.api.userPlaylists(for: uri!, limit: count, offset: offset)
-//                        : spotify.api.currentUserPlaylists(limit: count, offset: offset)
-//                }
-//
-//                playlistsAt(0)
-//                    .unfold(limit: paginationLimit) {
-//                        $0.offset + $0.items.count >= $0.total ? nil
-//                            : playlistsAt($0.offset + count)
-//                    }
-//                    .collect()
-//                    .map { $0.flatMap { $0.items } }
-//                    .map { items in
-//                        items.compactMap { item -> SpotifyPlaylist? in
-//                            SpotifyPlaylist(SpotifyPlaylistToken(item.id), spotify: spotify)
-//                        }
-//                    }
-//                    .onMain()
-//                    .fulfillingAny(.children, of: promise)
-//                    .sink(receiveCompletion: appLogErrors(_:)) { playlists in
-//                        self._children.value = .init(playlists)
-//                    }.store(in: &cancellables)
-//            }
-//
-//            if promise.includesAny([.attributes]) {
-//                let userProfile = uri != nil
-//                    ? spotify.api.userProfile(uri!)
-//                    : spotify.api.currentUserProfile()
-//
-//                userProfile.eraseToAnyPublisher()
-//                    .onMain()
-//                    .fulfillingAny(.attributes, of: promise)
-//                    .sink(receiveCompletion: appLogErrors) { info in
-//                        self._attributes.value = PlaylistAttributesSnapshot(SpotifyUser.attributes(of: info))
-//                    }
-//                    .store(in: &cancellables)
-//            }
-//        }
-//    }
 }
 
 extension SpotifyUser: RequestMapperDelegate {
@@ -179,7 +131,7 @@ extension SpotifyUser: RequestMapperDelegate {
 				: spotify.api.currentUserProfile()
 
 			return userProfile
-				.map { .init(SpotifyUser.attributes(of: $0), state: .version(nil)) }
+				.map { .init(SpotifyUser.attributes(of: $0), state: .valid) }
 				.eraseToAnyPublisher()
 		case .playlists:
 			let count = 50
@@ -206,7 +158,7 @@ extension SpotifyUser: RequestMapperDelegate {
 				.map {
 					.init(.unsafe([
 						.children: $0
-					]), state: .version(nil))
+					]), state: .valid)
 				}
 				.eraseToAnyPublisher()
 		}

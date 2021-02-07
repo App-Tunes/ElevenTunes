@@ -37,7 +37,7 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
         self.contentType = type
 		version = UUID().uuidString
         super.init()
-		_attributes.update(.init(keys: Set(attributes.keys), attributes: attributes, state: .version(version)))
+		_attributes.update(.init(keys: Set(attributes.keys), attributes: attributes, state: .valid))
     }
     
     public required init(from decoder: Decoder) throws {
@@ -55,9 +55,7 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
     }
     
     override func expand(_ context: Library) -> AnyPlaylist { self }
-    
-    var asToken: PlaylistToken { self }
-    
+        
     func refreshVersion() {
         version = UUID().uuidString
     }
@@ -72,7 +70,16 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
 		_attributes.$update.eraseToAnyPublisher()
 	}
 
-    func `import`(library: AnyLibrary) -> Bool {
-        return false  // TODO We can do this bois
+	func `import`(library: UninterpretedLibrary) throws {
+		throw PlaylistImportError.unimportable  // TODO We can do this bois
     }
+}
+
+extension TransientPlaylist: BranchablePlaylist {
+	func store(in playlist: DBPlaylist) throws -> DBPlaylist.Representation {
+		playlist.title = _attributes.snapshot[PlaylistAttribute.title].value
+		playlist.initialSetup()  // Re-read attributes
+		
+		return .none
+	}
 }

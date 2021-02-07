@@ -49,14 +49,16 @@ class LibrarySettingsLevel: SettingsLevel, Codable {
         fileType = "ivorius.eleventunes.library"
         managedObjectContext.automaticallyMergesChangesFromParent = true
     }
+	
+	private(set) lazy var library = Library(managedObjectContext: managedObjectContext, settings: settings)
 
     @Published var settings: LibrarySettingsLevel
     
     override func makeWindowControllers() {
         // Create the SwiftUI view and set the context as the value for the managedObjectContext environment keyPath.
-        // Add `@Environment(\.managedObjectContext)` in the views that will need the context.
-        let library = Library(managedObjectContext: managedObjectContext, settings: settings)
-        let contentView = ContentView(mainPlaylist: Playlist(library.mainPlaylist))
+        // Add `@Environment(\.managedObjectContext)` in the views that will need the context
+		let mainPlaylist = LibraryPlaylist(library: library, playContext: library.playContext)
+        let contentView = ContentView(mainPlaylist: Playlist(mainPlaylist))
             .environment(\.managedObjectContext, self.managedObjectContext!)
             .environment(\.library, library)
             .environment(\.player, library.player)
@@ -85,15 +87,15 @@ class LibrarySettingsLevel: SettingsLevel, Codable {
         updateChangeCount(.changeCleared)
     }
     
-    func `import`(_ dlibrary: AnyLibrary) -> Bool {
+	func `import`(dlibrary: UninterpretedLibrary) throws {
         guard let defaultPlaylistID = settings.defaultPlaylist else {
-            return false
+			throw LibraryPlaylist.ImportError.noDefaultPlaylist
         }
         guard let playlist = try? managedObjectContext.fetch(DBPlaylist.createFetchRequest(id: defaultPlaylistID)).first else {
-            return false
+			throw LibraryPlaylist.ImportError.noDefaultPlaylist
         }
                 
-        return Library.import(dlibrary, to: playlist)
+        try library.import(dlibrary, to: playlist)
     }
 
     override func additionalContent(for absoluteURL: URL!, saveOperation: NSDocument.SaveOperationType) throws -> Any {

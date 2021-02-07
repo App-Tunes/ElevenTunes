@@ -2,38 +2,55 @@
 //  DBPlaylist+CoreDataProperties.swift
 //  ElevenTunes
 //
-//  Created by Lukas Tenbrink on 26.12.20.
+//  Created by Lukas Tenbrink on 25.01.21.
 //
 //
 
 import Foundation
 import CoreData
 
+
 extension DBPlaylist {
-    @nonobjc public class func createFetchRequest() -> NSFetchRequest<DBPlaylist> {
-        return NSFetchRequest<DBPlaylist>(entityName: "DBPlaylist")
-    }
 
-    @nonobjc public class func createFetchRequest(id: UUID) -> NSFetchRequest<DBPlaylist> {
-        let request = self.createFetchRequest()
-        request.predicate = NSPredicate(format: "uuid = %@", id as CVarArg)
-        return request
-    }
+	@nonobjc public class func createFetchRequest() -> NSFetchRequest<DBPlaylist> {
+		return NSFetchRequest<DBPlaylist>(entityName: "DBPlaylist")
+	}
 
-    /// Why? Because objectID may change based on store etc.
-    /// UUID is nice and reliable. It shall never change.
-    @NSManaged public var uuid: UUID
-    @NSManaged public var backend: PlaylistToken?
-    @NSManaged public var backendID: String
+	@nonobjc public class func createFetchRequest(id: UUID) -> NSFetchRequest<DBPlaylist> {
+		let request = self.createFetchRequest()
+		request.predicate = NSPredicate(format: "uuid = %@", id as CVarArg)
+		return request
+	}
+
     @NSManaged public var contentType: PlaylistContentType
-    @NSManaged public var indexed: Bool
-	@NSManaged public var version: String?
-	@NSManaged public var tracksVersion: String?
-	@NSManaged public var childrenVersion: String?
+    @NSManaged public var primaryRepresentation: Representation
     @NSManaged public var title: String?
+    @NSManaged public var uuid: UUID
+    @NSManaged public var artists: NSSet
     @NSManaged public var children: NSOrderedSet
+    @NSManaged public var directoryRepresentation: DBDirectoryPlaylist?
+    @NSManaged public var m3uRepresentation: DBM3UPlaylist?
     @NSManaged public var parent: DBPlaylist?
+    @NSManaged public var spotifyRepresentation: DBSpotifyPlaylist?
     @NSManaged public var tracks: NSOrderedSet
+
+}
+
+// MARK: Generated accessors for artists
+extension DBPlaylist {
+
+    @objc(addArtistsObject:)
+    @NSManaged public func addToArtists(_ value: DBArtist)
+
+    @objc(removeArtistsObject:)
+    @NSManaged public func removeFromArtists(_ value: DBArtist)
+
+    @objc(addArtists:)
+    @NSManaged public func addToArtists(_ values: NSSet)
+
+    @objc(removeArtists:)
+    @NSManaged public func removeFromArtists(_ values: NSSet)
+
 }
 
 // MARK: Generated accessors for children
@@ -103,5 +120,9 @@ extension DBPlaylist {
 
     @objc(removeTracks:)
     @NSManaged public func removeFromTracks(_ values: NSOrderedSet)
+
+}
+
+extension DBPlaylist : Identifiable {
 
 }

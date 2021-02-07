@@ -11,8 +11,8 @@ import UniformTypeIdentifiers
 import Cocoa
 
 enum Content {
-    case playlist(_ playlist: PlaylistToken)
-    case track(_ track: TrackToken)
+    case playlist(_ playlist: AnyPlaylist)
+    case track(_ track: AnyTrack)
 }
 
 class ContentInterpreter {
@@ -21,10 +21,16 @@ class ContentInterpreter {
         case invalidData
     }
     
-    typealias Interpreter = (URL) -> AnyPublisher<Content, Error>?
+    typealias Interpreter = (URL, SettingsLevel) -> AnyPublisher<Content, Error>?
     
     static let types: [UTType] = [.fileURL, .url, .m3uPlaylist]
 
+	let settings: SettingsLevel
+	
+	init(settings: SettingsLevel) {
+		self.settings = settings
+	}
+	
     var interpreters: [Interpreter] = []
     
     func interpret(urls: [URL]) -> AnyPublisher<[Content], Error>? {
@@ -54,7 +60,7 @@ class ContentInterpreter {
     
     func interpret(url: URL) throws -> AnyPublisher<Content, Error> {
         for interpreter in interpreters {
-            if let publisher = interpreter(url) {
+            if let publisher = interpreter(url, settings) {
                 return publisher
             }
         }
@@ -77,9 +83,9 @@ class ContentInterpreter {
         }
     }
     
-    static func collect(fromContents contents: [Content]) -> ([TrackToken], [PlaylistToken]) {
-        var playlists: [PlaylistToken] = []
-        var tracks: [TrackToken] = []
+    static func collect(fromContents contents: [Content]) -> UninterpretedLibrary {
+        var playlists: [AnyPlaylist] = []
+        var tracks: [AnyTrack] = []
         
         for content in contents {
             switch content {
@@ -90,11 +96,6 @@ class ContentInterpreter {
             }
         }
 
-        return (tracks, playlists)
-    }
-    
-    static func library(fromContents contents: [Content], name: String) -> AnyLibrary {
-        let (tracks, playlists) = collect(fromContents: contents)
-        return DirectLibrary(allTracks: tracks, allPlaylists: playlists)
+        return UninterpretedLibrary(tracks: tracks, playlists: playlists)
     }
 }

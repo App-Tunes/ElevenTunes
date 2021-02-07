@@ -9,12 +9,9 @@ import Foundation
 import Combine
 
 protocol RemotePlaylist: AnyPlaylist, RequestMapperDelegate where Snapshot == PlaylistAttributes.PartialGroupSnapshot {
-	associatedtype Token: PlaylistToken
-	
 	typealias Requests = RequestMapper<PlaylistAttribute, PlaylistVersion, Self>
 
 	var mapper: Requests { get }
-	var token: Token { get }
 }
 
 extension RemotePlaylist {
@@ -32,10 +29,7 @@ extension RemotePlaylist {
 		mapper.invalidateCaches()
 	}
 	
-	public func `import`(library: AnyLibrary) -> Bool { false }
-
-	public var asToken: PlaylistToken { token }
-	public var origin: URL? { token.origin }
-
-	public var id: String { token.id }
+	public func `import`(library: UninterpretedLibrary) throws {
+		throw PlaylistImportError.unimportable
+	}
 }

@@ -18,9 +18,12 @@ import Combine
     case hybrid
 }
 
+enum PlaylistImportError: Error {
+	case unimportable, empty
+}
+
 public protocol AnyPlaylist: AnyObject {
     var id: String { get }
-    var asToken: PlaylistToken { get }
 
     var contentType: PlaylistContentType { get }
     
@@ -39,8 +42,7 @@ public protocol AnyPlaylist: AnyObject {
 	/// irrelevant updates.
     var attributes: AnyPublisher<PlaylistAttributes.Update, Never> { get }
 
-    @discardableResult
-    func `import`(library: AnyLibrary) -> Bool
+    func `import`(library: UninterpretedLibrary) throws
 }
 
 extension AnyPlaylist {
@@ -51,23 +53,3 @@ extension AnyPlaylist {
 		attributes.filtered(toJust: attribute)
 	}
 }
-
-class PlaylistBackendTypedCodable: TypedCodable<String> {
-    static let _registry = CodableRegistry<String>()
-        .register(TransientPlaylist.self, for: "transient")
-        .register(DirectoryPlaylistToken.self, for: "directory")
-        .register(M3UPlaylistToken.self, for: "m3u")
-        .register(SpotifyPlaylistToken.self, for: "spotify")
-        .register(SpotifyUserToken.self, for: "spotify-user")
-        .register(SpotifyAlbumToken.self, for: "spotify-album")
-        .register(SpotifyArtistToken.self, for: "spotify-artist")
-
-    override class var registry: CodableRegistry<String> { _registry }
-}
-
-extension NSValueTransformerName {
-    static let playlistBackendName = NSValueTransformerName(rawValue: "PlaylistBackendTransformer")
-}
-
-@objc(PlaylistBackendTransformer)
-class PlaylistBackendTransformer: TypedJSONCodableTransformer<String, PlaylistBackendTypedCodable> {}

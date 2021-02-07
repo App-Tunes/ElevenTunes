@@ -11,6 +11,10 @@ import Combine
 import CombineExt
 
 class LibraryPlaylist: AnyPlaylist {
+	enum ImportError: Error {
+		case noDefaultPlaylist
+	}
+	
     let managedObjectContext: NSManagedObjectContext
     var playContext: PlayContext
 
@@ -35,7 +39,7 @@ class LibraryPlaylist: AnyPlaylist {
             .removeDuplicates()
             .flatMap {
                 $0.map { [weak self] in self!.library!.track(cachedBy: $0) }
-                    .combineLatest()
+                    .combineLatestOrJust()
             }
 			.sink(receiveResult: { [weak self] result in
 				switch result {
@@ -45,8 +49,8 @@ class LibraryPlaylist: AnyPlaylist {
 					self?._attributes.update(.unsafe([
 							.tracks: tracks
 						],
-						state: .version(nil)
-					))
+						state: .valid)
+					)
 				}
 			})
 
@@ -57,7 +61,7 @@ class LibraryPlaylist: AnyPlaylist {
             .flatMap {
                 $0
                     .map { [weak self] in self!.library!.playlist(cachedBy: $0) }
-                    .combineLatest()
+                    .combineLatestOrJust()
             }
             .combineLatest($staticPlaylists.eraseError()).map { $1 + $0 }
 			.sink(receiveResult: { [weak self] result in
@@ -68,7 +72,7 @@ class LibraryPlaylist: AnyPlaylist {
 					self?._attributes.update(.unsafe([
 							.children: children
 						],
-						state: .version(nil)
+						state: .valid
 					))
 				}
 			})
@@ -89,9 +93,7 @@ class LibraryPlaylist: AnyPlaylist {
     var accentColor: Color { .accentColor }
     
     var hasCaches: Bool { false }
-    
-    var asToken: PlaylistToken { fatalError() }
-    
+        
 	func invalidateCaches() {
 		// We have no caches lol
 	}
@@ -114,11 +116,14 @@ class LibraryPlaylist: AnyPlaylist {
         
     var icon: Image { Image(systemName: "house.fill" ) }
             
-    func `import`(library: AnyLibrary) -> Bool {
-        guard let defaultPlaylist = self.library?.defaultPlaylist else {
-            return false
+	func `import`(library: UninterpretedLibrary) throws {
+        guard
+			let defaultPlaylist = self.library?.defaultPlaylist,
+			let _library = self.library
+		else {
+			throw ImportError.noDefaultPlaylist
         }
 
-        return Library.import(library, to: defaultPlaylist)
+		try _library.import(library, to: defaultPlaylist)
     }
 }

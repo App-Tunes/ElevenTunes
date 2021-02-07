@@ -9,165 +9,163 @@ import Foundation
 import CoreData
 
 extension Library {
-    static func existingTracks(forBackends backends: Set<TrackToken>, context: NSManagedObjectContext) throws -> [TrackToken: DBTrack] {
-        let fetchRequest = DBTrack.createFetchRequest()
-        fetchRequest.predicate = .init(format: "backendID IN %@", backends.map { $0.id })
-        let existing = try context.fetch(fetchRequest)
-        let backendFor = { (track: DBTrack) in backends.first { $0.id == track.backendID }! }
-        return Dictionary(uniqueKeysWithValues: existing.map { (backendFor($0), $0) })
-    }
-    
-    static func existingPlaylists(forBackends backends: Set<PlaylistToken>, context: NSManagedObjectContext) throws -> [PlaylistToken: DBPlaylist] {
-        let fetchRequest = DBPlaylist.createFetchRequest()
-        fetchRequest.predicate = .init(format: "backendID IN %@", backends.map { $0.id })
-        let existing = try context.fetch(fetchRequest)
-        let backendFor = { (playlist: DBPlaylist) in backends.first { $0.id == playlist.backendID }! }
-        return Dictionary(uniqueKeysWithValues: existing.map { (backendFor($0), $0) })
-    }
-    
+	enum InterpretationError: Error {
+		case unconvertibleType
+	}
+	
+	static func asBranched(_ track: AnyTrack, insertInto context: NSManagedObjectContext) throws -> BranchingTrack {
+		guard
+			let model = context.persistentStoreCoordinator?.managedObjectModel,
+			let trackModel = model.entitiesByName["DBTrack"]
+		else {
+			fatalError("Failed to find model in MOC")
+		}
 
-    static func convert(_ library: AnyLibrary, context: NSManagedObjectContext) -> ([DBTrack], [DBPlaylist]) {
-        guard let model = context.persistentStoreCoordinator?.managedObjectModel else {
-            fatalError("Failed to find model in MOC")
-        }
-        
-        guard let trackModel = model.entitiesByName["DBTrack"],
-              let playlistModel = model.entitiesByName["DBPlaylist"]
-        else {
-            fatalError("Failed to find track / playlist models in MOC")
-        }
-        
-        // ================= Discover all static content =====================
-        // (all deeper playlists' conversion can be deferred)
-        
-        var allTracks = Set(library.allTracks)
-        var allPlaylists = Set<PlaylistToken>()
-        
-        // Unfold playlists
-        for backend in flatSequence(first: library.allPlaylists, next: { backend in
-            if let backend = backend as? TransientPlaylist {
-				let attributes = backend._attributes.snapshot
-				let tracks = attributes[PlaylistAttribute.tracks].value ?? []
-				allTracks.formUnion(tracks.map(\.asToken))
-				let children = attributes[PlaylistAttribute.children].value ?? []
-				return children.map(\.asToken)
-            }
-            return []
-        }) {
-            allPlaylists.insert(backend)
-        }
+		guard
+			let primary = track as? BranchableTrack
+		else {
+			throw InterpretationError.unconvertibleType
+		}
 
-        // ================= Convert Tracks =====================
-
-        func convertTrack(_ backend: TrackToken) -> DBTrack {
-            if let backend = backend as? MockTrack {
-                let dbTrack = DBTrack(entity: trackModel, insertInto: context)
-				let attributes = backend._attributes.snapshot
-				let secondaryAttributes = attributes.filter(DBTrack.attributeGroups[.info]!.contains)
-				dbTrack.onUpdate((secondaryAttributes, change: []))
-                return dbTrack
-            }
-            
-            let dbTrack = DBTrack(entity: trackModel, insertInto: context)
-            dbTrack.backend = backend
-            dbTrack.backendID = backend.id
-
-            return dbTrack
-        }
-
-        let existingTracks = (try? Self.existingTracks(forBackends: allTracks, context: context)) ?? [:]
-        
-        let tracksByID = Dictionary(uniqueKeysWithValues: allTracks.map { ($0.id, existingTracks[$0] ?? convertTrack($0)) })
-        
-        // ================= Convert Playlists =====================
-        // (tracks are guaranteed at this point)
-        
-        var playlistChildren: [DBPlaylist: [String]] = [:]
-        
-        func convertPlaylist(_ backend: PlaylistToken) -> DBPlaylist {
-            if let backend = backend as? TransientPlaylist {
-                let dbPlaylist = DBPlaylist(entity: playlistModel, insertInto: context)
-                
-                dbPlaylist.contentType = backend.contentType
+		let cache = DBTrack(entity: trackModel, insertInto: context)
+		cache.primaryRepresentation = try primary.store(in: cache)
 				
-				// TODO Cache this somewhere? This seems rather unsafe lol
-				let attributes = backend._attributes.snapshot
-				let tracks = attributes[PlaylistAttribute.tracks].value ?? []
-				let children = attributes[PlaylistAttribute.children].value ?? []
+		return BranchingTrack(cache: cache, primary: track, secondary: [])
+	}
+	
+	func asBranched(_ playlist: AnyPlaylist, insertInto context: NSManagedObjectContext) throws -> BranchingPlaylist {
+		guard
+			let model = context.persistentStoreCoordinator?.managedObjectModel,
+			let playlistModel = model.entitiesByName["DBPlaylist"]
+		else {
+			fatalError("Failed to find model in MOC")
+		}
+		
+		guard
+			let primary = playlist as? BranchablePlaylist
+		else {
+			throw InterpretationError.unconvertibleType
+		}
 
-				dbPlaylist.addToTracks(NSOrderedSet(array: tracks.map { tracksByID[$0.asToken.id]! }))
-				let secondaryAttributes = attributes.filter(DBPlaylist.attributeGroups[.attributes]!.contains)
-				dbPlaylist.onUpdate((secondaryAttributes, []))
-				dbPlaylist.version = ""
-                playlistChildren[dbPlaylist] = children.map { $0.asToken.id }
-                
-                return dbPlaylist
-            }
-            
-            let dbPlaylist = DBPlaylist(entity: playlistModel, insertInto: context)
-            dbPlaylist.backend = backend
-            dbPlaylist.backendID = backend.id
-            
-            return dbPlaylist
-        }
+		let cache = DBPlaylist(entity: playlistModel, insertInto: context)
+		let primaryType = try primary.store(in: cache)
+		cache.primaryRepresentation = primaryType
+		cache.contentType = playlist.contentType
+		
+		return BranchingPlaylist(
+			cache: cache,
+			primary: primaryType != .none ? playlist : JustCachePlaylist(cache, library: self),
+			secondary: [],
+			contentType: playlist.contentType
+		)
+	}
+	
+	/// Inserts the pre-interpreted library into the context, by expanding its contents into connected caches.
+	/// The objects are modified in-place. The return value is the newly inserted objects
+	@discardableResult
+	func insert(_ library: UninterpretedLibrary, to context: NSManagedObjectContext) throws -> InterpretedLibrary {
+		// ================= Discover all static content =====================
+		// (all deeper playlists' conversion can be deferred)
 
-        let existingPlaylists = (try? Self.existingPlaylists(forBackends: allPlaylists, context: context)) ?? [:]
-        let playlistsByID = Dictionary(uniqueKeysWithValues: allPlaylists.map { ($0.id, existingPlaylists[$0] ?? convertPlaylist($0)) })
-        
-        // ================= Update Children =====================
-        // (playlists are guaranteed at this point)
+		let originalTracks = library.tracks
+		
+		var allTracks: [String: AnyTrack] = Dictionary(uniqueKeysWithValues: originalTracks.map {
+			($0.id, $0)
+		})
+		
+		var playlistTracks: [BranchingPlaylist: [String]] = [:]
+		var playlistChildren: [BranchingPlaylist: [BranchingPlaylist]] = [:]
 
-        for (playlist, children) in playlistChildren {
-            playlist.addToChildren(NSOrderedSet(array: children.map { playlistsByID[$0]! }))
-        }
-     
-        // ================= Awake Objects =====================
-        // (awakeFromInsert was before this, but we aren't on main thread, so watchers
-        // didn't have a chance to trigger)
+		let originalPlaylists = try library.playlists
+			.map { try self.asBranched($0, insertInto: context) }
+		
+		for _ in flatSequence(first: originalPlaylists, next: { branched in
+			let playlist = branched.primary
+			
+			if let playlist = playlist as? TransientPlaylist {
+				if let tracks = playlist._attributes.snapshot.attributes[PlaylistAttribute.tracks] {
+					allTracks.merge(Dictionary(uniqueKeysWithValues: tracks.map {
+						($0.id, $0)
+					})) { $1 }
+					
+					playlistTracks[branched] = tracks.map(\.id)
+				}
+				else {
+					playlistTracks[branched] = []
+				}
+				
+				// TODO try should be normal try
+				let children = try! playlist._attributes.snapshot
+					.attributes[PlaylistAttribute.children]?.map {
+						try self.asBranched($0, insertInto: context)
+					} ?? []
+				
+				playlistChildren[branched] = children
+				
+				return children
+			}
+			
+			playlistTracks[branched] = []
+			playlistChildren[branched] = []
+			
+			return []
+		}) {}
+		
+		// TODO Avoid duplication by looking up existing tracks first
+		let convertedTracks = try allTracks.mapValues {
+			try Library.asBranched($0, insertInto: context)
+		}
+		
+		for (playlist, tracks) in playlistTracks {
+			let cache = playlist.cache
+			cache.addToTracks(NSOrderedSet(array: tracks.map { convertedTracks[$0]!.cache }))
+		}
+		
+		for (playlist, children) in playlistChildren {
+			let cache = playlist.cache
+			cache.addToChildren(NSOrderedSet(array: children.map { $0.cache }))
+		}
+		
+		return InterpretedLibrary(
+			tracks: originalTracks.map { convertedTracks[$0.id]! },
+			playlists: originalPlaylists
+		)
+	}
+	
+	/// Import playlists and tracks to a playlist without updating its backends.
+	func `import`(_ library: UninterpretedLibrary, to parent: DBPlaylist) throws {
+		guard !library.tracks.isEmpty || !library.playlists.isEmpty else {
+			throw PlaylistImportError.empty  // lol why bother bro
+		}
+		
+		let contentType = parent.contentType
+		guard library.tracks.isEmpty || contentType != .playlists else {
+			throw PlaylistImportError.unimportable  // Can't contain tracks
+		}
+		
+		guard library.playlists.isEmpty || contentType != .tracks else {
+			throw PlaylistImportError.unimportable  // Can't contain playlists
+		}
+		
+		// Fetch requests auto-update content
+		parent.managedObjectContext!.performChildTask(concurrencyType: .privateQueueConcurrencyType) { context in
+			do {
+				let library = try self.insert(library, to: context)
 
-        playlistsByID.values.forEach { $0.initialSetup() }
-        tracksByID.values.forEach { $0.initialSetup() }
+				if let parent = context.translate(parent) {
+					if !library.playlists.isEmpty {
+						parent.addToChildren(NSOrderedSet(array: library.playlists.map(\.cache)))
+					}
+					if !library.tracks.isEmpty {
+						parent.addToTracks(NSOrderedSet(array: library.tracks.map(\.cache)))
+					}
+				}
 
-        // Finally, gather back what was originally asked
-        return (
-            library.allTracks.map { tracksByID[$0.id]! },
-            library.allPlaylists.map { playlistsByID[$0.id]! }
-        )
-    }
-    
-    static func `import`(_ dlibrary: AnyLibrary, to parent: DBPlaylist) -> Bool {
-        guard !dlibrary.allTracks.isEmpty || !dlibrary.allPlaylists.isEmpty else {
-            return false  // lol why bother bro
-        }
-        
-        let contentType = parent.contentType
-        guard dlibrary.allTracks.isEmpty || contentType != .playlists else {
-            return false  // Can't contain tracks
-        }
-        
-        guard dlibrary.allPlaylists.isEmpty || contentType != .tracks else {
-            return false  // Can't contain playlists
-        }
-        
-        // Fetch requests auto-update content
-        parent.managedObjectContext!.performChildTask(concurrencyType: .privateQueueConcurrencyType) { context in
-            let (tracks, playlists) = Library.convert(
-                dlibrary,
-                context: context
-            )
-
-            let parent = context.translate(parent)
-            parent?.addToChildren(NSOrderedSet(array: playlists))
-            parent?.addToTracks(NSOrderedSet(array: tracks))
-
-            do {
-                try context.save()
-            }
-            catch let error {
-                appLogger.error("Failed import: \(error)")
-            }
-        }
-        
-        return true
-    }
+				try context.save()
+			}
+			catch let error {
+				appLogger.error("Failed import: \(error)")
+			}
+		}
+	}
 }

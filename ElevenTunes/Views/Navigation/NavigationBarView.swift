@@ -8,13 +8,20 @@
 import SwiftUI
 
 struct NavigationBarView: View {
-    @Environment(\.library) private var library: Library!
+	let playlist: Playlist
     
     func createPlaylist(_ playlist: TransientPlaylist) {
-        let success = library.mainPlaylist.import(library: DirectLibrary(allPlaylists: [playlist]))
-        if !success {
-            NSAlert.warning(title: "Creation failure", text: "Failed to create new playlist")
-        }
+		let library = UninterpretedLibrary(playlists: [playlist])
+		
+		do {
+			try self.playlist.backend.import(library: library)
+		}
+		catch let error {
+			NSAlert.warning(
+				title: "Failed to create new playlist",
+				text: String(describing: error)
+			)
+		}
     }
     
     var addFolderViews: some View {
@@ -67,7 +74,7 @@ struct NavigationBarView: View {
             Button {
                 // TODO Library View
             } label: {
-                Image(systemName: "house")
+                Image(systemName: "music.note.house")
             }
             .disabled(true)
 
@@ -103,8 +110,8 @@ struct NavigationBarView: View {
     }
 }
 
-struct NavigationBarView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationBarView()
-    }
-}
+//struct NavigationBarView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NavigationBarView()
+//    }
+//}

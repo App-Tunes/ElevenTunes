@@ -25,7 +25,7 @@ struct NavigatorView: View {
                 .contentShape(Rectangle())
             .onDrop(of: ContentInterpreter.types, delegate: PlaylistDropInterpreter(library.interpreter, parent: directory.backend, context: .playlists))
 
-            NavigationBarView()
+            NavigationBarView(playlist: directory)
         }
     }
 }

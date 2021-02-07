@@ -9,8 +9,7 @@ import Foundation
 import Combine
 
 public enum VolatileState<Version: Hashable>: Equatable {
-	/// The state is valid, and final for the version. If nil, the state is final for all versions.
-	case version(Version?)
+	case valid
 	/// The state has not been fetched yet. A load might be in process,
 	/// or has yet to be scheduled.
 	/// If a value is provided, it is a guess or a cache.
@@ -18,13 +17,6 @@ public enum VolatileState<Version: Hashable>: Equatable {
 	/// An attempt at a fetch was made, but failed. A retry is recommended.
 	/// If a value is provided, it is a guess or a cache.
 	case error(Error)
-	
-	var isVersioned: Bool {
-		if case .version = self {
-			return true
-		}
-		return false
-	}
 	
 	var isKnown: Bool {
 		if case .missing = self {
@@ -40,25 +32,15 @@ public enum VolatileState<Version: Hashable>: Equatable {
 		if case .missing = lhs { return .missing }
 		if case .missing = rhs { return .missing }
 		// Both are versioned. Collapse
-		if case .version(let lversion) = lhs, case .version(let rversion) = rhs {
-			if let lversion = lversion, let rversion = rversion {
-				// Missing because two different versions means one is out of date
-				return lversion == rversion ? lhs : .missing
-			}
-			return .version(lversion ?? rversion)
-		}
-		// Cannot reach here
-		fatalError()
+		return .valid
 	}
 	
 	public static func == (lhs: VolatileState, rhs: VolatileState) -> Bool {
-		if case .version(let lversion) = lhs, case .version(let rversion) = rhs {
-			return lversion == rversion
-		}
 		if case .error(let lerror) = lhs, case .error(let rerror) = rhs {
 			// Eh, good enough.
 			return ObjectIdentifier(lerror as AnyObject) == ObjectIdentifier(rerror as AnyObject)
 		}
+		if case .valid = lhs, case .valid = rhs { return true }
 		if case .missing = lhs, case .missing = rhs { return true }
 		return false
 	}
