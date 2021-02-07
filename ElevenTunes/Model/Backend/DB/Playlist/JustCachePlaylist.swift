@@ -50,7 +50,7 @@ final class JustCachePlaylist: RemotePlaylist {
 	var hasCaches: Bool { false }
 		
 	func `import`(library: UninterpretedLibrary) throws {
-		throw PlaylistImportError.unimportable  // TODO
+		try self.library.import(library, to: cache)
 	}
 	
 	func delete() throws {
