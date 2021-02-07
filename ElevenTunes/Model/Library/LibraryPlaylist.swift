@@ -126,4 +126,8 @@ class LibraryPlaylist: AnyPlaylist {
 
 		try _library.import(library, to: defaultPlaylist)
     }
+	
+	func delete() throws {
+		throw PlaylistDeleteError.undeletable
+	}
 }

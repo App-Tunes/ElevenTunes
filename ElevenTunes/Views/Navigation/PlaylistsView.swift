@@ -9,7 +9,9 @@ import SwiftUI
 import Combine
 
 struct PlaylistSectionView: View {
-    @State var playlist: Playlist
+	let playlist: Playlist
+	let selection: Set<Playlist>
+	
     @State var children: [Playlist] = []
     
     var isTopLevel: Bool = false
@@ -17,9 +19,12 @@ struct PlaylistSectionView: View {
     @ViewBuilder var _body: some View {
         if playlist.backend.contentType != .tracks {
             if isTopLevel {
-                Section(header: PlaylistRowView(playlist: playlist)) {
+                Section(header:
+					PlaylistRowView(playlist: playlist)
+						.contextMenu(menuItems: PlaylistsContextMenu(playlist: playlist, selection: selection).callAsFunction)
+				) {
                     ForEach(children) { child in
-                        PlaylistSectionView(playlist: child)
+						PlaylistSectionView(playlist: child, selection: selection)
                     }
                 }
                 .tag(playlist)
@@ -27,17 +32,19 @@ struct PlaylistSectionView: View {
             else {
                 DisclosureGroup {
                     ForEach(children) { child in
-                        PlaylistSectionView(playlist: child)
+                        PlaylistSectionView(playlist: child, selection: selection)
                     }
                 } label: {
                     PlaylistRowView(playlist: playlist)
+						.contextMenu(menuItems: PlaylistsContextMenu(playlist: playlist, selection: selection).callAsFunction)
                 }
                 .tag(playlist)
             }
         }
         else {
             PlaylistRowView(playlist: playlist)
-                .tag(playlist)
+				.tag(playlist)
+				.contextMenu(menuItems: PlaylistsContextMenu(playlist: playlist, selection: selection).callAsFunction)
         }
     }
     
@@ -54,12 +61,14 @@ struct PlaylistSectionView: View {
 }
 
 struct PlaylistsView: View {
-    @State var directory: Playlist
-    @State var topLevelChildren: [Playlist] = []
+    let directory: Playlist
+	let selection: Set<Playlist>
+
+	@State var topLevelChildren: [Playlist] = []
             
     var body: some View {
 		ForEach(topLevelChildren) { category in
-			PlaylistSectionView(playlist: category, isTopLevel: true)
+			PlaylistSectionView(playlist: category, selection: selection, isTopLevel: true)
 		}
 		
 		Text("") // FIXME WTF, apparently updates aren't executed on empty views???

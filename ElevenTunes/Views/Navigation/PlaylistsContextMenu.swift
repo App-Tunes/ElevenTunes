@@ -12,31 +12,50 @@ import SwiftUI
 import AppKit
 
 class PlaylistsContextMenu {
-    let playlist: AnyPlaylist
-    
-    init(playlist: AnyPlaylist) {
-        self.playlist = playlist
-    }
-    
-    func callAsFunction() -> AnyView {
-        AnyView(VStack {
-            if playlist.hasCaches {
+	let playlists: Set<Playlist>
+	
+	init(playlist: Playlist, selection: Set<Playlist>) {
+		self.playlists = selection.allIfContains(playlist)
+	}
+
+    func callAsFunction() -> some View {
+        VStack {
+			let playlists = self.playlists
+			
+			if playlists.contains(where: \.backend.hasCaches) {
                 Button(action: {
-                    self.playlist.invalidateCaches()
+					playlists.forEach { $0.backend.invalidateCaches() }
                 }) {
                     Image(systemName: "arrow.clockwise")
                     Text("Reload Metadata")
                 }
             }
-            
-            if let origin = playlist.origin {
-                Button(action: {
-                    NSWorkspace.shared.open(origin)
-                }) {
-                    Image(systemName: "link")
-                    Text("Visit Origin")
-                }
-            }
-        })
+			
+			if let playlist = playlists.one, let origin = playlist.backend.origin {
+				Button(action: {
+					NSWorkspace.shared.open(origin)
+				}) {
+					Image(systemName: "link")
+					Text("Visit Origin")
+				}
+			}
+			
+			Button(action: {
+				do {
+					try playlists.forEach {
+						try $0.backend.delete()
+					}
+				}
+				catch let error {
+					NSAlert.warning(
+						title: "Failed to delete playlist",
+						text: String(describing: error)
+					)
+				}
+			}) {
+				Image(systemName: "minus.circle")
+				Text("Delete")
+			}
+        }
     }
 }

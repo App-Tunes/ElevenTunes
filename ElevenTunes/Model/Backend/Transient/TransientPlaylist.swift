@@ -73,6 +73,10 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
 	func `import`(library: UninterpretedLibrary) throws {
 		throw PlaylistImportError.unimportable  // TODO We can do this bois
     }
+	
+	func delete() throws {
+		throw PlaylistDeleteError.undeletable
+	}
 }
 
 extension TransientPlaylist: BranchablePlaylist {

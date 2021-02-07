@@ -8,7 +8,7 @@
 import Foundation
 
 extension Set {
-	func alIfContains(_ element: Element) -> Set {
+	func allIfContains(_ element: Element) -> Set {
 		contains(element) ? self : [element]
 	}
 }

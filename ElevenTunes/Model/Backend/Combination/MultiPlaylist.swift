@@ -86,4 +86,8 @@ class MultiPlaylist: AnyPlaylist {
 	func `import`(library: UninterpretedLibrary) throws {
 		
 	}
+	
+	func delete() throws {
+		throw PlaylistDeleteError.undeletable
+	}
 }

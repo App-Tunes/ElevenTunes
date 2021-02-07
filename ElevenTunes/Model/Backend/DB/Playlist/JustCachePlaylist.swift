@@ -53,6 +53,10 @@ final class JustCachePlaylist: RemotePlaylist {
 		throw PlaylistImportError.unimportable  // TODO
 	}
 	
+	func delete() throws {
+		cache.managedObjectContext!.delete(cache)
+	}
+	
 	var icon: Image {
 		switch cache.contentType {
 		case .tracks:

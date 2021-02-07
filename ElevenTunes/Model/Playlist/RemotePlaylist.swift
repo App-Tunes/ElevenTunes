@@ -32,4 +32,8 @@ extension RemotePlaylist {
 	public func `import`(library: UninterpretedLibrary) throws {
 		throw PlaylistImportError.unimportable
 	}
+	
+	public func delete() throws {
+		throw PlaylistDeleteError.undeletable
+	}
 }

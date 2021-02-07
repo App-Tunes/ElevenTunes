@@ -22,6 +22,10 @@ enum PlaylistImportError: Error {
 	case unimportable, empty
 }
 
+enum PlaylistDeleteError: Error {
+	case undeletable
+}
+
 public protocol AnyPlaylist: AnyObject {
     var id: String { get }
 
@@ -43,6 +47,8 @@ public protocol AnyPlaylist: AnyObject {
     var attributes: AnyPublisher<PlaylistAttributes.Update, Never> { get }
 
     func `import`(library: UninterpretedLibrary) throws
+	
+	func delete() throws
 }
 
 extension AnyPlaylist {

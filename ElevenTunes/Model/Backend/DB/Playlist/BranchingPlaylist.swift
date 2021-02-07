@@ -60,6 +60,11 @@ public class BranchingPlaylist: AnyPlaylist {
 	public func `import`(library: UninterpretedLibrary) throws {
 		try primary.import(library: library)
 	}
+	
+	public func delete() throws {
+		try primary.delete()
+		try secondary.forEach { try $0.delete() }
+	}
 }
 
 extension BranchingPlaylist: Hashable {

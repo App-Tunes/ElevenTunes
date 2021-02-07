@@ -11,28 +11,24 @@ import AppKit
 
 class TracksContextMenu {
     let tracks: [Track]
-    let idx: Int
-    let selected: Set<Int>
     
     init(tracks: [Track], idx: Int, selected: Set<Int>) {
-        self.tracks = tracks
-        self.idx = idx
-        self.selected = selected
+        let sindices = selected.allIfContains(idx)
+		self.tracks = sindices.map { tracks[$0] }
     }
-    
-    lazy var sindices: Set<Int> = selected.alIfContains(idx)
-    lazy var stracks: [Track] = sindices.map { tracks[$0] }
-    
-    func callAsFunction() -> AnyView {
-        AnyView(VStack {
+        
+    func callAsFunction() -> some View {
+        VStack {
+			let tracks = self.tracks
+
             Button(action: {
-				self.stracks.forEach { $0.backend.invalidateCaches() }
+				tracks.forEach { $0.backend.invalidateCaches() }
             }) {
                 Image(systemName: "arrow.clockwise")
                 Text("Reload Metadata")
             }
 
-			if let track = stracks.one, let origin = track.backend.origin {
+			if let track = tracks.one, let origin = track.backend.origin {
                 Button(action: {
                     NSWorkspace.shared.open(origin)
                 }) {
@@ -40,6 +36,6 @@ class TracksContextMenu {
                     Text("Visit Origin")
                 }
             }
-        })
+        }
     }
 }
