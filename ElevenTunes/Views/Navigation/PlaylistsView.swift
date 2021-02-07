@@ -43,8 +43,8 @@ struct PlaylistSectionView: View {
         }
         else {
             PlaylistRowView(playlist: playlist)
-				.tag(playlist)
 				.contextMenu(menuItems: PlaylistsContextMenu(playlist: playlist, selection: selection).callAsFunction)
+				.tag(playlist)
         }
     }
     
