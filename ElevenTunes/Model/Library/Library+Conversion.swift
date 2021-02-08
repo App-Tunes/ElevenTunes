@@ -28,9 +28,14 @@ extension Library {
 		}
 
 		let cache = DBTrack(entity: trackModel, insertInto: context)
-		cache.primaryRepresentation = try primary.store(in: cache)
-				
-		return BranchingTrack(cache: cache, primary: track, secondary: [])
+		let primaryType = try primary.store(in: cache)
+		cache.primaryRepresentation = primaryType
+
+		return BranchingTrack(
+			cache: cache,
+			primary: primaryType != .none ? track : JustCacheTrack(cache),
+			secondary: []
+		)
 	}
 	
 	func asBranched(_ playlist: AnyPlaylist, insertInto context: NSManagedObjectContext) throws -> BranchingPlaylist {
