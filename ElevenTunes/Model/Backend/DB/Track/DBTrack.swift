@@ -33,5 +33,5 @@ public class DBTrack: NSManagedObject {
 
 protocol BranchableTrack {
 	@discardableResult
-	func store(in playlist: DBTrack) throws -> DBTrack.Representation
+	func store(in track: DBTrack) throws -> DBTrack.Representation
 }

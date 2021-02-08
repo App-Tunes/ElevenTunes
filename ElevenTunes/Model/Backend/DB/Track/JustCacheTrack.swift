@@ -48,7 +48,7 @@ class JustCacheTrack: AnyTrack {
 }
 
 extension JustCacheTrack: BranchableTrack {
-	func store(in playlist: DBTrack) throws -> DBTrack.Representation {
+	func store(in track: DBTrack) throws -> DBTrack.Representation {
 		.none
 	}
 }

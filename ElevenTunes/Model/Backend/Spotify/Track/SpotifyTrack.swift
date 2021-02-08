@@ -195,3 +195,22 @@ extension SpotifyTrack: RequestMapperDelegate {
 		}
 	}
 }
+
+extension SpotifyTrack: BranchableTrack {
+	func store(in track: DBTrack) throws -> DBTrack.Representation {
+		guard
+			let context = track.managedObjectContext,
+			let model = context.persistentStoreCoordinator?.managedObjectModel,
+			let trackModel = model.entitiesByName["DBSpotifyTrack"]
+		else {
+			fatalError("Failed to find model in MOC")
+		}
+
+		let cache = DBSpotifyTrack(entity: trackModel, insertInto: context)
+		cache.spotifyID = token.uri
+		
+		track.spotifyRepresentation = cache
+		
+		return .spotify
+	}
+}

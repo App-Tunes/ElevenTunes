@@ -17,6 +17,10 @@ public final class AVTrack: RemoteTrack {
 		case missing
 	}
 	
+	enum AnalysisError: Error {
+		case notImplemented
+	}
+	
 	public let url: URL
 	public let isVideo: Bool
 
@@ -32,6 +36,7 @@ public final class AVTrack: RemoteTrack {
 	init(_ url: URL, isVideo: Bool) {
         self.url = url
 		self.isVideo = isVideo
+		mapper.delegate = self
 		mapper.offer(.url, update: loadURL())
     }
      
@@ -81,19 +86,35 @@ public final class AVTrack: RemoteTrack {
 		}
 			.eraseToAnyPublisher()
 	}
-
-//    public func load(atLeast mask: TrackContentMask) {
-//        contentSet.promise(mask) { promise in
-//            promise.fulfilling(.minimal) {
-//                _attributes.value[TrackAttribute.title] = token.url.lastPathComponent
-//            }
-//        }
-//    }
 }
 
 extension AVTrack: RequestMapperDelegate {
 	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<TrackAttribute, TrackVersion>.PartialGroupSnapshot, Error> {
-		// TODO
-		fatalError()
+		switch request {
+		case .analyze:
+			return Just(.empty(state: .error(AnalysisError.notImplemented))).eraseError().eraseToAnyPublisher()
+		case .url:
+			return Future { self.loadURL() }.eraseToAnyPublisher()
+		}
+	}
+}
+
+extension AVTrack: BranchableTrack {
+	func store(in track: DBTrack) throws -> DBTrack.Representation {
+		guard
+			let context = track.managedObjectContext,
+			let model = context.persistentStoreCoordinator?.managedObjectModel,
+			let trackModel = model.entitiesByName["DBAVTrack"]
+		else {
+			fatalError("Failed to find model in MOC")
+		}
+
+		let cache = DBAVTrack(entity: trackModel, insertInto: context)
+		cache.url = url
+		cache.isVideo = isVideo
+		
+		track.avRepresentation = cache
+		
+		return .av
 	}
 }
