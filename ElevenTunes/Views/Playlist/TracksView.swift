@@ -47,8 +47,10 @@ struct TracksView: View {
             .keyboardShortcut(.return, modifiers: [])
         }
 		.whileActive(playlist.backend.demand([.tracks]))
-		.onReceive(playlist.backend.attribute(PlaylistAttribute.tracks)) {
-			self.tracks ?= ($0.value ?? []).map(Track.init)
+		.onReceive(playlist.backend.attribute(PlaylistAttribute.tracks)) { newValue in
+			withAnimation {
+				self.tracks ?= (newValue.value ?? []).map(Track.init)
+			}
         }
         .frame(minWidth: 200, idealWidth: 250, maxWidth: .infinity, minHeight: 50, idealHeight: 150, maxHeight: .infinity)
         .contentShape(Rectangle())
