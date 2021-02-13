@@ -24,6 +24,8 @@
 		80151EF52593C98500D9539A /* SpotifyDeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80151EF42593C98500D9539A /* SpotifyDeviceView.swift */; };
 		80151EFA2593E1EF00D9539A /* SpotifyDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80151EF92593E1EF00D9539A /* SpotifyDevices.swift */; };
 		801B4F5125A60A0E0053BFC4 /* BSManagedDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 801B4F5025A60A0E0053BFC4 /* BSManagedDocument.m */; };
+		801F7E1A25D84B47004372CE /* NSItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801F7E1925D84B47004372CE /* NSItemProvider.swift */; };
+		801F7E1F25D84F7E004372CE /* PlaylistsExportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801F7E1E25D84F7E004372CE /* PlaylistsExportManager.swift */; };
 		802ACDDD25C08A43007324AF /* JustCachePlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802ACDDC25C08A43007324AF /* JustCachePlaylist.swift */; };
 		802ACDE225C08A5B007324AF /* JustCacheTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802ACDE125C08A5B007324AF /* JustCacheTrack.swift */; };
 		802DBA22259FA9B000EA6DB7 /* Gradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802DBA21259FA9B000EA6DB7 /* Gradient.swift */; };
@@ -214,6 +216,8 @@
 		80151EF92593E1EF00D9539A /* SpotifyDevices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyDevices.swift; sourceTree = "<group>"; };
 		801B4F4F25A60A0E0053BFC4 /* BSManagedDocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BSManagedDocument.h; sourceTree = "<group>"; };
 		801B4F5025A60A0E0053BFC4 /* BSManagedDocument.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BSManagedDocument.m; sourceTree = "<group>"; };
+		801F7E1925D84B47004372CE /* NSItemProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSItemProvider.swift; sourceTree = "<group>"; };
+		801F7E1E25D84F7E004372CE /* PlaylistsExportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsExportManager.swift; sourceTree = "<group>"; };
 		802ACDDC25C08A43007324AF /* JustCachePlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JustCachePlaylist.swift; sourceTree = "<group>"; };
 		802ACDE125C08A5B007324AF /* JustCacheTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JustCacheTrack.swift; sourceTree = "<group>"; };
 		802DBA21259FA9B000EA6DB7 /* Gradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gradient.swift; sourceTree = "<group>"; };
@@ -576,6 +580,7 @@
 				80D653CA25993C72007221D5 /* PlaylistRowView.swift */,
 				802DBA26259FCBA600EA6DB7 /* NavigationSearchBar.swift */,
 				80D6DAB5259E389600879BCF /* PlaylistsContextMenu.swift */,
+				801F7E1E25D84F7E004372CE /* PlaylistsExportManager.swift */,
 				802DBA6125A1175200EA6DB7 /* NavigationBarView.swift */,
 				803BF16D25D0A05D006372F2 /* NewPlaylistView.swift */,
 			);
@@ -931,6 +936,7 @@
 			children = (
 				80ED7690258FF41200B8B9C3 /* Array.swift */,
 				80CD394F25A3CE99002C5A56 /* Dictionary.swift */,
+				801F7E1925D84B47004372CE /* NSItemProvider.swift */,
 				800C1203259A4AC10017A116 /* Set.swift */,
 				808A7630259405F200B0A9CE /* URL.swift */,
 				8082F10125A88BE700B1D157 /* Date.swift */,
@@ -1174,6 +1180,7 @@
 				8054BFF5259F698E00A7035A /* ToolbarView.swift in Sources */,
 				80151EDC2593C53200D9539A /* GeneralSettingsView.swift in Sources */,
 				80AD69A5258829C400192BED /* PlaylistBarView.swift in Sources */,
+				801F7E1F25D84F7E004372CE /* PlaylistsExportManager.swift in Sources */,
 				802E2CB9259601DB00CB91EC /* AppLog.swift in Sources */,
 				80A8C85125BF5B5200F97EF0 /* DBM3UPlaylist+CoreDataProperties.swift in Sources */,
 				802E2CE025960EC400CB91EC /* Document.xcdatamodeld in Sources */,
@@ -1218,6 +1225,7 @@
 				806B27EE258D7D880091EA4D /* Player.swift in Sources */,
 				806B2796258D5D540091EA4D /* PlaylistsView.swift in Sources */,
 				802DBA6225A1175200EA6DB7 /* NavigationBarView.swift in Sources */,
+				801F7E1A25D84B47004372CE /* NSItemProvider.swift in Sources */,
 				80151EF52593C98500D9539A /* SpotifyDeviceView.swift in Sources */,
 				80A8C89125BF734D00F97EF0 /* AnyPlaylistCache.swift in Sources */,
 				80ED7691258FF41200B8B9C3 /* Array.swift in Sources */,

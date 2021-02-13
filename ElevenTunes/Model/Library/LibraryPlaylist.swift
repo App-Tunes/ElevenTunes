@@ -116,6 +116,10 @@ class LibraryPlaylist: AnyPlaylist {
         
     var icon: Image { Image(systemName: "house.fill" ) }
             
+	func movePlaylists(fromIndices: IndexSet, toIndex index: Int) throws {
+		throw PlaylistEditError.notSupported
+	}
+	
 	func `import`(library: UninterpretedLibrary) throws {
         guard
 			let defaultPlaylist = self.library?.defaultPlaylist,

@@ -13,16 +13,23 @@ struct PlaylistSectionView: View {
 	let selection: Set<Playlist>
 	
     @State var children: [Playlist] = []
-    
+    	
     var isTopLevel: Bool = false
-    
+	
+	@ViewBuilder var rowView: some View {
+		PlaylistRowView(playlist: playlist)
+			.contextMenu {
+				PlaylistsContextMenu(playlist: playlist, selection: selection)()
+			}
+			.onDrag {
+				PlaylistsExportManager(playlist: playlist, selection: selection).itemProvider()
+			}
+	}
+	
     @ViewBuilder var _body: some View {
         if playlist.backend.contentType != .tracks {
             if isTopLevel {
-                Section(header:
-					PlaylistRowView(playlist: playlist)
-						.contextMenu(menuItems: PlaylistsContextMenu(playlist: playlist, selection: selection).callAsFunction)
-				) {
+                Section(header: rowView) {
                     ForEach(children) { child in
 						PlaylistSectionView(playlist: child, selection: selection)
                     }
@@ -34,16 +41,12 @@ struct PlaylistSectionView: View {
                     ForEach(children) { child in
                         PlaylistSectionView(playlist: child, selection: selection)
                     }
-                } label: {
-                    PlaylistRowView(playlist: playlist)
-						.contextMenu(menuItems: PlaylistsContextMenu(playlist: playlist, selection: selection).callAsFunction)
-                }
+                } label: { rowView }
                 .tag(playlist)
             }
         }
         else {
-            PlaylistRowView(playlist: playlist)
-				.contextMenu(menuItems: PlaylistsContextMenu(playlist: playlist, selection: selection).callAsFunction)
+			rowView
 				.tag(playlist)
         }
     }

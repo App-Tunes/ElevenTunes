@@ -57,6 +57,10 @@ public class BranchingPlaylist: AnyPlaylist {
 		primary.contentType
 	}
 	
+	public func movePlaylists(fromIndices: IndexSet, toIndex index: Int) throws {
+		try primary.movePlaylists(fromIndices: fromIndices, toIndex: index)
+	}
+	
 	public func `import`(library: UninterpretedLibrary) throws {
 		try primary.import(library: library)
 	}

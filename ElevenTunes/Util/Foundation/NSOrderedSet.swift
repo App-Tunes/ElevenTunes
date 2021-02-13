@@ -11,4 +11,8 @@ extension NSOrderedSet {
     static func +<T>(lhs: NSOrderedSet, rhs: [T]) -> NSOrderedSet {
         return NSOrderedSet(array: lhs.array + rhs)
     }
+	
+	func moving(fromOffsets src: IndexSet, toOffset dst: Int) -> NSOrderedSet {
+		NSOrderedSet(array: array.moving(fromOffsets: src, toOffset: dst))
+	}
 }

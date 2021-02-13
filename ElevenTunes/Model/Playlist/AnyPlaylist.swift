@@ -26,6 +26,11 @@ enum PlaylistDeleteError: Error {
 	case undeletable
 }
 
+enum PlaylistEditError: Error {
+	case notSupported
+	case invalidOperation
+}
+
 public protocol AnyPlaylist: AnyObject {
     var id: String { get }
 
@@ -46,8 +51,9 @@ public protocol AnyPlaylist: AnyObject {
 	/// irrelevant updates.
     var attributes: AnyPublisher<PlaylistAttributes.Update, Never> { get }
 
-    func `import`(library: UninterpretedLibrary) throws
-	
+	func movePlaylists(fromIndices: IndexSet, toIndex index: Int) throws
+	func `import`(library: UninterpretedLibrary) throws
+
 	func delete() throws
 }
 

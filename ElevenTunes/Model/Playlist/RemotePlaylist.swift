@@ -29,6 +29,10 @@ extension RemotePlaylist {
 		mapper.invalidateCaches()
 	}
 	
+	public func movePlaylists(fromIndices: IndexSet, toIndex index: Int) throws {
+		throw PlaylistEditError.notSupported
+	}
+	
 	public func `import`(library: UninterpretedLibrary) throws {
 		throw PlaylistImportError.unimportable
 	}

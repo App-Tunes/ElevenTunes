@@ -83,8 +83,12 @@ class MultiPlaylist: AnyPlaylist {
 		fatalError() // TODO
 	}
 	
+	func movePlaylists(fromIndices: IndexSet, toIndex index: Int) throws {
+		throw PlaylistEditError.notSupported
+	}
+	
 	func `import`(library: UninterpretedLibrary) throws {
-		
+		throw PlaylistImportError.unimportable
 	}
 	
 	func delete() throws {
