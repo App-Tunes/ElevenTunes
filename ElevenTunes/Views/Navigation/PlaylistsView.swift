@@ -8,79 +8,18 @@
 import SwiftUI
 import Combine
 
-struct PlaylistSectionView: View {
-	let playlist: Playlist
-	let selection: Set<Playlist>
-	
-    @State var children: [Playlist] = []
-    	
-    var isTopLevel: Bool = false
-	
-	@ViewBuilder var rowView: some View {
-		PlaylistRowView(playlist: playlist)
-			.contextMenu {
-				PlaylistsContextMenu(playlist: playlist, selection: selection)()
-			}
-			.onDrag {
-				PlaylistsExportManager(playlist: playlist, selection: selection).itemProvider()
-			}
+struct PlaylistsView: NSViewControllerRepresentable {
+    let directory: Playlist
+	let selectionObserver: (Set<Playlist>) -> Void
+            
+	func makeNSViewController(context: Context) -> PlaylistsViewController {
+		PlaylistsViewController(directory, selectionObserver: selectionObserver)
 	}
 	
-    @ViewBuilder var _body: some View {
-        if playlist.backend.contentType != .tracks {
-            if isTopLevel {
-                Section(header: rowView) {
-                    ForEach(children) { child in
-						PlaylistSectionView(playlist: child, selection: selection)
-                    }
-                }
-                .tag(playlist)
-            }
-            else {
-                DisclosureGroup {
-                    ForEach(children) { child in
-                        PlaylistSectionView(playlist: child, selection: selection)
-                    }
-                } label: { rowView }
-                .tag(playlist)
-            }
-        }
-        else {
-			rowView
-				.tag(playlist)
-        }
-    }
-    
-    var body: some View {
-        _body
-			.id(playlist.id)
-			.whileActive(playlist.backend.demand([PlaylistAttribute.children]))
-			.onReceive(playlist.backend.attribute(PlaylistAttribute.children)) { newValue in
-				withAnimation {
-					children ?= (newValue.value ?? []).map(Playlist.init)
-				}
-			}
-    }
-}
-
-struct PlaylistsView: View {
-    let directory: Playlist
-	let selection: Set<Playlist>
-
-	@State var topLevelChildren: [Playlist] = []
-            
-    var body: some View {
-		ForEach(topLevelChildren) { category in
-			PlaylistSectionView(playlist: category, selection: selection, isTopLevel: true)
-		}
-		
-		Text("") // FIXME WTF, apparently updates aren't executed on empty views???
-			.whileActive(directory.backend.demand([PlaylistAttribute.children]))
-			.onReceive(directory.backend.attribute(PlaylistAttribute.children)) {
-				topLevelChildren ?= ($0.value ?? []).map(Playlist.init)
-			}
-			.frame(minWidth: 0, maxWidth: 800, maxHeight: .infinity, alignment: .leading)
-   }
+	func updateNSViewController(_ nsViewController: PlaylistsViewController, context: Context) {
+		setIfDifferent(nsViewController, \.directory, directory)
+		nsViewController.selectionObserver = selectionObserver
+	}
 }
 
 //struct PlaylistsView_Previews: PreviewProvider {

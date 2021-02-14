@@ -49,7 +49,7 @@ struct TracksView: View {
 		.whileActive(playlist.backend.demand([.tracks]))
 		.onReceive(playlist.backend.attribute(PlaylistAttribute.tracks)) { newValue in
 			withAnimation {
-				self.tracks ?= (newValue.value ?? []).map(Track.init)
+				setIfDifferent(self, \.tracks, (newValue.value ?? []).map(Track.init))
 			}
         }
         .frame(minWidth: 200, idealWidth: 250, maxWidth: .infinity, minHeight: 50, idealHeight: 150, maxHeight: .infinity)

@@ -65,12 +65,12 @@ struct TrackCellView: View {
         .opacity(hasBasicInfo ? 1 : 0.5)
 		.whileActive(track.backend.demand([.title, .bpm, .key, .album, .artists]))
 		.onReceive(track.backend.attributes) { (snapshot, _) in
-			hasBasicInfo ?= snapshot[TrackAttribute.title].state == .valid
-			title ?= snapshot[TrackAttribute.title].value
-			tempo ?= snapshot[TrackAttribute.bpm].value
-			key ?= snapshot[TrackAttribute.key].value
-			album ?= snapshot[TrackAttribute.album].value.map(Playlist.init)
-			artists ?= snapshot[TrackAttribute.artists].value?.map(Playlist.init) ?? []
+			setIfDifferent(self, \.hasBasicInfo, snapshot[TrackAttribute.title].state == .valid)
+			setIfDifferent(self, \.title, snapshot[TrackAttribute.title].value)
+			setIfDifferent(self, \.tempo, snapshot[TrackAttribute.bpm].value)
+			setIfDifferent(self, \.key, snapshot[TrackAttribute.key].value)
+			setIfDifferent(self, \.album, snapshot[TrackAttribute.album].value.map(Playlist.init))
+			setIfDifferent(self, \.artists, snapshot[TrackAttribute.artists].value?.map(Playlist.init) ?? [])
 		}
     }
 }

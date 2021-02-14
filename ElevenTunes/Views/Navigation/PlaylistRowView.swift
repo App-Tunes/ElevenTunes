@@ -39,9 +39,13 @@ struct PlaylistRowView: View {
                 Text(title.value ?? "...")
                     .opacity(0.5)
             }
+			
+			Spacer()
         }
 		.whileActive(playlist.backend.demand([.title]))
-		.onReceive(playlist.backend.attribute(PlaylistAttribute.title)) { title ?= $0 }
+		.onReceive(playlist.backend.attribute(PlaylistAttribute.title)) {
+			setIfDifferent(self, \.title, $0)
+		}
 		.frame(height: 15)
     }
 }

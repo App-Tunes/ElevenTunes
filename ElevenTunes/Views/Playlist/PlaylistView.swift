@@ -34,7 +34,7 @@ struct PlaylistView: View {
         .listStyle(DefaultListStyle())
 		.whileActive(playlist.backend.demand([.tracks]))
 		.onReceive(playlist.backend.attribute(PlaylistAttribute.tracks)) {
-			state ?= $0.state
+			setIfDifferent(self, \.state, $0.state)
 		}
     }
 }

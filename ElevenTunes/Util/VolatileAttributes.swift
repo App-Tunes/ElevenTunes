@@ -57,6 +57,10 @@ public struct VolatileSnapshot<Value, Version: Hashable> {
 		self.state = state
 	}
 	
+	func map<T>(_ fun: (Value) -> T) -> VolatileSnapshot<T, Version> {
+		.init(value.map(fun), state: state)
+	}
+
 	static func missing(_ value: Value? = nil) -> VolatileSnapshot {
 		.init(value, state: .missing)
 	}
