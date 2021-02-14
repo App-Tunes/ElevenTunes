@@ -19,6 +19,18 @@ class PlaylistsExportManager: NSObject {
 	init(playlist: Playlist, selection: Set<Playlist>) {
 		self.playlists = selection.allIfContains(playlist)
 	}
+	
+	static func read(fromPasteboard pasteboard: NSPasteboard, context: NSManagedObjectContext) -> Set<DBPlaylist>? {
+		guard
+			let data = pasteboard.data(forType: .init(rawValue: Self.playlistsIdentifier)),
+			let url = URL(dataRepresentation: data, relativeTo: nil),
+			let playlist = context.read(uri: url, as: DBPlaylist.self)
+		else {
+			return nil
+		}
+		
+		return [playlist]
+	}
 
 	func itemProvider() -> NSItemProvider {
 		let provider = NSItemProvider()
@@ -39,7 +51,7 @@ class PlaylistsExportManager: NSObject {
 
 extension PlaylistsExportManager: NSPasteboardWriting {
 	func writableTypes(for pasteboard: NSPasteboard) -> [NSPasteboard.PasteboardType] {
-		[.URL]
+		[.init(rawValue: Self.playlistsIdentifier)]
 	}
 	
 	func pasteboardPropertyList(forType type: NSPasteboard.PasteboardType) -> Any? {

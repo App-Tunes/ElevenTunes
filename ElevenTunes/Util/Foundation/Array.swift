@@ -37,12 +37,7 @@ extension Array {
 
         return result
     }
-    
-    func explodeMap<T>(_ map: (Element) -> T?) -> [T]? {
-        let map = compactMap(map)
-        return map.count == count ? map : nil
-    }
-	
+    	
 	func moving(fromOffsets src: IndexSet, toOffset dst: Int) -> [Element] {
 		var copy = self
 		copy.move(fromOffsets: src, toOffset: dst)

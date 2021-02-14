@@ -24,14 +24,32 @@ extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
 
 	func outlineView(_ outlineView: NSOutlineView, validateDrop info: NSDraggingInfo, proposedItem item: Any?, proposedChildIndex index: Int) -> NSDragOperation {
 		let pasteboard = info.draggingPasteboard
+		let item = self.item(raw: item)
 
-		// Includes URL which might be a local one
+		if pasteboard.canReadItem(withDataConformingToTypes: [PlaylistsExportManager.playlistsIdentifier]) {
+			return item.playlist.contentType != .tracks ? .move : []
+		}
+		
 		return library.interpreter.canInterpret(pasteboard: pasteboard) ? .copy : []
 	}
 	
 	func outlineView(_ outlineView: NSOutlineView, acceptDrop info: NSDraggingInfo, item: Any?, childIndex index: Int) -> Bool {
 		let pasteboard = info.draggingPasteboard
 		let item = self.item(raw: item)
+
+		if let playlists = PlaylistsExportManager.read(fromPasteboard: pasteboard, context: library.managedObjectContext) {
+			guard let parent = playlists.explodeMap({ $0.parent })?.one else {
+				return false  // TODO Multiple sources, can't simply rearrange
+			}
+			
+			guard let indices = playlists.explodeMap({ parent.children.index(of: $0) }) else {
+				return false // TODO Somehow playlists not in parent?
+			}
+			
+			parent.children = parent.children.moving(fromOffsets: IndexSet(indices), toOffset: index)
+			
+			return true
+		}
 
 		return library.interpreter.interpret(pasteboard: pasteboard)?
 			.map(ContentInterpreter.collect)

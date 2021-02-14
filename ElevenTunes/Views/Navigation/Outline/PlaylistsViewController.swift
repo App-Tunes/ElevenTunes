@@ -49,5 +49,6 @@ class PlaylistsViewController: NSViewController {
         super.viewDidLoad()
 		
 		outlineView.registerForDraggedTypes(ContentInterpreter.types.map { .init(rawValue: $0.identifier ) })
+		outlineView.registerForDraggedTypes([.init(PlaylistsExportManager.playlistsIdentifier)])
     }
 }

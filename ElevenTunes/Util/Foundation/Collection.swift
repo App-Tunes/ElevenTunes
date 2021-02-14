@@ -13,6 +13,11 @@ extension Collection {
 		indices.contains(index) ? self[index] : nil
 	}
 	
+	func explodeMap<T>(_ map: (Element) -> T?) -> [T]? {
+		let map = compactMap(map)
+		return map.count == count ? map : nil
+	}
+
 	var one : Element? {
 		count == 1 ? first! : nil
 	}
