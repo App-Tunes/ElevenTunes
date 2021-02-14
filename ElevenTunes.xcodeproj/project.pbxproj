@@ -416,6 +416,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8010009825D9B96500784E3A /* Outline */ = {
+			isa = PBXGroup;
+			children = (
+				806B2795258D5D540091EA4D /* PlaylistsView.swift */,
+				804D3BFF25D93A5E00705D42 /* PlaylistsViewController.swift */,
+				804D3C0625D93BAD00705D42 /* PlaylistsViewController+Outline.swift */,
+				804D3C0B25D94D2900705D42 /* PlaylistsViewController+Hierarchy.swift */,
+				804D3C0025D93A5E00705D42 /* PlaylistsViewController.xib */,
+			);
+			path = Outline;
+			sourceTree = "<group>";
+		};
 		80151EE32593C91F00D9539A /* Spotify */ = {
 			isa = PBXGroup;
 			children = (
@@ -594,11 +606,7 @@
 			children = (
 				80AD6992258828B300192BED /* NavigatorView.swift */,
 				802DBA31259FDA9900EA6DB7 /* Wrappers.swift */,
-				806B2795258D5D540091EA4D /* PlaylistsView.swift */,
-				804D3BFF25D93A5E00705D42 /* PlaylistsViewController.swift */,
-				804D3C0625D93BAD00705D42 /* PlaylistsViewController+Outline.swift */,
-				804D3C0B25D94D2900705D42 /* PlaylistsViewController+Hierarchy.swift */,
-				804D3C0025D93A5E00705D42 /* PlaylistsViewController.xib */,
+				8010009825D9B96500784E3A /* Outline */,
 				80D653CA25993C72007221D5 /* PlaylistRowView.swift */,
 				802DBA26259FCBA600EA6DB7 /* NavigationSearchBar.swift */,
 				80D6DAB5259E389600879BCF /* PlaylistsContextMenu.swift */,
