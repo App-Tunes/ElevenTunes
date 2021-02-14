@@ -6,10 +6,12 @@
 //
 
 import Cocoa
+import Combine
 
 class PlaylistsViewController: NSViewController {
 	@IBOutlet weak var outlineView: NSOutlineView! = nil
 		
+	var library: Library
 	var directory: Playlist {
 		didSet {
 			directoryItem = Item(playlist: directory.backend, parent: nil, delegate: self)
@@ -27,8 +29,11 @@ class PlaylistsViewController: NSViewController {
 	
 	var dummyPlaylist: Item!
 	
-	init(_ directory: Playlist, selectionObserver: @escaping (Set<Playlist>) -> Void) {
+	var cancellables = Set<AnyCancellable>()
+	
+	init(_ directory: Playlist, library: Library, selectionObserver: @escaping (Set<Playlist>) -> Void) {
 		self.directory = directory
+		self.library = library
 		self.selectionObserver = selectionObserver
 		super.init(nibName: nil, bundle: .main)
 		directoryItem = Item(playlist: directory.backend, parent: nil, delegate: self)
@@ -42,5 +47,7 @@ class PlaylistsViewController: NSViewController {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
+		
+		outlineView.registerForDraggedTypes(ContentInterpreter.types.map { .init(rawValue: $0.identifier ) })
     }
 }

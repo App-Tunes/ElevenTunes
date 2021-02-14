@@ -23,7 +23,7 @@ class ContentInterpreter {
     
     typealias Interpreter = (URL, SettingsLevel) -> AnyPublisher<Content, Error>?
     
-    static let types: [UTType] = [.fileURL, .url, .m3uPlaylist]
+	static let types: [UTType] = [.fileURL, .url, .m3uPlaylist]
 
 	let settings: SettingsLevel
 	

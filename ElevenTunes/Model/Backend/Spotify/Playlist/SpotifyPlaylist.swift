@@ -139,3 +139,22 @@ extension SpotifyPlaylist: RequestMapperDelegate {
 		}
 	}
 }
+
+extension SpotifyPlaylist: BranchablePlaylist {
+	func store(in playlist: DBPlaylist) throws -> DBPlaylist.Representation {
+		guard
+			let context = playlist.managedObjectContext,
+			let model = context.persistentStoreCoordinator?.managedObjectModel,
+			let playlistModel = model.entitiesByName["DBSpotifyPlaylist"]
+		else {
+			fatalError("Failed to find model in MOC")
+		}
+
+		let cache = DBSpotifyPlaylist(entity: playlistModel, insertInto: context)
+		cache.spotifyID = token.uri
+		
+		playlist.spotifyRepresentation = cache
+		
+		return .spotify
+	}
+}

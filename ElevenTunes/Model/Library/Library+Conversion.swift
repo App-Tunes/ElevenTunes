@@ -10,7 +10,7 @@ import CoreData
 
 extension Library {
 	enum InterpretationError: Error {
-		case unconvertibleType
+		case unconvertibleType(type: Any)
 	}
 	
 	static func asBranched(_ track: AnyTrack, insertInto context: NSManagedObjectContext) throws -> BranchingTrack {
@@ -24,7 +24,7 @@ extension Library {
 		guard
 			let primary = track as? BranchableTrack
 		else {
-			throw InterpretationError.unconvertibleType
+			throw InterpretationError.unconvertibleType(type: track)
 		}
 
 		let cache = DBTrack(entity: trackModel, insertInto: context)
@@ -49,7 +49,7 @@ extension Library {
 		guard
 			let primary = playlist as? BranchablePlaylist
 		else {
-			throw InterpretationError.unconvertibleType
+			throw InterpretationError.unconvertibleType(type: playlist)
 		}
 
 		let cache = DBPlaylist(entity: playlistModel, insertInto: context)
