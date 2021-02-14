@@ -12,7 +12,3 @@ extension Set {
 		contains(element) ? self : [element]
 	}
 }
-
-extension Collection {
-    var one: Element? { count == 1 ? first : nil }
-}
