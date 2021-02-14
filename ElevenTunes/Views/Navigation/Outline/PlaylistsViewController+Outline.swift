@@ -25,7 +25,7 @@ extension PlaylistsViewController: NSOutlineViewDelegate {
 		let isTopLevel = item.parent == directoryItem
 		
 		if let view = outlineView.makeView(withIdentifier: CellIdentifiers.PlaylistCell, owner: nil) as? PlaylistRowNSView {
-			let content = PlaylistRowView(playlist: Playlist(item.playlist))
+			let content = PlaylistRowView(playlist: Playlist(item.playlist), isTopLevel: isTopLevel)
 			
 			if let hostingView = view.hostingView {
 				hostingView.rootView = content
@@ -47,6 +47,10 @@ extension PlaylistsViewController: NSOutlineViewDelegate {
 	
 	func outlineView(_ outlineView: NSOutlineView, heightOfRowByItem item: Any) -> CGFloat {
 		25
+	}
+	
+	func outlineView(_ outlineView: NSOutlineView, isGroupItem raw: Any) -> Bool {
+		item(raw: raw).parent == directoryItem
 	}
 	
 	func outlineViewItemDidExpand(_ notification: Notification) {

@@ -9,9 +9,10 @@ import SwiftUI
 
 struct PlaylistRowView: View {
     let playlist: Playlist
-
+	let isTopLevel: Bool
+	
 	@State var title: PlaylistAttributes.ValueSnapshot<String> = .missing()
-    
+	
     var body: some View {
         HStack {
 			if title.state != .valid {
@@ -25,10 +26,7 @@ struct PlaylistRowView: View {
             }
             else {
                 playlist.backend.icon
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
                     .foregroundColor(playlist.backend.accentColor)
-                    .frame(width: 15, height: 15)
             }
 
 			if title.state == .valid {
@@ -42,6 +40,9 @@ struct PlaylistRowView: View {
 			
 			Spacer()
         }
+		.font(isTopLevel ? .system(size: 11, weight: .bold, design: .default) : .system(.body, design: .default))
+		.saturation(isTopLevel ? 0 : 1)
+		.opacity(isTopLevel ? 0.7 : 1)
 		.whileActive(playlist.backend.demand([.title]))
 		.onReceive(playlist.backend.attribute(PlaylistAttribute.title)) {
 			setIfDifferent(self, \.title, $0)
