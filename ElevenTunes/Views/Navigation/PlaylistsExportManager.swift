@@ -7,11 +7,15 @@
 
 import Foundation
 
-class PlaylistsExportManager {
+class PlaylistsExportManager: NSObject {
 	public static let playlistsIdentifier = "eleventunes.playlists"
 	
 	let playlists: Set<Playlist>
 	
+	init(playlists: Set<Playlist>) {
+		self.playlists = playlists
+	}
+
 	init(playlist: Playlist, selection: Set<Playlist>) {
 		self.playlists = selection.allIfContains(playlist)
 	}
@@ -30,5 +34,19 @@ class PlaylistsExportManager {
 		provider.registerDummyIfNeeded()
 		
 		return provider
+	}
+}
+
+extension PlaylistsExportManager: NSPasteboardWriting {
+	func writableTypes(for pasteboard: NSPasteboard) -> [NSPasteboard.PasteboardType] {
+		[.URL]
+	}
+	
+	func pasteboardPropertyList(forType type: NSPasteboard.PasteboardType) -> Any? {
+		if let dragged = playlists.map(\.backend) as? [BranchingPlaylist] {
+			return dragged.map(\.cache.objectID).map { $0.uriRepresentation().dataRepresentation }
+		}
+		
+		return nil
 	}
 }

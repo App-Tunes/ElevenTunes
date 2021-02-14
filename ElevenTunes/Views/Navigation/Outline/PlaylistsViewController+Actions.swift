@@ -16,13 +16,16 @@ extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
 		return PlaylistActions(playlists: Set(items.map { Playlist($0.playlist) })).makeMenu()
 	}
 	
-//	func outlineView(_ outlineView: NSOutlineView, pasteboardWriterForItem item: Any) -> NSPasteboardWriting? {
-//		return (item as? Item)?.asPlaylist.map(Library.shared.export().pasteboardItem)
-//	}
+	func outlineView(_ outlineView: NSOutlineView, pasteboardWriterForItem item: Any) -> NSPasteboardWriting? {
+		let item = self.item(raw: item)
+
+		return PlaylistsExportManager(playlists: [Playlist(item.playlist)])
+	}
 
 	func outlineView(_ outlineView: NSOutlineView, validateDrop info: NSDraggingInfo, proposedItem item: Any?, proposedChildIndex index: Int) -> NSDragOperation {
 		let pasteboard = info.draggingPasteboard
 
+		// Includes URL which might be a local one
 		return library.interpreter.canInterpret(pasteboard: pasteboard) ? .copy : []
 	}
 	

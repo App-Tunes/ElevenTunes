@@ -53,8 +53,6 @@ extension PlaylistsViewController: NSOutlineViewDelegate {
 		item(raw: raw).parent == directoryItem
 	}
 	
-	
-	
 	func outlineViewItemDidExpand(_ notification: Notification) {
 		let item = self.item(raw: notification.userInfo!["NSObject"]!)
 		item.isDemanding = true
