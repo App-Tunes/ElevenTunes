@@ -47,18 +47,15 @@ class PlaylistsExportManager: NSObject {
 		
 		return provider
 	}
-}
-
-extension PlaylistsExportManager: NSPasteboardWriting {
-	func writableTypes(for pasteboard: NSPasteboard) -> [NSPasteboard.PasteboardType] {
-		[.init(rawValue: Self.playlistsIdentifier)]
-	}
 	
-	func pasteboardPropertyList(forType type: NSPasteboard.PasteboardType) -> Any? {
-		if let dragged = playlists.map(\.backend) as? [BranchingPlaylist] {
-			return dragged.map(\.cache.objectID).map { $0.uriRepresentation().dataRepresentation }
+	func pasteboardItem() -> NSPasteboardItem {
+		let item = NSPasteboardItem()
+		
+		if let dragged = playlists.map(\.backend) as? [BranchingPlaylist], let playlist = dragged.one {
+			// TODO Allow dragging more than one
+			item.setData(playlist.cache.objectID.uriRepresentation().dataRepresentation, forType: .init(Self.playlistsIdentifier))
 		}
 		
-		return nil
+		return item
 	}
 }
