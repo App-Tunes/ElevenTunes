@@ -95,7 +95,7 @@ class LibrarySettingsLevel: SettingsLevel, Codable {
 			throw LibraryPlaylist.ImportError.noDefaultPlaylist
         }
                 
-        try library.import(dlibrary, to: playlist)
+        try library.import(dlibrary, to: playlist, atIndex: nil)
     }
 
     override func additionalContent(for absoluteURL: URL!, saveOperation: NSDocument.SaveOperationType) throws -> Any {

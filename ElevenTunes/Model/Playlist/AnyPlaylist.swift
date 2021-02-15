@@ -51,8 +51,7 @@ public protocol AnyPlaylist: AnyObject {
 	/// irrelevant updates.
     var attributes: AnyPublisher<PlaylistAttributes.Update, Never> { get }
 
-	func movePlaylists(fromIndices: IndexSet, toIndex index: Int) throws
-	func `import`(library: UninterpretedLibrary) throws
+	func `import`(library: UninterpretedLibrary, toIndex index: Int?) throws
 
 	func delete() throws
 }

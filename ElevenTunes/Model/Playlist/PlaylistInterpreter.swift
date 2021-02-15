@@ -51,7 +51,7 @@ class PlaylistDropInterpreter: DropDelegate {
                 }
                 
 				do {
-					try playlist.import(library: library)
+					try playlist.import(library: library, toIndex: nil)
 				}
 				catch let error {
 					NSAlert.warning(

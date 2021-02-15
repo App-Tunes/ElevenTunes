@@ -53,8 +53,8 @@ final class JustCachePlaylist: RemotePlaylist {
 		cache.children = cache.children.moving(fromOffsets: fromIndices, toOffset: index)
 	}
 	
-	func `import`(library: UninterpretedLibrary) throws {
-		try self.library.import(library, to: cache)
+	func `import`(library: UninterpretedLibrary, toIndex index: Int?) throws {
+		try self.library.import(library, to: cache, atIndex: index)
 	}
 	
 	func delete() throws {

@@ -33,7 +33,7 @@ extension RemotePlaylist {
 		throw PlaylistEditError.notSupported
 	}
 	
-	public func `import`(library: UninterpretedLibrary) throws {
+	public func `import`(library: UninterpretedLibrary, toIndex index: Int?) throws {
 		throw PlaylistImportError.unimportable
 	}
 	

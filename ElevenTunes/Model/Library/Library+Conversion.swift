@@ -138,7 +138,7 @@ extension Library {
 	}
 	
 	/// Import playlists and tracks to a playlist without updating its backends.
-	func `import`(_ library: UninterpretedLibrary, to parent: DBPlaylist) throws {
+	func `import`(_ library: UninterpretedLibrary, to parent: DBPlaylist, atIndex index: Int?) throws {
 		guard !library.tracks.isEmpty || !library.playlists.isEmpty else {
 			throw PlaylistImportError.empty  // lol why bother bro
 		}
@@ -152,6 +152,10 @@ extension Library {
 			throw PlaylistImportError.unimportable  // Can't contain playlists
 		}
 		
+		guard index == nil || library.tracks.isEmpty || library.playlists.isEmpty else {
+			throw PlaylistImportError.unimportable  // Kinda weird, needs work, but for now it'll work
+		}
+
 		// Fetch requests auto-update content
 		parent.managedObjectContext!.performChildTask(concurrencyType: .privateQueueConcurrencyType) { context in
 			do {
@@ -159,10 +163,10 @@ extension Library {
 
 				if let parent = context.translate(parent) {
 					if !library.playlists.isEmpty {
-						parent.addToChildren(NSOrderedSet(array: library.playlists.map(\.cache)))
+						parent.children = NSOrderedSet(array: parent.children.array.inserting(contentsOf: library.playlists.map(\.cache), at: index))
 					}
 					if !library.tracks.isEmpty {
-						parent.addToTracks(NSOrderedSet(array: library.tracks.map(\.cache)))
+						parent.tracks = NSOrderedSet(array: parent.tracks.array.inserting(contentsOf: library.tracks.map(\.cache), at: index))
 					}
 				}
 

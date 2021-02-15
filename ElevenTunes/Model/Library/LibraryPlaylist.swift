@@ -120,7 +120,7 @@ class LibraryPlaylist: AnyPlaylist {
 		throw PlaylistEditError.notSupported
 	}
 	
-	func `import`(library: UninterpretedLibrary) throws {
+	func `import`(library: UninterpretedLibrary, toIndex index: Int?) throws {
         guard
 			let defaultPlaylist = self.library?.defaultPlaylist,
 			let _library = self.library
@@ -128,7 +128,7 @@ class LibraryPlaylist: AnyPlaylist {
 			throw ImportError.noDefaultPlaylist
         }
 
-		try _library.import(library, to: defaultPlaylist)
+		try _library.import(library, to: defaultPlaylist, atIndex: index)
     }
 	
 	func delete() throws {

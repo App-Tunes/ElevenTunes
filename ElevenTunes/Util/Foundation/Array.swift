@@ -43,6 +43,21 @@ extension Array {
 		copy.move(fromOffsets: src, toOffset: dst)
 		return copy
 	}
+	
+	mutating func insert<C: Collection>(contentsOf collection: C, at index: Int?) where C.Element == Element {
+		if let index = index {
+			insert(contentsOf: collection, at: index)
+		}
+		else {
+			self = self + collection
+		}
+	}
+	
+	func inserting<C: Collection>(contentsOf collection: C, at index: Int?) -> Array where C.Element == Element {
+		var copy = self
+		copy.insert(contentsOf: collection, at: index)
+		return copy
+	}
 }
 
 extension Array where Element: Hashable {

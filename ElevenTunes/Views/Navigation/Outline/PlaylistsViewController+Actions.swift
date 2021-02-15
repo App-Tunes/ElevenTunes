@@ -55,7 +55,7 @@ extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
 			.map(ContentInterpreter.collect)
 			.sink(receiveCompletion: appLogErrors(_:)) { library in
 				do {
-					try item.playlist.import(library: library)
+					try item.playlist.import(library: library, toIndex: index)
 				}
 				catch let error {
 					NSAlert.warning(

@@ -74,7 +74,7 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
 		throw PlaylistEditError.notSupported
 	}
 
-	func `import`(library: UninterpretedLibrary) throws {
+	func `import`(library: UninterpretedLibrary, toIndex index: Int?) throws {
 		throw PlaylistImportError.unimportable  // TODO We can do this bois
     }
 	

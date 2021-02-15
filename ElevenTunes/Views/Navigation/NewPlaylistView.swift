@@ -37,7 +37,7 @@ struct NewPlaylistView: View {
 		let library = UninterpretedLibrary(playlists: [playlist])
 		
 		do {
-			try position.backend.import(library: library)
+			try position.backend.import(library: library, toIndex: nil)
 		}
 		catch let error {
 			NSAlert.warning(
