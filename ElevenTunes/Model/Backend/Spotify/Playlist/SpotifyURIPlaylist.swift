@@ -10,7 +10,7 @@ import Combine
 import SpotifyWebAPI
 import SwiftUI
 
-public class SpotifyURIPlaylistToken: PlaylistToken, SpotifyURIConvertible {
+public class SpotifyURIPlaylistToken: PlaylistToken, SpotifyURIConvertible, Hashable {
     enum SpotifyError: Error {
         case noURI
     }
@@ -21,26 +21,23 @@ public class SpotifyURIPlaylistToken: PlaylistToken, SpotifyURIConvertible {
     
     var spotifyID: String
 
-    public override var id: String { spotifyID }
+    public var id: String { spotifyID }
     
     public var uri: String { "spotify:\(Self.urlComponent):\(id)" }
-    public override var origin: URL? { URL(string: "https://open.spotify.com/\(Self.urlComponent)/\(spotifyID)") }
+    public var origin: URL? { URL(string: "https://open.spotify.com/\(Self.urlComponent)/\(spotifyID)") }
 
     public required init(_ spotifyID: String) {
         self.spotifyID = spotifyID
-        super.init()
     }
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         spotifyID = try container.decode(String.self, forKey: .spotifyID)
-        try super.init(from: decoder)
     }
     
-    public override func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(spotifyID, forKey: .spotifyID)
-        try super.encode(to: encoder)
     }
     
     class func playlistID(fromURL url: URL) throws -> String {
@@ -55,6 +52,18 @@ public class SpotifyURIPlaylistToken: PlaylistToken, SpotifyURIConvertible {
     }
     
     class var urlComponent: String { fatalError() }
+	
+	public func expand(_ context: Library) throws -> AnyPlaylist {
+		fatalError()
+	}
+	
+	public func hash(into hasher: inout Hasher) {
+		hasher.combine(uri)
+	}
+	
+	public static func ==(lhs: SpotifyURIPlaylistToken, rhs: SpotifyURIPlaylistToken) -> Bool {
+		lhs.uri == rhs.uri
+	}
 }
 
 protocol SpotifyURIPlaylist: RemotePlaylist {

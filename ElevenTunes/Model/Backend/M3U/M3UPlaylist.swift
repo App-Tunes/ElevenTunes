@@ -11,11 +11,30 @@ import CoreData
 import SwiftUI
 import Combine
 
-public final class M3UPlaylist: RemotePlaylist {
+public struct M3UPlaylistToken: PlaylistToken {
 	enum InterpretationError: Error {
 		case noFile
 	}
 
+	let url: URL
+	
+	public var id: String { url.absoluteString }
+	public var origin: URL? { url }
+	
+	static func create(fromURL url: URL) throws -> M3UPlaylistToken {
+		if try url.isFileDirectory() {
+			throw InterpretationError.noFile
+		}
+		
+		return M3UPlaylistToken(url: url)
+	}
+	
+	public func expand(_ context: Library) throws -> AnyPlaylist {
+		M3UPlaylist(url, library: context)
+	}
+}
+
+public final class M3UPlaylist: RemotePlaylist {
 	let url: URL
 	let library: Library
 
@@ -34,14 +53,6 @@ public final class M3UPlaylist: RemotePlaylist {
 		mapper.offer(.url, update: urlAttributes())
     }
     
-	static func create(fromURL url: URL, library: Library) throws -> M3UPlaylist {
-		if try url.isFileDirectory() {
-			throw InterpretationError.noFile
-		}
-		
-		return M3UPlaylist(url, library: library)
-	}
-
     public var icon: Image { Image(systemName: "doc.text") }
     
     public var accentColor: Color { SystemUI.color }
@@ -98,7 +109,6 @@ extension M3UPlaylist: RequestMapperDelegate {
 	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.PartialGroupSnapshot, Error> {
 		let url = self.url
 		let library = self.library
-		let interpreter = library.interpreter
 		
 		switch request {
 		case .url:
@@ -112,18 +122,12 @@ extension M3UPlaylist: RequestMapperDelegate {
 			.map { file in
 				M3UPlaylist.interpretFile(file, relativeTo: url)
 			}
-			.flatMap {
-				interpreter.interpret(urls: $0)
-					?? Just([]).eraseError().eraseToAnyPublisher()
-			}
-			.map { (contents: [Content]) -> UninterpretedLibrary in
-				ContentInterpreter.collect(fromContents: contents)
-			}
+			.tryMap { try TrackInterpreter.standard.interpret(urls: $0) }
+			.tryMap { try $0.map { try $0.expand(library) } }
 			.tryMap { ($0, try url.modificationDate().isoFormat) }
-			.map { (library, version) in
+			.map { (tracks, version) in
 				return .init(.unsafe([
-					.tracks: library.tracks,
-					.children: library.playlists
+					.tracks: tracks,
 				]), state: .valid)
 			}.eraseToAnyPublisher()
 		}

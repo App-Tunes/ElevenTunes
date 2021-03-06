@@ -21,6 +21,10 @@ extension Library {
 			fatalError("Failed to find model in MOC")
 		}
 
+		if let track = track as? BranchingTrack {
+			return track
+		}
+		
 		guard
 			let primary = track as? BranchableTrack
 		else {
@@ -44,6 +48,10 @@ extension Library {
 			let playlistModel = model.entitiesByName["DBPlaylist"]
 		else {
 			fatalError("Failed to find model in MOC")
+		}
+		
+		if let playlist = playlist as? BranchingPlaylist {
+			return playlist
 		}
 		
 		guard
@@ -72,7 +80,7 @@ extension Library {
 		// ================= Discover all static content =====================
 		// (all deeper playlists' conversion can be deferred)
 
-		let originalTracks = library.tracks
+		let originalTracks = try library.tracks.map { try $0.expand(self) }
 		
 		var allTracks: [String: AnyTrack] = Dictionary(uniqueKeysWithValues: originalTracks.map {
 			($0.id, $0)
@@ -82,7 +90,7 @@ extension Library {
 		var playlistChildren: [BranchingPlaylist: [BranchingPlaylist]] = [:]
 
 		let originalPlaylists = try library.playlists
-			.map { try self.asBranched($0, insertInto: context) }
+			.map { try self.asBranched(try $0.expand(self), insertInto: context) }
 		
 		for _ in flatSequence(first: originalPlaylists, next: { branched in
 			let playlist = branched.primary
@@ -163,10 +171,10 @@ extension Library {
 
 				if let parent = context.translate(parent) {
 					if !library.playlists.isEmpty {
-						parent.children = NSOrderedSet(array: parent.children.array.inserting(contentsOf: library.playlists.map(\.cache), at: index))
+						parent.children = parent.children.inserting(contentsOf: library.playlists.map(\.cache), atIndex: index)
 					}
 					if !library.tracks.isEmpty {
-						parent.tracks = NSOrderedSet(array: parent.tracks.array.inserting(contentsOf: library.tracks.map(\.cache), at: index))
+						parent.tracks = parent.tracks.inserting(contentsOf: library.tracks.map(\.cache), atIndex: index)
 					}
 				}
 

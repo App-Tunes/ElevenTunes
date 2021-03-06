@@ -9,8 +9,8 @@ import Cocoa
 import Combine
 
 public struct UninterpretedLibrary {
-	public var tracks: [AnyTrack] = []
-	public var playlists: [AnyPlaylist] = []
+	public var tracks: [TrackToken] = []
+	public var playlists: [PlaylistToken] = []
 }
 
 public struct InterpretedLibrary {
@@ -26,8 +26,6 @@ public class Library {
 	let playContext: PlayContext
         
     let settings: LibrarySettingsLevel
-    var _interpreter: ContentInterpreter! = nil
-	var interpreter: ContentInterpreter { _interpreter }
     
     let player: Player
     
@@ -44,8 +42,6 @@ public class Library {
         
         player = Player(context: playContext)
         
-		_interpreter = ContentInterpreter.createDefault(settings: settings, library: self)
-
         defaultPlaylist = settings.defaultPlaylist.flatMap { try? managedObjectContext.fetch(DBPlaylist.createFetchRequest(id: $0)).first }
 
         NotificationCenter.default.addObserver(self, selector: #selector(objectsDidChange), name: .NSManagedObjectContextObjectsDidChange, object: managedObjectContext)

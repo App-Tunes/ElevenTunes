@@ -13,9 +13,13 @@ import Combine
 public class SpotifyAlbumToken: SpotifyURIPlaylistToken {
     override class var urlComponent: String { "album" }
     
-    override func expand(_ context: Library) -> AnyPlaylist {
-        context.spotify.album(self)
-    }
+	public override func expand(_ context: Library) throws -> AnyPlaylist {
+		context.spotify.album(self)
+	}
+	
+	static func create(fromURL url: URL) throws -> SpotifyAlbumToken {
+		SpotifyAlbumToken(try SpotifyAlbumToken.playlistID(fromURL: url))
+	}
 }
 
 public final class SpotifyAlbum: SpotifyURIPlaylist, AnyAlbum {
@@ -40,14 +44,6 @@ public final class SpotifyAlbum: SpotifyURIPlaylist, AnyAlbum {
 		mapper.delegate = self
     }
     
-	static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyAlbum, Error> {
-		return Future { try SpotifyAlbumToken.playlistID(fromURL: url) }
-			.flatMap { spotify.api.album(SpotifyAlbumToken($0)) }
-			.tryMap { SpotifyAlbumToken(try $0.id.unwrap(orThrow: NoAlbumID())) }
-			.map { SpotifyAlbum($0, spotify: spotify) }
-			.eraseToAnyPublisher()
-	}
-
     public var contentType: PlaylistContentType { .tracks }
     
     public var icon: Image { Image(systemName: "opticaldisc") }

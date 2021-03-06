@@ -10,15 +10,34 @@ import Foundation
 import SwiftUI
 import Combine
 
+public struct DirectoryPlaylistToken: PlaylistToken {
+	enum InterpretationError: Error {
+		case noDirectory
+	}
+
+	let url: URL
+	
+	public var id: String { url.absoluteString }
+	public var origin: URL? { url }
+	
+	static func create(fromURL url: URL) throws -> DirectoryPlaylistToken {
+		if !(try url.isFileDirectory()) {
+			throw InterpretationError.noDirectory
+		}
+
+		return DirectoryPlaylistToken(url: url)
+	}
+	
+	public func expand(_ context: Library) throws -> AnyPlaylist {
+		DirectoryPlaylist(url, library: context)
+	}
+}
+
 public final class DirectoryPlaylist: RemotePlaylist {
 	enum Request {
 		case url, contents
 	}
 	
-	enum InterpretationError: Error {
-		case noDirectory
-	}
-
 	let library: Library
 	let url: URL
 
@@ -34,14 +53,6 @@ public final class DirectoryPlaylist: RemotePlaylist {
 		mapper.offer(.url, update: loadURL())
     }
     
-	static func create(fromURL url: URL, library: Library) throws -> DirectoryPlaylist {
-		if !(try url.isFileDirectory()) {
-			throw InterpretationError.noDirectory
-		}
-
-		return DirectoryPlaylist(url, library: library)
-	}
-
 	static let _icon: Image = Image(systemName: "folder")
 	public var icon: Image { DirectoryPlaylist._icon }
 	public var accentColor: Color { SystemUI.color }
@@ -66,7 +77,7 @@ public final class DirectoryPlaylist: RemotePlaylist {
 extension DirectoryPlaylist: RequestMapperDelegate {
 	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<PlaylistAttribute, PlaylistVersion>.PartialGroupSnapshot, Error> {
 		let url = self.url
-		let interpreter = library.interpreter
+		let library = self.library
 
 		switch request {
 		case .url:
@@ -77,18 +88,12 @@ extension DirectoryPlaylist: RequestMapperDelegate {
 			return Future {
 				try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: [.isDirectoryKey])
 			}
-			.flatMap {
-				interpreter.interpret(urls: $0)
-					?? Just([]).eraseError().eraseToAnyPublisher()
-			}
-			.tryMap { (contents: [Content]) -> UninterpretedLibrary in
-				ContentInterpreter.collect(fromContents: contents)
-			}
+			.tryMap { try TrackInterpreter.standard.interpret(urls: $0) }
+			.tryMap { try $0.map { try $0.expand(library) } }
 			.tryMap { ($0, try url.modificationDate().isoFormat) }
-			.map { (library, version) in
+			.map { (tracks, version) in
 				return .init(.unsafe([
-					.tracks: library.tracks,
-					.children: library.playlists
+					.tracks: tracks,
 				]), state: .valid)
 			}.eraseToAnyPublisher()
 		}

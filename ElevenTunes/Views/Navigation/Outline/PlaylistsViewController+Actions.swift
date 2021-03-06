@@ -30,32 +30,35 @@ extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
 			return item.playlist.contentType != .tracks ? .move : []
 		}
 		
-		return library.interpreter.canInterpret(pasteboard: pasteboard) ? .copy : []
+		return PlaylistInterpreter.standard.interpret(pasteboard: pasteboard) != nil ? .copy : []
 	}
 	
 	func outlineView(_ outlineView: NSOutlineView, acceptDrop info: NSDraggingInfo, item: Any?, childIndex index: Int) -> Bool {
 		let pasteboard = info.draggingPasteboard
 		let item = self.item(raw: item)
 
+		let library = self.library
+		
 		if let playlists = PlaylistsExportManager.read(fromPasteboard: pasteboard, context: library.managedObjectContext) {
-			guard let parent = playlists.explodeMap({ $0.parent })?.one else {
-				return false  // TODO Multiple sources, can't simply rearrange
-			}
+			// Internal drag; do internal logic
 			
-			guard let indices = playlists.explodeMap({ parent.children.index(of: $0) }) else {
-				return false // TODO Somehow playlists not in parent?
+			if
+				let playlist = item.playlist as? BranchingPlaylist,
+				// TODO Formal import if dest is not internal
+				playlist.primary is JustCachePlaylist
+			{
+				playlist.cache.addToChildren(NSOrderedSet(array: Array(playlists)))
 			}
-			
-			parent.children = parent.children.moving(fromOffsets: IndexSet(indices), toOffset: index)
 			
 			return true
 		}
+		
+		// External drag; import formally
 
-		return library.interpreter.interpret(pasteboard: pasteboard)?
-			.map(ContentInterpreter.collect)
-			.sink(receiveCompletion: appLogErrors(_:)) { library in
+		return PlaylistInterpreter.standard.interpret(pasteboard: pasteboard)?
+			.sink(receiveCompletion: appLogErrors(_:)) { tokens in
 				do {
-					try item.playlist.import(library: library, toIndex: index)
+					try item.playlist.import(library: UninterpretedLibrary(playlists: tokens), toIndex: index)
 				}
 				catch let error {
 					NSAlert.warning(

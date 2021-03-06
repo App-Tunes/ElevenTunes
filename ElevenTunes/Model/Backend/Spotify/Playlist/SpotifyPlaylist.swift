@@ -25,9 +25,13 @@ struct MinimalPlaylistItemContainer<Item: Codable & Hashable>: Codable, Hashable
 public class SpotifyPlaylistToken: SpotifyURIPlaylistToken {
     override class var urlComponent: String { "playlist" }
     
-    override func expand(_ context: Library) -> AnyPlaylist {
-        SpotifyPlaylist(self, spotify: context.spotify)
-    }
+	public override func expand(_ context: Library) throws -> AnyPlaylist {
+		SpotifyPlaylist(self, spotify: context.spotify)
+	}
+	
+	static func create(fromURL url: URL) throws -> SpotifyPlaylistToken {
+		SpotifyPlaylistToken(try SpotifyPlaylistToken.playlistID(fromURL: url))
+	}
 }
 
 public final class SpotifyPlaylist: SpotifyURIPlaylist {
@@ -57,14 +61,6 @@ public final class SpotifyPlaylist: SpotifyURIPlaylist {
 		self.mapper.offer(.playlist, update: .init(SpotifyPlaylist.attributes(of: playlist), state: .missing))
     }
 	
-	static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyPlaylist, Error> {
-		return Future { try SpotifyPlaylistToken.playlistID(fromURL: url) }
-			.flatMap { spotify.api.playlist(SpotifyPlaylistToken($0)) }
-			.map { SpotifyPlaylistToken($0.id) }
-			.map { SpotifyPlaylist($0, spotify: spotify) }
-			.eraseToAnyPublisher()
-	}
-
 	public var contentType: PlaylistContentType { .tracks }
 	
 	public var id: String { token.id }

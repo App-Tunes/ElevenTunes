@@ -15,16 +15,12 @@ class PlaylistDropInterpreter: DropDelegate {
         case playlists, tracks
     }
     
-    let interpreter: ContentInterpreter
     let parent: AnyPlaylist
-    let context: Context
     
     var cancellables = Set<AnyCancellable>()
     
-    init(_ interpreter: ContentInterpreter, parent: AnyPlaylist, context: Context) {
-        self.interpreter = interpreter
+	init(parent: AnyPlaylist) {
         self.parent = parent
-        self.context = context
     }
     
     func dropEntered(info: DropInfo) {
@@ -35,23 +31,17 @@ class PlaylistDropInterpreter: DropDelegate {
     }
 
     func performDrop(info: DropInfo) -> Bool {
-        guard let interpreted = interpreter.interpret(drop: info) else {
+		guard let interpreted = TrackInterpreter.standard.interpret(drop: info) else {
             return false
         }
         
         let playlist = self.parent
-        let context = self.context
+		
         interpreted
-            .tryMap { ContentInterpreter.collect(fromContents: $0) }
             .onMain()
-            .sink(receiveCompletion: appLogErrors(_:)) { library in
-                if context == .tracks && !library.playlists.isEmpty {
-                    // TODO Ask if the user wants to add all tracks of the playlist?
-                    return
-                }
-                
+            .sink(receiveCompletion: appLogErrors(_:)) { tokens in
 				do {
-					try playlist.import(library: library, toIndex: nil)
+					try playlist.import(library: UninterpretedLibrary(tracks: tokens), toIndex: nil)
 				}
 				catch let error {
 					NSAlert.warning(

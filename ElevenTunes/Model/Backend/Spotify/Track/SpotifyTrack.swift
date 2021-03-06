@@ -51,29 +51,16 @@ public class SpotifyTrackToken: TrackToken, SpotifyURIConvertible {
 
     var trackID: String
 
-    public override var id: String { trackID }
+    public var id: String { trackID }
     
     public var uri: String { "spotify:track:\(id)" }
 	
-	override var origin: URL? {
+	public var origin: URL? {
 		URL(string: "https://open.spotify.com/track/\(trackID)")
 	}
 
     init(_ uri: String) {
         self.trackID = uri
-        super.init()
-    }
-
-    public required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        trackID = try container.decode(String.self, forKey: .trackID)
-        try super.init(from: decoder)
-    }
-
-    public override func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(trackID, forKey: .trackID)
-        try super.encode(to: encoder)
     }
     
     static func trackID(fromURL url: URL) throws -> String {
@@ -87,9 +74,13 @@ public class SpotifyTrackToken: TrackToken, SpotifyURIConvertible {
         return id
     }
     
-    override func expand(_ context: Library) -> AnyTrack {
-        SpotifyTrack(self, spotify: context.spotify)
-    }
+	static func create(fromURL url: URL) throws -> SpotifyTrackToken {
+		SpotifyTrackToken(try SpotifyTrackToken.trackID(fromURL: url))
+	}
+
+	public func expand(_ context: Library) throws -> AnyTrack {
+		SpotifyTrack(self, spotify: context.spotify)
+	}
 }
 
 public final class SpotifyTrack: RemoteTrack {
@@ -116,16 +107,6 @@ public final class SpotifyTrack: RemoteTrack {
 		mapper.offer(.track, update: .init(extractAttributes(from: track), state: .valid))
     }
     
-	static func create(_ spotify: Spotify, fromURL url: URL) -> AnyPublisher<SpotifyTrack, Error> {
-		return Future { try SpotifyTrackToken.trackID(fromURL: url) }
-			.flatMap {
-				spotify.api.track(SpotifyTrackToken($0)).compactMap(ExistingSpotifyTrack.init)
-			}
-			.map { SpotifyTrackToken($0.id) }
-			.map { SpotifyTrack($0, spotify: spotify) }
-			.eraseToAnyPublisher()
-	}
-
     public var accentColor: Color { Spotify.color }
 	
 	public var id: String { token.id }

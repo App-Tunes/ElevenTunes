@@ -9,21 +9,10 @@ import Foundation
 import Combine
 import SwiftUI
 
-public class PlaylistToken: NSObject, Codable {
-    public var id: String { fatalError() }
+public protocol PlaylistToken {
+	var id: String { get }
 	
-	public var origin: URL? { nil }
+	var origin: URL? { get }
 
-    func expand(_ context: Library) -> AnyPlaylist { fatalError() }
-
-    // NSObject gedöns
-    
-    public override var hash: Int { id.hash }
-    
-    public override func isEqual(_ other: Any?) -> Bool {
-        guard let other = other as? PlaylistToken else { return false }
-        return self.id == other.id
-    }
+	func expand(_ context: Library) throws -> AnyPlaylist
 }
-
-extension PlaylistToken: Identifiable {}

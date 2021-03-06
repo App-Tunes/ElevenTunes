@@ -12,32 +12,25 @@ import Combine
 extension ContentInterpreter {
     struct LoadError: Error {}
     
-    func interpret(drop info: DropInfo) -> AnyPublisher<[Content], Error>? {
-        var publishers: [AnyPublisher<Content, Error>] = []
+    func interpret(drop info: DropInfo) -> AnyPublisher<[Interpreted], Error>? {
+        var publishers: [AnyPublisher<Interpreted, Error>] = []
 
-        for type in Self.types {
+        for type in self.types {
             for provider in info.itemProviders(for: [type]) {
                 publishers.append(
                     provider.loadItem(forType: type)
                         .mapError { _ in LoadError() }
-                        .tryFlatMap { item in try self.interpret(item, type: type) }
-                        .catch { error -> AnyPublisher<Content, Error> in
-                            if !(error is LoadError) {
-                                appLogger.error("Error reading content: \(error)")
-                            }
-                            return Empty<Content, Error>(completeImmediately: true)
-                                .eraseToAnyPublisher()
-                        }
+                        .tryCompactMap { item in try self.interpret(item, type: type) }
                         .eraseToAnyPublisher()
                     )
             }
         }
+		
+		guard !publishers.isEmpty else {
+			return nil
+		}
         
-        guard !publishers.isEmpty else {
-            return nil
-        }
-        
-        return Publishers.MergeMany(publishers)
+		return Publishers.MergeMany(publishers)
             .collect()
             .eraseToAnyPublisher()
     }

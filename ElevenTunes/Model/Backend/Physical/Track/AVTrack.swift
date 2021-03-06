@@ -12,11 +12,38 @@ import Combine
 import AVFoundation
 import SwiftUI
 
-public final class AVTrack: RemoteTrack {
+public struct AVTrackToken: TrackToken {
 	enum InterpretationError: Error {
 		case missing
 	}
+
+	let url: URL
+	let isVideo: Bool
 	
+	public var id: String { url.absoluteString }
+	public var origin: URL? { url }
+	
+	static func understands(url: URL) -> Bool {
+		guard let type = UTType(filenameExtension: url.pathExtension) else {
+			return false
+		}
+		return type.conforms(to: .audiovisualContent)
+	}
+
+	static func create(fromURL url: URL) throws -> AVTrackToken {
+		_ = try AVAudioFile(forReading: url) // Just so we know it's readable
+		let type = try UTType(filenameExtension: url.pathExtension).unwrap(orThrow: InterpretationError.missing)
+		let isVideo = type.conforms(to: .video)
+		
+		return AVTrackToken(url: url, isVideo: isVideo)
+	}
+	
+	public func expand(_ context: Library) throws -> AnyTrack {
+		AVTrack(url, isVideo: isVideo)
+	}
+}
+
+public final class AVTrack: RemoteTrack {
 	enum AnalysisError: Error {
 		case notImplemented
 	}
@@ -40,21 +67,6 @@ public final class AVTrack: RemoteTrack {
 		mapper.offer(.url, update: loadURL())
     }
      
-	static func understands(url: URL) -> Bool {
-		guard let type = UTType(filenameExtension: url.pathExtension) else {
-			return false
-		}
-		return type.conforms(to: .audiovisualContent)
-	}
-
-	static func create(fromURL url: URL) throws -> AVTrack {
-		_ = try AVAudioFile(forReading: url) // Just so we know it's readable
-		let type = try UTType(filenameExtension: url.pathExtension).unwrap(orThrow: InterpretationError.missing)
-		let isVideo = type.conforms(to: .video)
-		
-		return AVTrack(url, isVideo: isVideo)
-	}
-
 	public var accentColor: Color { SystemUI.color }
 
     public var icon: Image {

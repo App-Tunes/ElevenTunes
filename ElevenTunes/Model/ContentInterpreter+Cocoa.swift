@@ -9,26 +9,15 @@ import Cocoa
 import Combine
 
 extension ContentInterpreter {
-	func canInterpret(pasteboard info: NSPasteboard) -> Bool {
-		info.canReadItem(withDataConformingToTypes: Self.types.map(\.identifier))
-	}
-	
-	func interpret(pasteboard info: NSPasteboard) -> AnyPublisher<[Content], Error>? {
-		var publishers: [AnyPublisher<Content, Error>] = []
+	func interpret(pasteboard info: NSPasteboard) -> AnyPublisher<[Interpreted], Error>? {
+		var publishers: [AnyPublisher<Interpreted, Error>] = []
 
-		for type in Self.types {
+		for type in self.types {
 			if info.canReadItem(withDataConformingToTypes: [type.identifier]) {
 				publishers.append(
 					info.loadData(forType: type)
 						.mapError { _ in LoadError() }
-						.tryFlatMap { item in try self.interpret(item, type: type) }
-						.catch { error -> AnyPublisher<Content, Error> in
-							if !(error is LoadError) {
-								appLogger.error("Error reading content: \(error)")
-							}
-							return Empty<Content, Error>(completeImmediately: true)
-								.eraseToAnyPublisher()
-						}
+						.tryCompactMap { item in try self.interpret(item, type: type) }
 						.eraseToAnyPublisher()
 					)
 			}

@@ -23,6 +23,7 @@
 		80151EE82593C92A00D9539A /* SpotifyAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80151EE72593C92A00D9539A /* SpotifyAuthView.swift */; };
 		80151EF52593C98500D9539A /* SpotifyDeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80151EF42593C98500D9539A /* SpotifyDeviceView.swift */; };
 		80151EFA2593E1EF00D9539A /* SpotifyDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80151EF92593E1EF00D9539A /* SpotifyDevices.swift */; };
+		80185C5625DC589C00CAF358 /* ElevenInterpreters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80185C5525DC589C00CAF358 /* ElevenInterpreters.swift */; };
 		801B4F5125A60A0E0053BFC4 /* BSManagedDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 801B4F5025A60A0E0053BFC4 /* BSManagedDocument.m */; };
 		801F7E1A25D84B47004372CE /* NSItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801F7E1925D84B47004372CE /* NSItemProvider.swift */; };
 		801F7E1F25D84F7E004372CE /* PlaylistsExportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801F7E1E25D84F7E004372CE /* PlaylistsExportManager.swift */; };
@@ -114,7 +115,6 @@
 		808445D525A663CC00E27EC8 /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808445D425A663CC00E27EC8 /* Alerts.swift */; };
 		808445DE25A7996200E27EC8 /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808445DD25A7996200E27EC8 /* Badge.swift */; };
 		808A761F2593F2EA00B0A9CE /* ContentInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808A761E2593F2EA00B0A9CE /* ContentInterpreter.swift */; };
-		808A76242593FF4900B0A9CE /* ContentInterpreter+Interpreters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808A76232593FF4900B0A9CE /* ContentInterpreter+Interpreters.swift */; };
 		808A7631259405F200B0A9CE /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808A7630259405F200B0A9CE /* URL.swift */; };
 		808A763625940EE400B0A9CE /* ContentInterpreter+SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808A763525940EE400B0A9CE /* ContentInterpreter+SwiftUI.swift */; };
 		808D5480259F395C006F7435 /* Spotify+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808D547F259F395C006F7435 /* Spotify+UI.swift */; };
@@ -227,6 +227,7 @@
 		80151EE72593C92A00D9539A /* SpotifyAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAuthView.swift; sourceTree = "<group>"; };
 		80151EF42593C98500D9539A /* SpotifyDeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyDeviceView.swift; sourceTree = "<group>"; };
 		80151EF92593E1EF00D9539A /* SpotifyDevices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyDevices.swift; sourceTree = "<group>"; };
+		80185C5525DC589C00CAF358 /* ElevenInterpreters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevenInterpreters.swift; sourceTree = "<group>"; };
 		801B4F4F25A60A0E0053BFC4 /* BSManagedDocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BSManagedDocument.h; sourceTree = "<group>"; };
 		801B4F5025A60A0E0053BFC4 /* BSManagedDocument.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BSManagedDocument.m; sourceTree = "<group>"; };
 		801F7E1925D84B47004372CE /* NSItemProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSItemProvider.swift; sourceTree = "<group>"; };
@@ -317,7 +318,6 @@
 		808445D425A663CC00E27EC8 /* Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
 		808445DD25A7996200E27EC8 /* Badge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
 		808A761E2593F2EA00B0A9CE /* ContentInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentInterpreter.swift; sourceTree = "<group>"; };
-		808A76232593FF4900B0A9CE /* ContentInterpreter+Interpreters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentInterpreter+Interpreters.swift"; sourceTree = "<group>"; };
 		808A7630259405F200B0A9CE /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
 		808A763525940EE400B0A9CE /* ContentInterpreter+SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentInterpreter+SwiftUI.swift"; sourceTree = "<group>"; };
 		808D547F259F395C006F7435 /* Spotify+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Spotify+UI.swift"; sourceTree = "<group>"; };
@@ -648,9 +648,9 @@
 				80D6DA92259DEE1300879BCF /* Artist */,
 				80D6DA93259DEE1900879BCF /* Album */,
 				808A761E2593F2EA00B0A9CE /* ContentInterpreter.swift */,
-				808A76232593FF4900B0A9CE /* ContentInterpreter+Interpreters.swift */,
 				808A763525940EE400B0A9CE /* ContentInterpreter+SwiftUI.swift */,
 				80DC5CE925D9DAB900563A10 /* ContentInterpreter+Cocoa.swift */,
+				80185C5525DC589C00CAF358 /* ElevenInterpreters.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1179,12 +1179,12 @@
 				8054BFFA259F6A2700A7035A /* PlayingTrackView.swift in Sources */,
 				80A8C82625BF557400F97EF0 /* BranchingTrack.swift in Sources */,
 				808D548D259F3BC9006F7435 /* Color.swift in Sources */,
-				808A76242593FF4900B0A9CE /* ContentInterpreter+Interpreters.swift in Sources */,
 				806B28C8258F93D90091EA4D /* Spotify.swift in Sources */,
 				80D6DA7D259CD68500879BCF /* Library+Contents.swift in Sources */,
 				806B2840258E5A960091EA4D /* SinglePlayer.swift in Sources */,
 				80C9A194259FA5E800A038CC /* VisualEffectView.swift in Sources */,
 				802E2DC6259644FF00CB91EC /* M3UPlaylist.swift in Sources */,
+				80185C5625DC589C00CAF358 /* ElevenInterpreters.swift in Sources */,
 				80F53EC625D9D5B5003A98B3 /* StaticMenu.swift in Sources */,
 				80DC5CEF25D9DC0800563A10 /* NSPasteboard.swift in Sources */,
 				808A763625940EE400B0A9CE /* ContentInterpreter+SwiftUI.swift in Sources */,

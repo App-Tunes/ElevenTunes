@@ -20,32 +20,19 @@ class MockTrack: TrackToken, AnyTrack {
 	
 	init(attributes: TypedDict<TrackAttribute>) {
 		version = UUID().uuidString
-		super.init()
 		_attributes.update(.init(keys: Set(attributes.keys), attributes: attributes, state: .valid))
 	}
 
-    public required init(from decoder: Decoder) throws {
-        fatalError()
-//        let container = try decoder.container(keyedBy: CodingKeys.self)
-//        // TODO
-//        try super.init(from: decoder)
-    }
-
-    public override func encode(to encoder: Encoder) throws {
-        fatalError()
-//        var container = encoder.container(keyedBy: CodingKeys.self)
-//        // TODO
-//        try super.encode(to: encoder)
-    }
-        
     var icon: Image { Image(systemName: "questionmark") }
     
     var accentColor: Color { .primary}
 
     let uuid = UUID()
-    override var id: String { uuid.description }
     
-    override func expand(_ context: Library) -> AnyTrack { self }
+	var id: String { uuid.description }
+	var origin: URL? { nil }
+    
+    func expand(_ context: Library) throws -> AnyTrack { self }
 
 	func refreshVersion() {
 		version = UUID().uuidString

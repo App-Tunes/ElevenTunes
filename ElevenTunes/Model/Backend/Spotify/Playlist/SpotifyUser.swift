@@ -22,30 +22,28 @@ public class SpotifyUserToken: PlaylistToken {
         
     var userID: String?
     
-    public override var id: String { userID ?? "spotify::playlist::currentuser" }
+    public var id: String { userID ?? "spotify::playlist::currentuser" }
     
     var uri: String? { userID.map { "spotify:user:\($0)" } }
+	
+	public var origin: URL? { nil } // TODO
 
     init(_ userID: String? = nil) {
         self.userID = userID
-        super.init()
     }
         
     init(user: SpotifyWebAPI.SpotifyUser) {
         self.userID = user.id
-        super.init()
     }
         
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         userID = try container.decodeIfPresent(String.self, forKey: .userID)
-        try super.init(from: decoder)
     }
     
-    public override func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(userID, forKey: .userID)
-        try super.encode(to: encoder)
     }
     
     static func userID(fromURL url: URL) throws -> String {
@@ -58,10 +56,14 @@ public class SpotifyUserToken: PlaylistToken {
         }
         return id
     }
-    
-    override func expand(_ context: Library) -> AnyPlaylist {
-        SpotifyUser(self, spotify: context.spotify)
-    }
+	
+	static func create(fromURL url: URL?) throws -> SpotifyUserToken {
+		try SpotifyUserToken(url.map { try SpotifyUserToken.userID(fromURL: $0) })
+	}
+	
+	public func expand(_ context: Library) throws -> AnyPlaylist {
+		SpotifyUser(self, spotify: context.spotify)
+	}
 }
 
 public final class SpotifyUser: RemotePlaylist {
@@ -88,13 +90,6 @@ public final class SpotifyUser: RemotePlaylist {
         self.spotify = spotify
 		mapper.delegate = self
     }
-
-	static func create(_ spotify: Spotify, fromURL url: URL?) -> AnyPublisher<SpotifyUser, Error> {
-		return Future { try url.map { try SpotifyUserToken.userID(fromURL: $0) } }
-			.map { SpotifyUserToken($0) }
-			.map { SpotifyUser($0, spotify: spotify) }
-			.eraseToAnyPublisher()
-	}
 
 //    convenience init(_ user: SpotifyWebAPI.SpotifyUser, spotify: Spotify) {
 //        self.init(SpotifyUserToken(user.id), spotify: spotify)
