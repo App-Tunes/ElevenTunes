@@ -77,6 +77,8 @@
 		805FD8BD25A12B4B00F32BFB /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805FD8BC25A12B4B00F32BFB /* Double.swift */; };
 		805FD8C225A12BA400F32BFB /* Tempo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805FD8C125A12BA400F32BFB /* Tempo.swift */; };
 		805FD8CF25A1348E00F32BFB /* PlayHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805FD8CE25A1348E00F32BFB /* PlayHistoryView.swift */; };
+		806185A225F4E6FA0062AAB3 /* NSOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185A125F4E6FA0062AAB3 /* NSOutlineView.swift */; };
+		806185A725F4E73D0062AAB3 /* ArrayDifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185A625F4E73D0062AAB3 /* ArrayDifference.swift */; };
 		806B0D2F25A9E47800603E64 /* VolatileAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D2E25A9E47800603E64 /* VolatileAttributes.swift */; };
 		806B0D3425A9EF1400603E64 /* SetRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D3325A9EF1400603E64 /* SetRelation.swift */; };
 		806B0D4225A9FE3F00603E64 /* RequestMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D4125A9FE3F00603E64 /* RequestMapper.swift */; };
@@ -282,6 +284,8 @@
 		805FD8BC25A12B4B00F32BFB /* Double.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
 		805FD8C125A12BA400F32BFB /* Tempo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tempo.swift; sourceTree = "<group>"; };
 		805FD8CE25A1348E00F32BFB /* PlayHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayHistoryView.swift; sourceTree = "<group>"; };
+		806185A125F4E6FA0062AAB3 /* NSOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSOutlineView.swift; sourceTree = "<group>"; };
+		806185A625F4E73D0062AAB3 /* ArrayDifference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayDifference.swift; sourceTree = "<group>"; };
 		806B0D2E25A9E47800603E64 /* VolatileAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolatileAttributes.swift; sourceTree = "<group>"; };
 		806B0D3325A9EF1400603E64 /* SetRelation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRelation.swift; sourceTree = "<group>"; };
 		806B0D4125A9FE3F00603E64 /* RequestMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestMapper.swift; sourceTree = "<group>"; };
@@ -544,6 +548,8 @@
 				80F53EAE25D9BE58003A98B3 /* ActionOutlineView.swift */,
 				80F53EB625D9BE88003A98B3 /* Keycodes.swift */,
 				80DC5CEE25D9DC0800563A10 /* NSPasteboard.swift */,
+				806185A125F4E6FA0062AAB3 /* NSOutlineView.swift */,
+				806185A625F4E73D0062AAB3 /* ArrayDifference.swift */,
 			);
 			path = Cocoa;
 			sourceTree = "<group>";
@@ -1285,6 +1291,7 @@
 				806B0D4225A9FE3F00603E64 /* RequestMapper.swift in Sources */,
 				80A8C89925BF738500F97EF0 /* AnyTrackCache.swift in Sources */,
 				806B287A258E9A320091EA4D /* SpotifySettingsView.swift in Sources */,
+				806185A225F4E6FA0062AAB3 /* NSOutlineView.swift in Sources */,
 				802E2BC12594DE1F00CB91EC /* LibraryDocument.swift in Sources */,
 				80A8C84325BF5B5200F97EF0 /* DBAVTrack+CoreDataProperties.swift in Sources */,
 				806B28D8258FB4F50091EA4D /* NSItemProvider+Combine.swift in Sources */,
@@ -1326,6 +1333,7 @@
 				8054C015259F720000A7035A /* PlayerAudioView.swift in Sources */,
 				802E2DA9259643AE00CB91EC /* SpotifyTrack.swift in Sources */,
 				80A8C82125BF556A00F97EF0 /* BranchingPlaylist.swift in Sources */,
+				806185A725F4E73D0062AAB3 /* ArrayDifference.swift in Sources */,
 				802DBA32259FDA9900EA6DB7 /* Wrappers.swift in Sources */,
 				8054C000259F6DA000A7035A /* TrackCellView.swift in Sources */,
 				806E203025975A15003EEA83 /* TransientPlaylist.swift in Sources */,

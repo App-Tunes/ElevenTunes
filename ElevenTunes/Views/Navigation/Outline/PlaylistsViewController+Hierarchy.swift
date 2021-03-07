@@ -9,9 +9,9 @@ import Foundation
 import Combine
 
 extension PlaylistsViewController {
-	func childrenUpdated(ofItem item: Item) {
+	func childrenUpdated(ofItem item: Item, from: [Item]?, to: [Item]?) {
 		let item = item == directoryItem ? nil : item
-		outlineView?.reloadItem(item, reloadChildren: true)
+		outlineView?.animateDifference(childrenOf: item, from: from, to: to)
 	}
 	
 	class Item: Identifiable, Hashable {
@@ -23,7 +23,7 @@ extension PlaylistsViewController {
 		var observer: AnyCancellable? = nil
 		var childrenState: PlaylistAttributes.ValueSnapshot<[Item]> {
 			didSet {
-				delegate?.childrenUpdated(ofItem: self)
+				delegate?.childrenUpdated(ofItem: self, from: oldValue.value, to: childrenState.value)
 			}
 		}
 
