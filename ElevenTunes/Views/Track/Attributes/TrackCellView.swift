@@ -12,8 +12,6 @@ struct TrackCellView: View {
     let track: Track
 
 	@State var hasBasicInfo: Bool = false
-    @State var artists: [Playlist] = []
-    @State var album: Playlist? = nil
     
 	@State var title: String?
 
@@ -41,8 +39,12 @@ struct TrackCellView: View {
                     }
                 }
                 
-                TrackOriginView(artists: artists, album: album)
-                    .foregroundColor(.secondary)
+				HStack {
+					Image(systemName: "person.2")
+					TrackArtistsView(track: track)
+					
+					TrackAlbumView(track: track)
+				}
                     .font(.system(size: 11))
                     .frame(alignment: .top)
             }
@@ -56,8 +58,6 @@ struct TrackCellView: View {
 		.onReceive(track.backend.attributes) { (snapshot, _) in
 			setIfDifferent(self, \.hasBasicInfo, snapshot[TrackAttribute.title].state == .valid)
 			setIfDifferent(self, \.title, snapshot[TrackAttribute.title].value)
-			setIfDifferent(self, \.album, snapshot[TrackAttribute.album].value.map(Playlist.init))
-			setIfDifferent(self, \.artists, snapshot[TrackAttribute.artists].value?.map(Playlist.init) ?? [])
 		}
     }
 }

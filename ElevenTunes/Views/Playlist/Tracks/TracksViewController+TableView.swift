@@ -14,6 +14,8 @@ extension TracksViewController: NSTableViewDelegate {
 		static let Image = NSUserInterfaceItemIdentifier(rawValue: "Image")
 		static let Tempo = NSUserInterfaceItemIdentifier(rawValue: "Tempo")
 		static let Key = NSUserInterfaceItemIdentifier(rawValue: "Key")
+		static let Artists = NSUserInterfaceItemIdentifier(rawValue: "Artists")
+		static let Album = NSUserInterfaceItemIdentifier(rawValue: "Album")
 	}
 
 	enum CellIdentifiers {
@@ -21,6 +23,8 @@ extension TracksViewController: NSTableViewDelegate {
 		static let TrackCell = NSUserInterfaceItemIdentifier(rawValue: "TrackCell")
 		static let TempoCell = NSUserInterfaceItemIdentifier(rawValue: "TempoCell")
 		static let KeyCell = NSUserInterfaceItemIdentifier(rawValue: "KeyCell")
+		static let AlbumCell = NSUserInterfaceItemIdentifier(rawValue: "AlbumCell")
+		static let ArtistsCell = NSUserInterfaceItemIdentifier(rawValue: "ArtistsCell")
 	}
 
 	func initColumns() {
@@ -41,6 +45,18 @@ extension TracksViewController: NSTableViewDelegate {
 		addColumn(ColumnIdentifiers.Title, title: "Title") {
 			$0.widthRange = 150...CGFloat.infinity
 			$0.resizingMask = [.autoresizingMask, .userResizingMask]
+		}
+		
+		addColumn(ColumnIdentifiers.Artists, title: "Artists") {
+			$0.widthRange = 60...CGFloat.infinity
+			$0.headerCell.alignment = .center
+			$0.isHidden = true
+		}
+		
+		addColumn(ColumnIdentifiers.Album, title: "Album") {
+			$0.widthRange = 60...CGFloat.infinity
+			$0.headerCell.alignment = .center
+			$0.isHidden = true
 		}
 		
 		addColumn(ColumnIdentifiers.Tempo, title: "♩=") {
@@ -92,6 +108,16 @@ extension TracksViewController: NSTableViewDelegate {
 
 		if let view = createOn(ColumnIdentifiers.Key, cell: CellIdentifiers.KeyCell) {
 			view.rootView = AnyView(TrackKeyView(track: track))
+			return view
+		}
+		
+		if let view = createOn(ColumnIdentifiers.Artists, cell: CellIdentifiers.ArtistsCell) {
+			view.rootView = AnyView(TrackArtistsView(track: track))
+			return view
+		}
+		
+		if let view = createOn(ColumnIdentifiers.Album, cell: CellIdentifiers.AlbumCell) {
+			view.rootView = AnyView(TrackAlbumView(track: track))
 			return view
 		}
 		

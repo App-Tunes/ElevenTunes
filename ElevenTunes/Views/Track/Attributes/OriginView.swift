@@ -68,27 +68,52 @@ struct AlbumCellView: View {
     }
 }
 
-struct TrackOriginView: View {
-    let artists: [Playlist]
-    let album: Playlist?
-    
-    var body: some View {
-        HStack {
-            Image(systemName: "person.2")
-            
-            if artists.isEmpty {
-                Text("Unknown Artist")
-                    .opacity(0.5)
-            }
-            else {
-                ForEach(artists, id: \.id) {
-                    ArtistCellView(artist: $0)
-                }
-            }
-            
-            if let album = album {
-                AlbumCellView(album: album)
-            }
-        }
-    }
+struct TrackArtistsView: View {
+	let track: Track
+	
+	@State var artists: [Playlist]?
+
+	var body: some View {
+		HStack {
+			if let artists = artists {
+				if artists.isEmpty {
+					Text("Unknown Artist")
+						.opacity(0.5)
+				}
+				else {
+					ForEach(artists, id: \.id) {
+						ArtistCellView(artist: $0)
+					}
+				}
+			}
+			else {
+				Text("...")
+					.opacity(0.5)
+			}
+		}
+			.foregroundColor(.secondary)
+			.whileActive(track.backend.demand([.artists]))
+			.onReceive(track.backend.attribute(TrackAttribute.artists)) {
+				artists = $0.value?.map { Playlist($0) }
+			}
+	}
+}
+
+struct TrackAlbumView: View {
+	let track: Track
+	
+	@State var album: Playlist?
+
+	var body: some View {
+		Group {
+			if let album = album {
+				AlbumCellView(album: album)
+			}
+		}
+			.foregroundColor(.secondary)
+			.whileActive(track.backend.demand([.album]))
+			.onReceive(track.backend.attribute(TrackAttribute.album)) {
+				album = $0.value.map { Playlist($0) }
+			}
+	}
 }
