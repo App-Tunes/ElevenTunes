@@ -10,7 +10,8 @@ import Combine
 
 class TracksViewController: NSViewController {
 	@IBOutlet weak var tableView: NSTableView! = nil
-		
+	var tableViewHiddenExtension: NSTableView.ColumnHiddenExtension!
+
 	var library: Library
 	var playlist: Playlist {
 		didSet {

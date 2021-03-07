@@ -52,6 +52,13 @@ extension TracksViewController: NSTableViewDelegate {
 			$0.widthRange = 42...42
 			$0.headerCell.alignment = .center
 		}
+		
+		tableViewHiddenExtension = .init(tableView: tableView, titles: [
+			ColumnIdentifiers.Image: "Artwork (⸬)",
+			ColumnIdentifiers.Tempo: "Beats per Minute (♩=)",
+			ColumnIdentifiers.Key: "Initial Key (♫)",
+		], affix: [ColumnIdentifiers.Title])
+		tableViewHiddenExtension.attach()
 	}
 	
 	func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
