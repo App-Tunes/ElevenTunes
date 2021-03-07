@@ -71,14 +71,14 @@ struct AlbumCellView: View {
 struct TrackArtistsView: View {
 	let track: Track
 	
-	@State var snapshot: VolatileSnapshot<[AnyArtist], String> = .missing()
+	@State var snapshot: VolatileSnapshot<[Playlist], String> = .missing()
 
 	var body: some View {
 		HStack {
 			if snapshot.state == .valid {
 				if let artists = snapshot.value, !artists.isEmpty {
 					ForEach(artists, id: \.id) {
-						ArtistCellView(artist: Playlist($0))
+						ArtistCellView(artist: $0)
 					}
 				}
 				else {
@@ -94,7 +94,7 @@ struct TrackArtistsView: View {
 			.foregroundColor(.secondary)
 			.whileActive(track.backend.demand([.artists]))
 			.onReceive(track.backend.attribute(TrackAttribute.artists)) {
-				snapshot = $0
+				setIfDifferent(self, \.snapshot, $0.map { $0.map { Playlist($0) } })
 			}
 			.id(track.id)
 	}
