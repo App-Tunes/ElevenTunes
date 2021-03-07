@@ -25,9 +25,16 @@ public class DBTrack: NSManagedObject {
 	
 	func initialSetup() {
 		primaryRepresentationP = primaryRepresentation
+		representationsP = representations
+	}
+	
+	var representations: [Representation: AnyTrackCache] {
+		var reps: [Representation: AnyTrackCache] = [:]
+		
+		reps[.av] = avRepresentation
+		reps[.spotify] = spotifyRepresentation
 
-		representationsP[.av] = avRepresentation
-		representationsP[.spotify] = spotifyRepresentation
+		return reps
 	}
 }
 

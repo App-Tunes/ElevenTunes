@@ -35,6 +35,8 @@ extension Library {
 		let primaryType = try primary.store(in: cache)
 		cache.primaryRepresentation = primaryType
 
+		cache.initialSetup()
+		
 		return BranchingTrack(
 			cache: cache,
 			primary: primaryType != .none ? track : JustCacheTrack(cache),
@@ -64,6 +66,8 @@ extension Library {
 		let primaryType = try primary.store(in: cache)
 		cache.primaryRepresentation = primaryType
 		cache.contentType = playlist.contentType
+		
+		cache.initialSetup()
 		
 		return BranchingPlaylist(
 			cache: cache,

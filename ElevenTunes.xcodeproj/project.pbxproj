@@ -78,6 +78,8 @@
 		8054C015259F720000A7035A /* PlayerAudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8054C014259F720000A7035A /* PlayerAudioView.swift */; };
 		8054C01A259F860000A7035A /* SpotifyURIPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8054C019259F860000A7035A /* SpotifyURIPlaylist.swift */; };
 		805DF1EA25F582970056D9C0 /* TracksExportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805DF1E925F582970056D9C0 /* TracksExportManager.swift */; };
+		805DF1F325F58D6E0056D9C0 /* DBPlaylist+Changes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805DF1F225F58D6E0056D9C0 /* DBPlaylist+Changes.swift */; };
+		805DF1F825F58EB90056D9C0 /* DBTrack+Changes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805DF1F725F58EB90056D9C0 /* DBTrack+Changes.swift */; };
 		805FD8B525A128D600F32BFB /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805FD8B425A128D600F32BFB /* Key.swift */; };
 		805FD8BD25A12B4B00F32BFB /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805FD8BC25A12B4B00F32BFB /* Double.swift */; };
 		805FD8C225A12BA400F32BFB /* Tempo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805FD8C125A12BA400F32BFB /* Tempo.swift */; };
@@ -296,6 +298,8 @@
 		8054C014259F720000A7035A /* PlayerAudioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerAudioView.swift; sourceTree = "<group>"; };
 		8054C019259F860000A7035A /* SpotifyURIPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyURIPlaylist.swift; sourceTree = "<group>"; };
 		805DF1E925F582970056D9C0 /* TracksExportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksExportManager.swift; sourceTree = "<group>"; };
+		805DF1F225F58D6E0056D9C0 /* DBPlaylist+Changes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DBPlaylist+Changes.swift"; sourceTree = "<group>"; };
+		805DF1F725F58EB90056D9C0 /* DBTrack+Changes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DBTrack+Changes.swift"; sourceTree = "<group>"; };
 		805FD8B425A128D600F32BFB /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
 		805FD8BC25A12B4B00F32BFB /* Double.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
 		805FD8C125A12BA400F32BFB /* Tempo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tempo.swift; sourceTree = "<group>"; };
@@ -837,6 +841,7 @@
 				80A8C82025BF556A00F97EF0 /* BranchingPlaylist.swift */,
 				802ACDDC25C08A43007324AF /* JustCachePlaylist.swift */,
 				80A8C83225BF5B5200F97EF0 /* DBPlaylist.swift */,
+				805DF1F225F58D6E0056D9C0 /* DBPlaylist+Changes.swift */,
 				80A8C83325BF5B5200F97EF0 /* DBPlaylist+CoreDataProperties.swift */,
 			);
 			path = Playlist;
@@ -848,6 +853,7 @@
 				80A8C82525BF557400F97EF0 /* BranchingTrack.swift */,
 				802ACDE125C08A5B007324AF /* JustCacheTrack.swift */,
 				80A8C83C25BF5B5200F97EF0 /* DBTrack.swift */,
+				805DF1F725F58EB90056D9C0 /* DBTrack+Changes.swift */,
 				80A8C83D25BF5B5200F97EF0 /* DBTrack+CoreDataProperties.swift */,
 			);
 			path = Track;
@@ -1288,9 +1294,11 @@
 				8053383E2599002A006F06DC /* BlinkingImage.swift in Sources */,
 				805338232598BA5B006F06DC /* Sequence.swift in Sources */,
 				8005083E2597F45B0055FB2D /* CodableRegistry.swift in Sources */,
+				805DF1F325F58D6E0056D9C0 /* DBPlaylist+Changes.swift in Sources */,
 				802E2CD2259607E300CB91EC /* Library.swift in Sources */,
 				80A8C84925BF5B5200F97EF0 /* DBSpotifyTrack+CoreDataProperties.swift in Sources */,
 				8082F11425A9BF3200B1D157 /* KeyedDemand.swift in Sources */,
+				805DF1F825F58EB90056D9C0 /* DBTrack+Changes.swift in Sources */,
 				800C11FA259A378D0017A116 /* AVTrack.swift in Sources */,
 				8005085E259802B60055FB2D /* RawRepresentable.swift in Sources */,
 				802E2CF52596359300CB91EC /* Track+Attributes.swift in Sources */,

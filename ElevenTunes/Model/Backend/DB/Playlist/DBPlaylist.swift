@@ -30,10 +30,17 @@ public class DBPlaylist: NSManagedObject {
 	func initialSetup() {
 		contentTypeP = contentType
 		primaryRepresentationP = primaryRepresentation
-
-		representationsP[.directory] = directoryRepresentation
-		representationsP[.m3u] = m3uRepresentation
-		representationsP[.spotify] = spotifyRepresentation
+		representationsP = representations
+	}
+	
+	var representations: [Representation: AnyPlaylistCache] {
+		var reps: [Representation: AnyPlaylistCache] = [:]
+		
+		reps[.directory] = directoryRepresentation
+		reps[.m3u] = m3uRepresentation
+		reps[.spotify] = spotifyRepresentation
+		
+		return reps
 	}
 }
 
