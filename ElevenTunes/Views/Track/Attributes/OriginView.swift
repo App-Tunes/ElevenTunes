@@ -96,6 +96,7 @@ struct TrackArtistsView: View {
 			.onReceive(track.backend.attribute(TrackAttribute.artists)) {
 				artists = $0.value?.map { Playlist($0) }
 			}
+			.id(track.id)
 	}
 }
 
@@ -115,5 +116,6 @@ struct TrackAlbumView: View {
 			.onReceive(track.backend.attribute(TrackAttribute.album)) {
 				album = $0.value.map { Playlist($0) }
 			}
+			.id(track.id)
 	}
 }
