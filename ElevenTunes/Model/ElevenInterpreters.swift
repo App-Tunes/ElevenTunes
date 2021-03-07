@@ -9,7 +9,7 @@ import Foundation
 import UniformTypeIdentifiers
 
 class TrackInterpreter: ContentInterpreter<TrackToken> {
-	override var types: [UTType] { [.fileURL, .url] }
+	override var types: [UTType] { [.url] }
 	
 	static let standard = createDefault()
 	
@@ -28,7 +28,7 @@ class TrackInterpreter: ContentInterpreter<TrackToken> {
 }
 
 class PlaylistInterpreter: ContentInterpreter<PlaylistToken> {
-	override var types: [UTType] { [.fileURL, .url, .m3uPlaylist] }
+	override var types: [UTType] { [.url, .m3uPlaylist] }
 	
 	static let standard = createDefault()
 	

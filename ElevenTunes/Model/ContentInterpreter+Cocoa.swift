@@ -16,7 +16,6 @@ extension ContentInterpreter {
 			if info.canReadItem(withDataConformingToTypes: [type.identifier]) {
 				publishers.append(
 					info.loadData(forType: type)
-						.mapError { _ in LoadError() }
 						.tryCompactMap { item in try self.interpret(item, type: type) }
 						.eraseToAnyPublisher()
 					)

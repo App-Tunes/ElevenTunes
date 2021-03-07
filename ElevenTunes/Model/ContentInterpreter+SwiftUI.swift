@@ -10,8 +10,6 @@ import SwiftUI
 import Combine
 
 extension ContentInterpreter {
-    struct LoadError: Error {}
-    
     func interpret(drop info: DropInfo) -> AnyPublisher<[Interpreted], Error>? {
         var publishers: [AnyPublisher<Interpreted, Error>] = []
 
@@ -19,7 +17,6 @@ extension ContentInterpreter {
             for provider in info.itemProviders(for: [type]) {
                 publishers.append(
                     provider.loadItem(forType: type)
-                        .mapError { _ in LoadError() }
                         .tryCompactMap { item in try self.interpret(item, type: type) }
                         .eraseToAnyPublisher()
                     )
