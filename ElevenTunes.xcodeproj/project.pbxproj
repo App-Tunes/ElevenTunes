@@ -80,6 +80,7 @@
 		806185A225F4E6FA0062AAB3 /* NSOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185A125F4E6FA0062AAB3 /* NSOutlineView.swift */; };
 		806185A725F4E73D0062AAB3 /* ArrayDifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185A625F4E73D0062AAB3 /* ArrayDifference.swift */; };
 		806185AC25F5038F0062AAB3 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185AB25F5038F0062AAB3 /* Int.swift */; };
+		806185B125F504C40062AAB3 /* PlaylistsViewController+Interaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185B025F504C40062AAB3 /* PlaylistsViewController+Interaction.swift */; };
 		806B0D2F25A9E47800603E64 /* VolatileAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D2E25A9E47800603E64 /* VolatileAttributes.swift */; };
 		806B0D3425A9EF1400603E64 /* SetRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D3325A9EF1400603E64 /* SetRelation.swift */; };
 		806B0D4225A9FE3F00603E64 /* RequestMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D4125A9FE3F00603E64 /* RequestMapper.swift */; };
@@ -288,6 +289,7 @@
 		806185A125F4E6FA0062AAB3 /* NSOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSOutlineView.swift; sourceTree = "<group>"; };
 		806185A625F4E73D0062AAB3 /* ArrayDifference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayDifference.swift; sourceTree = "<group>"; };
 		806185AB25F5038F0062AAB3 /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
+		806185B025F504C40062AAB3 /* PlaylistsViewController+Interaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlaylistsViewController+Interaction.swift"; sourceTree = "<group>"; };
 		806B0D2E25A9E47800603E64 /* VolatileAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolatileAttributes.swift; sourceTree = "<group>"; };
 		806B0D3325A9EF1400603E64 /* SetRelation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRelation.swift; sourceTree = "<group>"; };
 		806B0D4125A9FE3F00603E64 /* RequestMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestMapper.swift; sourceTree = "<group>"; };
@@ -444,6 +446,7 @@
 				806B2795258D5D540091EA4D /* PlaylistsView.swift */,
 				804D3BFF25D93A5E00705D42 /* PlaylistsViewController.swift */,
 				804D3C0625D93BAD00705D42 /* PlaylistsViewController+Outline.swift */,
+				806185B025F504C40062AAB3 /* PlaylistsViewController+Interaction.swift */,
 				80F53EC025D9BF49003A98B3 /* PlaylistsViewController+Actions.swift */,
 				804D3C0B25D94D2900705D42 /* PlaylistsViewController+Hierarchy.swift */,
 				804D3C0025D93A5E00705D42 /* PlaylistsViewController.xib */,
@@ -1305,6 +1308,7 @@
 				802DBA6225A1175200EA6DB7 /* NavigationBarView.swift in Sources */,
 				801F7E1A25D84B47004372CE /* NSItemProvider.swift in Sources */,
 				80151EF52593C98500D9539A /* SpotifyDeviceView.swift in Sources */,
+				806185B125F504C40062AAB3 /* PlaylistsViewController+Interaction.swift in Sources */,
 				80A8C89125BF734D00F97EF0 /* AnyPlaylistCache.swift in Sources */,
 				80ED7691258FF41200B8B9C3 /* Array.swift in Sources */,
 				80AD69892588285F00192BED /* PlayerBarView.swift in Sources */,

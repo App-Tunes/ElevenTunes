@@ -30,8 +30,14 @@ struct PlaylistRowView: View {
             }
 
 			if title.state == .valid {
-				Text(title.value ?? "Unknown Playlist")
-//                        .opacity((playlist.tracks.isEmpty && playlist.children.isEmpty) ? 0.6 : 1)
+				TextField("", text: .init(get: { title.value ?? "Unknown Playlist" }, set: {
+					if let primary = playlist.backend.primary as? JustCachePlaylist {
+						primary.cache.title = $0
+					}
+				}))
+					.textFieldStyle(PlainTextFieldStyle())
+					.foregroundColor(.primary)
+					.disabled(!(playlist.backend.primary is JustCachePlaylist))
             }
             else {
                 Text(title.value ?? "...")

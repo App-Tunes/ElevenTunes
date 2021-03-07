@@ -76,3 +76,9 @@ extension BranchingPlaylist: Hashable {
 		hasher.combine(id)
 	}
 }
+
+extension AnyPlaylist {
+	var primary: AnyPlaylist {
+		(self as? BranchingPlaylist)?.primary ?? self
+	}
+}
