@@ -33,6 +33,7 @@ struct PlayerControlsView: View {
                 Image(systemName: isPlaying ? "pause.fill" : "play.fill")
                     .font(.system(size: 24))
             }
+				.frame(width: 25)
                 .keyboardShortcut(.space, modifiers: [])
 
             Button(action: {
