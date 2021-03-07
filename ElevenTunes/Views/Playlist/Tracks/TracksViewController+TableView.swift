@@ -78,7 +78,7 @@ extension TracksViewController: NSTableViewDelegate {
 		}
 		
 		if let view = createOn(ColumnIdentifiers.Image, cell: CellIdentifiers.ImageCell) {
-			view.rootView = AnyView(PlayTrackImageView(track: track, context: .playlist(playlist.backend, tracks: tracks.map(\.backend), index: row))
+			view.rootView = AnyView(PlayTrackImageView(track: track, context: .playlist(playlist.backend, tracks: tracks.map(\.backend), track: track.backend))
 									.environment(\.library, library)
 						.environment(\.player, library.player)
 					)

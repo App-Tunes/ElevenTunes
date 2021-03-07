@@ -10,7 +10,7 @@ import Combine
 
 struct PlayTrackView: View {
     let track: Track
-    @State var context: PlayHistoryContext
+    let context: PlayHistoryContext
 
     @Environment(\.player) private var player: Player!
     @State var current: AnyTrack?
@@ -46,7 +46,7 @@ struct PlayTrackView: View {
             }
         }
         .onHover { isHovering = $0 }
-        .buttonStyle(BorderlessButtonStyle())
+        .buttonStyle(InfinityButtonStyle())
         .onReceive(player.$current) { self.current = $0 }
         .onReceive(player.$next) { self.next = $0 }
     }
@@ -54,8 +54,7 @@ struct PlayTrackView: View {
 
 struct PlayTrackImageView: View {
 	let track: Track
-	
-	@State var context: PlayHistoryContext
+	let context: PlayHistoryContext
 
 	var body: some View {
 		ZStack(alignment: .center) {
@@ -69,5 +68,6 @@ struct PlayTrackImageView: View {
 				.font(.system(size: 14))
 		}
 		.cornerRadius(5)
+		.id(track.id)
 	}
 }

@@ -9,9 +9,22 @@ import Foundation
 import SwiftUI
 
 extension Button where Label == Text {
-    static func invisible(_ action: @escaping () -> Void) -> AnyView {
-        AnyView(Button("", action: action)
-            .buttonStyle(BorderlessButtonStyle())
-            .frame(width: 0, height: 0))
+    static func invisible(_ action: @escaping () -> Void) -> some View {
+        Button("", action: action)
+            .buttonStyle(InvisibleButtonStyle())
     }
+}
+
+struct InvisibleButtonStyle: ButtonStyle {
+	func makeBody(configuration: Configuration) -> some View {
+		configuration.label
+			.frame(width: 0, height: 0)
+	}
+}
+
+struct InfinityButtonStyle: ButtonStyle {
+	func makeBody(configuration: Configuration) -> some View {
+		configuration.label
+			.frame(maxWidth: .infinity, maxHeight: .infinity)
+	}
 }

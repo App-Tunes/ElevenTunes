@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 enum PlayHistoryContext {
-    case playlist(_ playlist: AnyPlaylist, tracks: [AnyTrack], index: Int)
+    case playlist(_ playlist: AnyPlaylist, tracks: [AnyTrack], track: AnyTrack)
 }
 
 class PlayHistory {
@@ -31,7 +31,8 @@ class PlayHistory {
     
     convenience init(context: PlayHistoryContext) {
         switch context {
-        case .playlist(_, let tracks, let index):
+        case .playlist(_, let tracks, let track):
+			let index = tracks.firstIndex { $0.id == track.id } ?? tracks.count
             self.init(Array(tracks[index...]), history: Array(tracks[..<index]))
         }
     }
