@@ -15,7 +15,6 @@ class PlaylistsViewController: NSViewController {
 	var directory: Playlist {
 		didSet {
 			directoryItem = Item(playlist: directory.backend, parent: nil, delegate: self)
-			print("Did Set")
 		}
 	}
 	

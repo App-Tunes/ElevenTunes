@@ -53,3 +53,25 @@ struct PlayTrackView: View {
         .onReceive(player.$next) { self.next = $0 }
     }
 }
+
+struct PlayTrackImageView: View {
+	let track: Track
+	
+	@State var context: PlayHistoryContext
+
+	var body: some View {
+		HStack {
+			ZStack(alignment: .center) {
+				Rectangle()
+					.fill(Color.black)
+					.opacity(0.2)
+				
+				TrackImageView(track: track)
+				
+				PlayTrackView(track: track, context: context)
+					.font(.system(size: 14))
+			}
+			.cornerRadius(5)
+		}
+	}
+}

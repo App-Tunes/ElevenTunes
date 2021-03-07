@@ -15,20 +15,15 @@ struct TrackRowView: View {
 
     var body: some View {
         HStack {
-            ZStack(alignment: .center) {
-                Rectangle()
-                    .fill(Color.black)
-                    .opacity(0.2)
-				
-				TrackImageView(track: track)
-                
-                PlayTrackView(track: track, context: context)
-                    .font(.system(size: 14))
-            }
-            .frame(width: 28, height: 28)
-            .cornerRadius(5)
+            PlayTrackImageView(track: track, context: context)
+				.frame(width: 28, height: 28)
 
             TrackCellView(track: track)
+			
+			Spacer()
+			
+			TrackTempoView(track: track)
+			TrackKeyView(track: track)
         }
     }
 }

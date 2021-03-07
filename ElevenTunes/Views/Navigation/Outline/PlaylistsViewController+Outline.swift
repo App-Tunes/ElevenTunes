@@ -8,11 +8,6 @@
 import Foundation
 import SwiftUI
 
-@objc(PlaylistRowNSView)
-class PlaylistRowNSView: NSView {
-	var hostingView: NSHostingView<PlaylistRowView>?
-}
-
 extension PlaylistsViewController: NSOutlineViewDelegate {
 	enum CellIdentifiers {
 		static let HeaderCell = NSUserInterfaceItemIdentifier(rawValue: "HeaderCell")
@@ -24,29 +19,12 @@ extension PlaylistsViewController: NSOutlineViewDelegate {
 		let item = self.item(raw: raw)
 		let isTopLevel = item.parent == directoryItem
 		
-		if let view = outlineView.makeView(withIdentifier: CellIdentifiers.PlaylistCell, owner: nil) as? PlaylistRowNSView {
-			let content = PlaylistRowView(playlist: Playlist(item.playlist), isTopLevel: isTopLevel)
-			
-			if let hostingView = view.hostingView {
-				hostingView.rootView = content
-			}
-			else {
-				let hostingView = NSHostingView(rootView: content)
-				hostingView.frame = view.bounds
-				hostingView.translatesAutoresizingMaskIntoConstraints = false
-
-				view.hostingView = hostingView
-				view.setFullSizeContent(hostingView)
-			}
-			
+		if let view = outlineView.makeView(withIdentifier: CellIdentifiers.PlaylistCell, owner: nil) as? AnyNSHostingView {
+			view.rootView = AnyView(PlaylistRowView(playlist: Playlist(item.playlist), isTopLevel: isTopLevel))
 			return view
 		}
 
 		return nil
-	}
-	
-	func outlineView(_ outlineView: NSOutlineView, heightOfRowByItem item: Any) -> CGFloat {
-		25
 	}
 	
 	func outlineView(_ outlineView: NSOutlineView, isGroupItem raw: Any) -> Bool {

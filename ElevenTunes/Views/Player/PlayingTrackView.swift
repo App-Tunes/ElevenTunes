@@ -30,6 +30,11 @@ struct PlayingTrackView: View {
 
             if let current = current {
                 TrackCellView(track: current)
+				
+				Spacer()
+				
+				TrackTempoView(track: current)
+				TrackKeyView(track: current)
             }
             else {
                 Text("Nothing Playing").opacity(0.5)

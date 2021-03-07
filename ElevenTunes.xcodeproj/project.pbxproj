@@ -54,6 +54,8 @@
 		802E2DAD259643AE00CB91EC /* SpotifyUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2DA7259643AE00CB91EC /* SpotifyUser.swift */; };
 		802E2DC6259644FF00CB91EC /* M3UPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2DC4259644FF00CB91EC /* M3UPlaylist.swift */; };
 		802E2DCF2596573900CB91EC /* NSOrderedSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2DCE2596573900CB91EC /* NSOrderedSet.swift */; };
+		803A86FF25F5387700D7B9E1 /* HostingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803A86FE25F5387700D7B9E1 /* HostingView.swift */; };
+		803A870425F54C9C00D7B9E1 /* NSTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803A870325F54C9C00D7B9E1 /* NSTableView.swift */; };
 		803BF16E25D0A05D006372F2 /* NewPlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803BF16D25D0A05D006372F2 /* NewPlaylistView.swift */; };
 		804D3C0125D93A5E00705D42 /* PlaylistsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804D3BFF25D93A5E00705D42 /* PlaylistsViewController.swift */; };
 		804D3C0225D93A5E00705D42 /* PlaylistsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 804D3C0025D93A5E00705D42 /* PlaylistsViewController.xib */; };
@@ -81,10 +83,15 @@
 		806185A725F4E73D0062AAB3 /* ArrayDifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185A625F4E73D0062AAB3 /* ArrayDifference.swift */; };
 		806185AC25F5038F0062AAB3 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185AB25F5038F0062AAB3 /* Int.swift */; };
 		806185B125F504C40062AAB3 /* PlaylistsViewController+Interaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185B025F504C40062AAB3 /* PlaylistsViewController+Interaction.swift */; };
+		806185B725F51B030062AAB3 /* TracksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185B625F51B030062AAB3 /* TracksView.swift */; };
+		806185BD25F51B460062AAB3 /* TracksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185BB25F51B460062AAB3 /* TracksViewController.swift */; };
+		806185BE25F51B460062AAB3 /* TracksViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 806185BC25F51B460062AAB3 /* TracksViewController.xib */; };
+		806185C325F51C220062AAB3 /* TracksViewController+TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185C225F51C220062AAB3 /* TracksViewController+TableView.swift */; };
+		806185C925F534650062AAB3 /* TrackTempoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185C825F534650062AAB3 /* TrackTempoView.swift */; };
+		806185CE25F5346D0062AAB3 /* TrackKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185CD25F5346D0062AAB3 /* TrackKeyView.swift */; };
 		806B0D2F25A9E47800603E64 /* VolatileAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D2E25A9E47800603E64 /* VolatileAttributes.swift */; };
 		806B0D3425A9EF1400603E64 /* SetRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D3325A9EF1400603E64 /* SetRelation.swift */; };
 		806B0D4225A9FE3F00603E64 /* RequestMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D4125A9FE3F00603E64 /* RequestMapper.swift */; };
-		806B2790258D5CBD0091EA4D /* TracksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B278F258D5CBD0091EA4D /* TracksView.swift */; };
 		806B2796258D5D540091EA4D /* PlaylistsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B2795258D5D540091EA4D /* PlaylistsView.swift */; };
 		806B27C1258D69470091EA4D /* LibraryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B27C0258D69470091EA4D /* LibraryMock.swift */; };
 		806B27D1258D6ADB0091EA4D /* TypedDict.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B27D0258D6ADB0091EA4D /* TypedDict.swift */; };
@@ -263,6 +270,8 @@
 		802E2DA7259643AE00CB91EC /* SpotifyUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyUser.swift; sourceTree = "<group>"; };
 		802E2DC4259644FF00CB91EC /* M3UPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = M3UPlaylist.swift; sourceTree = "<group>"; };
 		802E2DCE2596573900CB91EC /* NSOrderedSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSOrderedSet.swift; sourceTree = "<group>"; };
+		803A86FE25F5387700D7B9E1 /* HostingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostingView.swift; sourceTree = "<group>"; };
+		803A870325F54C9C00D7B9E1 /* NSTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTableView.swift; sourceTree = "<group>"; };
 		803BF16D25D0A05D006372F2 /* NewPlaylistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlaylistView.swift; sourceTree = "<group>"; };
 		804D3BFF25D93A5E00705D42 /* PlaylistsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsViewController.swift; sourceTree = "<group>"; };
 		804D3C0025D93A5E00705D42 /* PlaylistsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaylistsViewController.xib; sourceTree = "<group>"; };
@@ -290,10 +299,15 @@
 		806185A625F4E73D0062AAB3 /* ArrayDifference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayDifference.swift; sourceTree = "<group>"; };
 		806185AB25F5038F0062AAB3 /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
 		806185B025F504C40062AAB3 /* PlaylistsViewController+Interaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlaylistsViewController+Interaction.swift"; sourceTree = "<group>"; };
+		806185B625F51B030062AAB3 /* TracksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksView.swift; sourceTree = "<group>"; };
+		806185BB25F51B460062AAB3 /* TracksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksViewController.swift; sourceTree = "<group>"; };
+		806185BC25F51B460062AAB3 /* TracksViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TracksViewController.xib; sourceTree = "<group>"; };
+		806185C225F51C220062AAB3 /* TracksViewController+TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TracksViewController+TableView.swift"; sourceTree = "<group>"; };
+		806185C825F534650062AAB3 /* TrackTempoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTempoView.swift; sourceTree = "<group>"; };
+		806185CD25F5346D0062AAB3 /* TrackKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackKeyView.swift; sourceTree = "<group>"; };
 		806B0D2E25A9E47800603E64 /* VolatileAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolatileAttributes.swift; sourceTree = "<group>"; };
 		806B0D3325A9EF1400603E64 /* SetRelation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRelation.swift; sourceTree = "<group>"; };
 		806B0D4125A9FE3F00603E64 /* RequestMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestMapper.swift; sourceTree = "<group>"; };
-		806B278F258D5CBD0091EA4D /* TracksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksView.swift; sourceTree = "<group>"; };
 		806B2795258D5D540091EA4D /* PlaylistsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsView.swift; sourceTree = "<group>"; };
 		806B27C0258D69470091EA4D /* LibraryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryMock.swift; sourceTree = "<group>"; };
 		806B27D0258D6ADB0091EA4D /* TypedDict.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypedDict.swift; sourceTree = "<group>"; };
@@ -554,6 +568,7 @@
 				80F53EB625D9BE88003A98B3 /* Keycodes.swift */,
 				80DC5CEE25D9DC0800563A10 /* NSPasteboard.swift */,
 				806185A125F4E6FA0062AAB3 /* NSOutlineView.swift */,
+				803A870325F54C9C00D7B9E1 /* NSTableView.swift */,
 				806185A625F4E73D0062AAB3 /* ArrayDifference.swift */,
 			);
 			path = Cocoa;
@@ -580,6 +595,7 @@
 				80C9A184259F916F00A038CC /* Combine.swift */,
 				802DBA21259FA9B000EA6DB7 /* Gradient.swift */,
 				80E0AD7325AC5D3100274597 /* WhileActive.swift */,
+				803A86FE25F5387700D7B9E1 /* HostingView.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -599,13 +615,9 @@
 		8054BFFE259F6D8000A7035A /* Track */ = {
 			isa = PBXGroup;
 			children = (
+				806185C725F534150062AAB3 /* Attributes */,
 				80AD699F258828F400192BED /* TrackInfoView.swift */,
-				8054C00C259F6DE600A7035A /* PlayTrackView.swift */,
-				8054BFFF259F6DA000A7035A /* TrackCellView.swift */,
-				8097F6D925AE76250072E847 /* TrackImageView.swift */,
-				8054C007259F6DC900A7035A /* OriginView.swift */,
 				80C9A189259F9BDB00A038CC /* RemoteImageCollection.swift */,
-				802DBA4B259FED1D00EA6DB7 /* PlaylistMultiplicityView.swift */,
 			);
 			path = Track;
 			sourceTree = "<group>";
@@ -631,6 +643,30 @@
 				805FD8C125A12BA400F32BFB /* Tempo.swift */,
 			);
 			path = Audio;
+			sourceTree = "<group>";
+		};
+		806185B525F51A940062AAB3 /* Tracks */ = {
+			isa = PBXGroup;
+			children = (
+				806185B625F51B030062AAB3 /* TracksView.swift */,
+				806185BB25F51B460062AAB3 /* TracksViewController.swift */,
+				806185C225F51C220062AAB3 /* TracksViewController+TableView.swift */,
+				806185BC25F51B460062AAB3 /* TracksViewController.xib */,
+			);
+			path = Tracks;
+			sourceTree = "<group>";
+		};
+		806185C725F534150062AAB3 /* Attributes */ = {
+			isa = PBXGroup;
+			children = (
+				8054BFFF259F6DA000A7035A /* TrackCellView.swift */,
+				8054C007259F6DC900A7035A /* OriginView.swift */,
+				8054C00C259F6DE600A7035A /* PlayTrackView.swift */,
+				8097F6D925AE76250072E847 /* TrackImageView.swift */,
+				806185C825F534650062AAB3 /* TrackTempoView.swift */,
+				806185CD25F5346D0062AAB3 /* TrackKeyView.swift */,
+			);
+			path = Attributes;
 			sourceTree = "<group>";
 		};
 		806B2794258D5D390091EA4D /* Navigation */ = {
@@ -961,8 +997,9 @@
 		80AD69AF25882A3C00192BED /* Playlist */ = {
 			isa = PBXGroup;
 			children = (
+				802DBA4B259FED1D00EA6DB7 /* PlaylistMultiplicityView.swift */,
 				80AD698D2588287900192BED /* PlaylistView.swift */,
-				806B278F258D5CBD0091EA4D /* TracksView.swift */,
+				806185B525F51A940062AAB3 /* Tracks */,
 				80D6DAB0259E31C800879BCF /* TracksContextMenu.swift */,
 				80AD69A9258829EE00192BED /* FilterBarView.swift */,
 				80AD69A4258829C400192BED /* PlaylistBarView.swift */,
@@ -1160,6 +1197,7 @@
 				804D3C0225D93A5E00705D42 /* PlaylistsViewController.xib in Resources */,
 				802E2C9D2595FEB900CB91EC /* Main.storyboard in Resources */,
 				80AD695B258825FD00192BED /* Preview Assets.xcassets in Resources */,
+				806185BE25F51B460062AAB3 /* TracksViewController.xib in Resources */,
 				80AD6958258825FD00192BED /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1217,6 +1255,7 @@
 				80D6DA95259DEE2400879BCF /* AnyArtist.swift in Sources */,
 				804D3C1225D96E9300705D42 /* NSLayoutConstraint.swift in Sources */,
 				8005082D25978E270055FB2D /* Library+Conversion.swift in Sources */,
+				803A870425F54C9C00D7B9E1 /* NSTableView.swift in Sources */,
 				80D6DAA7259E2AE100879BCF /* SpotifyAlbum.swift in Sources */,
 				80C9A178259F8FD300A038CC /* MilkyImageView.swift in Sources */,
 				806E1FD32596A5FA003EEA83 /* Playlist+Attributes.swift in Sources */,
@@ -1224,6 +1263,7 @@
 				801B4F5125A60A0E0053BFC4 /* BSManagedDocument.m in Sources */,
 				804D3C0725D93BAD00705D42 /* PlaylistsViewController+Outline.swift in Sources */,
 				80A8C84C25BF5B5200F97EF0 /* DBArtist.swift in Sources */,
+				806185B725F51B030062AAB3 /* TracksView.swift in Sources */,
 				8082F10225A88BE700B1D157 /* Date.swift in Sources */,
 				806B2836258E4B4F0091EA4D /* PlayerControlsView.swift in Sources */,
 				80D6DAB1259E31C800879BCF /* TracksContextMenu.swift in Sources */,
@@ -1254,6 +1294,7 @@
 				802E2DCF2596573900CB91EC /* NSOrderedSet.swift in Sources */,
 				8054BFF5259F698E00A7035A /* ToolbarView.swift in Sources */,
 				80151EDC2593C53200D9539A /* GeneralSettingsView.swift in Sources */,
+				803A86FF25F5387700D7B9E1 /* HostingView.swift in Sources */,
 				80AD69A5258829C400192BED /* PlaylistBarView.swift in Sources */,
 				801F7E1F25D84F7E004372CE /* PlaylistsExportManager.swift in Sources */,
 				802E2CB9259601DB00CB91EC /* AppLog.swift in Sources */,
@@ -1268,6 +1309,7 @@
 				80A8C88C25BF5FA500F97EF0 /* TrackToken.swift in Sources */,
 				802ACDE225C08A5B007324AF /* JustCacheTrack.swift in Sources */,
 				806B28D3258FAF1E0091EA4D /* Future.swift in Sources */,
+				806185BD25F51B460062AAB3 /* TracksViewController.swift in Sources */,
 				80C9A185259F916F00A038CC /* Combine.swift in Sources */,
 				80AD69A0258828F400192BED /* TrackInfoView.swift in Sources */,
 				80F53EAF25D9BE58003A98B3 /* ActionOutlineView.swift in Sources */,
@@ -1291,9 +1333,9 @@
 				804D3C0125D93A5E00705D42 /* PlaylistsViewController.swift in Sources */,
 				80A8C85225BF5B5200F97EF0 /* DBAlbum.swift in Sources */,
 				80C9A17D259F902D00A038CC /* MilkyCoverView.swift in Sources */,
-				806B2790258D5CBD0091EA4D /* TracksView.swift in Sources */,
 				80A8C84725BF5B5200F97EF0 /* DBDirectoryPlaylist+CoreDataProperties.swift in Sources */,
 				806E202825975A0E003EEA83 /* MockTrack.swift in Sources */,
+				806185C325F51C220062AAB3 /* TracksViewController+TableView.swift in Sources */,
 				80A8C84425BF5B5200F97EF0 /* DBPlaylist.swift in Sources */,
 				806B0D4225A9FE3F00603E64 /* RequestMapper.swift in Sources */,
 				80A8C89925BF738500F97EF0 /* AnyTrackCache.swift in Sources */,
@@ -1326,11 +1368,13 @@
 				80D6DAB6259E389600879BCF /* PlaylistActions.swift in Sources */,
 				800C11FF259A3EF10017A116 /* TrackRowView.swift in Sources */,
 				806E1FDB2596A9A3003EEA83 /* CodableTransformer.swift in Sources */,
+				806185C925F534650062AAB3 /* TrackTempoView.swift in Sources */,
 				80C9A18F259FA13000A038CC /* Optional.swift in Sources */,
 				8054C01A259F860000A7035A /* SpotifyURIPlaylist.swift in Sources */,
 				8054C008259F6DC900A7035A /* OriginView.swift in Sources */,
 				806B28AC258ED4CE0091EA4D /* SpotifyAudioEmitter.swift in Sources */,
 				8083E85225AA11A200D4CE60 /* RemotePlaylist.swift in Sources */,
+				806185CE25F5346D0062AAB3 /* TrackKeyView.swift in Sources */,
 				80D6DA66259B74AA00879BCF /* NSLock.swift in Sources */,
 				8053381625989A7A006F06DC /* NSManagedObjectContext.swift in Sources */,
 				808D5485259F3A4A006F7435 /* SystemUI.swift in Sources */,

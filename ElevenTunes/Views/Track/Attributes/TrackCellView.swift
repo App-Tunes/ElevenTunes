@@ -16,8 +16,6 @@ struct TrackCellView: View {
     @State var album: Playlist? = nil
     
 	@State var title: String?
-	@State var tempo: Tempo?
-	@State var key: MusicalKey?
 
     @Environment(\.library) var library: Library!
 
@@ -49,26 +47,15 @@ struct TrackCellView: View {
                     .frame(alignment: .top)
             }
             .padding(.vertical, 4)
-
-            Spacer()
-            
-            Text(key?.title ?? "")
-                .foregroundColor(key?.color ?? .clear)
-                .frame(width: 30, alignment: .center)
-                .padding(.leading)
-            
-            Text(tempo?.title ?? "")
-                .foregroundColor(tempo?.color ?? .clear)
-                .frame(width: 50, alignment: .trailing)
+			
+			Spacer()
         }
         .lineLimit(1)
         .opacity(hasBasicInfo ? 1 : 0.5)
-		.whileActive(track.backend.demand([.title, .bpm, .key, .album, .artists]))
+		.whileActive(track.backend.demand([.title, .album, .artists]))
 		.onReceive(track.backend.attributes) { (snapshot, _) in
 			setIfDifferent(self, \.hasBasicInfo, snapshot[TrackAttribute.title].state == .valid)
 			setIfDifferent(self, \.title, snapshot[TrackAttribute.title].value)
-			setIfDifferent(self, \.tempo, snapshot[TrackAttribute.bpm].value)
-			setIfDifferent(self, \.key, snapshot[TrackAttribute.key].value)
 			setIfDifferent(self, \.album, snapshot[TrackAttribute.album].value.map(Playlist.init))
 			setIfDifferent(self, \.artists, snapshot[TrackAttribute.artists].value?.map(Playlist.init) ?? [])
 		}
