@@ -32,7 +32,9 @@ struct ArtistCellView: View {
             }
         }
 		.whileActive(artist.backend.demand([.title]))
-		.onReceive(artist.backend.attribute(PlaylistAttribute.title)) { title = $0 }
+		.onReceive(artist.backend.attribute(PlaylistAttribute.title)) {
+			setIfDifferent(self, \.title, $0)
+		}
 		.id(artist.id)
     }
 }
@@ -63,7 +65,9 @@ struct AlbumCellView: View {
             }
         }
 		.whileActive(album.backend.demand([.title]))
-		.onReceive(album.backend.attribute(PlaylistAttribute.title)) { title = $0 }
+		.onReceive(album.backend.attribute(PlaylistAttribute.title)) {
+			setIfDifferent(self, \.title, $0)
+		}
 		.id(album.id)
     }
 }
@@ -114,7 +118,7 @@ struct TrackAlbumView: View {
 			.foregroundColor(.secondary)
 			.whileActive(track.backend.demand([.album]))
 			.onReceive(track.backend.attribute(TrackAttribute.album)) {
-				album = $0.value.map { Playlist($0) }
+				setIfDifferent(self, \.album, $0.value.map { Playlist($0) })
 			}
 			.id(track.id)
 	}
