@@ -92,6 +92,7 @@
                                     </tableColumn>
                                 </tableColumns>
                                 <connections>
+                                    <action trigger="doubleAction" selector="didDoubleClick:" target="-2" id="JEq-2D-YxU"/>
                                     <outlet property="dataSource" destination="-2" id="EbI-hz-3cL"/>
                                     <outlet property="delegate" destination="-2" id="JfU-ZX-6oO"/>
                                 </connections>

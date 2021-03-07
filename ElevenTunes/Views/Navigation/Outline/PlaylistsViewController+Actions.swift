@@ -46,7 +46,7 @@ extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
 		{
 			// Internal cache-only drag; do internal logic
 			
-			playlist.cache.children = playlist.cache.children.inserting(contentsOf: playlists, atIndex: index >= 0 ? index : nil)
+			playlist.cache.children = playlist.cache.children.inserting(contentsOf: playlists, atIndex: index.positiveOrNil)
 
 			return true
 		}

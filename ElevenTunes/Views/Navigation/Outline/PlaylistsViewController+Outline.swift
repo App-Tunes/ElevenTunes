@@ -67,6 +67,24 @@ extension PlaylistsViewController: NSOutlineViewDelegate {
 		let items = outlineView.selectedRowIndexes.map { outlineView.item(atRow: $0) as! Item }
 		selectionObserver(Set(items.map { Playlist($0.playlist) }))
 	}
+	
+	@IBAction func didDoubleClick(_ sender: Any) {
+		guard let clicked = outlineView.clickedRow.positiveOrNil else {
+			return
+		}
+
+		let item = outlineView.item(atRow: clicked) as! Item
+		
+		guard !self.outlineView(outlineView, isItemExpandable: item) else {
+			outlineView.toggleItemExpanded(item)
+			return
+		}
+		
+//		if let playlist = item.asPlaylist {
+//			PlaylistActions.create(.visible(playlists: [playlist]))?.menuPlay(self)
+//			return
+//		}
+	}
 }
 
 extension PlaylistsViewController: NSOutlineViewDataSource {
