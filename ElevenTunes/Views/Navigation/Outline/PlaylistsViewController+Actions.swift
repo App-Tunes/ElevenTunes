@@ -59,8 +59,7 @@ extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
 		
 		if
 			let playlists = PlaylistsExportManager.read(fromPasteboard: pasteboard, context: library.managedObjectContext),
-			let playlist = item.playlist as? BranchingPlaylist,
-			playlist.primary is JustCachePlaylist
+			let playlist = item.playlist.primary as? JustCachePlaylist
 		{
 			// Internal cache-only drag; do internal logic
 			

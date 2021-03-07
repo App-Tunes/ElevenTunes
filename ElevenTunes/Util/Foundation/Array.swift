@@ -25,6 +25,10 @@ extension Array {
         self = [element] + self
     }
     
+	public func fullSlice() -> ArraySlice<Element> {
+		return self[indices]
+	}
+
     func removeDuplicates<T: Hashable>(by: (Element) -> T) -> [Element] {
         var result = [Element]()
         var set = Set<T>()

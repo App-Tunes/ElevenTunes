@@ -188,7 +188,7 @@ extension SpotifyTrack: BranchableTrack {
 		}
 
 		let cache = DBSpotifyTrack(entity: trackModel, insertInto: context)
-		cache.spotifyID = token.uri
+		cache.spotifyID = token.trackID
 		
 		track.spotifyRepresentation = cache
 		

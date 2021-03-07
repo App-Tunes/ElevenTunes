@@ -77,6 +77,7 @@
 		8054C00D259F6DE600A7035A /* PlayTrackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8054C00C259F6DE600A7035A /* PlayTrackView.swift */; };
 		8054C015259F720000A7035A /* PlayerAudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8054C014259F720000A7035A /* PlayerAudioView.swift */; };
 		8054C01A259F860000A7035A /* SpotifyURIPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8054C019259F860000A7035A /* SpotifyURIPlaylist.swift */; };
+		805DF1EA25F582970056D9C0 /* TracksExportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805DF1E925F582970056D9C0 /* TracksExportManager.swift */; };
 		805FD8B525A128D600F32BFB /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805FD8B425A128D600F32BFB /* Key.swift */; };
 		805FD8BD25A12B4B00F32BFB /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805FD8BC25A12B4B00F32BFB /* Double.swift */; };
 		805FD8C225A12BA400F32BFB /* Tempo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805FD8C125A12BA400F32BFB /* Tempo.swift */; };
@@ -294,6 +295,7 @@
 		8054C00C259F6DE600A7035A /* PlayTrackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTrackView.swift; sourceTree = "<group>"; };
 		8054C014259F720000A7035A /* PlayerAudioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerAudioView.swift; sourceTree = "<group>"; };
 		8054C019259F860000A7035A /* SpotifyURIPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyURIPlaylist.swift; sourceTree = "<group>"; };
+		805DF1E925F582970056D9C0 /* TracksExportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksExportManager.swift; sourceTree = "<group>"; };
 		805FD8B425A128D600F32BFB /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
 		805FD8BC25A12B4B00F32BFB /* Double.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
 		805FD8C125A12BA400F32BFB /* Tempo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tempo.swift; sourceTree = "<group>"; };
@@ -1004,6 +1006,7 @@
 				80AD698D2588287900192BED /* PlaylistView.swift */,
 				806185B525F51A940062AAB3 /* Tracks */,
 				80D6DAB0259E31C800879BCF /* TrackActions.swift */,
+				805DF1E925F582970056D9C0 /* TracksExportManager.swift */,
 				80AD69A9258829EE00192BED /* FilterBarView.swift */,
 				80AD69A4258829C400192BED /* PlaylistBarView.swift */,
 				800C11FE259A3EF10017A116 /* TrackRowView.swift */,
@@ -1231,6 +1234,7 @@
 				80F53EB725D9BE88003A98B3 /* Keycodes.swift in Sources */,
 				8054BFFA259F6A2700A7035A /* PlayingTrackView.swift in Sources */,
 				80A8C82625BF557400F97EF0 /* BranchingTrack.swift in Sources */,
+				805DF1EA25F582970056D9C0 /* TracksExportManager.swift in Sources */,
 				808D548D259F3BC9006F7435 /* Color.swift in Sources */,
 				806B28C8258F93D90091EA4D /* Spotify.swift in Sources */,
 				80D6DA7D259CD68500879BCF /* Library+Contents.swift in Sources */,

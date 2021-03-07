@@ -21,7 +21,7 @@ class TracksViewController: NSViewController {
 	
 	var tracks: [Track] = [] {
 		didSet {
-			tableView?.reloadData()
+			tableView?.animateDifference(from: oldValue, to: tracks)
 		}
 	}
 	
@@ -45,7 +45,8 @@ class TracksViewController: NSViewController {
 		initColumns()
 
 		tableView.registerForDraggedTypes(TrackInterpreter.standard.types.map { .init(rawValue: $0.identifier ) })
-		
+		tableView.registerForDraggedTypes([.init(TracksExportManager.tracksIdentifier)])
+
 		tableView.backgroundColor = NSColor.clear
 		tableView.sizeToFit()
 	}
