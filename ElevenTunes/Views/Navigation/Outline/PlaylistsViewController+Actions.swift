@@ -8,6 +8,24 @@
 import Foundation
 
 extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
+	@IBAction func didDoubleClick(_ sender: Any) {
+		guard let clicked = outlineView.clickedRow.positiveOrNil else {
+			return
+		}
+
+		let item = outlineView.item(atRow: clicked) as! Item
+		
+		guard !self.outlineView(outlineView, isItemExpandable: item) else {
+			outlineView.toggleItemExpanded(item)
+			return
+		}
+		
+//		if let playlist = item.asPlaylist {
+//			PlaylistActions.create(.visible(playlists: [playlist]))?.menuPlay(self)
+//			return
+//		}
+	}
+
 	func currentMenu(forOutlineView outlineView: NSOutlineViewContextSensitiveMenu) -> NSMenu? {
 		let items = outlineView.contextualClickedRows
 			.compactMap(outlineView.item)
