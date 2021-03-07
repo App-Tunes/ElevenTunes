@@ -40,6 +40,7 @@ extension TracksViewController: NSTableViewDelegate {
 		
 		addColumn(ColumnIdentifiers.Title, title: "Title") {
 			$0.widthRange = 150...CGFloat.infinity
+			$0.resizingMask = [.autoresizingMask, .userResizingMask]
 		}
 		
 		addColumn(ColumnIdentifiers.Tempo, title: "♩=") {

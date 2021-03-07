@@ -24,7 +24,7 @@
                         <rect key="frame" x="1" y="1" width="478" height="270"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="fullWidth" alternatingRowBackgroundColors="YES" columnSelection="YES" autosaveColumns="NO" rowHeight="30" headerView="1en-sV-iwO" viewBased="YES" floatsGroupRows="NO" id="hOV-Xg-aod" customClass="NSTableViewContextSensitiveMenu" customModule="ElevenTunes" customModuleProvider="target">
+                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" tableStyle="fullWidth" alternatingRowBackgroundColors="YES" columnSelection="YES" autosaveColumns="NO" rowHeight="30" headerView="1en-sV-iwO" viewBased="YES" floatsGroupRows="NO" id="hOV-Xg-aod" customClass="NSTableViewContextSensitiveMenu" customModule="ElevenTunes" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="478" height="213"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="4" height="4"/>
