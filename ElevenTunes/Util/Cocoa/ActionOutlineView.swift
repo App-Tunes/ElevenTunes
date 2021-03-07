@@ -8,13 +8,12 @@
 import Cocoa
 
 class ActionTableView: NSTableView {
-	@objc
-	var enterAction: Selector?
+	@objc var returnAction: Selector?
 	
 	override func keyDown(with event: NSEvent) {
 		guard !Keycodes.Either.enter.matches(event: event) else {
-			if let enterAction = enterAction {
-				target?.performSelector(onMainThread: enterAction, with: event, waitUntilDone: false)
+			if let returnAction = returnAction {
+				target?.performSelector(onMainThread: returnAction, with: event, waitUntilDone: false)
 			}
 			
 			return
@@ -25,13 +24,12 @@ class ActionTableView: NSTableView {
 }
 
 class ActionOutlineView: NSOutlineView {
-	@objc
-	var enterAction: Selector?
+	@objc var returnAction: Selector?
 	
 	override func keyDown(with event: NSEvent) {
 		guard !Keycodes.Either.enter.matches(event: event) else {
-			if let enterAction = enterAction {
-				target?.performSelector(onMainThread: enterAction, with: event, waitUntilDone: false)
+			if let returnAction = returnAction {
+				target?.performSelector(onMainThread: returnAction, with: event, waitUntilDone: false)
 			}
 			
 			return

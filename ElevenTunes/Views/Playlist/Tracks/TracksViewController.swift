@@ -9,7 +9,7 @@ import Cocoa
 import Combine
 
 class TracksViewController: NSViewController {
-	@IBOutlet weak var tableView: NSTableView! = nil
+	@IBOutlet weak var tableView: NSTableViewContextSensitiveMenu! = nil
 	var tableViewHiddenExtension: NSTableView.ColumnHiddenExtension!
 
 	var library: Library
@@ -43,6 +43,8 @@ class TracksViewController: NSViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		initColumns()
+
+		tableView.returnAction = #selector(didPressReturn(_:))
 
 		tableView.registerForDraggedTypes(TrackInterpreter.standard.types.map { .init(rawValue: $0.identifier ) })
 		tableView.registerForDraggedTypes([.init(TracksExportManager.tracksIdentifier)])

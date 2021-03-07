@@ -9,9 +9,19 @@ import Cocoa
 
 extension TracksViewController: NSTableViewContextSensitiveMenuDelegate {
 	@IBAction func didDoubleClick(_ sender: Any) {
+		tableView.clickedRow.positiveOrNil.map {
+			play(rows: IndexSet([$0]))
+		}
+	}
+	
+	@IBAction func didPressReturn(_ sender: Any) {
+		play(rows: tableView.selectedRowIndexes)
+	}
+	
+	func play(rows: IndexSet) {
 		guard
-			let clicked = tableView.clickedRow.positiveOrNil,
-			let track = tracks[safe: clicked]
+			let tracks = rows.explodeMap({ tracks[safe: $0] }),
+			let track = tracks.one
 		else {
 			return
 		}
