@@ -17,17 +17,17 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="34" horizontalPageScroll="10" verticalLineScroll="34" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bSj-pV-7rr">
+                <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="37" horizontalPageScroll="10" verticalLineScroll="37" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bSj-pV-7rr">
                     <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" id="YAl-Fx-uay">
                         <rect key="frame" x="1" y="1" width="478" height="270"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" tableStyle="fullWidth" alternatingRowBackgroundColors="YES" columnSelection="YES" autosaveColumns="NO" rowHeight="30" headerView="1en-sV-iwO" viewBased="YES" floatsGroupRows="NO" id="hOV-Xg-aod" customClass="NSTableViewContextSensitiveMenu" customModule="ElevenTunes" customModuleProvider="target">
+                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" tableStyle="fullWidth" alternatingRowBackgroundColors="YES" columnSelection="YES" autosaveColumns="NO" rowHeight="33" headerView="1en-sV-iwO" viewBased="YES" floatsGroupRows="NO" id="hOV-Xg-aod" customClass="NSTableViewContextSensitiveMenu" customModule="ElevenTunes" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="478" height="213"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <size key="intercellSpacing" width="4" height="4"/>
+                                <size key="intercellSpacing" width="8" height="4"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
@@ -44,19 +44,19 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <customView identifier="ImageCell" id="vkk-vp-u9g" customClass="AnyNSHostingView" customModule="ElevenTunes" customModuleProvider="target">
-                                                <rect key="frame" x="2" y="2" width="38" height="36"/>
+                                                <rect key="frame" x="4" y="2" width="38" height="36"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             </customView>
                                             <customView identifier="TrackCell" id="OKo-3G-9lm" customClass="AnyNSHostingView" customModule="ElevenTunes" customModuleProvider="target">
-                                                <rect key="frame" x="2" y="42" width="38" height="36"/>
+                                                <rect key="frame" x="4" y="42" width="38" height="36"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             </customView>
                                             <customView identifier="TempoCell" id="fuF-mJ-D86" customClass="AnyNSHostingView" customModule="ElevenTunes" customModuleProvider="target">
-                                                <rect key="frame" x="2" y="82" width="38" height="36"/>
+                                                <rect key="frame" x="4" y="82" width="38" height="36"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             </customView>
                                             <customView identifier="KeyCell" id="giF-hm-33d" customClass="AnyNSHostingView" customModule="ElevenTunes" customModuleProvider="target">
-                                                <rect key="frame" x="2" y="122" width="38" height="36"/>
+                                                <rect key="frame" x="4" y="122" width="38" height="36"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             </customView>
                                         </prototypeCellViews>

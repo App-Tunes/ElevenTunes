@@ -26,8 +26,6 @@ struct PlayTrackView: View {
                 Rectangle()
                     .fill(Color.black)
                     .opacity(0.7)
-                    // TODO Extremely hacky but I can't get it to autofill otherwise rn
-                    .frame(width: 28, height: 28)
                     .opacity((isHovering || [next?.id, current?.id].contains(track.id)) ? 1 : 0)
 
                 if track.id == next?.id {
@@ -60,18 +58,16 @@ struct PlayTrackImageView: View {
 	@State var context: PlayHistoryContext
 
 	var body: some View {
-		HStack {
-			ZStack(alignment: .center) {
-				Rectangle()
-					.fill(Color.black)
-					.opacity(0.2)
-				
-				TrackImageView(track: track)
-				
-				PlayTrackView(track: track, context: context)
-					.font(.system(size: 14))
-			}
-			.cornerRadius(5)
+		ZStack(alignment: .center) {
+			Rectangle()
+				.fill(Color.black)
+				.opacity(0.2)
+			
+			TrackImageView(track: track)
+			
+			PlayTrackView(track: track, context: context)
+				.font(.system(size: 14))
 		}
+		.cornerRadius(5)
 	}
 }

@@ -14,8 +14,6 @@ struct TrackKeyView: View {
     var body: some View {
 		Text(key?.title ?? "")
 			.foregroundColor(key?.color ?? .clear)
-			.frame(width: 30, alignment: .center)
-			.padding(.leading)
 			.whileActive(track.backend.demand([.key]))
 			.onReceive(track.backend.attribute(TrackAttribute.key)) {
 				setIfDifferent(self, \.key, $0.value)
