@@ -23,7 +23,9 @@ struct TrackRowView: View {
 			Spacer()
 			
 			TrackTempoView(track: track)
+
 			TrackKeyView(track: track)
+				.padding(.leading)
         }
     }
 }
