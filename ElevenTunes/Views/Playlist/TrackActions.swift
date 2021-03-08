@@ -42,6 +42,18 @@ class TrackActions: NSObject {
                     Text("Visit Origin")
                 }
             }
+			
+			Button(action: reloadMetadata) {
+				Image(systemName: "arrow.clockwise")
+				Text("Reload Metadata")
+			}
+			
+			if tracks.allSatisfy({ $0.backend.primary is JustCacheTrack }) {
+				Button(action: delete) {
+					Image(systemName: "delete.right")
+					Text("Remove from Library")
+				}
+			}
         }
     }
 	
@@ -56,12 +68,21 @@ class TrackActions: NSObject {
 			}
 		}
 		
-//		menu.addItem(withTitle: "Delete", callback: deletePlaylists)
+		if tracks.allSatisfy({ $0.backend is BranchingTrack }) {
+			menu.addItem(withTitle: "Remove from Library", callback: delete)
+		}
 				
 		return menu.menu
 	}
 	
 	func reloadMetadata() {
 		tracks.forEach { $0.backend.invalidateCaches() }
+	}
+	
+	func delete() {
+		let tracks = self.tracks.compactMap { $0.backend as? BranchingTrack }
+		tracks.forEach {
+			$0.cache.managedObjectContext?.delete($0.cache)
+		}
 	}
 }

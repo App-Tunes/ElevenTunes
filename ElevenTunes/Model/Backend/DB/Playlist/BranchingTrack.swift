@@ -58,3 +58,9 @@ extension BranchingTrack: Hashable {
 		hasher.combine(id)
 	}
 }
+
+extension AnyTrack {
+	var primary: AnyTrack {
+		(self as? BranchingTrack)?.primary ?? self
+	}
+}
