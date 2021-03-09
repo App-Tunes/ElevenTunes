@@ -55,3 +55,48 @@ class PlaylistInterpreter: ContentInterpreter<PlaylistToken> {
 		return interpreter
 	}
 }
+
+
+enum LibraryContent {
+	case playlist(PlaylistToken)
+	case track(TrackToken)
+}
+
+class LibraryContentInterpreter: ContentInterpreter<LibraryContent> {
+	override var types: [UTType] {
+		TrackInterpreter.standard.types + PlaylistInterpreter.standard.types
+	}
+	
+	static let standard = createDefault()
+	
+	static func createDefault() -> LibraryContentInterpreter {
+		let interpreter = LibraryContentInterpreter()
+		
+		interpreter.register { url in
+			try TrackInterpreter.standard.interpret(url: url).map { .track($0) }
+		}
+		
+		interpreter.register { url in
+			try PlaylistInterpreter.standard.interpret(url: url).map { .playlist($0) }
+		}
+		
+		return interpreter
+	}
+	
+	static func separate(_ contents: [LibraryContent]) -> ([PlaylistToken], [TrackToken]) {
+		var playlists: [PlaylistToken] = []
+		var tracks: [TrackToken] = []
+		
+		for content in contents {
+			switch content {
+			case .playlist(let playlist):
+				playlists.append(playlist)
+			case .track(let track):
+				tracks.append(track)
+			}
+		}
+		
+		return (playlists, tracks)
+	}
+}
+
