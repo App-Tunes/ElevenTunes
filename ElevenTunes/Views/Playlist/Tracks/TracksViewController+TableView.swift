@@ -77,6 +77,7 @@ extension TracksViewController: NSTableViewDelegate {
 		tableViewHiddenExtension.attach()
 		
 		tableView.autosaveName = "tableViewTracks"
+		tableView.autosaveTableColumns = true
 		tableViewSynchronizer = .init(tableView: tableView)
 		tableViewSynchronizer.attach()
 	}
