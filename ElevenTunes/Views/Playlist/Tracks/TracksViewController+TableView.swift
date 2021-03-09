@@ -75,6 +75,10 @@ extension TracksViewController: NSTableViewDelegate {
 			ColumnIdentifiers.Key: "Initial Key (♫)",
 		], affix: [ColumnIdentifiers.Title])
 		tableViewHiddenExtension.attach()
+		
+		tableView.autosaveName = "tableViewTracks"
+		tableViewSynchronizer = .init(tableView: tableView)
+		tableViewSynchronizer.attach()
 	}
 	
 	func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {

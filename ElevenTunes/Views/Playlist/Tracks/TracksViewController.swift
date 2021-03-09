@@ -11,6 +11,7 @@ import Combine
 class TracksViewController: NSViewController {
 	@IBOutlet weak var tableView: NSTableViewContextSensitiveMenu! = nil
 	var tableViewHiddenExtension: NSTableView.ColumnHiddenExtension!
+	var tableViewSynchronizer: NSTableView.ActiveSynchronizer!
 
 	var library: Library
 	var playlist: Playlist {

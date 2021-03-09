@@ -173,6 +173,7 @@
 		80AD69A5258829C400192BED /* PlaylistBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AD69A4258829C400192BED /* PlaylistBarView.swift */; };
 		80AD69AA258829EE00192BED /* FilterBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AD69A9258829EE00192BED /* FilterBarView.swift */; };
 		80AD69B725882D1200192BED /* PlayPositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AD69B625882D1200192BED /* PlayPositionView.swift */; };
+		80B357D225F6FAC400180A4A /* NSTableView+Synchronization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B357D125F6FAC400180A4A /* NSTableView+Synchronization.swift */; };
 		80C9A178259F8FD300A038CC /* MilkyImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C9A177259F8FD300A038CC /* MilkyImageView.swift */; };
 		80C9A17D259F902D00A038CC /* MilkyCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C9A17C259F902D00A038CC /* MilkyCoverView.swift */; };
 		80C9A185259F916F00A038CC /* Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C9A184259F916F00A038CC /* Combine.swift */; };
@@ -398,6 +399,7 @@
 		80AD69A4258829C400192BED /* PlaylistBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistBarView.swift; sourceTree = "<group>"; };
 		80AD69A9258829EE00192BED /* FilterBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBarView.swift; sourceTree = "<group>"; };
 		80AD69B625882D1200192BED /* PlayPositionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayPositionView.swift; sourceTree = "<group>"; };
+		80B357D125F6FAC400180A4A /* NSTableView+Synchronization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTableView+Synchronization.swift"; sourceTree = "<group>"; };
 		80C9A177259F8FD300A038CC /* MilkyImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MilkyImageView.swift; sourceTree = "<group>"; };
 		80C9A17C259F902D00A038CC /* MilkyCoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MilkyCoverView.swift; sourceTree = "<group>"; };
 		80C9A184259F916F00A038CC /* Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Combine.swift; sourceTree = "<group>"; };
@@ -577,6 +579,7 @@
 				806185A125F4E6FA0062AAB3 /* NSOutlineView.swift */,
 				803A870325F54C9C00D7B9E1 /* NSTableView.swift */,
 				803A870825F554A700D7B9E1 /* NSTableView+Visibility.swift */,
+				80B357D125F6FAC400180A4A /* NSTableView+Synchronization.swift */,
 				806185A625F4E73D0062AAB3 /* ArrayDifference.swift */,
 			);
 			path = Cocoa;
@@ -1307,6 +1310,7 @@
 				80A8C84F25BF5B5200F97EF0 /* DBTrack+CoreDataProperties.swift in Sources */,
 				802E2CC9259602F200CB91EC /* SettingsWindowController.swift in Sources */,
 				808A7631259405F200B0A9CE /* URL.swift in Sources */,
+				80B357D225F6FAC400180A4A /* NSTableView+Synchronization.swift in Sources */,
 				802E2DCF2596573900CB91EC /* NSOrderedSet.swift in Sources */,
 				8054BFF5259F698E00A7035A /* ToolbarView.swift in Sources */,
 				80151EDC2593C53200D9539A /* GeneralSettingsView.swift in Sources */,
