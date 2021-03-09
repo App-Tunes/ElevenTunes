@@ -33,7 +33,7 @@ public struct AVTrackToken: TrackToken {
 	static func create(fromURL url: URL) throws -> AVTrackToken {
 		_ = try AVAudioFile(forReading: url) // Just so we know it's readable
 		let type = try UTType(filenameExtension: url.pathExtension).unwrap(orThrow: InterpretationError.missing)
-		let isVideo = type.conforms(to: .video)
+		let isVideo = type.conforms(to: .movie)
 		
 		return AVTrackToken(url: url, isVideo: isVideo)
 	}
@@ -70,7 +70,7 @@ public final class AVTrack: RemoteTrack {
 	public var accentColor: Color { SystemUI.color }
 
     public var icon: Image {
-		isVideo ? Image(systemName: "movie") : Image(systemName: "music.note")
+		isVideo ? Image(systemName: "film") : Image(systemName: "music.note")
 	}
 	
 	public var id: String { url.absoluteString }
