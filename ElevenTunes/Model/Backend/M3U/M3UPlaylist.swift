@@ -44,7 +44,7 @@ public final class M3UPlaylist: RemotePlaylist {
 	
 	let mapper = Requests(relation: [
 		.url: [.title],
-		.read: [.tracks, .children]
+		.read: [.tracks]
 	])
 
 	init(_ url: URL, library: Library) {
@@ -58,7 +58,7 @@ public final class M3UPlaylist: RemotePlaylist {
     
     public var accentColor: Color { SystemUI.color }
 	
-	public var contentType: PlaylistContentType { .hybrid }
+	public var contentType: PlaylistContentType { .tracks }
     
 	public var origin: URL? { url }
 
