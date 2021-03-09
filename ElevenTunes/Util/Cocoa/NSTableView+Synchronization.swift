@@ -24,10 +24,12 @@ extension NSTableView {
 		}
 		
 		func attach() {
-			moveObserver = NotificationCenter.default.addObserver(forName: NSTableView.columnDidMoveNotification, object: nil, queue: .main) { [unowned self] notification in
-				let tableView = notification.object as! NSTableView
+			moveObserver = NotificationCenter.default.addObserver(forName: NSTableView.columnDidMoveNotification, object: nil, queue: .main) { [weak tableView] notification in
+				guard let tableView = tableView else { return }
+				
+				let updateTableView = notification.object as! NSTableView
 
-				guard tableView != self.tableView, tableView.autosaveName == self.tableView.autosaveName else {
+				guard updateTableView != tableView, tableView.autosaveName == tableView.autosaveName else {
 					return
 				}
 				
@@ -35,37 +37,41 @@ extension NSTableView {
 				let newIndex = notification.userInfo!["NSNewColumn"] as! Int
 				let column = tableView.tableColumns[newIndex]
 
-				guard self.tableView.column(withIdentifier: column.identifier) == oldIndex else {
+				guard tableView.column(withIdentifier: column.identifier) == oldIndex else {
 					return
 				}
 				
-				self.tableView.moveColumn(oldIndex, toColumn: newIndex)
+				tableView.moveColumn(oldIndex, toColumn: newIndex)
 			}
 
-			resizeObserver = NotificationCenter.default.addObserver(forName: NSTableView.columnDidResizeNotification, object: nil, queue: .main) { [unowned self] notification in
-				let tableView = notification.object as! NSTableView
+			resizeObserver = NotificationCenter.default.addObserver(forName: NSTableView.columnDidResizeNotification, object: nil, queue: .main) { [weak tableView] notification in
+				guard let tableView = tableView else { return }
 				
-				guard tableView != self.tableView, tableView.autosaveName == self.tableView.autosaveName else {
+				let updateTableView = notification.object as! NSTableView
+				
+				guard updateTableView != tableView, tableView.autosaveName == tableView.autosaveName else {
 					return
 				}
 
 				let column = notification.userInfo!["NSTableColumn"] as! NSTableColumn
-				let selfColumn = self.tableView.tableColumn(withIdentifier: column.identifier)!
+				let selfColumn = tableView.tableColumn(withIdentifier: column.identifier)!
 				
 				if selfColumn.width != column.width {
 					selfColumn.width = column.width
 				}
 			}
 
-			visibleObserver = NotificationCenter.default.addObserver(forName: NSTableView.columnDidChangeVisibilityNotification, object: nil, queue: .main) { [unowned self] notification in
-				let tableView = notification.object as! NSTableView
+			visibleObserver = NotificationCenter.default.addObserver(forName: NSTableView.columnDidChangeVisibilityNotification, object: nil, queue: .main) { [weak tableView] notification in
+				guard let tableView = tableView else { return }
 				
-				guard tableView != self.tableView, tableView.autosaveName == self.tableView.autosaveName else {
+				let updateTableView = notification.object as! NSTableView
+				
+				guard updateTableView != tableView, tableView.autosaveName == tableView.autosaveName else {
 					return
 				}
 
 				let column = notification.userInfo!["NSTableColumn"] as! NSTableColumn
-				let selfColumn = self.tableView.tableColumn(withIdentifier: column.identifier)!
+				let selfColumn = tableView.tableColumn(withIdentifier: column.identifier)!
 				
 				if selfColumn.isHidden != column.isHidden {
 					selfColumn.isHidden = column.isHidden

@@ -31,6 +31,7 @@ struct ArtistCellView: View {
                     .opacity(0.5)
             }
         }
+		.help(title.value ?? "")
 		.whileActive(artist.backend.demand([.title]))
 		.onReceive(artist.backend.attribute(PlaylistAttribute.title)) {
 			setIfDifferent(self, \.title, $0)
