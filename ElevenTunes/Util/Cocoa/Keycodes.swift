@@ -7,10 +7,11 @@
 
 import Foundation
 
-enum Keycodes: Int {
+enum Keycodes: UInt16 {
 	case returnKey = 36, enterKey = 76
 	case delete = 51, forwardDelete = 117
-	
+	case space = 0x31
+
 	struct Either {
 		static let enter = Either([Keycodes.returnKey, Keycodes.enterKey])
 		static let delete = Either([Keycodes.delete, Keycodes.forwardDelete])
@@ -27,6 +28,6 @@ enum Keycodes: Int {
 	}
 
 	func matches(event: NSEvent) -> Bool {
-		return event.keyCode == UInt16(self.rawValue)
+		event.keyCode == rawValue
 	}
 }

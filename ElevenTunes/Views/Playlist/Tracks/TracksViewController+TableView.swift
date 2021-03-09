@@ -128,6 +128,12 @@ extension TracksViewController: NSTableViewDelegate {
 		
 		return nil
 	}
+	
+	func tableView(_ tableView: NSTableView, shouldTypeSelectFor event: NSEvent, withCurrentSearch searchString: String?) -> Bool {
+		// Deny "space" searches as they are more likely pause/play
+//		!Keycodes.space.matches(event: event)
+		false  // needs typeSelectString to be properly implemented, which requires caching of remote values
+	}
 }
 
 extension TracksViewController: NSTableViewDataSource {
