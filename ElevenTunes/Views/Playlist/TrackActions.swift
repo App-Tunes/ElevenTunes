@@ -43,11 +43,6 @@ class TrackActions: NSObject {
                 }
             }
 			
-			Button(action: reloadMetadata) {
-				Image(systemName: "arrow.clockwise")
-				Text("Reload Metadata")
-			}
-			
 			if tracks.allSatisfy({ $0.backend.primary is JustCacheTrack }) {
 				Button(action: delete) {
 					Image(systemName: "delete.right")

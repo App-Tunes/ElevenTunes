@@ -16,6 +16,12 @@ struct PlayingTrackView: View {
     @State var current: Track?
     @State var attributes: TypedDict<TrackAttribute> = .init()
 
+	@ViewBuilder var contextMenu: some View {
+		if let current = current {
+			TrackActions(tracks: [current])()
+		}
+	}
+	
     var body: some View {
         HStack {
             ZStack {
@@ -25,6 +31,7 @@ struct PlayingTrackView: View {
                 
 				TrackImageView(track: current)
             }
+			.contextMenu(menuItems: { self.contextMenu })
             .frame(width: 28, height: 28)
             .cornerRadius(5)
 
