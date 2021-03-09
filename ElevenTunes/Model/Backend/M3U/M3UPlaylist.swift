@@ -50,6 +50,7 @@ public final class M3UPlaylist: RemotePlaylist {
 	init(_ url: URL, library: Library) {
         self.url = url
 		self.library = library
+		mapper.delegate = self
 		mapper.offer(.url, update: urlAttributes())
     }
     
@@ -131,5 +132,24 @@ extension M3UPlaylist: RequestMapperDelegate {
 				]), state: .valid)
 			}.eraseToAnyPublisher()
 		}
+	}
+}
+
+extension M3UPlaylist: BranchablePlaylist {
+	func store(in playlist: DBPlaylist) throws -> DBPlaylist.Representation {
+		guard
+			let context = playlist.managedObjectContext,
+			let model = context.persistentStoreCoordinator?.managedObjectModel,
+			let playlistModel = model.entitiesByName["DBM3UPlaylist"]
+		else {
+			fatalError("Failed to find model in MOC")
+		}
+
+		let cache = DBM3UPlaylist(entity: playlistModel, insertInto: context)
+		cache.url = url
+		
+		playlist.m3uRepresentation = cache
+		
+		return .m3u
 	}
 }

@@ -49,7 +49,7 @@ public final class DirectoryPlaylist: RemotePlaylist {
     init(_ url: URL, library: Library) {
 		self.url = url
         self.library = library
-		
+		mapper.delegate = self
 		mapper.offer(.url, update: loadURL())
     }
     
@@ -97,5 +97,24 @@ extension DirectoryPlaylist: RequestMapperDelegate {
 				]), state: .valid)
 			}.eraseToAnyPublisher()
 		}
+	}
+}
+
+extension DirectoryPlaylist: BranchablePlaylist {
+	func store(in playlist: DBPlaylist) throws -> DBPlaylist.Representation {
+		guard
+			let context = playlist.managedObjectContext,
+			let model = context.persistentStoreCoordinator?.managedObjectModel,
+			let playlistModel = model.entitiesByName["DBDirectoryPlaylist"]
+		else {
+			fatalError("Failed to find model in MOC")
+		}
+
+		let cache = DBDirectoryPlaylist(entity: playlistModel, insertInto: context)
+		cache.url = url
+		
+		playlist.directoryRepresentation = cache
+		
+		return .directory
 	}
 }
