@@ -45,10 +45,16 @@ extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
 		let item = self.item(raw: item)
 
 		if pasteboard.canReadItem(withDataConformingToTypes: [PlaylistsExportManager.playlistsIdentifier]) {
+			// Found internal drag
 			return item.playlist.contentType != .tracks ? .move : []
 		}
 		
-		return PlaylistInterpreter.standard.interpret(pasteboard: pasteboard) != nil ? .copy : []
+		if PlaylistInterpreter.standard.interpret(pasteboard: pasteboard) != nil {
+			// Found external playlists drag
+			return item.playlist.contentType != .tracks ? .copy : []
+		}
+		
+		return []
 	}
 	
 	func outlineView(_ outlineView: NSOutlineView, acceptDrop info: NSDraggingInfo, item: Any?, childIndex index: Int) -> Bool {
