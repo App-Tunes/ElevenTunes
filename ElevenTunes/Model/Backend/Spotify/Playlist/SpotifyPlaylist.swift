@@ -147,7 +147,7 @@ extension SpotifyPlaylist: BranchablePlaylist {
 		}
 
 		let cache = DBSpotifyPlaylist(entity: playlistModel, insertInto: context)
-		cache.spotifyID = token.uri
+		cache.spotifyID = token.spotifyID
 		
 		playlist.spotifyRepresentation = cache
 		

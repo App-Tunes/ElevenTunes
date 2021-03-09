@@ -61,7 +61,6 @@ public struct DBPlaylistToken: PlaylistToken {
 	public var origin: URL? { nil }
 	
 	public static func understands(_ url: URL) -> Bool {
-		print(url)
 		return false
 	}
 	
