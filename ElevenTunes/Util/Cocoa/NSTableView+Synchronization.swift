@@ -29,7 +29,7 @@ extension NSTableView {
 				
 				let updateTableView = notification.object as! NSTableView
 
-				guard updateTableView != tableView, tableView.autosaveName == tableView.autosaveName else {
+				guard updateTableView != tableView, updateTableView.autosaveName == tableView.autosaveName else {
 					return
 				}
 				
@@ -49,12 +49,16 @@ extension NSTableView {
 				
 				let updateTableView = notification.object as! NSTableView
 				
-				guard updateTableView != tableView, tableView.autosaveName == tableView.autosaveName else {
+				guard updateTableView != tableView, updateTableView.autosaveName == tableView.autosaveName else {
 					return
 				}
 
 				let column = notification.userInfo!["NSTableColumn"] as! NSTableColumn
-				let selfColumn = tableView.tableColumn(withIdentifier: column.identifier)!
+				
+				guard let selfColumn = tableView.tableColumn(withIdentifier: column.identifier) else {
+					print("Missing column with identifier \(column.identifier) for synchronization.")
+					return
+				}
 				
 				if selfColumn.width != column.width {
 					selfColumn.width = column.width
@@ -66,13 +70,16 @@ extension NSTableView {
 				
 				let updateTableView = notification.object as! NSTableView
 				
-				guard updateTableView != tableView, tableView.autosaveName == tableView.autosaveName else {
+				guard updateTableView != tableView, updateTableView.autosaveName == tableView.autosaveName else {
 					return
 				}
 
 				let column = notification.userInfo!["NSTableColumn"] as! NSTableColumn
-				let selfColumn = tableView.tableColumn(withIdentifier: column.identifier)!
-				
+				guard let selfColumn = tableView.tableColumn(withIdentifier: column.identifier) else {
+					print("Missing column with identifier \(column.identifier) for synchronization.")
+					return
+				}
+
 				if selfColumn.isHidden != column.isHidden {
 					selfColumn.isHidden = column.isHidden
 				}
