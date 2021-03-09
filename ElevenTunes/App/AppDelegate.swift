@@ -50,43 +50,33 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func application(_ application: NSApplication, open urls: [URL]) {
-		// TODO
-//        var urls = urls
-//
-//        urls = urls.filter { !spotify.handleURL($0) }
-//
-//        let documentController = NSDocumentController.shared
-//
-//        do {
-//            let doc = try documentController.makeUntitledDocument(ofType: "library")
-//                as! LibraryDocument
-//
-//            let interpreter = ContentInterpreter.createDefault(settings: doc.settings)
-//            interpreter.interpret(urls: urls)?
-//                .tryMap {
-//                    try ContentInterpreter.library(fromContents: $0)
-//                }
-//                .sink(receiveCompletion: { result in
-//                    switch result {
-//                    case .finished:
-//                        DispatchQueue.main.async {
-//                            doc.makeWindowControllers()
-//                            doc.showWindows()
-//                            documentController.addDocument(doc)
-//                        }
-//                    case .failure(let error):
-//                        // Document will deallocate
-//                        appLogger.error("Error interpreting urls: \(error)")
-//                    }
-//                }) { library in
-//                    // TODO If import fails, wat do?
-//                    _ = doc.import(library)
-//                }
-//                .store(in: &cancellables)
-//        }
-//        catch let error {
-//            appLogger.error("Error creating new document: \(error)")
-//        }
+        var urls = urls
+
+        urls = urls.filter { !spotify.handleURL($0) }
+
+        let documentController = NSDocumentController.shared
+
+        do {
+            let doc = try documentController.makeUntitledDocument(ofType: "library")
+                as! LibraryDocument
+
+			Future {
+				LibraryContentInterpreter.standard.compactInterpret(urls: urls)
+			}
+				.map(LibraryContentInterpreter.separate)
+				.sink { library in
+					DispatchQueue.main.async {
+						doc.makeWindowControllers()
+						doc.showWindows()
+						documentController.addDocument(doc)
+						_ = try? doc.import(dlibrary: library)
+					}
+				}
+                .store(in: &cancellables)
+        }
+        catch let error {
+            appLogger.error("Error creating new document: \(error)")
+        }
     }
 
     @IBAction func showSettings(_ sender: AnyObject?) {

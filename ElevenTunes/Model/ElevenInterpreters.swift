@@ -83,7 +83,7 @@ class LibraryContentInterpreter: ContentInterpreter<LibraryContent> {
 		return interpreter
 	}
 	
-	static func separate(_ contents: [LibraryContent]) -> ([PlaylistToken], [TrackToken]) {
+	static func separate(_ contents: [LibraryContent]) -> UninterpretedLibrary {
 		var playlists: [PlaylistToken] = []
 		var tracks: [TrackToken] = []
 		
@@ -96,7 +96,7 @@ class LibraryContentInterpreter: ContentInterpreter<LibraryContent> {
 			}
 		}
 		
-		return (playlists, tracks)
+		return .init(tracks: tracks, playlists: playlists)
 	}
 }
 

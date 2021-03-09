@@ -90,9 +90,9 @@ extension DirectoryPlaylist: RequestMapperDelegate {
 			}
 			.map(LibraryContentInterpreter.standard.compactInterpret)
 			.map(LibraryContentInterpreter.separate(_:))
-			.tryMap { (playlists, tracks) in (
-				try playlists.map { try $0.expand(library) },
-				try tracks.map { try $0.expand(library) }
+			.tryMap { dlibrary in (
+				try dlibrary.playlists.map { try $0.expand(library) },
+				try dlibrary.tracks.map { try $0.expand(library) }
 			)}
 			.tryMap { ($0.0, $0.1, try url.modificationDate().isoFormat) }
 			.map { (playlists, tracks, version) in
