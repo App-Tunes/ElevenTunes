@@ -29,8 +29,8 @@ class ContentInterpreter<Interpreted> {
 		register { ((try? matches($0)) ?? false) ? try interpret($0) : nil }
 	}
 
-    func interpret(urls: [URL]) throws -> [Interpreted] {
-		try urls.compactMap(self.interpret)
+    func compactInterpret(urls: [URL]) -> [Interpreted] {
+		urls.compactMap { try? self.interpret(url: $0) }
     }
     
     func interpret(url: URL) throws -> Interpreted? {

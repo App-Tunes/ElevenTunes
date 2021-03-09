@@ -88,7 +88,7 @@ extension DirectoryPlaylist: RequestMapperDelegate {
 			return Future {
 				try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: [.isDirectoryKey])
 			}
-			.tryMap { try TrackInterpreter.standard.interpret(urls: $0) }
+			.map(TrackInterpreter.standard.compactInterpret)
 			.tryMap { try $0.map { try $0.expand(library) } }
 			.tryMap { ($0, try url.modificationDate().isoFormat) }
 			.map { (tracks, version) in

@@ -123,7 +123,7 @@ extension M3UPlaylist: RequestMapperDelegate {
 			.map { file in
 				M3UPlaylist.interpretFile(file, relativeTo: url)
 			}
-			.tryMap { try TrackInterpreter.standard.interpret(urls: $0) }
+			.map(TrackInterpreter.standard.compactInterpret)
 			.tryMap { try $0.map { try $0.expand(library) } }
 			.tryMap { ($0, try url.modificationDate().isoFormat) }
 			.map { (tracks, version) in
