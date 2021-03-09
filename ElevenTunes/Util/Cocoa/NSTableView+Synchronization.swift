@@ -35,7 +35,7 @@ extension NSTableView {
 				
 				let oldIndex = notification.userInfo!["NSOldColumn"] as! Int
 				let newIndex = notification.userInfo!["NSNewColumn"] as! Int
-				let column = tableView.tableColumns[newIndex]
+				let column = updateTableView.tableColumns[newIndex]
 
 				guard tableView.column(withIdentifier: column.identifier) == oldIndex else {
 					return
