@@ -10,9 +10,18 @@ import Combine
 
 enum PlayHistoryContext {
     case playlist(_ playlist: AnyPlaylist, tracks: [AnyTrack], track: AnyTrack)
+	
+	var fromStart: PlayHistoryContext {
+		switch self {
+		case .playlist(let playlist, let tracks, _):
+			return .playlist(playlist, tracks: tracks, track: tracks[0])
+		}
+	}
 }
 
 class PlayHistory {
+	var context: PlayHistoryContext?
+	
     @Published private(set) var queue: [AnyTrack]
     @Published private(set) var history: [AnyTrack] = []
 
@@ -35,8 +44,9 @@ class PlayHistory {
 			let index = tracks.firstIndex { $0.id == track.id } ?? tracks.count
             self.init(Array(tracks[index...]), history: Array(tracks[..<index]))
         }
+		self.context = context
     }
-        
+	        
     @discardableResult
     func forwards() -> AnyTrack? {
         // Move forwards in replacements so that no value is missing at any point

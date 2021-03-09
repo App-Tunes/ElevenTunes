@@ -13,6 +13,8 @@ public struct PlayContext {
 }
 
 class Player {
+	@Published var repeatEnabled: Bool = false
+
     @Published var previous: AnyTrack? {
         didSet {
             // Re-use last played if possible
@@ -123,6 +125,9 @@ class Player {
     func forwards() -> Bool {
         currentEmitterTask?.cancel()
         history.forwards()
+		if history.current == nil && repeatEnabled, let context = history.context {
+			play(PlayHistory(context: context.fromStart))
+		}
         return true
     }
     

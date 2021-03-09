@@ -15,8 +15,9 @@ struct PlayerControlsView: View {
     @State var current: AnyTrack?
     @State var next: AnyTrack?
 
-    @State var isPlaying: Bool = false
-    
+	@State var repeatEnabled: Bool = false
+	@State var isPlaying: Bool = false
+
     var playStateControls: some View {
         HStack {
             Button(action: {
@@ -63,12 +64,12 @@ struct PlayerControlsView: View {
                 .disabled(true)
             
             Button(action: {
-                
+				player.repeatEnabled.toggle()
             }) {
                 Image(systemName: "repeat")
                     .font(.system(size: 14))
             }
-                .disabled(true)
+				.foregroundColor(repeatEnabled ? .accentColor : .secondary)
             
             PlayerAudioView(player: player)
                 .padding(.leading)
@@ -77,7 +78,8 @@ struct PlayerControlsView: View {
         .onReceive(player.$previous) { self.previous = $0 }
         .onReceive(player.$current) { self.current = $0 }
         .onReceive(player.$next) { self.next = $0 }
-        .onReceive(player.$state) { self.isPlaying = $0.isPlaying }
+		.onReceive(player.$state) { self.isPlaying = $0.isPlaying }
+		.onReceive(player.$repeatEnabled) { self.repeatEnabled = $0 }
     }
 }
 //
