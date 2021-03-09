@@ -54,6 +54,7 @@ extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
 	func outlineView(_ outlineView: NSOutlineView, acceptDrop info: NSDraggingInfo, item: Any?, childIndex index: Int) -> Bool {
 		let pasteboard = info.draggingPasteboard
 		let item = self.item(raw: item)
+		let index = index.positiveOrNil
 
 		let library = self.library
 		
@@ -63,7 +64,7 @@ extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
 		{
 			// Internal cache-only drag; do internal logic
 			
-			playlist.cache.children = playlist.cache.children.inserting(contentsOf: playlists, atIndex: index.positiveOrNil)
+			playlist.cache.children = playlist.cache.children.inserting(contentsOf: playlists, atIndex: index)
 
 			return true
 		}
