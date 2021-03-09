@@ -22,12 +22,12 @@ struct ContentView: View {
     @State var isImporting: Bool = false
     @State var mainPlaylist: Playlist
 
-    @State var selection = Set<Playlist>()
+	@ObservedObject var navigator: Navigator = .init()
 
     var body: some View {
         HSplitView {
             ZStack(alignment: .top) {
-                NavigatorView(directory: mainPlaylist, selection: $selection)
+				NavigatorView(directory: mainPlaylist, navigator: navigator)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .listStyle(SidebarListStyle())
 
@@ -43,7 +43,7 @@ struct ContentView: View {
                 PlayerBarView()
                     .frame(maxWidth: .infinity)
 
-                PlaylistMultiplicityView(playlists: selection.sorted { $0.id < $1.id })
+				PlaylistMultiplicityView(playlists: navigator.playlists)
                     .frame(minWidth: 200, idealWidth: 250, maxWidth: .infinity, minHeight: 100, idealHeight: 400, maxHeight: .infinity)
                     .layoutPriority(2)
             }

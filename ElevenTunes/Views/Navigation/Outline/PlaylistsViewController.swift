@@ -24,16 +24,16 @@ class PlaylistsViewController: NSViewController {
 		}
 	}
 	
-	var selectionObserver: (Set<Playlist>) -> Void
+	var selectionObserver: (ContextualSelection<Playlist>) -> Void
 	
 	var dummyPlaylist: Item!
 	
 	var cancellables = Set<AnyCancellable>()
 	
-	init(_ directory: Playlist, library: Library, selectionObserver: @escaping (Set<Playlist>) -> Void) {
+	init(_ directory: Playlist, library: Library) {
 		self.directory = directory
 		self.library = library
-		self.selectionObserver = selectionObserver
+		self.selectionObserver = { _ in }
 		super.init(nibName: nil, bundle: .main)
 		directoryItem = Item(playlist: directory.backend, parent: nil, delegate: self)
 		directoryItem.isDemanding = true

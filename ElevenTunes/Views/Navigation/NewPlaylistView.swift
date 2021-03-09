@@ -9,27 +9,10 @@ import SwiftUI
 
 struct NewPlaylistView: View {
 	let directory: Playlist
-	let selection: Set<Playlist>
-	
-	let position: Playlist?
-
-	init(directory: Playlist, selection: Set<Playlist>) {
-		self.directory = directory
-		self.selection = selection
-		
-		if let only = selection.one {
-			position = only.backend.contentType != .tracks ? only : nil
-		}
-		else if selection.isEmpty {
-			position = directory
-		}
-		else {
-			position = nil
-		}
-	}
+	let selection: ContextualSelection<Playlist>
 	
 	func createPlaylist(_ playlist: TransientPlaylist) {
-		guard let position = position else {
+		guard let insertPosition = selection.insertPosition else {
 			NSAlert.warning(title: "Internal Error", text: "Unexpected position == nil")
 			return
 		}
@@ -37,7 +20,7 @@ struct NewPlaylistView: View {
 		let library = UninterpretedLibrary(playlists: [playlist])
 		
 		do {
-			try position.backend.import(library: library, toIndex: nil)
+			try insertPosition.0.backend.import(library: library, toIndex: insertPosition.1)
 		}
 		catch let error {
 			NSAlert.warning(
@@ -48,6 +31,8 @@ struct NewPlaylistView: View {
 	}
 
     var body: some View {
+		let canInsert = selection.insertPosition != nil
+		
 		HStack {
 			Button {
 				let playlist = TransientPlaylist(.tracks, attributes: .unsafe([
@@ -58,7 +43,7 @@ struct NewPlaylistView: View {
 				Image(systemName: "music.note.list")
 					.badge(systemName: "plus.circle.fill")
 			}
-				.disabled(position == nil)
+				.disabled(!canInsert)
 
 			Button {
 				let playlist = TransientPlaylist(.playlists, attributes: .unsafe([
@@ -69,7 +54,7 @@ struct NewPlaylistView: View {
 				Image(systemName: "folder")
 					.badge(systemName: "plus.circle.fill")
 			}
-				.disabled(position == nil)
+				.disabled(!canInsert)
 
 			Button {
 				let playlist = TransientPlaylist(.hybrid, attributes: .unsafe([
@@ -80,7 +65,7 @@ struct NewPlaylistView: View {
 				Image(systemName: "questionmark.folder")
 					.badge(systemName: "plus.circle.fill")
 			}
-				.disabled(position == nil)
+				.disabled(!canInsert)
 		}
     }
 }

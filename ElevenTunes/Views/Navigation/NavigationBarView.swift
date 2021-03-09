@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NavigationBarView: View {
 	let playlist: Playlist
-	let selection: Set<Playlist>
+	let selection: ContextualSelection<Playlist>
         
     var body: some View {
         HStack {

@@ -42,8 +42,19 @@ extension PlaylistsViewController: NSOutlineViewDelegate {
 	}
 	
 	func outlineViewSelectionDidChange(_ notification: Notification) {
-		let items = outlineView.selectedRowIndexes.map { outlineView.item(atRow: $0) as! Item }
-		selectionObserver(Set(items.map { Playlist($0.playlist) }))
+		let items = outlineView.selectedRowIndexes
+			.map { outlineView.item(atRow: $0) as! Item }
+		
+		var insertPosition: (Playlist, Int?)? = nil
+		if let item = items.one {
+			if item.playlist.contentType == .tracks {
+				insertPosition = (Playlist(item.parent!.playlist), outlineView.childIndex(forItem: item) + 1)
+			}
+			else {
+				insertPosition = (Playlist(item.playlist), nil)
+			}
+		}
+		selectionObserver(.init(insertPosition: insertPosition, playlists: Set(items.map { Playlist($0.playlist) })))
 	}	
 }
 
