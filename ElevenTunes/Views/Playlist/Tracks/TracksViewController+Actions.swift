@@ -21,12 +21,13 @@ extension TracksViewController: NSTableViewContextSensitiveMenuDelegate {
 	func play(rows: IndexSet) {
 		guard
 			let tracks = rows.explodeMap({ tracks[safe: $0] }),
+			// TODO enqueue all selected tracks, not just one
 			let track = tracks.one
 		else {
 			return
 		}
 
-		library.player.play(.init(context: .playlist(playlist.backend, tracks: tracks.map(\.backend), track: track.backend)))
+		library.player.play(.init(context: .playlist(playlist.backend, tracks: self.tracks.map(\.backend), track: track.backend)))
 	}
 	
 	func currentMenu(forTableView tableView: NSTableViewContextSensitiveMenu) -> NSMenu? {
