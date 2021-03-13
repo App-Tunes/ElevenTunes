@@ -20,7 +20,7 @@ struct MinimalSpotifyTrack: Codable, Hashable {
 }
 
 struct DetailedSpotifyTrack: Codable, Hashable {
-    static let filters = "id,name,album(id),artists(id)"
+    static let filters = "id,name,album(id),artists(id,name)"
 
     struct Album: Codable, Hashable {
         var id: String
@@ -28,6 +28,7 @@ struct DetailedSpotifyTrack: Codable, Hashable {
     
     struct Artist: Codable, Hashable {
         var id: String
+		var name: String
     }
     
     var id: String
@@ -36,7 +37,7 @@ struct DetailedSpotifyTrack: Codable, Hashable {
     var artists: [Artist]
     
     static func from(_ track: SpotifyWebAPI.Track) -> DetailedSpotifyTrack {
-        DetailedSpotifyTrack(id: track.id!, name: track.name, album: track.album.map { Album(id: $0.id!) }, artists: (track.artists ?? []).map { Artist(id: $0.id!) })
+		DetailedSpotifyTrack(id: track.id!, name: track.name, album: track.album.map { Album(id: $0.id!) }, artists: (track.artists ?? []).map { Artist(id: $0.id!, name: $0.name) })
     }
 }
 
@@ -139,7 +140,7 @@ public final class SpotifyTrack: RemoteTrack {
 			.title: track.name,
 			.album: track.album.map { spotify.album(SpotifyAlbumToken($0.id)) },
 			.artists:  track.artists.map {
-				spotify.artist(SpotifyArtistToken($0.id))
+				spotify.artist(SpotifyArtistToken($0.id), details: $0)
 			}
 		])
     }

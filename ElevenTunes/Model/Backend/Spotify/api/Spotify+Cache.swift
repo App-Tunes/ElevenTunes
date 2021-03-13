@@ -9,12 +9,15 @@ import Foundation
 import SpotifyWebAPI
 
 extension Spotify {
-    func artist(_ token: SpotifyArtistToken, info: SpotifyWebAPI.Artist? = nil) -> SpotifyArtist {
+	func artist(_ token: SpotifyArtistToken, info: SpotifyWebAPI.Artist? = nil, details: DetailedSpotifyTrack.Artist? = nil) -> SpotifyArtist {
         let artist = artistCaches.get(token, insertingDefault: SpotifyArtist(token, spotify: self))
         
         if let info = info {
             artist.offerCache(info)
         }
+		if let details = details {
+			artist.offerCache(details)
+		}
         
         return artist
     }

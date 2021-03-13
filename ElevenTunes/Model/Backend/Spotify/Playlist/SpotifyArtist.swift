@@ -51,16 +51,26 @@ public final class SpotifyArtist: SpotifyURIPlaylist, AnyArtist {
 	
 	public var origin: URL? { token.origin }
     
-    func offerCache(_ artist: SpotifyWebAPI.Artist) {
+	func offerCache(_ artist: SpotifyWebAPI.Artist) {
 		mapper.offer(.info, update: read(artist))
-    }
-    
+	}
+		
 	func read(_ artist: SpotifyWebAPI.Artist) -> PlaylistAttributes.PartialGroupSnapshot {
 		.init(.unsafe([
 			.title: artist.name
 		]), state: .valid)
     }
     
+	func offerCache(_ artist: DetailedSpotifyTrack.Artist) {
+		mapper.offer(.info, update: read(artist))
+	}
+
+	func read(_ artist: DetailedSpotifyTrack.Artist) -> PlaylistAttributes.PartialGroupSnapshot {
+		.init(.unsafe([
+			.title: artist.name
+		]), state: .valid)
+	}
+
     public func bestImageForPreview(_ images: [SpotifyWebAPI.SpotifyImage]) -> URL? {
         guard let image = (images.sorted {
                 max($0.width ?? 0, $0.height ?? 0) <
