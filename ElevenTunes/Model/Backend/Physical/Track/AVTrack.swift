@@ -61,7 +61,7 @@ public final class AVTrack: RemoteTrack {
 	
 	let mapper = Requests(relation: [
 		.url: [],
-		.taglib: [.title, .key, .bpm],
+		.taglib: [.title, .key, .bpm, .previewImage],
 		.analyze: [.bpm, .key]
 	])
 
@@ -119,6 +119,7 @@ extension AVTrack: RequestMapperDelegate {
 			.map { file in
 				.init(.unsafe([
 					.title: file.title,
+					.previewImage: file.image.flatMap { NSImage(data: $0) },
 					.bpm: file.bpm.flatMap { Double($0) }
 				]), state: .valid)
 			}
