@@ -42,7 +42,7 @@ extension TracksViewController: NSTableViewContextSensitiveMenuDelegate {
 			return nil
 		}
 
-		return TracksExportManager(tracks: [track]).pasteboardItem()
+		return TracksExportManager(track: track.backend).pasteboardItem()
 	}
 	
 	func tableView(_ tableView: NSTableView, validateDrop info: NSDraggingInfo, proposedRow row: Int, proposedDropOperation dropOperation: NSTableView.DropOperation) -> NSDragOperation {

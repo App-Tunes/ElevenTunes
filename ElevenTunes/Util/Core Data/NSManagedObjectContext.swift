@@ -9,6 +9,10 @@ import Foundation
 import CoreData
 
 extension NSManagedObjectContext {
+	enum InterpretationError: Error {
+		case wrongType
+	}
+	
     func child(concurrencyType: NSManagedObjectContextConcurrencyType) -> NSManagedObjectContext {
         let child = NSManagedObjectContext(concurrencyType: concurrencyType)
         child.parent = self
@@ -26,8 +30,8 @@ extension NSManagedObjectContext {
         self.object(with: object.objectID) as? T
     }
     
-    func read<T>(uri: URL?, as: T.Type) -> T? {
-        uri.flatMap { persistentStoreCoordinator?.managedObjectID(forURIRepresentation: $0) }
-            .flatMap { object(with: $0) } as? T
+    func read<T>(uri: URL?, as: T.Type) throws -> T {
+        try (uri.flatMap { persistentStoreCoordinator?.managedObjectID(forURIRepresentation: $0) }
+			.flatMap { try existingObject(with: $0) } as? T).unwrap(orThrow: InterpretationError.wrongType)
     }
 }

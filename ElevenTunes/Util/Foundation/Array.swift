@@ -66,6 +66,10 @@ extension Array {
 	var neighbors: Zip2Sequence<ArraySlice<Element>, ArraySlice<Element>> {
 		Swift.zip(self.dropLast(), self.dropFirst())
 	}
+	
+	var nonEmpty: Array? {
+		isEmpty ? nil : self
+	}
 }
 
 extension Array where Element: Hashable {

@@ -37,7 +37,7 @@ extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
 	func outlineView(_ outlineView: NSOutlineView, pasteboardWriterForItem item: Any) -> NSPasteboardWriting? {
 		let item = self.item(raw: item)
 
-		return PlaylistsExportManager(playlists: [Playlist(item.playlist)]).pasteboardItem()
+		return PlaylistsExportManager(playlist: item.playlist).pasteboardItem()
 	}
 
 	func outlineView(_ outlineView: NSOutlineView, validateDrop info: NSDraggingInfo, proposedItem item: Any?, proposedChildIndex index: Int) -> NSDragOperation {
