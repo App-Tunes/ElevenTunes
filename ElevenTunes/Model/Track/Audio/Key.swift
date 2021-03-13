@@ -60,9 +60,14 @@ struct MusicalKey: Equatable {
 	
 	var title: String { note.title + mode.shorthand }
 
+	/// Like open key notation, but 0-11 for proper indexing
+	var likenessIndex: Int {
+		((note.pitchClass + mode.shiftToMajor) * 7) % 12
+	}
+	
 	var openKeyNotation: Int {
-		((note.pitchClass + mode.shiftToMajor) * 7) % 12 + 1
+		likenessIndex + 1
 	}
     
-	var color: Color { Self.colors[openKeyNotation - 1] }
+	var color: Color { Self.colors[likenessIndex] }
 }
