@@ -77,11 +77,15 @@ struct TrackArtistsView: View {
 	@State var snapshot: VolatileSnapshot<[Playlist], String> = .missing()
 
 	var body: some View {
-		HStack {
+		HStack(spacing: 4) {
 			if snapshot.state == .valid {
 				if let artists = snapshot.value, !artists.isEmpty {
 					ForEach(artists, id: \.id) {
 						ArtistCellView(artist: $0)
+						
+						if $0 != artists.last {
+							Text("·")
+						}
 					}
 				}
 				else {
