@@ -83,6 +83,11 @@ class Player {
     }
             
     func toggle() {
+		if history.current == nil, let context = history.context {
+			play(PlayHistory(context: context.fromStart))
+			return
+		}
+		
         singlePlayer.toggle()
     }
     
