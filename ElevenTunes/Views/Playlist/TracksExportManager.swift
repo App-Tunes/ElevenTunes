@@ -20,16 +20,18 @@ class TracksExportManager: NSObject {
 		self.tracks = selection.allIfContains(track)
 	}
 	
-	static func read(fromPasteboard pasteboard: NSPasteboard, context: NSManagedObjectContext) -> Set<DBTrack>? {
-		guard
-			let data = pasteboard.data(forType: .init(rawValue: Self.tracksIdentifier)),
-			let url = URL(dataRepresentation: data, relativeTo: nil),
-			let track = context.read(uri: url, as: DBTrack.self)
-		else {
-			return nil
+	static func read(fromPasteboard pasteboard: NSPasteboard, context: NSManagedObjectContext) -> [DBTrack]? {
+		pasteboard.pasteboardItems?.compactMap { (item: NSPasteboardItem) -> DBTrack? in
+			guard
+				let data = item.data(forType: .init(rawValue: Self.tracksIdentifier)),
+				let url = URL(dataRepresentation: data, relativeTo: nil),
+				let track = context.read(uri: url, as: DBTrack.self)
+			else {
+				return nil
+			}
+			
+			return track
 		}
-		
-		return [track]
 	}
 
 	func itemProvider() -> NSItemProvider {

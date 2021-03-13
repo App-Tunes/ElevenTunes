@@ -20,16 +20,18 @@ class PlaylistsExportManager: NSObject {
 		self.playlists = selection.allIfContains(playlist)
 	}
 	
-	static func read(fromPasteboard pasteboard: NSPasteboard, context: NSManagedObjectContext) -> Set<DBPlaylist>? {
-		guard
-			let data = pasteboard.data(forType: .init(rawValue: Self.playlistsIdentifier)),
-			let url = URL(dataRepresentation: data, relativeTo: nil),
-			let playlist = context.read(uri: url, as: DBPlaylist.self)
-		else {
-			return nil
+	static func read(fromPasteboard pasteboard: NSPasteboard, context: NSManagedObjectContext) -> [DBPlaylist]? {
+		pasteboard.pasteboardItems?.compactMap { (item: NSPasteboardItem) -> DBPlaylist? in
+			guard
+				let data = item.data(forType: .init(rawValue: Self.playlistsIdentifier)),
+				let url = URL(dataRepresentation: data, relativeTo: nil),
+				let track = context.read(uri: url, as: DBPlaylist.self)
+			else {
+				return nil
+			}
+			
+			return track
 		}
-		
-		return [playlist]
 	}
 
 	func itemProvider() -> NSItemProvider {
