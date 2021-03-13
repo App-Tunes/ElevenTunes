@@ -36,22 +36,14 @@ extension NSOutlineView {
 				insertItems(at: IndexSet(added), inParent: parent, withAnimation: .slideUp)
 			}
 		}
-		else {
-			// Animate size difference first
-			if fromCount > toCount {
-				removeItems(at: IndexSet(integersIn: toCount ..< fromCount), inParent: parent, withAnimation: .slideDown)
+		else if let from = from, let to = to, let movement = from.editMovement(to: to) {
+			for (src, dst) in movement {
+				moveItem(at: src, inParent: parent, to: dst, inParent: parent)
 			}
-			else if toCount > fromCount {
-				insertItems(at: IndexSet(integersIn: fromCount ..< toCount), inParent: parent, withAnimation: .slideUp)
-			}
-			
-			reloadItems(at: IndexSet(integersIn: 0 ..< min(fromCount, toCount)), inParent: parent)
 		}
-	}
-
-	func reloadItems(at rows: IndexSet, inParent parent: Any?) {
-		removeItems(at: rows, inParent: parent, withAnimation: [])
-		insertItems(at: rows, inParent: parent, withAnimation: [])
+		else {
+			reloadData()
+		}
 	}
 
 	func animateDelete(items: [Any]) {
