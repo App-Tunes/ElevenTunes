@@ -147,7 +147,7 @@ public final class SpotifyTrack: RemoteTrack {
     func extractAttributes(from features: AudioFeatures) -> TypedDict<TrackAttribute> {
 		.unsafe([
 			.bpm: Tempo(features.tempo),
-			.key: MusicalKey(features.key)
+			.key: MusicalNote(pitchClass: features.key).map { MusicalKey(note: $0, mode: features.mode == 1 ? .major : .minor) }
 		])
     }
 }
