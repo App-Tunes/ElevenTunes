@@ -53,6 +53,10 @@ class TrackActions: NSObject {
     }
 	
 	func makeMenu() -> NSMenu {
+		guard !tracks.isEmpty else {
+			return NSMenu()
+		}
+		
 		let menu = StaticMenu()
 		
 		menu.addItem(withTitle: "Reload Metadata", callback: self.reloadMetadata)

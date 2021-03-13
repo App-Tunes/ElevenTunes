@@ -52,6 +52,10 @@ class PlaylistActions: NSObject {
     }
 	
 	func makeMenu() -> NSMenu {
+		guard !playlists.isEmpty else {
+			return NSMenu()
+		}
+
 		let menu = StaticMenu()
 		
 		if playlists.contains(where: \.backend.hasCaches) {
