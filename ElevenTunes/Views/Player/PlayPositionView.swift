@@ -145,6 +145,7 @@ struct PlayPositionView: View {
                             .foregroundColor(.secondary)
                             .padding(.trailing)
                     }
+						.allowsHitTesting(false)
                 }
             }
         }
