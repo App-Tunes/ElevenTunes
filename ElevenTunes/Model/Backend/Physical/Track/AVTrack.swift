@@ -121,6 +121,7 @@ extension AVTrack: RequestMapperDelegate {
 					.title: file.title,
 					.previewImage: file.image.flatMap { NSImage(data: $0) },
 					.bpm: file.bpm.flatMap { Double($0) }.map { Tempo($0) },
+					.key: file.initialKey.flatMap { MusicalKey.parse($0) },
 					.album: file.album.map { TransientAlbum(attributes: .unsafe([
 						.title: $0
 					])) },
