@@ -62,6 +62,10 @@ extension Array {
 		copy.insert(contentsOf: collection, at: index)
 		return copy
 	}
+	
+	var neighbors: Zip2Sequence<ArraySlice<Element>, ArraySlice<Element>> {
+		Swift.zip(self.dropLast(), self.dropFirst())
+	}
 }
 
 extension Array where Element: Hashable {

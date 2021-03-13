@@ -209,6 +209,7 @@
 		80F53EC625D9D5B5003A98B3 /* StaticMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F53EC525D9D5B5003A98B3 /* StaticMenu.swift */; };
 		80F61B9F25FCF84600AC4CF8 /* libtaglib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80F61B9B25FCF7F500AC4CF8 /* libtaglib.a */; };
 		80F61BA625FCF90600AC4CF8 /* TagLibFile.mm in Sources */ = {isa = PBXBuildFile; fileRef = 80F61BA525FCF90600AC4CF8 /* TagLibFile.mm */; };
+		80F61BAE25FD190600AC4CF8 /* NSRegularExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F61BAD25FD190600AC4CF8 /* NSRegularExpression.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -682,6 +683,7 @@
 		80F61B9825FCF7F500AC4CF8 /* taglib_config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = taglib_config.h; sourceTree = "<group>"; };
 		80F61BA425FCF90600AC4CF8 /* TagLibFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagLibFile.h; sourceTree = "<group>"; };
 		80F61BA525FCF90600AC4CF8 /* TagLibFile.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TagLibFile.mm; sourceTree = "<group>"; };
+		80F61BAD25FD190600AC4CF8 /* NSRegularExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRegularExpression.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -831,6 +833,7 @@
 				803A870825F554A700D7B9E1 /* NSTableView+Visibility.swift */,
 				80B357D125F6FAC400180A4A /* NSTableView+Synchronization.swift */,
 				806185A625F4E73D0062AAB3 /* ArrayDifference.swift */,
+				80F61BAD25FD190600AC4CF8 /* NSRegularExpression.swift */,
 			);
 			path = Cocoa;
 			sourceTree = "<group>";
@@ -2099,6 +2102,7 @@
 				80A8C84A25BF5B5200F97EF0 /* DBSpotifyPlaylist.swift in Sources */,
 				804D3C0125D93A5E00705D42 /* PlaylistsViewController.swift in Sources */,
 				80A8C85225BF5B5200F97EF0 /* DBAlbum.swift in Sources */,
+				80F61BAE25FD190600AC4CF8 /* NSRegularExpression.swift in Sources */,
 				80C9A17D259F902D00A038CC /* MilkyCoverView.swift in Sources */,
 				80A8C84725BF5B5200F97EF0 /* DBDirectoryPlaylist+CoreDataProperties.swift in Sources */,
 				806E202825975A0E003EEA83 /* MockTrack.swift in Sources */,

@@ -10,3 +10,9 @@ import SwiftUI
 
 protocol AnyAlbum: AnyPlaylist {
 }
+
+class TransientAlbum: TransientPlaylist, AnyAlbum {
+	init(attributes: TypedDict<PlaylistAttribute>) {
+		super.init(.hybrid, attributes: attributes)
+	}
+}

@@ -61,7 +61,7 @@ public final class AVTrack: RemoteTrack {
 	
 	let mapper = Requests(relation: [
 		.url: [],
-		.taglib: [.title, .key, .bpm, .previewImage],
+		.taglib: [.title, .key, .bpm, .previewImage, .artists, .album],
 		.analyze: [.bpm, .key]
 	])
 
@@ -120,7 +120,19 @@ extension AVTrack: RequestMapperDelegate {
 				.init(.unsafe([
 					.title: file.title,
 					.previewImage: file.image.flatMap { NSImage(data: $0) },
-					.bpm: file.bpm.flatMap { Double($0) }
+					.bpm: file.bpm.flatMap { Double($0) },
+					.album: file.album.map { TransientAlbum(attributes: .unsafe([
+						.title: $0
+					])) },
+					.artists: file.artist.map {
+						let artists = TransientArtist.splitNames($0)
+						
+						return artists.map {
+							TransientArtist(attributes: .unsafe([
+								.title: $0
+							]))
+						}
+					}
 				]), state: .valid)
 			}
 			.eraseToAnyPublisher()

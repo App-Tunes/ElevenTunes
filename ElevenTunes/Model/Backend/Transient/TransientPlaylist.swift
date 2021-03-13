@@ -44,7 +44,10 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
     @Published var version: PlaylistVersion
 
 	func demand(_ demand: Set<PlaylistAttribute>) -> AnyCancellable {
-		AnyCancellable {}
+		// The ones we don't have, we can never fulfill either
+		let unfulfilled = demand.subtracting(_attributes.snapshot.keys)
+		_attributes.updateEmpty(unfulfilled, state: .valid)
+		return AnyCancellable { }
 	}
 	
 	var attributes: AnyPublisher<PlaylistAttributes.Update, Never> {
