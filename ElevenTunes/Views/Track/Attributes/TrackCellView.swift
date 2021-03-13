@@ -43,7 +43,7 @@ struct TrackCellView: View {
 					Image(systemName: "person.2")
 					TrackArtistsView(track: track)
 					
-					TrackAlbumView(track: track)
+					TrackAlbumView(track: track, withIcon: true)
 				}
                     .font(.system(size: 11))
                     .frame(alignment: .top)

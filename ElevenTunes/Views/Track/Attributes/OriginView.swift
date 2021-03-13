@@ -47,8 +47,6 @@ struct AlbumCellView: View {
     
     var body: some View {
 		HStack {
-            album.backend.icon
-            
 			if title.state == .valid {
                 if let url = album.backend.origin {
                     UnderlinedLink(
@@ -107,12 +105,17 @@ struct TrackArtistsView: View {
 
 struct TrackAlbumView: View {
 	let track: Track
+	let withIcon: Bool
 	
 	@State var album: Playlist?
 
 	var body: some View {
 		Group {
 			if let album = album {
+				if withIcon {
+					Image(systemName: "opticaldisc")
+				}
+				
 				AlbumCellView(album: album)
 			}
 		}

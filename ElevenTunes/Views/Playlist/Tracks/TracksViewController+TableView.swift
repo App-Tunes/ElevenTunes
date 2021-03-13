@@ -122,7 +122,7 @@ extension TracksViewController: NSTableViewDelegate {
 		}
 		
 		if let view = createOn(ColumnIdentifiers.Album, cell: CellIdentifiers.AlbumCell) {
-			view.rootView = AnyView(TrackAlbumView(track: track))
+			view.rootView = AnyView(TrackAlbumView(track: track, withIcon: false))
 			return view
 		}
 		
