@@ -56,10 +56,15 @@ public final class SpotifyPlaylist: SpotifyURIPlaylist {
 		mapper.delegate = self
     }
     
-    convenience init(playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>, spotify: Spotify) {
-        self.init(SpotifyPlaylistToken(playlist.id), spotify: spotify)
-		self.mapper.offer(.playlist, update: .init(SpotifyPlaylist.attributes(of: playlist), state: .missing))
-    }
+	convenience init(playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>, spotify: Spotify) {
+		self.init(SpotifyPlaylistToken(playlist.id), spotify: spotify)
+		self.mapper.offer(.playlist, update: .init(SpotifyPlaylist.attributes(of: playlist), state: .valid))
+	}
+	
+	convenience init(playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistsItemsReference>, spotify: Spotify) {
+		self.init(SpotifyPlaylistToken(playlist.id), spotify: spotify)
+		self.mapper.offer(.playlist, update: .init(SpotifyPlaylist.attributes(of: playlist), state: .valid))
+	}
 	
 	public var contentType: PlaylistContentType { .tracks }
 	
@@ -67,12 +72,18 @@ public final class SpotifyPlaylist: SpotifyURIPlaylist {
 	
 	public var origin: URL? { token.origin }
 
-    static func attributes(of playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>) -> TypedDict<PlaylistAttribute> {
-        return .unsafe([
-            .title: playlist.name
-        ])
-    }
-	    
+	static func attributes(of playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItems>) -> TypedDict<PlaylistAttribute> {
+		return .unsafe([
+			.title: playlist.name
+		])
+	}
+		
+	static func attributes(of playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistsItemsReference>) -> TypedDict<PlaylistAttribute> {
+		return .unsafe([
+			.title: playlist.name
+		])
+	}
+		
     func viewableTracks(_ uris: [SpotifyTrackToken], spotify: Spotify) -> AnyPublisher<[SpotifyTrack], Error> {
         guard !uris.isEmpty else {
             return Just([]).eraseError().eraseToAnyPublisher()

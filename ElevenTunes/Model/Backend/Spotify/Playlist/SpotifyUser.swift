@@ -147,7 +147,7 @@ extension SpotifyUser: RequestMapperDelegate {
 				.map { $0.flatMap { $0.items } }
 				.map { items in
 					items.compactMap { item -> SpotifyPlaylist? in
-						SpotifyPlaylist(SpotifyPlaylistToken(item.id), spotify: spotify)
+						SpotifyPlaylist(playlist: item, spotify: spotify)
 					}
 				}
 				.map {
