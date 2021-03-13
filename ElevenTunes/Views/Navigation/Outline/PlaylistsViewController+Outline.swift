@@ -55,7 +55,12 @@ extension PlaylistsViewController: NSOutlineViewDelegate {
 			}
 		}
 		selectionObserver(.init(insertPosition: insertPosition, playlists: Set(items.map { Playlist($0.playlist) })))
-	}	
+	}
+	
+	func outlineView(_ outlineView: NSOutlineView, shouldTypeSelectFor event: NSEvent, withCurrentSearch searchString: String?) -> Bool {
+		// Needs a solid implementatin on our side, since subviews are hosting views
+		false
+	}
 }
 
 extension PlaylistsViewController: NSOutlineViewDataSource {
