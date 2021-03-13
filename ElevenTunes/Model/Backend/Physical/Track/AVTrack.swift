@@ -48,15 +48,20 @@ public final class AVTrack: RemoteTrack {
 		case notImplemented
 	}
 	
+	enum TagLibError: Error {
+		case cannotRead
+	}
+	
 	public let url: URL
 	public let isVideo: Bool
 
 	enum Request {
-		case url, analyze
+		case url, analyze, taglib
 	}
 	
 	let mapper = Requests(relation: [
-		.url: [.title],
+		.url: [],
+		.taglib: [.title, .key, .bpm],
 		.analyze: [.bpm, .key]
 	])
 
@@ -81,7 +86,7 @@ public final class AVTrack: RemoteTrack {
 		do {
 			return .init(.unsafe([
 				.title: url.lastPathComponent
-			]), state: .valid)
+			]), state: .missing)
 		}
 		catch let error {
 			return .empty(state: .error(error))
@@ -101,12 +106,26 @@ public final class AVTrack: RemoteTrack {
 }
 
 extension AVTrack: RequestMapperDelegate {
-	func onDemand(_ request: Request) -> AnyPublisher<VolatileAttributes<TrackAttribute, TrackVersion>.PartialGroupSnapshot, Error> {
+	func onDemand(_ request: Request) -> AnyPublisher<TrackAttributes.PartialGroupSnapshot, Error> {
+		let url = self.url
+		
 		switch request {
-		case .analyze:
-			return Just(.empty(state: .error(AnalysisError.notImplemented))).eraseError().eraseToAnyPublisher()
 		case .url:
 			return Future { self.loadURL() }.eraseToAnyPublisher()
+		case .taglib:
+			return Future {
+				try TagLibFile(url: url).unwrap(orThrow: TagLibError.cannotRead)
+			}
+			.map { file in
+				.init(.unsafe([
+					.title: file.title,
+					.bpm: file.bpm.flatMap { Double($0) }
+				]), state: .valid)
+			}
+			.eraseToAnyPublisher()
+		case .analyze:
+			return Just(.empty(state: .error(AnalysisError.notImplemented)))
+				.eraseError().eraseToAnyPublisher()
 		}
 	}
 }

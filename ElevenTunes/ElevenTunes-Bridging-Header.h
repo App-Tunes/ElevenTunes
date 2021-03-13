@@ -3,3 +3,5 @@
 //
 
 #import "BSManagedDocument.h"
+
+#import "TagLibFile.h"
