@@ -121,9 +121,9 @@ struct TrackAlbumView: View {
 				}
 				
 				AlbumCellView(album: album)
+					.foregroundColor(.secondary)
 			}
 		}
-			.foregroundColor(.secondary)
 			.whileActive(track.backend.demand([.album]))
 			.onReceive(track.backend.attribute(TrackAttribute.album)) {
 				setIfDifferent(self, \.album, $0.value.map { Playlist($0) })
