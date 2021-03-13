@@ -40,7 +40,8 @@ class Spotify {
     static let scopes: Set<Scope> = [
         .userReadPlaybackState,
         .userModifyPlaybackState,
-        .playlistModifyPrivate,
+		.playlistReadPrivate,
+		.playlistModifyPrivate,
         .playlistModifyPublic,
         .userLibraryRead,
         .userLibraryModify,
