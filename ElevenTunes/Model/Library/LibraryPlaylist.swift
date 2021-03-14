@@ -125,6 +125,8 @@ class LibraryPlaylist: AnyPlaylist {
 		switch capability {
 		case .importChildren:
 			return true
+		case .addChildren(_):
+			return true
 		default:
 			return false
 		}
