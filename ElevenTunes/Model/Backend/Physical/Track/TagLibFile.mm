@@ -8,8 +8,9 @@
 
 #import "TagLibFile.h"
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wall"
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wall"
+#pragma clang diagnostic ignored "-Weverything"
 
 #import "fileref.h"
 #import "tag.h"
@@ -38,7 +39,7 @@
 
 #import "AVFoundation/AVFoundation.h"
 
-#pragma GCC diagnostic pop
+#pragma clang diagnostic pop
 
 inline NSString *TagLibStringToNS(const TagLib::String &tagString) {
     if (tagString == TagLib::ByteVector::null)
