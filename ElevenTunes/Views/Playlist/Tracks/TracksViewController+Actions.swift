@@ -87,18 +87,20 @@ extension TracksViewController: NSTableViewContextSensitiveMenuDelegate {
 		
 		// External drag; import formally
 
-		return TrackInterpreter.standard.interpret(pasteboard: pasteboard)?
-			.sink(receiveCompletion: appLogErrors(_:)) { tokens in
-				do {
-					try playlist.import(library: UninterpretedLibrary(tracks: tokens), toIndex: row)
-				}
-				catch let error {
-					NSAlert.warning(
-						title: "Import Failure",
-						text: String(describing: error)
-					)
-				}
-			}
-			.store(in: &cancellables) != nil
+		guard let tokens = TrackInterpreter.standard.interpret(pasteboard: pasteboard) else {
+			return false
+		}
+
+		do {
+			try playlist.import(library: UninterpretedLibrary(tracks: tokens), toIndex: row)
+		}
+		catch let error {
+			NSAlert.warning(
+				title: "Import Failure",
+				text: String(describing: error)
+			)
+		}
+
+		return true
 	}
 }

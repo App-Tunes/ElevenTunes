@@ -12,15 +12,25 @@ import UniformTypeIdentifiers
 extension NSPasteboard {
 	class MissingError: Error { }
 
-	func loadData(forType type: UTType) -> Future<NSSecureCoding, Error> {
+	func loadFirstData(forType type: UTType) throws -> Data {
 		guard let strictType = (types ?? []).first(where: {
 			UTType($0.rawValue)?.conforms(to: type) ?? false
 		}) else {
-			return Future { throw MissingError() }
+			throw MissingError()
 		}
 		
-		return Future {
-			try self.data(forType: strictType).unwrap(orThrow: MissingError()) as NSSecureCoding
+		return try self.data(forType: strictType).unwrap(orThrow: MissingError())
+	}
+}
+
+extension NSPasteboardItem {
+	func loadData(forType type: UTType) throws -> Data {
+		guard let strictType = types.first(where: {
+			UTType($0.rawValue)?.conforms(to: type) ?? false
+		}) else {
+			throw NSPasteboard.MissingError()
 		}
+		
+		return try self.data(forType: strictType).unwrap(orThrow: NSPasteboard.MissingError())
 	}
 }

@@ -7,27 +7,20 @@
 
 import Cocoa
 import Combine
+import UniformTypeIdentifiers
 
 extension ContentInterpreter {
-	func interpret(pasteboard info: NSPasteboard) -> AnyPublisher<[Interpreted], Error>? {
-		var publishers: [AnyPublisher<Interpreted, Error>] = []
-
-		for type in self.types {
-			if info.canReadItem(withDataConformingToTypes: [type.identifier]) {
-				publishers.append(
-					info.loadData(forType: type)
-						.tryCompactMap { item in try self.interpret(item, type: type) }
-						.eraseToAnyPublisher()
-					)
+	func interpret(pasteboard: NSPasteboard) -> [Interpreted]? {
+		pasteboard.pasteboardItems?
+			.compactMap(self.interpret)
+			.nonEmpty
+	}
+	
+	func interpret(pasteboardItem item: NSPasteboardItem) -> Interpreted? {
+		self.types.compactMap { type in
+			(try? item.loadData(forType: type)).flatMap { data in
+				try? self.interpret(data as NSSecureCoding, type: type)
 			}
-		}
-		
-		guard !publishers.isEmpty else {
-			return nil
-		}
-		
-		return Publishers.MergeMany(publishers)
-			.collect()
-			.eraseToAnyPublisher()
+		}.first
 	}
 }

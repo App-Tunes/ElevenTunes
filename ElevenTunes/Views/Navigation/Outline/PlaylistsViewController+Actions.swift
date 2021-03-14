@@ -86,20 +86,21 @@ extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
 		
 		// External drag; import formally
 
-		return PlaylistInterpreter.standard.interpret(pasteboard: pasteboard)?
-			.sink(receiveCompletion: appLogErrors(_:)) { tokens in
-				do {
-					try item.playlist.import(library: UninterpretedLibrary(playlists: tokens), toIndex: index)
-					outlineView.animator().expandItem(item)
-				}
-				catch let error {
-					NSAlert.warning(
-						title: "Import Failure",
-						text: String(describing: error)
-					)
-				}
-			}
-			.store(in: &cancellables) != nil
-	}
+		guard let tokens = PlaylistInterpreter.standard.interpret(pasteboard: pasteboard) else {
+			return false
+		}
 
+		do {
+			try item.playlist.import(library: UninterpretedLibrary(playlists: tokens), toIndex: index)
+			outlineView.animator().expandItem(item)
+		}
+		catch let error {
+			NSAlert.warning(
+				title: "Import Failure",
+				text: String(describing: error)
+			)
+		}
+
+		return true
+	}
 }
