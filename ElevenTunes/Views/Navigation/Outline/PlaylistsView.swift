@@ -10,18 +10,18 @@ import Combine
 
 struct PlaylistsView: NSViewControllerRepresentable {
 	let directory: Playlist
-	let selectionObserver: (ContextualSelection<Playlist>) -> Void
+	let navigator: Navigator
 
 	@Environment(\.library) private var library: Library!
 
 	func makeNSViewController(context: Context) -> PlaylistsViewController {
-		PlaylistsViewController(directory, library: library)
+		PlaylistsViewController(directory, library: library, navigator: navigator)
 	}
 	
 	func updateNSViewController(_ nsViewController: PlaylistsViewController, context: Context) {
 		setIfDifferent(nsViewController, \.directory, directory)
 		nsViewController.library = library
-		nsViewController.selectionObserver = selectionObserver
+		nsViewController.navigator = navigator
 	}
 }
 

@@ -33,6 +33,10 @@ class LibraryPlaylist: AnyPlaylist {
         self.playContext = playContext
         self.library = library
         
+		_attributes.update(.unsafe([
+			.title: "Library"
+		], state: .valid))
+		
         tracksObserver = CDPublisher(request: DBTrack.createFetchRequest(), context: managedObjectContext)
             // TODO Apparently, sometimes the same object is emitted twice
             .map { $0.removeDuplicates() }
@@ -100,7 +104,8 @@ class LibraryPlaylist: AnyPlaylist {
 	
 	func demand(_ demand: Set<PlaylistAttribute>) -> AnyCancellable {
 		// TODO We may want to invalidate CD Publishers if there's no demand
-		AnyCancellable { }
+		_attributes.updateEmptyMissing(demand, state: .valid)
+		return AnyCancellable { }
 	}
 
 	var attributes: AnyPublisher<PlaylistAttributes.Update, Never> {

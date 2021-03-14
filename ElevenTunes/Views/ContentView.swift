@@ -22,7 +22,7 @@ struct ContentView: View {
     @State var isImporting: Bool = false
     @State var mainPlaylist: Playlist
 
-	@ObservedObject var navigator: Navigator = .init()
+	@ObservedObject var navigator: Navigator
 
     var body: some View {
         HSplitView {

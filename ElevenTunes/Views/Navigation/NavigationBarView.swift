@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NavigationBarView: View {
 	let playlist: Playlist
-	let selection: ContextualSelection<Playlist>
+	@ObservedObject var navigator: Navigator
         
     var body: some View {
         HStack {
@@ -25,21 +25,21 @@ struct NavigationBarView: View {
                 .frame(width: 20)
                     
             Button {
-                // TODO Library View
+				navigator.selectRoot()
             } label: {
                 Image(systemName: "music.note.house")
             }
-            .disabled(true)
+				.foregroundColor(navigator.isRootSelected ? .accentColor : .primary)
 
             Spacer()
                 .frame(width: 20)
 
             Button {
-                // TODO Navigator: Back
+				// TODO Navigator: Backward
             } label: {
                 Image(systemName: "chevron.backward")
             }
-            .disabled(true)
+			.disabled(true)
 
             Spacer()
                 .frame(width: 15)
@@ -53,7 +53,7 @@ struct NavigationBarView: View {
 
             Spacer()
             
-            NewPlaylistView(directory: playlist, selection: selection)
+			NewPlaylistView(directory: playlist, selection: navigator.selection)
                 .padding(.trailing, 8)
         }
             .buttonStyle(BorderlessButtonStyle())

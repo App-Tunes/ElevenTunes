@@ -210,6 +210,7 @@
 		80F61B9F25FCF84600AC4CF8 /* libtaglib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80F61B9B25FCF7F500AC4CF8 /* libtaglib.a */; };
 		80F61BA625FCF90600AC4CF8 /* TagLibFile.mm in Sources */ = {isa = PBXBuildFile; fileRef = 80F61BA525FCF90600AC4CF8 /* TagLibFile.mm */; };
 		80F61BAE25FD190600AC4CF8 /* NSRegularExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F61BAD25FD190600AC4CF8 /* NSRegularExpression.swift */; };
+		80F61BB325FE314E00AC4CF8 /* Navigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F61BB225FE314E00AC4CF8 /* Navigator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -684,6 +685,7 @@
 		80F61BA425FCF90600AC4CF8 /* TagLibFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagLibFile.h; sourceTree = "<group>"; };
 		80F61BA525FCF90600AC4CF8 /* TagLibFile.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TagLibFile.mm; sourceTree = "<group>"; };
 		80F61BAD25FD190600AC4CF8 /* NSRegularExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRegularExpression.swift; sourceTree = "<group>"; };
+		80F61BB225FE314E00AC4CF8 /* Navigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -963,6 +965,7 @@
 				808A763525940EE400B0A9CE /* ContentInterpreter+SwiftUI.swift */,
 				80DC5CE925D9DAB900563A10 /* ContentInterpreter+Cocoa.swift */,
 				80185C5525DC589C00CAF358 /* ElevenInterpreters.swift */,
+				80F61BB225FE314E00AC4CF8 /* Navigator.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2136,6 +2139,7 @@
 				80D6DAAC259E2CBF00879BCF /* Link.swift in Sources */,
 				80A8C84D25BF5B5200F97EF0 /* DBArtist+CoreDataProperties.swift in Sources */,
 				80AD69B725882D1200192BED /* PlayPositionView.swift in Sources */,
+				80F61BB325FE314E00AC4CF8 /* Navigator.swift in Sources */,
 				80D6DAB6259E389600879BCF /* PlaylistActions.swift in Sources */,
 				800C11FF259A3EF10017A116 /* TrackRowView.swift in Sources */,
 				806E1FDB2596A9A3003EEA83 /* CodableTransformer.swift in Sources */,

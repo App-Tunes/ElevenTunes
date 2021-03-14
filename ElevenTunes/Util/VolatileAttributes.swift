@@ -88,6 +88,10 @@ public class VolatileAttributes<Key: AnyObject & Hashable, Version: Hashable> {
 		update(Snapshot(group: GroupSnapshot(keys: keys, attributes: .init(), state: state)))
 	}
 
+	func updateEmptyMissing(_ keys: Set<Key>, state: State) {
+		updateEmpty(keys.subtracting(snapshot.keys), state: state)
+	}
+	
 	func update(_ snapshot: Snapshot) {
 		guard !snapshot.isEmpty else { return }
 

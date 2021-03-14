@@ -24,16 +24,19 @@ class PlaylistsViewController: NSViewController {
 		}
 	}
 	
-	var selectionObserver: (ContextualSelection<Playlist>) -> Void
+	var navigator: Navigator {
+		didSet { observeNavigator() }
+	}
+	var navigationObservation: AnyCancellable?
 	
 	var dummyPlaylist: Item!
 	
 	var cancellables = Set<AnyCancellable>()
 	
-	init(_ directory: Playlist, library: Library) {
+	init(_ directory: Playlist, library: Library, navigator: Navigator) {
 		self.directory = directory
 		self.library = library
-		self.selectionObserver = { _ in }
+		self.navigator = navigator
 		super.init(nibName: nil, bundle: .main)
 		directoryItem = Item(playlist: directory.backend, parent: nil, delegate: self)
 		directoryItem.isDemanding = true
@@ -50,5 +53,6 @@ class PlaylistsViewController: NSViewController {
 		outlineView.registerForDraggedTypes(PlaylistInterpreter.standard.types.map { .init(rawValue: $0.identifier ) })
 		outlineView.registerForDraggedTypes(TrackInterpreter.standard.types.map { .init(rawValue: $0.identifier ) })
 		outlineView.registerForDraggedTypes([.init(PlaylistsExportManager.playlistsIdentifier)])
+		observeNavigator()
     }
 }

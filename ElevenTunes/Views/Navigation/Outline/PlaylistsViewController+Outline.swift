@@ -54,12 +54,34 @@ extension PlaylistsViewController: NSOutlineViewDelegate {
 				insertPosition = (Playlist(item.playlist), nil)
 			}
 		}
-		selectionObserver(.init(insertPosition: insertPosition, playlists: Set(items.map { Playlist($0.playlist) })))
+		navigator.select(.init(insertPosition: insertPosition, items: Set(items.map { Playlist($0.playlist) })))
 	}
 	
 	func outlineView(_ outlineView: NSOutlineView, shouldTypeSelectFor event: NSEvent, withCurrentSearch searchString: String?) -> Bool {
 		// Needs a solid implementatin on our side, since subviews are hosting views
 		false
+	}
+	
+	func observeNavigator() {
+		let navigator = self.navigator
+		guard let outlineView = self.outlineView else {
+			return
+		}
+
+		// OnMain so we are in objectDidChange
+		navigationObservation = navigator.objectWillChange.onMain().sink {
+			// Suboptimal, but navigator.row(forItem) uses === checking. We can't lookup items.
+			let selectedIDs = navigator.selection.items.map(\.id)
+			let selected = IndexSet(IndexSet(0..<outlineView.numberOfRows)
+				.filter {
+					selectedIDs.contains((outlineView.item(atRow: $0) as! Item).playlist.id)
+				}
+			)
+			
+			if selected != outlineView.selectedRowIndexes {
+				outlineView.selectRowIndexes(selected, byExtendingSelection: false)
+			}
+		}
 	}
 }
 
