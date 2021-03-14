@@ -94,7 +94,7 @@ class LibraryPlaylist: AnyPlaylist {
     
     var origin: URL? { nil }
     
-    var accentColor: Color { .accentColor }
+    var accentColor: Color { .primary }
     
     var hasCaches: Bool { false }
         
