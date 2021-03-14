@@ -105,6 +105,8 @@ class LibrarySettingsLevel: SettingsLevel, Codable {
     }
     
     override func writeAdditionalContent(_ content: Any!, to absoluteURL: URL!, originalContentsURL absoluteOriginalContentsURL: URL!) throws {
+		managedObjectContext.persistentStoreCoordinator!.name = absoluteURL.description
+		
         if let content = content as? LibrarySettingsLevel {
             let target = absoluteURL.appendingPathComponent("Settings.json")
             let encoder = JSONEncoder()
@@ -114,6 +116,8 @@ class LibrarySettingsLevel: SettingsLevel, Codable {
     }
     
     override func readAdditionalContent(from absoluteURL: URL!) throws {
+		managedObjectContext.persistentStoreCoordinator!.name = absoluteURL.description
+
         let target = absoluteURL.appendingPathComponent("Settings.json")
         let decoder = JSONDecoder()
         let data = try Data(contentsOf: target)

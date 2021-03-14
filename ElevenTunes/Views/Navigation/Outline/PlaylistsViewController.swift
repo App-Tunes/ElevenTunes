@@ -52,6 +52,11 @@ class PlaylistsViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
+		outlineView.autosaveExpandedItems = true
+		outlineView.autosaveName = library.managedObjectContext.persistentStoreCoordinator?.name.map {
+			"playlists-\($0)"
+		}
+		
 		outlineView.registerForDraggedTypes(PlaylistInterpreter.standard.types.map { .init(rawValue: $0.identifier ) })
 		outlineView.registerForDraggedTypes(TrackInterpreter.standard.types.map { .init(rawValue: $0.identifier ) })
 		outlineView.registerForDraggedTypes([.init(PlaylistsExportManager.playlistsIdentifier)])
@@ -72,7 +77,7 @@ class PlaylistsViewController: NSViewController {
 		}
 		
 		// TODO Expand full path? May never be required
-		guard let item = item(forPlaylist: playlist) else {
+		guard let item = item(forPlaylistID: playlist.id) else {
 			return
 		}
 		

@@ -84,11 +84,11 @@ extension PlaylistsViewController: NSOutlineViewDataSource {
 		return raw != nil ? (raw as! Item) : directoryItem
 	}
 	
-	func item(forPlaylist playlist: AnyPlaylist) -> Item? {
+	func item(forPlaylistID id: String) -> Item? {
 		IndexSet(0..<outlineView.numberOfRows)
 			.map { outlineView.item(atRow: $0) as! Item }
 			.first {
-				$0.playlist.id == playlist.id
+				$0.playlist.id == id
 			}
 	}
 	
@@ -123,5 +123,14 @@ extension PlaylistsViewController: NSOutlineViewDataSource {
 	
 	func outlineView(_ outlineView: NSOutlineView, objectValueFor tableColumn: NSTableColumn?, byItem raw: Any?) -> Any? {
 		nil
+	}
+	
+	func outlineView(_ outlineView: NSOutlineView, persistentObjectForItem item: Any?) -> Any? {
+		self.item(raw: item).playlist.id
+	}
+	
+	func outlineView(_ outlineView: NSOutlineView, itemForPersistentObject object: Any) -> Any? {
+		// TODO Will only work if it's in view already...
+		(object as? String).flatMap { item(forPlaylistID: $0) }
 	}
 }
