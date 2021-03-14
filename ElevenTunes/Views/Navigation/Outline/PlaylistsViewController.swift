@@ -41,6 +41,8 @@ class PlaylistsViewController: NSViewController {
 		directoryItem = Item(playlist: directory.backend, parent: nil, delegate: self)
 		directoryItem.isDemanding = true
 		dummyPlaylist = Item(playlist: TransientPlaylist(.tracks, attributes: .init()), parent: nil, delegate: self)
+		observeNavigator()
+		NotificationCenter.default.addObserver(self, selector: #selector(onNewPlaylist(notification:)), name: NewPlaylistView.newPlaylistNotification, object: nil)
 	}
 	
 	required init?(coder: NSCoder) {
@@ -53,6 +55,27 @@ class PlaylistsViewController: NSViewController {
 		outlineView.registerForDraggedTypes(PlaylistInterpreter.standard.types.map { .init(rawValue: $0.identifier ) })
 		outlineView.registerForDraggedTypes(TrackInterpreter.standard.types.map { .init(rawValue: $0.identifier ) })
 		outlineView.registerForDraggedTypes([.init(PlaylistsExportManager.playlistsIdentifier)])
-		observeNavigator()
     }
+	
+	@objc func onNewPlaylist(notification: NSNotification) {
+		guard let playlist = notification.userInfo?["playlist"] as? AnyPlaylist else {
+			return
+		}
+		
+		if
+			let playlist = playlist as? LibraryPlaylist,
+			let defaultPlaylist = playlist.library?.defaultPlaylist,
+			let item = item(forCache: defaultPlaylist)
+		{
+			outlineView.animator().expandItem(item)
+			return
+		}
+		
+		// TODO Expand full path? May never be required
+		guard let item = item(forPlaylist: playlist) else {
+			return
+		}
+		
+		outlineView.animator().expandItem(item)
+	}
 }

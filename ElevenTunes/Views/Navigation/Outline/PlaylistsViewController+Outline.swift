@@ -64,19 +64,13 @@ extension PlaylistsViewController: NSOutlineViewDelegate {
 	
 	func observeNavigator() {
 		let navigator = self.navigator
-		guard let outlineView = self.outlineView else {
-			return
-		}
 
 		// OnMain so we are in objectDidChange
-		navigationObservation = navigator.objectWillChange.onMain().sink {
+		navigationObservation = navigator.objectWillChange.onMain().sink { [weak self] in
+			guard let self = self, let outlineView = self.outlineView else { return }
+			
 			// Suboptimal, but navigator.row(forItem) uses === checking. We can't lookup items.
-			let selectedIDs = navigator.selection.items.map(\.id)
-			let selected = IndexSet(IndexSet(0..<outlineView.numberOfRows)
-				.filter {
-					selectedIDs.contains((outlineView.item(atRow: $0) as! Item).playlist.id)
-				}
-			)
+			let selected = self.indices(forPlaylists: navigator.selection.items)
 			
 			if selected != outlineView.selectedRowIndexes {
 				outlineView.selectRowIndexes(selected, byExtendingSelection: false)
@@ -88,6 +82,31 @@ extension PlaylistsViewController: NSOutlineViewDelegate {
 extension PlaylistsViewController: NSOutlineViewDataSource {
 	func item(raw: Any?) -> Item {
 		return raw != nil ? (raw as! Item) : directoryItem
+	}
+	
+	func item(forPlaylist playlist: AnyPlaylist) -> Item? {
+		IndexSet(0..<outlineView.numberOfRows)
+			.map { outlineView.item(atRow: $0) as! Item }
+			.first {
+				$0.playlist.id == playlist.id
+			}
+	}
+	
+	func item(forCache playlist: DBPlaylist) -> Item? {
+		IndexSet(0..<outlineView.numberOfRows)
+			.map { outlineView.item(atRow: $0) as! Item }
+			.first {
+				($0.playlist as? BranchingPlaylist)?.cache == playlist
+			}
+	}
+	
+	func indices<C>(forPlaylists playlists: C) -> IndexSet where C: Collection, C.Element == Playlist {
+		let ids = playlists.map(\.id)
+		return IndexSet(IndexSet(0..<outlineView.numberOfRows)
+			.filter {
+				ids.contains((outlineView.item(atRow: $0) as! Item).playlist.id)
+			}
+		)
 	}
 	
 	func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem raw: Any?) -> Int {

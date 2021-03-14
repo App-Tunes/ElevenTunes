@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct NewPlaylistView: View {
+	static let newPlaylistNotification = NSNotification.Name("newPlaylistNotification")
+	
 	let directory: Playlist
 	let selection: ContextualSelection<Playlist>
 	
@@ -21,6 +23,7 @@ struct NewPlaylistView: View {
 		
 		do {
 			try insertPosition.0.backend.import(library: library, toIndex: insertPosition.1)
+			NotificationCenter.default.post(.init(name: Self.newPlaylistNotification, userInfo: ["playlist": insertPosition.0.backend]))
 		}
 		catch let error {
 			NSAlert.warning(
