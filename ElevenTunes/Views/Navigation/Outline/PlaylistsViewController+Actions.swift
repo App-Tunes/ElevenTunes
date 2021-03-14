@@ -79,6 +79,7 @@ extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
 			// Internal cache-only drag; do internal logic
 			
 			playlist.cache.children = playlist.cache.children.inserting(contentsOf: playlists, atIndex: index)
+			outlineView.animator().expandItem(item)
 
 			return true
 		}
@@ -89,6 +90,7 @@ extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
 			.sink(receiveCompletion: appLogErrors(_:)) { tokens in
 				do {
 					try item.playlist.import(library: UninterpretedLibrary(playlists: tokens), toIndex: index)
+					outlineView.animator().expandItem(item)
 				}
 				catch let error {
 					NSAlert.warning(
