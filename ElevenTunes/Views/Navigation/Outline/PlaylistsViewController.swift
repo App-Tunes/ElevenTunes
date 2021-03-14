@@ -10,6 +10,7 @@ import Combine
 
 class PlaylistsViewController: NSViewController {
 	@IBOutlet weak var outlineView: NSOutlineView! = nil
+	var expandExtension: NSOutlineView.DelayedAutoExpander! = nil
 		
 	var library: Library
 	var directory: Playlist {
@@ -52,6 +53,12 @@ class PlaylistsViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
+		// TODO Autosave information? I don't think the outline view can do it in a delayed manner.
+		expandExtension = .init(outlineView: outlineView, timeLimit: 5)
+		if let defaultPlaylist = library.defaultPlaylist {
+			expandExtension.expand = [defaultPlaylist.uuid.uuidString]
+		}
+		
 		outlineView.autosaveExpandedItems = true
 		outlineView.autosaveName = library.managedObjectContext.persistentStoreCoordinator?.name.map {
 			"playlists-\($0)"
@@ -60,6 +67,12 @@ class PlaylistsViewController: NSViewController {
 		outlineView.registerForDraggedTypes(PlaylistInterpreter.standard.types.map { .init(rawValue: $0.identifier ) })
 		outlineView.registerForDraggedTypes(TrackInterpreter.standard.types.map { .init(rawValue: $0.identifier ) })
 		outlineView.registerForDraggedTypes([.init(PlaylistsExportManager.playlistsIdentifier)])
+				
+		// Auto-expand the default playlist at launch
+		if let defaultPlaylist = library.defaultPlaylist,
+		   let item = item(forCache: defaultPlaylist) {
+			outlineView.expandItem(item)
+		}
     }
 	
 	@objc func onNewPlaylist(notification: NSNotification) {

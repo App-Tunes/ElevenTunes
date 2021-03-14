@@ -62,6 +62,10 @@ extension PlaylistsViewController: NSOutlineViewDelegate {
 		false
 	}
 	
+	func outlineView(_ outlineView: NSOutlineView, willDisplayOutlineCell cell: Any, for tableColumn: NSTableColumn?, item: Any) {
+		expandExtension.willDisplayItem(item, withID: (item as! Item).playlist.id)
+	}
+	
 	func observeNavigator() {
 		let navigator = self.navigator
 

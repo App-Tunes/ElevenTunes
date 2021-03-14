@@ -211,6 +211,7 @@
 		80F61BA625FCF90600AC4CF8 /* TagLibFile.mm in Sources */ = {isa = PBXBuildFile; fileRef = 80F61BA525FCF90600AC4CF8 /* TagLibFile.mm */; };
 		80F61BAE25FD190600AC4CF8 /* NSRegularExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F61BAD25FD190600AC4CF8 /* NSRegularExpression.swift */; };
 		80F61BB325FE314E00AC4CF8 /* Navigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F61BB225FE314E00AC4CF8 /* Navigator.swift */; };
+		80F61BB825FE4AF700AC4CF8 /* DelayedAutoExpander.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F61BB725FE4AF700AC4CF8 /* DelayedAutoExpander.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -686,6 +687,7 @@
 		80F61BA525FCF90600AC4CF8 /* TagLibFile.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TagLibFile.mm; sourceTree = "<group>"; };
 		80F61BAD25FD190600AC4CF8 /* NSRegularExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRegularExpression.swift; sourceTree = "<group>"; };
 		80F61BB225FE314E00AC4CF8 /* Navigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigator.swift; sourceTree = "<group>"; };
+		80F61BB725FE4AF700AC4CF8 /* DelayedAutoExpander.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayedAutoExpander.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -825,6 +827,7 @@
 		804D3C1025D96E8900705D42 /* Cocoa */ = {
 			isa = PBXGroup;
 			children = (
+				80F61BB725FE4AF700AC4CF8 /* DelayedAutoExpander.swift */,
 				804D3C1125D96E9300705D42 /* NSLayoutConstraint.swift */,
 				80F53EA925D9BE4C003A98B3 /* ContextSensitiveMenu.swift */,
 				80F53EAE25D9BE58003A98B3 /* ActionOutlineView.swift */,
@@ -2172,6 +2175,7 @@
 				80A8C85325BF5B5200F97EF0 /* DBAlbum+CoreDataProperties.swift in Sources */,
 				806B27C1258D69470091EA4D /* LibraryMock.swift in Sources */,
 				800C1204259A4AC10017A116 /* Set.swift in Sources */,
+				80F61BB825FE4AF700AC4CF8 /* DelayedAutoExpander.swift in Sources */,
 				8054BFF0259F533C00A7035A /* HoverPositionView.swift in Sources */,
 				800508592597FEEB0055FB2D /* Library+Prune.swift in Sources */,
 				806B28A4258ED16C0091EA4D /* AVAudioPlayerEmitter.swift in Sources */,
