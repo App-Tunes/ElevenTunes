@@ -54,6 +54,10 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
 		_attributes.$update.eraseToAnyPublisher()
 	}
 	
+	public func supports(_ capability: PlaylistCapability) -> Bool {
+		false
+	}
+	
 	func `import`(library: UninterpretedLibrary, toIndex index: Int?) throws {
 		throw PlaylistImportError.unimportable  // TODO We can do this bois
     }

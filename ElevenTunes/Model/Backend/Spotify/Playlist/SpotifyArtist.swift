@@ -83,6 +83,10 @@ public final class SpotifyArtist: SpotifyURIPlaylist, AnyArtist {
         
         return URL(string: image.url)
     }
+	
+	public func supports(_ capability: PlaylistCapability) -> Bool {
+		false
+	}
 }
 
 extension SpotifyArtist: RequestMapperDelegate {

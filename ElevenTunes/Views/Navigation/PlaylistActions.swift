@@ -49,9 +49,11 @@ class PlaylistActions: NSObject {
 				}
 			}
 			
-			Button(action: unlink) {
-				Image(systemName: "delete.right")
-				Text("Remove from Library")
+			if playlists.allSatisfy({ $0.backend.supports(.delete) }) {
+				Button(action: unlink) {
+					Image(systemName: "delete.right")
+					Text("Remove from Library")
+				}
 			}
         }
     }
@@ -77,7 +79,9 @@ class PlaylistActions: NSObject {
 			menu.addItem(withTitle: "Remove from library", callback: unlink)
 		}
 		
-		menu.addItem(withTitle: "Delete", callback: delete)
+		if playlists.allSatisfy({ $0.backend.supports(.delete) }) {
+			menu.addItem(withTitle: "Delete", callback: delete)
+		}
 				
 		return menu.menu
 	}

@@ -104,6 +104,10 @@ public final class M3UPlaylist: RemotePlaylist {
 			return .empty(state: .error(error))
 		}
     }
+	
+	public func supports(_ capability: PlaylistCapability) -> Bool {
+		false
+	}
 }
 
 extension M3UPlaylist: RequestMapperDelegate {

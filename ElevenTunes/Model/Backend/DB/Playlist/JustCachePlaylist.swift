@@ -49,6 +49,15 @@ final class JustCachePlaylist: RemotePlaylist {
 	
 	var hasCaches: Bool { false }
 	
+	public func supports(_ capability: PlaylistCapability) -> Bool {
+		switch capability {
+		case .delete:
+			return false  // "Remove from Library" is fine
+		case .insertChildren:
+			return true
+		}
+	}
+	
 	func `import`(library: UninterpretedLibrary, toIndex index: Int?) throws {
 		try self.library.import(library, to: cache, atIndex: index)
 	}

@@ -116,6 +116,15 @@ class LibraryPlaylist: AnyPlaylist {
         
     var icon: Image { Image(systemName: "house.fill" ) }
 	
+	public func supports(_ capability: PlaylistCapability) -> Bool {
+		switch capability {
+		case .insertChildren:
+			return true
+		default:
+			return false
+		}
+	}
+	
 	func `import`(library: UninterpretedLibrary, toIndex index: Int?) throws {
         guard
 			let defaultPlaylist = self.library?.defaultPlaylist,

@@ -76,7 +76,9 @@ class TrackActions: NSObject {
 			menu.addItem(withTitle: "Remove from library", callback: unlink)
 		}
 		
-		menu.addItem(withTitle: "Delete", callback: delete)
+		if tracks.allSatisfy({ $0.backend.supports(.delete) }) {
+			menu.addItem(withTitle: "Delete", callback: delete)
+		}
 
 		return menu.menu
 	}

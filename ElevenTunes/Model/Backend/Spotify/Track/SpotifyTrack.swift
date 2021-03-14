@@ -134,6 +134,10 @@ public final class SpotifyTrack: RemoteTrack {
             })
             .eraseToAnyPublisher()
     }
+	
+	public func supports(_ capability: TrackCapability) -> Bool {
+		false
+	}
     
     func extractAttributes(from track: DetailedSpotifyTrack) -> TypedDict<TrackAttribute> {
 		.unsafe([

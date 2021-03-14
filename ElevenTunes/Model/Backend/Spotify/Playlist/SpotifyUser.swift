@@ -112,6 +112,10 @@ public final class SpotifyUser: RemotePlaylist {
         attributes[PlaylistAttribute.title] = user.displayName ?? user.id
         return attributes
     }
+	
+	public func supports(_ capability: PlaylistCapability) -> Bool {
+		false
+	}
 }
 
 extension SpotifyUser: RequestMapperDelegate {

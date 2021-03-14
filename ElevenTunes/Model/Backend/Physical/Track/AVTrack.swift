@@ -103,6 +103,10 @@ public final class AVTrack: RemoteTrack {
 		}
 			.eraseToAnyPublisher()
 	}
+	
+	public func supports(_ capability: TrackCapability) -> Bool {
+		false
+	}
 }
 
 extension AVTrack: RequestMapperDelegate {

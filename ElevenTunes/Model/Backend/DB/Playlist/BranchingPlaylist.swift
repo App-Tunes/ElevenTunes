@@ -57,6 +57,10 @@ public class BranchingPlaylist: AnyPlaylist {
 		primary.contentType
 	}
 	
+	public func supports(_ capability: PlaylistCapability) -> Bool {
+		primary.supports(capability)
+	}
+	
 	public func `import`(library: UninterpretedLibrary, toIndex index: Int?) throws {
 		try primary.import(library: library, toIndex: index)
 	}

@@ -46,6 +46,13 @@ class JustCacheTrack: AnyTrack {
 		Fail(error: EmitterFail.noBackend).eraseToAnyPublisher()
 	}
 	
+	public func supports(_ capability: TrackCapability) -> Bool {
+		switch capability {
+		case .delete:
+			return true
+		}
+	}
+	
 	func delete() throws {
 		cache.delete()
 	}

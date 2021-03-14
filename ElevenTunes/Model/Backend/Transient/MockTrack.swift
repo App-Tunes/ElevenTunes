@@ -52,6 +52,10 @@ class MockTrack: TrackToken, AnyTrack {
         Fail(error: MockError()).eraseToAnyPublisher()
     }
     
+	func supports(_ capability: TrackCapability) -> Bool {
+		false
+	}
+	
     func invalidateCaches() { }
 	
 	func delete() throws {

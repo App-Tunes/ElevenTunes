@@ -52,11 +52,20 @@ extension TracksViewController: NSTableViewContextSensitiveMenuDelegate {
 		
 		let pasteboard = info.draggingPasteboard
 		
-		if pasteboard.canReadItem(withDataConformingToTypes: [TracksExportManager.tracksIdentifier]) {
+		if pasteboard.canReadItem(withDataConformingToTypes: [TracksExportManager.tracksIdentifier]), playlist.backend is JustCachePlaylist {
 			return .move
 		}
 		
-		return PlaylistInterpreter.standard.interpret(pasteboard: pasteboard) != nil ? .copy : []
+		if
+			playlist.backend.contentType != .playlists,
+			playlist.backend.supports(.insertChildren),
+			TrackInterpreter.standard.interpret(pasteboard: pasteboard) != nil
+		{
+			// Found external drag
+			return .move
+		}
+		
+		return []
 	}
 	
 	func tableView(_ tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation: NSTableView.DropOperation) -> Bool {

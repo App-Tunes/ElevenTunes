@@ -100,6 +100,10 @@ public final class SpotifyPlaylist: SpotifyURIPlaylist {
             }
             .eraseToAnyPublisher()
     }
+	
+	public func supports(_ capability: PlaylistCapability) -> Bool {
+		false
+	}
 }
 
 extension SpotifyPlaylist: RequestMapperDelegate {

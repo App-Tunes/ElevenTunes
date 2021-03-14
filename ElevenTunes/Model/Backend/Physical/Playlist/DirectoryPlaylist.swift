@@ -72,6 +72,10 @@ public final class DirectoryPlaylist: RemotePlaylist {
 			return .empty(state: .error(error))
 		}
     }
+	
+	public func supports(_ capability: PlaylistCapability) -> Bool {
+		false
+	}
 }
 
 extension DirectoryPlaylist: RequestMapperDelegate {

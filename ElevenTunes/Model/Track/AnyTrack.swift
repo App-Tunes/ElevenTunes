@@ -9,6 +9,10 @@ import Foundation
 import SwiftUI
 import Combine
 
+public enum TrackCapability {
+	case delete
+}
+
 public protocol AnyTrack: AnyObject {
     var id: String { get }
     
@@ -23,6 +27,7 @@ public protocol AnyTrack: AnyObject {
 	/// irrelevant updates.
 	var attributes: AnyPublisher<TrackAttributes.Update, Never> { get }
 
+	func supports(_ capability: TrackCapability) -> Bool
     func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error>
     
     var icon: Image { get }

@@ -74,6 +74,10 @@ public final class SpotifyAlbum: SpotifyURIPlaylist, AnyAlbum {
         
         return URL(string: image.url)
     }
+	
+	public func supports(_ capability: PlaylistCapability) -> Bool {
+		false
+	}
 }
 
 extension SpotifyAlbum: RequestMapperDelegate {

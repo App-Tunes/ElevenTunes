@@ -31,6 +31,10 @@ enum PlaylistEditError: Error {
 	case invalidOperation
 }
 
+public enum PlaylistCapability {
+	case delete, insertChildren
+}
+
 public protocol AnyPlaylist: AnyObject {
     var id: String { get }
 
@@ -51,6 +55,7 @@ public protocol AnyPlaylist: AnyObject {
 	/// irrelevant updates.
     var attributes: AnyPublisher<PlaylistAttributes.Update, Never> { get }
 
+	func supports(_ capability: PlaylistCapability) -> Bool
 	func `import`(library: UninterpretedLibrary, toIndex index: Int?) throws
 
 	func delete() throws

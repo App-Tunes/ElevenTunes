@@ -44,14 +44,18 @@ extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
 		let pasteboard = info.draggingPasteboard
 		let item = self.item(raw: item)
 
-		if pasteboard.canReadItem(withDataConformingToTypes: [PlaylistsExportManager.playlistsIdentifier]) {
+		if item.playlist.primary is JustCachePlaylist && pasteboard.canReadItem(withDataConformingToTypes: [PlaylistsExportManager.playlistsIdentifier]) {
 			// Found internal drag
-			return item.playlist.contentType != .tracks ? .move : []
+			return .move
 		}
 		
-		if PlaylistInterpreter.standard.interpret(pasteboard: pasteboard) != nil {
+		if
+			item.playlist.contentType != .tracks,
+			item.playlist.supports(.insertChildren),
+			PlaylistInterpreter.standard.interpret(pasteboard: pasteboard) != nil
+		{
 			// Found external playlists drag
-			return item.playlist.contentType != .tracks ? .copy : []
+			return .move
 		}
 		
 		return []

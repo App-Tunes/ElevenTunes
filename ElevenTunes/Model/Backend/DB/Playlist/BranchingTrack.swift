@@ -48,6 +48,10 @@ public class BranchingTrack: AnyTrack {
 		primary.emitter(context: context)
 	}
 	
+	public func supports(_ capability: TrackCapability) -> Bool {
+		primary.supports(capability)
+	}
+	
 	public func delete() throws {
 		try primary.delete()
 		secondary.forEach { try? $0.delete() }
