@@ -42,11 +42,16 @@ class PlaylistActions: NSObject {
 				}
 			}
 			
-			Button(action: {
-				self.deletePlaylists()
-			}) {
-				Image(systemName: "minus.circle")
-				Text("Delete")
+			if playlists.map(\.backend) as? [BranchingPlaylist] != nil {
+				Button(action: delete) {
+					Image(systemName: "delete.right")
+					Text("Delete")
+				}
+			}
+			
+			Button(action: unlink) {
+				Image(systemName: "delete.right")
+				Text("Remove from Library")
 			}
         }
     }
@@ -68,7 +73,11 @@ class PlaylistActions: NSObject {
 			}
 		}
 		
-		menu.addItem(withTitle: "Delete", callback: deletePlaylists)
+		if playlists.map(\.backend) as? [BranchingPlaylist] != nil{
+			menu.addItem(withTitle: "Remove from library", callback: unlink)
+		}
+		
+		menu.addItem(withTitle: "Delete", callback: delete)
 				
 		return menu.menu
 	}
@@ -81,7 +90,7 @@ class PlaylistActions: NSObject {
 		NSWorkspace.shared.open(origin)
 	}
 	
-	func deletePlaylists() {
+	func delete() {
 		do {
 			try playlists.forEach {
 				try $0.backend.delete()
@@ -92,6 +101,12 @@ class PlaylistActions: NSObject {
 				title: "Failed to delete playlist",
 				text: String(describing: error)
 			)
+		}
+	}
+
+	func unlink() {
+		playlists.forEach {
+			($0.backend as? BranchingPlaylist)?.cache.delete()
 		}
 	}
 }

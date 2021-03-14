@@ -53,4 +53,8 @@ class MockTrack: TrackToken, AnyTrack {
     }
     
     func invalidateCaches() { }
+	
+	func delete() throws {
+		// Uuuhhhhh
+	}
 }

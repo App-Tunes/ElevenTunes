@@ -54,7 +54,7 @@ final class JustCachePlaylist: RemotePlaylist {
 	}
 	
 	func delete() throws {
-		cache.managedObjectContext!.delete(cache)
+		cache.delete()
 	}
 	
 	var icon: Image {

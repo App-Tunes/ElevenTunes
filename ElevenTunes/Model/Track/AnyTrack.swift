@@ -27,6 +27,12 @@ public protocol AnyTrack: AnyObject {
     
     var icon: Image { get }
     var accentColor: Color { get }
+	
+	func delete() throws
+}
+
+enum TrackDeleteError: Error {
+	case undeletable
 }
 
 extension AnyTrack {

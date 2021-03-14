@@ -43,11 +43,16 @@ class TrackActions: NSObject {
                 }
             }
 			
-			if tracks.allSatisfy({ $0.backend.primary is JustCacheTrack }) {
-				Button(action: delete) {
+			if tracks.map(\.backend) as? [BranchingTrack] != nil{
+				Button(action: unlink) {
 					Image(systemName: "delete.right")
 					Text("Remove from Library")
 				}
+			}
+
+			Button(action: delete) {
+				Image(systemName: "delete.right")
+				Text("Remove from Library")
 			}
         }
     }
@@ -67,10 +72,12 @@ class TrackActions: NSObject {
 			}
 		}
 		
-		if tracks.allSatisfy({ $0.backend is BranchingTrack }) {
-			menu.addItem(withTitle: "Remove from Library", callback: delete)
+		if tracks.map(\.backend) as? [BranchingTrack] != nil{
+			menu.addItem(withTitle: "Remove from library", callback: unlink)
 		}
-				
+		
+		menu.addItem(withTitle: "Delete", callback: delete)
+
 		return menu.menu
 	}
 	
@@ -79,9 +86,22 @@ class TrackActions: NSObject {
 	}
 	
 	func delete() {
-		let tracks = self.tracks.compactMap { $0.backend as? BranchingTrack }
+		do {
+			try tracks.forEach {
+				try $0.backend.delete()
+			}
+		}
+		catch let error {
+			NSAlert.warning(
+				title: "Failed to delete playlist",
+				text: String(describing: error)
+			)
+		}
+	}
+
+	func unlink() {
 		tracks.forEach {
-			$0.cache.managedObjectContext?.delete($0.cache)
+			($0.backend as? BranchingTrack)?.cache.delete()
 		}
 	}
 }

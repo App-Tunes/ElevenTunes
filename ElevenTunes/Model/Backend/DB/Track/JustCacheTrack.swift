@@ -45,6 +45,10 @@ class JustCacheTrack: AnyTrack {
 	func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
 		Fail(error: EmitterFail.noBackend).eraseToAnyPublisher()
 	}
+	
+	func delete() throws {
+		cache.delete()
+	}
 }
 
 extension JustCacheTrack: BranchableTrack {

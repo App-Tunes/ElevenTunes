@@ -34,4 +34,8 @@ extension RemoteTrack {
 		
 		mapper.invalidateCaches()
 	}
+	
+	public func delete() throws {
+		throw PlaylistDeleteError.undeletable
+	}
 }

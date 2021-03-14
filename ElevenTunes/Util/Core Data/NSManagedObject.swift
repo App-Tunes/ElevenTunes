@@ -21,4 +21,8 @@ extension NSManagedObject {
         didAccessValue(forKey: key)
         return value
     }
+	
+	func delete() {
+		managedObjectContext!.delete(self)
+	}
 }

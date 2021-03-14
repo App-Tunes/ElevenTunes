@@ -63,7 +63,8 @@ public class BranchingPlaylist: AnyPlaylist {
 	
 	public func delete() throws {
 		try primary.delete()
-		try secondary.forEach { try $0.delete() }
+		secondary.forEach { try? $0.delete() }
+		cache.delete()
 	}
 }
 

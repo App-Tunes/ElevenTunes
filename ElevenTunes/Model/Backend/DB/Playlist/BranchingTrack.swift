@@ -47,6 +47,12 @@ public class BranchingTrack: AnyTrack {
 	public func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
 		primary.emitter(context: context)
 	}
+	
+	public func delete() throws {
+		try primary.delete()
+		secondary.forEach { try? $0.delete() }
+		cache.delete()
+	}
 }
 
 extension BranchingTrack: Hashable {
