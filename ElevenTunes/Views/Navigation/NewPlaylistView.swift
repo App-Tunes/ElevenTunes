@@ -31,7 +31,7 @@ struct NewPlaylistView: View {
 	}
 
     var body: some View {
-		let canInsert = selection.insertPosition != nil
+		let insertPlaylist = selection.insertPosition?.0.backend
 		
 		HStack {
 			Button {
@@ -43,7 +43,7 @@ struct NewPlaylistView: View {
 				Image(systemName: "music.note.list")
 					.badge(systemName: "plus.circle.fill")
 			}
-				.disabled(!canInsert)
+				.disabled(!(insertPlaylist?.supports(.addChildren(.tracks)) ?? false))
 
 			Button {
 				let playlist = TransientPlaylist(.playlists, attributes: .unsafe([
@@ -54,7 +54,7 @@ struct NewPlaylistView: View {
 				Image(systemName: "folder")
 					.badge(systemName: "plus.circle.fill")
 			}
-				.disabled(!canInsert)
+				.disabled(!(insertPlaylist?.supports(.addChildren(.playlists)) ?? false))
 
 			Button {
 				let playlist = TransientPlaylist(.hybrid, attributes: .unsafe([
@@ -65,7 +65,7 @@ struct NewPlaylistView: View {
 				Image(systemName: "questionmark.folder")
 					.badge(systemName: "plus.circle.fill")
 			}
-				.disabled(!canInsert)
+				.disabled(!(insertPlaylist?.supports(.addChildren(.hybrid)) ?? false))
 		}
     }
 }

@@ -51,7 +51,7 @@ extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
 		
 		if
 			item.playlist.contentType != .tracks,
-			item.playlist.supports(.insertChildren),
+			item.playlist.supports(.importChildren),
 			PlaylistInterpreter.standard.interpret(pasteboard: pasteboard) != nil
 		{
 			// Found external playlists drag

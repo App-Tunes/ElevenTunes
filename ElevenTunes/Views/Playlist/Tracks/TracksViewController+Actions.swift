@@ -58,7 +58,7 @@ extension TracksViewController: NSTableViewContextSensitiveMenuDelegate {
 		
 		if
 			playlist.backend.contentType != .playlists,
-			playlist.backend.supports(.insertChildren),
+			playlist.backend.supports(.importChildren),
 			TrackInterpreter.standard.interpret(pasteboard: pasteboard) != nil
 		{
 			// Found external drag

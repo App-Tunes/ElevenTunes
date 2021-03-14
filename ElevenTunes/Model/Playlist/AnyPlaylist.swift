@@ -32,7 +32,7 @@ enum PlaylistEditError: Error {
 }
 
 public enum PlaylistCapability {
-	case delete, insertChildren
+	case delete, importChildren, addChildren(PlaylistContentType)
 }
 
 public protocol AnyPlaylist: AnyObject {

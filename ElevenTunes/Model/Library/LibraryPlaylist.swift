@@ -118,7 +118,7 @@ class LibraryPlaylist: AnyPlaylist {
 	
 	public func supports(_ capability: PlaylistCapability) -> Bool {
 		switch capability {
-		case .insertChildren:
+		case .importChildren:
 			return true
 		default:
 			return false

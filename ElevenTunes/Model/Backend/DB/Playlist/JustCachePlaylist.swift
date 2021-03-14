@@ -53,7 +53,9 @@ final class JustCachePlaylist: RemotePlaylist {
 		switch capability {
 		case .delete:
 			return false  // "Remove from Library" is fine
-		case .insertChildren:
+		case .importChildren:
+			return true
+		case .addChildren(_):
 			return true
 		}
 	}
