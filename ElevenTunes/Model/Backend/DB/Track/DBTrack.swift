@@ -14,8 +14,6 @@ public class DBTrack: NSManagedObject {
 	@objc public enum Representation: Int16 {
 		case none, av, spotify
 	}
-
-	public let attributes = TrackAttributes()
 	
 	@Published public var primaryRepresentationP: Representation = .none
 	@Published public var representationsP: [Representation: AnyTrackCache] = [:]

@@ -55,6 +55,8 @@ public final class AVTrack: RemoteTrack {
 	public let url: URL
 	public let isVideo: Bool
 
+	var cache: DBAVTrack? = nil
+
 	enum Request {
 		case url, analyze, taglib
 	}
@@ -66,12 +68,21 @@ public final class AVTrack: RemoteTrack {
 	])
 
 	init(_ url: URL, isVideo: Bool) {
-        self.url = url
+		self.url = url
 		self.isVideo = isVideo
 		mapper.delegate = self
 		mapper.offer(.url, update: loadURL())
-    }
-     
+	}
+	 
+	convenience init(cache: DBAVTrack) {
+		self.init(cache.url, isVideo: cache.isVideo)
+		// It's reasonable to assume for the moment
+		// that the track is always read on import, so
+		// when we're created from DB we assume values as valid
+//		mapper.attributes.update(cache.owner.attributes.snapshot)
+		self.cache = cache
+	}
+	 
 	public var accentColor: Color { SystemUI.color }
 
     public var icon: Image {
@@ -146,6 +157,10 @@ extension AVTrack: RequestMapperDelegate {
 				.eraseError().eraseToAnyPublisher()
 		}
 	}
+	
+	func onUpdate(_ snapshot: VolatileAttributes<TrackAttribute, String>.PartialGroupSnapshot, from request: Request) {
+		// TODO
+	}
 }
 
 extension AVTrack: BranchableTrack {
@@ -163,6 +178,8 @@ extension AVTrack: BranchableTrack {
 		cache.isVideo = isVideo
 		
 		track.avRepresentation = cache
+		
+		self.cache = cache
 		
 		return .av
 	}

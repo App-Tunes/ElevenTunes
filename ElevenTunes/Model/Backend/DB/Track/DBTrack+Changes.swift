@@ -20,5 +20,7 @@ extension DBTrack: SelfChangeWatcher {
 		]) {
 			representationsP = representations
 		}
+		
+		// TODO Attributes
 	}
 }

@@ -180,6 +180,10 @@ extension SpotifyTrack: RequestMapperDelegate {
 				.eraseToAnyPublisher()
 		}
 	}
+	
+	func onUpdate(_ snapshot: VolatileAttributes<TrackAttribute, String>.PartialGroupSnapshot, from request: Request) {
+		// TODO
+	}
 }
 
 extension SpotifyTrack: BranchableTrack {

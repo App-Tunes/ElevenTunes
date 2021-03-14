@@ -104,7 +104,7 @@ class LibraryPlaylist: AnyPlaylist {
 	
 	func demand(_ demand: Set<PlaylistAttribute>) -> AnyCancellable {
 		// TODO We may want to invalidate CD Publishers if there's no demand
-		_attributes.updateEmptyMissing(demand, state: .valid)
+		_attributes.updateEmptyMissing(demand)
 		return AnyCancellable { }
 	}
 

@@ -9,17 +9,39 @@ import Foundation
 import Combine
 import SwiftUI
 
-class JustCacheTrack: AnyTrack {
+final class JustCacheTrack: RemoteTrack {
 	enum EmitterFail: Error {
 		case noBackend
 	}
 	
 	let cache: DBTrack
 	
+	enum Request {
+		case attributes
+	}
+
+	let mapper = Requests(relation: [
+		.attributes: [.title],
+	])
+
 	init(_ cache: DBTrack) {
 		self.cache = cache
+		mapper.delegate = self
+		
+		NotificationCenter.default.addObserver(self, selector: #selector(objectsDidChange), name: .NSManagedObjectContextObjectsDidChange, object: cache.managedObjectContext!)
 	}
-	
+			
+	@objc func objectsDidChange(_ notification: NSNotification) {
+		guard let userInfo = notification.userInfo else { return }
+
+		// awakeFromInsert is only called on the original context. Not when it's inserted here
+		let updates = (userInfo[NSUpdatedObjectsKey] as? Set<NSManagedObject> ?? []).union(userInfo[NSInsertedObjectsKey] as? Set<NSManagedObject> ?? [])
+		
+		if updates.contains(cache) {
+			mapper.invalidateCaches()  // TODO invalidate only what's needed
+		}
+	}
+
 	/// TODO Use UUID
 	var id: String { cache.objectID.description }
 	
@@ -28,20 +50,7 @@ class JustCacheTrack: AnyTrack {
 	var accentColor: Color { .primary }
 	
 	func invalidateCaches() { }
-	
-	func demand(_ demand: Set<TrackAttribute>) -> AnyCancellable {
-		_ = cache.primaryRepresentation // Fire fault
 		
-		// Set all we don't have yet to valid / don't know this
-		cache.attributes.updateEmpty(demand.subtracting(cache.attributes.snapshot.keys), state: .valid)
-		
-		return AnyCancellable {}
-	}
-	
-	var attributes: AnyPublisher<TrackAttributes.Update, Never> {
-		cache.attributes.$update.eraseToAnyPublisher()
-	}
-	
 	func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
 		Fail(error: EmitterFail.noBackend).eraseToAnyPublisher()
 	}
@@ -55,6 +64,24 @@ class JustCacheTrack: AnyTrack {
 	
 	func delete() throws {
 		cache.delete()
+	}
+}
+
+extension JustCacheTrack: RequestMapperDelegate {
+	func onDemand(_ request: Request) -> AnyPublisher<TrackAttributes.PartialGroupSnapshot, Error> {
+		let cache = self.cache
+		
+		switch request {
+		case .attributes:
+			return Just(.init(.unsafe([
+				.title: cache.title
+			]), state: .valid)
+			).eraseError().eraseToAnyPublisher()
+		}
+	}
+	
+	func onUpdate(_ snapshot: VolatileAttributes<TrackAttribute, String>.PartialGroupSnapshot, from request: Request) {
+		// TODO
 	}
 }
 

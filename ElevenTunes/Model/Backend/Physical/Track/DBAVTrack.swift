@@ -16,6 +16,6 @@ public class DBAVTrack: NSManagedObject {
 
 extension DBAVTrack: AnyTrackCache {
 	public func expand(library: Library) -> AnyTrack {
-		AVTrack(url, isVideo: isVideo)
+		AVTrack(cache: self)
 	}
 }

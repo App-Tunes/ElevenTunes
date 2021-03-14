@@ -121,6 +121,10 @@ extension JustCachePlaylist: RequestMapperDelegate {
 				.eraseError().eraseToAnyPublisher()
 		}
 	}
+	
+	func onUpdate(_ snapshot: VolatileAttributes<PlaylistAttribute, String>.PartialGroupSnapshot, from request: Request) {
+		// TODO
+	}
 }
 
 extension JustCachePlaylist: BranchablePlaylist {

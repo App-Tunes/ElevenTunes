@@ -45,7 +45,7 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
 
 	func demand(_ demand: Set<PlaylistAttribute>) -> AnyCancellable {
 		// The ones we don't have, we can never fulfill either
-		_attributes.updateEmptyMissing(demand, state: .valid)
+		_attributes.updateEmptyMissing(demand)
 		return AnyCancellable { }
 	}
 	

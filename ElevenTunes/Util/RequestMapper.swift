@@ -13,6 +13,7 @@ protocol RequestMapperDelegate: AnyObject {
 	associatedtype Snapshot
 	
 	func onDemand(_ request: Request) -> AnyPublisher<Snapshot, Error>
+	func onUpdate(_ snapshot: Snapshot, from request: Request)
 }
 
 extension VolatileAttributes {
@@ -86,6 +87,7 @@ class RequestMapper<Attribute: AnyObject & Hashable, Version: Hashable, Delegate
 			)
 			
 			attributes.update(fullSnapshot)
+			delegate?.onUpdate(snapshot, from: request)
 		}
 	}
 	
@@ -131,6 +133,7 @@ class RequestMapper<Attribute: AnyObject & Hashable, Version: Hashable, Delegate
 						)
 						
 						attributes.update(fullSnapshot)
+						delegate.onUpdate(snapshot, from: request)
 					}
 				}
 				.store(in: &cancellables)

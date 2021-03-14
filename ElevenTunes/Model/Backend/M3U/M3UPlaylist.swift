@@ -137,6 +137,10 @@ extension M3UPlaylist: RequestMapperDelegate {
 			}.eraseToAnyPublisher()
 		}
 	}
+	
+	func onUpdate(_ snapshot: VolatileAttributes<PlaylistAttribute, String>.PartialGroupSnapshot, from request: Request) {
+		// TODO
+	}
 }
 
 extension M3UPlaylist: BranchablePlaylist {
