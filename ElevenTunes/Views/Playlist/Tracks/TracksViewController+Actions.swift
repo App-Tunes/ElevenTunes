@@ -92,7 +92,7 @@ extension TracksViewController: NSTableViewContextSensitiveMenuDelegate {
 		}
 
 		do {
-			try playlist.import(library: UninterpretedLibrary(tracks: tokens), toIndex: row)
+			try playlist.import(tracks: tokens, toIndex: row)
 		}
 		catch let error {
 			NSAlert.warning(

@@ -91,7 +91,7 @@ extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
 		}
 
 		do {
-			try item.playlist.import(library: UninterpretedLibrary(playlists: tokens), toIndex: index)
+			try item.playlist.import(playlists: tokens, toIndex: index)
 			outlineView.animator().expandItem(item)
 		}
 		catch let error {

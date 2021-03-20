@@ -132,22 +132,25 @@ class LibraryPlaylist: AnyPlaylist {
 		}
 	}
 	
-	func `import`(library: UninterpretedLibrary, toIndex index: Int?) throws {
+	func `import`(tracks: [TrackToken], toIndex index: Int?) throws {
 		guard let _library = self.library else {
 			throw ImportError.deInited
 		}
-		
-		if library.playlists.isEmpty {
-			try _library.import(library, to: nil, atIndex: index)
-			return
-		}
-		
-        guard let defaultPlaylist = self.library?.defaultPlaylist else {
-			throw ImportError.noDefaultPlaylist
-        }
 
-		try _library.import(library, to: defaultPlaylist, atIndex: index)
-    }
+		try _library.import(tracks, to: nil, atIndex: index)
+	}
+	
+	func `import`(playlists: [PlaylistToken], toIndex index: Int?) throws {
+		guard let _library = self.library else {
+			throw ImportError.deInited
+		}
+
+		guard let defaultPlaylist = self.library?.defaultPlaylist else {
+			throw ImportError.noDefaultPlaylist
+		}
+
+		try _library.import(playlists, to: defaultPlaylist, atIndex: index)
+	}
 	
 	func delete() throws {
 		throw PlaylistDeleteError.undeletable

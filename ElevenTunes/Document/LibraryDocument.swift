@@ -89,17 +89,21 @@ class LibrarySettingsLevel: SettingsLevel, Codable {
         updateChangeCount(.changeCleared)
     }
     
-	func `import`(dlibrary: UninterpretedLibrary) throws {
-        guard let defaultPlaylistID = settings.defaultPlaylist else {
-			throw LibraryPlaylist.ImportError.noDefaultPlaylist
-        }
-        guard let playlist = try? managedObjectContext.fetch(DBPlaylist.createFetchRequest(id: defaultPlaylistID)).first else {
-			throw LibraryPlaylist.ImportError.noDefaultPlaylist
-        }
-                
-        try library.import(dlibrary, to: playlist, atIndex: nil)
+	func `import`(tracks: [TrackToken]) throws {
+        try library.import(tracks, to: nil, atIndex: nil)
     }
 
+	func `import`(playlists: [PlaylistToken]) throws {
+		guard let defaultPlaylistID = settings.defaultPlaylist else {
+			throw LibraryPlaylist.ImportError.noDefaultPlaylist
+		}
+		guard let playlist = try? managedObjectContext.fetch(DBPlaylist.createFetchRequest(id: defaultPlaylistID)).first else {
+			throw LibraryPlaylist.ImportError.noDefaultPlaylist
+		}
+		
+		try library.import(playlists, to: playlist, atIndex: nil)
+	}
+	
     override func additionalContent(for absoluteURL: URL!, saveOperation: NSDocument.SaveOperationType) throws -> Any {
         settings
     }

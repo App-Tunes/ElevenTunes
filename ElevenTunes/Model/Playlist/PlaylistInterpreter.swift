@@ -41,7 +41,7 @@ class PlaylistDropInterpreter: DropDelegate {
             .onMain()
             .sink(receiveCompletion: appLogErrors(_:)) { tokens in
 				do {
-					try playlist.import(library: UninterpretedLibrary(tracks: tokens), toIndex: nil)
+					try playlist.import(tracks: tokens, toIndex: nil)
 				}
 				catch let error {
 					NSAlert.warning(

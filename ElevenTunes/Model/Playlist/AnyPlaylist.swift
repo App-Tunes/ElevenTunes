@@ -56,7 +56,8 @@ public protocol AnyPlaylist: AnyObject {
     var attributes: AnyPublisher<PlaylistAttributes.Update, Never> { get }
 
 	func supports(_ capability: PlaylistCapability) -> Bool
-	func `import`(library: UninterpretedLibrary, toIndex index: Int?) throws
+	func `import`(tracks: [TrackToken], toIndex index: Int?) throws
+	func `import`(playlists: [PlaylistToken], toIndex index: Int?) throws
 
 	func delete() throws
 }

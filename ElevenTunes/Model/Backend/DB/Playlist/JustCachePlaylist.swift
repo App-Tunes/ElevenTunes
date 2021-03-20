@@ -60,8 +60,12 @@ final class JustCachePlaylist: RemotePlaylist {
 		}
 	}
 	
-	func `import`(library: UninterpretedLibrary, toIndex index: Int?) throws {
-		try self.library.import(library, to: cache, atIndex: index)
+	func `import`(tracks: [TrackToken], toIndex index: Int?) throws {
+		try self.library.import(tracks, to: cache, atIndex: index)
+	}
+	
+	func `import`(playlists: [PlaylistToken], toIndex index: Int?) throws {
+		try self.library.import(playlists, to: cache, atIndex: index)
 	}
 	
 	func delete() throws {

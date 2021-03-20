@@ -69,7 +69,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 						doc.makeWindowControllers()
 						doc.showWindows()
 						documentController.addDocument(doc)
-						_ = try? doc.import(dlibrary: library)
+						_ = try? doc.import(tracks: library.tracks)
+						_ = try? doc.import(playlists: library.playlists)
 					}
 				}
                 .store(in: &cancellables)

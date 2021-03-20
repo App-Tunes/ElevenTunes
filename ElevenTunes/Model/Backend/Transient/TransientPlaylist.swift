@@ -57,9 +57,13 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
 		false
 	}
 	
-	func `import`(library: UninterpretedLibrary, toIndex index: Int?) throws {
+	func `import`(tracks: [TrackToken], toIndex index: Int?) throws {
 		throw PlaylistImportError.unimportable  // TODO We can do this bois
-    }
+	}
+	
+	func `import`(playlists: [PlaylistToken], toIndex index: Int?) throws {
+		throw PlaylistImportError.unimportable  // TODO We can do this bois
+	}
 	
 	func delete() throws {
 		throw PlaylistDeleteError.undeletable

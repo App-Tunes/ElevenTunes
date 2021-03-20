@@ -18,11 +18,9 @@ struct NewPlaylistView: View {
 			NSAlert.warning(title: "Internal Error", text: "Unexpected position == nil")
 			return
 		}
-		
-		let library = UninterpretedLibrary(playlists: [playlist])
-		
+				
 		do {
-			try insertPosition.0.backend.import(library: library, toIndex: insertPosition.1)
+			try insertPosition.0.backend.import(playlists: [playlist], toIndex: insertPosition.1)
 			NotificationCenter.default.post(.init(name: Self.newPlaylistNotification, userInfo: ["playlist": insertPosition.0.backend]))
 		}
 		catch let error {

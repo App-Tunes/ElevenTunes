@@ -61,8 +61,12 @@ public class BranchingPlaylist: AnyPlaylist {
 		primary.supports(capability)
 	}
 	
-	public func `import`(library: UninterpretedLibrary, toIndex index: Int?) throws {
-		try primary.import(library: library, toIndex: index)
+	public func `import`(tracks: [TrackToken], toIndex index: Int?) throws {
+		try primary.import(tracks: tracks, toIndex: index)
+	}
+	
+	public func `import`(playlists: [PlaylistToken], toIndex index: Int?) throws {
+		try primary.import(playlists: playlists, toIndex: index)
 	}
 	
 	public func delete() throws {

@@ -149,38 +149,54 @@ extension Library {
 		)
 	}
 	
-	/// Import playlists and tracks to a playlist without updating its backends.
-	func `import`(_ library: UninterpretedLibrary, to parent: DBPlaylist?, atIndex index: Int?) throws {
-		guard !library.tracks.isEmpty || !library.playlists.isEmpty else {
+	/// Import tracks to a playlist without updating its backends.
+	func `import`(_ tracks: [TrackToken], to parent: DBPlaylist?, atIndex index: Int?) throws {
+		guard !tracks.isEmpty else {
 			throw PlaylistImportError.empty  // lol why bother bro
 		}
 		
 		if let contentType = parent?.contentType {
-			guard library.tracks.isEmpty || contentType != .playlists else {
+			guard tracks.isEmpty || contentType != .playlists else {
 				throw PlaylistImportError.unimportable  // Can't contain tracks
-			}
-			
-			guard library.playlists.isEmpty || contentType != .tracks else {
-				throw PlaylistImportError.unimportable  // Can't contain playlists
-			}
-			
-			guard index == nil || library.tracks.isEmpty || library.playlists.isEmpty else {
-				throw PlaylistImportError.unimportable  // Kinda weird, needs work, but for now it'll work
 			}
 		}
 
 		// Fetch requests auto-update content
 		managedObjectContext.performChildTask(concurrencyType: .privateQueueConcurrencyType) { context in
 			do {
-				let library = try self.insert(library, to: context)
+				let library = try self.insert(UninterpretedLibrary(tracks: tracks), to: context)
 
 				if let parent = parent.flatMap(context.translate) {
-					if !library.playlists.isEmpty {
-						parent.children = parent.children.inserting(contentsOf: library.playlists.map(\.cache), atIndex: index)
-					}
-					if !library.tracks.isEmpty {
-						parent.tracks = parent.tracks.inserting(contentsOf: library.tracks.map(\.cache), atIndex: index)
-					}
+					parent.tracks = parent.tracks.inserting(contentsOf: library.tracks.map(\.cache), atIndex: index)
+				}
+
+				try context.save()
+			}
+			catch let error {
+				appLogger.error("Failed import: \(error)")
+			}
+		}
+	}
+	
+	/// Import children to a playlist without updating its backends.
+	func `import`(_ playlists: [PlaylistToken], to parent: DBPlaylist?, atIndex index: Int?) throws {
+		guard !playlists.isEmpty else {
+			throw PlaylistImportError.empty  // lol why bother bro
+		}
+		
+		if let contentType = parent?.contentType {
+			guard playlists.isEmpty || contentType != .tracks else {
+				throw PlaylistImportError.unimportable  // Can't contain playlists
+			}
+		}
+
+		// Fetch requests auto-update content
+		managedObjectContext.performChildTask(concurrencyType: .privateQueueConcurrencyType) { context in
+			do {
+				let library = try self.insert(UninterpretedLibrary(playlists: playlists), to: context)
+
+				if let parent = parent.flatMap(context.translate) {
+					parent.children = parent.children.inserting(contentsOf: library.playlists.map(\.cache), atIndex: index)
 				}
 
 				try context.save()
