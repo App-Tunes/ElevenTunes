@@ -682,12 +682,12 @@
 		80F61B9325FCF7F500AC4CF8 /* modproperties.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = modproperties.cpp; sourceTree = "<group>"; };
 		80F61B9425FCF7F500AC4CF8 /* modfilebase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = modfilebase.h; sourceTree = "<group>"; };
 		80F61B9525FCF7F500AC4CF8 /* taglib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = taglib.xcodeproj; sourceTree = "<group>"; };
-		80F61B9825FCF7F500AC4CF8 /* taglib_config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = taglib_config.h; sourceTree = "<group>"; };
 		80F61BA425FCF90600AC4CF8 /* TagLibFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagLibFile.h; sourceTree = "<group>"; };
 		80F61BA525FCF90600AC4CF8 /* TagLibFile.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TagLibFile.mm; sourceTree = "<group>"; };
 		80F61BAD25FD190600AC4CF8 /* NSRegularExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRegularExpression.swift; sourceTree = "<group>"; };
 		80F61BB225FE314E00AC4CF8 /* Navigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigator.swift; sourceTree = "<group>"; };
 		80F61BB725FE4AF700AC4CF8 /* DelayedAutoExpander.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayedAutoExpander.swift; sourceTree = "<group>"; };
+		80F66AAE26064AD500696EE5 /* taglib_config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = taglib_config.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1365,9 +1365,9 @@
 		80F61A8D25FCF7F400AC4CF8 /* TagLib */ = {
 			isa = PBXGroup;
 			children = (
+				80F66AAE26064AD500696EE5 /* taglib_config.h */,
 				80F61A8E25FCF7F400AC4CF8 /* taglib */,
 				80F61B9525FCF7F500AC4CF8 /* taglib.xcodeproj */,
-				80F61B9825FCF7F500AC4CF8 /* taglib_config.h */,
 			);
 			path = TagLib;
 			sourceTree = "<group>";

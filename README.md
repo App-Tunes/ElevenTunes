@@ -23,7 +23,7 @@ Many objects contain multiple layers of caches: Backend (source of truth), local
 
 **Branching**: Branching types are used to group the primary representation and some secondary representations. Secondary represenatations may be used to query additional content.
 **Playlist**: A playlist is an object that can refer to tracks and other playlists in meaningful ways. Perhaps counter to tradition, a playlist is not only a list of tracks by some user - it might be any meaningful track or playlist collection, including folders, artists, albums or users. 
-**Playlist**: Representation of some media. When played, it is asked to represent itself as an audio emitter.
+**Track**: Representation of some media. When played, it is asked to represent itself as an audio emitter.
 
 ### Player
 Playing media files is offloaded into a hierarchy of responsibility. In order:
