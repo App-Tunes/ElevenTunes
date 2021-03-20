@@ -58,8 +58,18 @@ extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
 			item.playlist.supports(.importChildren),
 			PlaylistInterpreter.standard.interpret(pasteboard: pasteboard) != nil
 		{
-			// Found external playlists drag
+			// Found playlists drag
 			return .move
+		}
+		
+		if
+			index == NSOutlineViewDropOnItemIndex,
+			item.playlist.contentType != .playlists,
+			item.playlist.supports(.importTracks),
+			TrackInterpreter.standard.interpret(pasteboard: pasteboard) != nil
+		{
+			// Found tracks drag
+			return .copy
 		}
 		
 		return []
@@ -86,21 +96,37 @@ extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
 		
 		// External drag; import formally
 
-		guard let tokens = PlaylistInterpreter.standard.interpret(pasteboard: pasteboard) else {
-			return false
+		if let tokens = PlaylistInterpreter.standard.interpret(pasteboard: pasteboard) {
+			do {
+				try item.playlist.import(playlists: tokens, toIndex: index)
+				outlineView.animator().expandItem(item)
+			}
+			catch let error {
+				NSAlert.warning(
+					title: "Import Failure",
+					text: String(describing: error)
+				)
+			}
+			
+			return true
 		}
 
-		do {
-			try item.playlist.import(playlists: tokens, toIndex: index)
-			outlineView.animator().expandItem(item)
-		}
-		catch let error {
-			NSAlert.warning(
-				title: "Import Failure",
-				text: String(describing: error)
-			)
+		if let tokens = TrackInterpreter.standard.interpret(pasteboard: pasteboard) {
+			do {
+				try item.playlist.import(tracks: tokens, toIndex: index)
+				outlineView.animator().expandItem(item)
+			}
+			catch let error {
+				NSAlert.warning(
+					title: "Import Failure",
+					text: String(describing: error)
+				)
+			}
+			
+			return true
 		}
 
-		return true
+
+		return false
 	}
 }

@@ -127,6 +127,8 @@ class LibraryPlaylist: AnyPlaylist {
 			return true
 		case .addChildren(_):
 			return true
+		case .importTracks:
+			return true
 		default:
 			return false
 		}

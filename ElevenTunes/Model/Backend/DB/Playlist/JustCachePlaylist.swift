@@ -57,6 +57,8 @@ final class JustCachePlaylist: RemotePlaylist {
 			return true
 		case .addChildren(_):
 			return true
+		case .importTracks:
+			return true
 		}
 	}
 	
