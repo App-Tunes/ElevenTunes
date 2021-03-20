@@ -150,30 +150,31 @@ extension Library {
 	}
 	
 	/// Import playlists and tracks to a playlist without updating its backends.
-	func `import`(_ library: UninterpretedLibrary, to parent: DBPlaylist, atIndex index: Int?) throws {
+	func `import`(_ library: UninterpretedLibrary, to parent: DBPlaylist?, atIndex index: Int?) throws {
 		guard !library.tracks.isEmpty || !library.playlists.isEmpty else {
 			throw PlaylistImportError.empty  // lol why bother bro
 		}
 		
-		let contentType = parent.contentType
-		guard library.tracks.isEmpty || contentType != .playlists else {
-			throw PlaylistImportError.unimportable  // Can't contain tracks
-		}
-		
-		guard library.playlists.isEmpty || contentType != .tracks else {
-			throw PlaylistImportError.unimportable  // Can't contain playlists
-		}
-		
-		guard index == nil || library.tracks.isEmpty || library.playlists.isEmpty else {
-			throw PlaylistImportError.unimportable  // Kinda weird, needs work, but for now it'll work
+		if let contentType = parent?.contentType {
+			guard library.tracks.isEmpty || contentType != .playlists else {
+				throw PlaylistImportError.unimportable  // Can't contain tracks
+			}
+			
+			guard library.playlists.isEmpty || contentType != .tracks else {
+				throw PlaylistImportError.unimportable  // Can't contain playlists
+			}
+			
+			guard index == nil || library.tracks.isEmpty || library.playlists.isEmpty else {
+				throw PlaylistImportError.unimportable  // Kinda weird, needs work, but for now it'll work
+			}
 		}
 
 		// Fetch requests auto-update content
-		parent.managedObjectContext!.performChildTask(concurrencyType: .privateQueueConcurrencyType) { context in
+		managedObjectContext.performChildTask(concurrencyType: .privateQueueConcurrencyType) { context in
 			do {
 				let library = try self.insert(library, to: context)
 
-				if let parent = context.translate(parent) {
+				if let parent = parent.flatMap(context.translate) {
 					if !library.playlists.isEmpty {
 						parent.children = parent.children.inserting(contentsOf: library.playlists.map(\.cache), atIndex: index)
 					}

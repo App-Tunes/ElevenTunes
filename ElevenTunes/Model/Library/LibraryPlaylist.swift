@@ -12,7 +12,7 @@ import CombineExt
 
 class LibraryPlaylist: AnyPlaylist {
 	enum ImportError: Error {
-		case noDefaultPlaylist
+		case noDefaultPlaylist, deInited
 	}
 	
     let managedObjectContext: NSManagedObjectContext
@@ -133,10 +133,16 @@ class LibraryPlaylist: AnyPlaylist {
 	}
 	
 	func `import`(library: UninterpretedLibrary, toIndex index: Int?) throws {
-        guard
-			let defaultPlaylist = self.library?.defaultPlaylist,
-			let _library = self.library
-		else {
+		guard let _library = self.library else {
+			throw ImportError.deInited
+		}
+		
+		if library.playlists.isEmpty {
+			try _library.import(library, to: nil, atIndex: index)
+			return
+		}
+		
+        guard let defaultPlaylist = self.library?.defaultPlaylist else {
 			throw ImportError.noDefaultPlaylist
         }
 
