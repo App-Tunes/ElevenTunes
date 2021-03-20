@@ -4,6 +4,10 @@ Grand successor of Ten Tunes.
 
 This media manager focuses on unifying representations of media into a simple, streamlined UI. Supports for more backends, read-only and write compatible, will be added over time.
  
+ ## Setup
+ 
+ * Place or symlink taglib to Frameworks/TagLib/taglib 
+
  ## Backends
  
  * [✓] Audio Files (AVFoundation)
