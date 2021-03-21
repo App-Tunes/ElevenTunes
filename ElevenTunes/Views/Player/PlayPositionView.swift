@@ -57,6 +57,7 @@ struct PlayPositionBarsView: View {
     
     func move(to point: CGFloat) {
         do {
+			let point = max(0, min(1, point))
             try playing.move(to: playing.duration.map { $0 * TimeInterval(point) } ?? 0 )
         } catch let error {
             appLogger.error("Error moving to time: \(error)")
@@ -83,11 +84,11 @@ struct PlayPositionBarsView: View {
             .gesture(
                 DragGesture(minimumDistance: 0, coordinateSpace: .local)
                     .onChanged { value in
-                        mousePosition = value.location.x / geo.size.width
+                        mousePosition = max(0, min(1, value.location.x / geo.size.width))
                         isDragging = true
                     }
                     .onEnded { value in
-                        move(to: value.location.x / geo.size.width)
+                        move(to: max(0, min(1, value.location.x / geo.size.width)))
                         isDragging = false
                     }
             )

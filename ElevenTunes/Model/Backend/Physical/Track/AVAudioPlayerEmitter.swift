@@ -65,15 +65,14 @@ class AVAudioPlayerEmitter: NSObject, AudioTrack {
     }
 	
 	func _seek() {
-		let startSample = AVAudioFramePosition(floor(startTime * format.sampleRate))
+		let startSample = max(0, AVAudioFramePosition(floor(startTime * format.sampleRate)))
+		
 		guard file.length > startSample else {
 			delegate?.emitterDidStop(self)
 			return
 		}
-		
-		let lengthSamples = AVAudioFrameCount(file.length - startSample)
 
-		device.player.scheduleSegment(file, startingFrame: startSample, frameCount: lengthSamples, at: nil) { [weak self] in
+		device.player.scheduleSegment(file, startingFrame: startSample, frameCount: AVAudioFrameCount(file.length), at: nil) { [weak self] in
 			guard let self = self else { return }
 			// Is this a proper completion?
 			guard !self.isSwapping else { return }
