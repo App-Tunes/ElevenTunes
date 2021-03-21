@@ -10,7 +10,7 @@ import Combine
 import AVFoundation
 
 public class PlayContext {
-	@Published var avOutputDevice: AVAudioDevice?
+	@Published var avOutputDevice: AVAudioDevice
 
 	let spotify: Spotify
 	@Published var spotifyDevice: SpotifyAudioDevice?
@@ -19,6 +19,7 @@ public class PlayContext {
 	
 	init(spotify: Spotify) {
 		self.spotify = spotify
+		avOutputDevice = .systemDefault
 		
 		spotify.authenticator.$isAuthorized.sink { [weak self] in
 			guard let self = self else { return }

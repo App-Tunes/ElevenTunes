@@ -13,4 +13,8 @@ public class SpotifyAudioDevice: AudioDevice {
 	init(spotify: Spotify) {
 		self.spotify = spotify
 	}
+	
+	public override var name: String {
+		"Spotify"  // TODO
+	}
 }

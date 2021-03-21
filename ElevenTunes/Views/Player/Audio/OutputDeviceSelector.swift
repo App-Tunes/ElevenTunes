@@ -35,7 +35,7 @@ class AudioDeviceProxy: ObservableObject {
 	}
 	
 	var options: [Option] {
-		AudioDeviceFinder.findDevices()
+		[.systemDefault] + AudioDeviceFinder.findDevices()
 	}
 	
 	var current: Option? { context.avOutputDevice }
@@ -76,18 +76,7 @@ struct OutputDeviceSelectorView: View {
 	}
 
 	var body: some View {
-		VStack(alignment: .leading, spacing: 0) {
-			HStack {
-				Text("Output Device").bold()
-					.padding(.trailing)
-				
-				Slider(value: $proxy.currentVolume, in: 0...1)
-				
-				PlayerAudioView.volumeImage(proxy.currentVolume)
-					.frame(width: 25, alignment: .leading)
-			}
-				.padding()
-			
+		VStack(alignment: .leading, spacing: 0) {			
 			ForEach(proxy.options, id: \.deviceID) { option in
 				optionView(option)
 					.padding(.horizontal)

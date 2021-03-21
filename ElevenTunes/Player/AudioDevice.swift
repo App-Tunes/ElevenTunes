@@ -7,8 +7,9 @@
 
 import Foundation
 
-public protocol AudioDevice {
-	
+public class AudioDevice: ObservableObject {
+	public var name: String { "Unknown Device" }
+	@Published public var volume: Double = 1
 }
 
 class UnsupportedAudioDeviceError: Error { }

@@ -94,7 +94,7 @@ public class AVAudioDevice: AudioDevice {
 		return name as String?
 	}
 
-	var name: String? {
+	public override var name: String {
 		guard let deviceID = deviceID else {
 			return "System Default"
 		}
@@ -104,14 +104,15 @@ public class AVAudioDevice: AudioDevice {
 			mScope:AudioObjectPropertyScope(kAudioObjectPropertyScopeGlobal),
 			mElement:AudioObjectPropertyElement(kAudioObjectPropertyElementMaster))
 
-		var name:CFString? = nil
-		var propsize:UInt32 = UInt32(MemoryLayout<CFString?>.size)
-		let result:OSStatus = AudioObjectGetPropertyData(deviceID, &address, 0, nil, &propsize, &name)
-		if (result != 0) {
-			return nil
+		var name: CFString? = nil
+		var propsize: UInt32 = UInt32(MemoryLayout<CFString?>.size)
+		let result: OSStatus = AudioObjectGetPropertyData(deviceID, &address, 0, nil, &propsize, &name)
+		
+		guard let nameSet = name, result == 0 else {
+			return "Unknown Device"
 		}
-
-		return name as String?
+		
+		return nameSet as String
 	}
 	
 	var icon: String {
@@ -119,17 +120,17 @@ public class AVAudioDevice: AudioDevice {
 			return "􀀀"
 		}
 		
-		if deviceID == 46 { return "􀙗" }
 		return "􀝎"
 	}
 	
-	var volume: Double {
+	public override var volume: Double {
 		get {
 			(deviceID ?? CoreAudioTT.defaultOutputDevice).flatMap {
 				CoreAudioTT.volume(ofDevice: UInt32($0))
 			}.flatMap(Double.init) ?? 0
 		}
 		set {
+			objectWillChange.send()
 			(deviceID ?? CoreAudioTT.defaultOutputDevice).map {
 				CoreAudioTT.setVolume(ofDevice: UInt32($0), Float(newValue))
 			}
