@@ -76,22 +76,20 @@ public class AVAudioDevice: AudioDevice {
 
 	var uid: String? {
 		guard let deviceID = deviceID else {
-			return nil
+			return "System Default"
 		}
 
-		var address:AudioObjectPropertyAddress = AudioObjectPropertyAddress(
-			mSelector:AudioObjectPropertySelector(kAudioDevicePropertyDeviceUID),
-			mScope:AudioObjectPropertyScope(kAudioObjectPropertyScopeGlobal),
-			mElement:AudioObjectPropertyElement(kAudioObjectPropertyElementMaster))
-
-		var name:CFString? = nil
-		var propsize:UInt32 = UInt32(MemoryLayout<CFString?>.size)
-		let result:OSStatus = AudioObjectGetPropertyData(deviceID, &address, 0, nil, &propsize, &name)
-		if (result != 0) {
+		guard let uid = try? CoreAudioTT.getObjectProperty(
+			object: deviceID,
+			selector: kAudioDevicePropertyDeviceUID,
+			scope: kAudioObjectPropertyScopeGlobal,
+			example: "" as CFString,
+			channel: kAudioObjectPropertyElementMaster
+		) else {
 			return nil
 		}
-
-		return name as String?
+		
+		return uid as String
 	}
 
 	public override var name: String {
@@ -99,20 +97,16 @@ public class AVAudioDevice: AudioDevice {
 			return "System Default"
 		}
 
-		var address:AudioObjectPropertyAddress = AudioObjectPropertyAddress(
-			mSelector:AudioObjectPropertySelector(kAudioDevicePropertyDeviceNameCFString),
-			mScope:AudioObjectPropertyScope(kAudioObjectPropertyScopeGlobal),
-			mElement:AudioObjectPropertyElement(kAudioObjectPropertyElementMaster))
-
-		var name: CFString? = nil
-		var propsize: UInt32 = UInt32(MemoryLayout<CFString?>.size)
-		let result: OSStatus = AudioObjectGetPropertyData(deviceID, &address, 0, nil, &propsize, &name)
-		
-		guard let nameSet = name, result == 0 else {
+		guard let name = try? CoreAudioTT.getObjectProperty(
+			object: deviceID,
+			selector: kAudioDevicePropertyDeviceNameCFString,
+			scope: kAudioObjectPropertyScopeGlobal,
+			example: "" as CFString
+		) else {
 			return "Unknown Device"
 		}
 		
-		return nameSet as String
+		return name as String
 	}
 	
 	var isHidden: Bool {
@@ -279,12 +273,8 @@ class AudioDeviceFinder {
 			return []
 		}
 
-		let numDevices = Int(propsize / UInt32(MemoryLayout<AudioDeviceID>.size))
-
-		var devids = [AudioDeviceID]()
-		for _ in 0..<numDevices {
-			devids.append(AudioDeviceID())
-		}
+		let deviceCount = Int(propsize / UInt32(MemoryLayout<AudioDeviceID>.size))
+		var devids = Array(repeating: AudioDeviceID(), count: deviceCount)
 
 		result = AudioObjectGetPropertyData(AudioObjectID(kAudioObjectSystemObject), &address, 0, nil, &propsize, &devids);
 		if (result != 0) {
