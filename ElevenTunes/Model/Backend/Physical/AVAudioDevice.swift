@@ -115,6 +115,24 @@ public class AVAudioDevice: AudioDevice {
 		return nameSet as String
 	}
 	
+	var isHidden: Bool {
+		guard let id = deviceID ?? CoreAudioTT.defaultOutputDevice else {
+			return true
+		}
+		
+		do {
+			return try CoreAudioTT.getObjectProperty(
+				object: id,
+				selector: kAudioDevicePropertyIsHidden,
+				scope: kAudioDevicePropertyScopeOutput,
+				example: UInt32()
+			) > 0
+		}
+		catch {
+			return true
+		}
+	}
+	
 	var icon: String {
 		guard let deviceID = deviceID else {
 			return "􀀀"
@@ -276,7 +294,7 @@ class AudioDeviceFinder {
 
 		return devids.compactMap {
 			let audioDevice = AVAudioDevice(deviceID: $0)
-			return audioDevice.hasOutput ? audioDevice : nil
+			return audioDevice.hasOutput && !audioDevice.isHidden ? audioDevice : nil
 		}
 	}
 }
