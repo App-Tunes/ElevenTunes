@@ -9,77 +9,47 @@ import SwiftUI
 import AVFoundation
 
 @available(OSX 10.15, *)
-class AudioDeviceProxy: NSObject, ObservableObject {
-	enum Option: Equatable {
-		case systemDefault
-				
-		var id: UInt32 {
-			switch self {
-			case .systemDefault:
-				return 0
-			}
-		}
-		
-		var name: String {
-			switch self {
-			case .systemDefault:
-				return "System Default"
-			}
-		}
-		
-		var icon: String {
-			switch self {
-			case .systemDefault:
-				return "􀀀"
-			}
-		}
-	}
+class AudioDeviceProxy: ObservableObject {
+	typealias Option = AVAudioDevice
 	
-	override init() {
-		super.init()
+	let context: PlayContext
+
+	init(context: PlayContext) {
+		self.context = context
 		
 //		AKManager.addObserver(self, forKeyPath: #keyPath(AKManager.outputDevices), options: [.new], context: nil)
 //		AKManager.addObserver(self, forKeyPath: #keyPath(AKManager.outputDevice), options: [.new], context: nil)
 	}
 	
-	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-		print("Change!")
-		objectWillChange.send()
-	}
+//	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+//		print("Change!")
+//		objectWillChange.send()
+//	}
 	
 	func link(_ option: Option) throws {
 		guard current != option else {
 			return // No need
 		}
 		
-		
+		context.avOutputDevice = option
 	}
 	
 	var options: [Option] {
-		return [.systemDefault]
+		AudioDeviceFinder.findDevices()
 	}
 	
-	var current: Option? {
-		.systemDefault
-	}
+	var current: Option? { context.avOutputDevice }
 	
-	var currentVolume: Double = 1
-//	{
-//		get {
-//			var volume = 0.0
-//			_ = AudioUnitGetParameter(AudioUnitGetSys, kMatrixMixerParam_Volume, kAudioUnitScope_Global, 0, &volume);
-//			return volume
-//		}
-//
-//		set {
-//
-//		}
-//	}
+	var currentVolume: Double {
+		get { current?.volume ?? 1}
+		set { current?.volume = newValue }
+	}
 }
 
 @available(OSX 10.15, *)
 struct OutputDeviceSelectorView: View {
-	@ObservedObject var proxy = AudioDeviceProxy()
+	@ObservedObject var proxy: AudioDeviceProxy
+	
 	@State private var pressOption: AudioDeviceProxy.Option?
 	@State private var hoverOption: AudioDeviceProxy.Option?
 
@@ -87,7 +57,7 @@ struct OutputDeviceSelectorView: View {
 		HStack {
 			Text(option.icon)
 				.frame(width: 25, alignment: .leading)
-			Text(option.name)
+			Text(option.name ?? "Unknown Device")
 				.frame(width: 300, alignment: .leading)
 			
 			Text("􀆅").foregroundColor(Color.white.opacity(
@@ -113,17 +83,12 @@ struct OutputDeviceSelectorView: View {
 				
 				Slider(value: $proxy.currentVolume, in: 0...1)
 				
-				Text(
-					proxy.currentVolume == 0 ? "􀊡" :
-					proxy.currentVolume < 0.33 ? "􀊥" :
-					proxy.currentVolume < 0.66 ? "􀊧" :
-					"􀊩"
-				)
-				.frame(width: 25, alignment: .leading)
+				PlayerAudioView.volumeImage(proxy.currentVolume)
+					.frame(width: 25, alignment: .leading)
 			}
 				.padding()
 			
-			ForEach(proxy.options, id: \.id) { option in
+			ForEach(proxy.options, id: \.deviceID) { option in
 				optionView(option)
 					.padding(.horizontal)
 					.padding(.vertical, 10)
@@ -147,9 +112,9 @@ struct OutputDeviceSelectorView: View {
 	}
 }
 
-@available(OSX 10.15, *)
-struct OutputDeviceSelectorView_Previews: PreviewProvider {
-	static var previews: some View {
-		OutputDeviceSelectorView()
-	}
-}
+//@available(OSX 10.15, *)
+//struct OutputDeviceSelectorView_Previews: PreviewProvider {
+//	static var previews: some View {
+//		OutputDeviceSelectorView()
+//	}
+//}

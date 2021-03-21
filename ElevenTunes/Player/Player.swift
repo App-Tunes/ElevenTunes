@@ -8,10 +8,6 @@
 import Foundation
 import Combine
 
-public struct PlayContext {
-    var spotify: Spotify
-}
-
 class Player {
 	@Published var repeatEnabled: Bool = false
 
@@ -48,7 +44,7 @@ class Player {
     @Published var isAlmostNext: Bool = false
 
     @Published var state: PlayerState = .init(isPlaying: false, currentTime: nil)
-    var context: PlayContext
+    let context: PlayContext
     
     let singlePlayer = SinglePlayer()
 
@@ -73,13 +69,8 @@ class Player {
 			return nil
 		}
 		
-		// TODO
-		let device = BranchingAudioDevice(av: AVAudioDevice(), spotify: SpotifyAudioDevice(spotify: context.spotify))
-		
-		return Future {
-			try track.audioTrack(forDevice: device)
-		}
-			.flatMap { $0 }
+		return context.deviceStream.eraseError()
+			.tryFlatMap { try track.audioTrack(forDevice: $0) }
 			.eraseToAnyPublisher()
 	}
     

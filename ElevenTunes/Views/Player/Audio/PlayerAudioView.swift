@@ -14,12 +14,12 @@ struct PlayerAudioView: View {
 	@State var volume: Double = 1
 	@State var presents: Bool = false
 		
-	var volumeImage: Image {
+	static func volumeImage(_ volume: Double) -> Image {
 		Image(systemName:
-				volume == 0 ? "speaker.fill" :
-				volume < 0.33 ? "speaker.wave.1.fill" :
-				volume < 0.66 ? "speaker.wave.2.fill" :
-				"speaker.wave.3.fill"
+			volume == 0 ? "speaker.fill" :
+			volume < 0.33 ? "speaker.wave.1.fill" :
+			volume < 0.66 ? "speaker.wave.2.fill" :
+			"speaker.wave.3.fill"
 		)
 	}
 	
@@ -34,13 +34,12 @@ struct PlayerAudioView: View {
 			Button(action: {
 				presents.toggle()
 			}) {
-				volumeImage
+				Self.volumeImage(volume)
 					.frame(width: 25, alignment: .leading)
 			}
 				.popover(isPresented: $presents) {
-					AudioSetupView()
+					AudioSetupView(context: player.context)
 				}
-				.disabled(true)
         }
 		.onReceive(player.singlePlayer.$volume) { self.volume = $0 }
     }
