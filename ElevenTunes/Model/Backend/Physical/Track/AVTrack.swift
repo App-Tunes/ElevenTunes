@@ -103,14 +103,17 @@ public final class AVTrack: RemoteTrack {
 			return .empty(state: .error(error))
 		}
 	}
-
-	public func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
+	
+	public func audioTrack(forDevice device: BranchingAudioDevice) throws -> AnyPublisher<AudioTrack, Error> {
+		guard let device = device.av else {
+			throw UnsupportedAudioDeviceError()
+		}
+		
 		// TODO Return video emitter when possible
-		let url = self.url
-		return Future {
-			let player = try AVAudioPlayer(contentsOf: url)
-			player.prepareToPlay()
-			return AVAudioPlayerEmitter(player)
+		return Future { [url] in
+			let file = try AVAudioFile(forReading: url)
+			let singleDevice = try device.prepare(file)
+			return AVAudioPlayerEmitter(singleDevice, file: file)
 		}
 			.eraseToAnyPublisher()
 	}

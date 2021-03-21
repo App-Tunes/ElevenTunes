@@ -16,7 +16,7 @@ class SinglePlayer {
     static let timeInAnAlmost: TimeInterval = 5
     
     // Unfortunately, K/V observation on this doesn't seem to work :(
-    @Published private(set) var playing: AnyAudioEmitter? {
+    @Published private(set) var playing: AudioTrack? {
         willSet {
             playing?.delegate = nil
             playing?.stop()
@@ -26,6 +26,10 @@ class SinglePlayer {
     
     @Published private(set) var state = PlayerState(isPlaying: false, currentTime: nil)
     @Published private(set) var isAlmostDone = false
+	
+	@Published var volume: Double = 1 {
+		didSet { playing?.volume = volume }
+	}
 
     private var almostDoneTimer: Timer?
     
@@ -58,7 +62,7 @@ class SinglePlayer {
         }
     }
     
-    func play(_ emitter: AnyAudioEmitter?) {
+    func play(_ emitter: AudioTrack?) {
         self.playing = emitter // Will toggle stop() on previous
         
         guard let emitter = emitter else {
@@ -67,6 +71,7 @@ class SinglePlayer {
         }
         
         emitter.delegate = self
+		emitter.volume = volume
         emitter.start()
     }
     
@@ -92,8 +97,8 @@ class SinglePlayer {
     }
 }
 
-extension SinglePlayer: AudioEmitterDelegate {
-    func emitterDidStop(_ emitter: AnyAudioEmitter) {
+extension SinglePlayer: AudioTrackDelegate {
+    func emitterDidStop(_ emitter: AudioTrack) {
         DispatchQueue.main.async {
             self.playing = nil
             self._updateState()
@@ -102,7 +107,7 @@ extension SinglePlayer: AudioEmitterDelegate {
         }
     }
     
-    func emitterUpdatedState(_ emitter: AnyAudioEmitter) {
+    func emitterUpdatedState(_ emitter: AudioTrack) {
         DispatchQueue.main.async {
             self._updateState()
         }

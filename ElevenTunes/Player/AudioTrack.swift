@@ -12,22 +12,22 @@ struct PlayerState {
     var currentTime: TimeInterval?
 }
 
-public protocol AudioEmitterDelegate: AnyObject {
-    func emitterDidStop(_ emitter: AnyAudioEmitter)
-    func emitterUpdatedState(_ emitter: AnyAudioEmitter)
+public protocol AudioTrackDelegate: AnyObject {
+    func emitterDidStop(_ emitter: AudioTrack)
+    func emitterUpdatedState(_ emitter: AudioTrack)
 }
 
-class InvalidTimeError: Error {
-    
-}
+class InvalidTimeError: Error { }
 
-public protocol AnyAudioEmitter: AnyObject {
-    var delegate: AudioEmitterDelegate? { get set }
+public protocol AudioTrack: AnyObject {
+    var delegate: AudioTrackDelegate? { get set }
     
     var currentTime: TimeInterval? { get }
     var isPlaying: Bool { get }
     
     var duration: TimeInterval? { get }
+	
+	var volume: Double { get set }
 
     func move(to time: TimeInterval) throws
     func start()

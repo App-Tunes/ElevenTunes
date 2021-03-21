@@ -1,0 +1,16 @@
+//
+//  SpotifyAudioDevice.swift
+//  ElevenTunes
+//
+//  Created by Lukas Tenbrink on 21.03.21.
+//
+
+import Foundation
+
+public class SpotifyAudioDevice: AudioDevice {
+	let spotify: Spotify
+	
+	init(spotify: Spotify) {
+		self.spotify = spotify
+	}
+}

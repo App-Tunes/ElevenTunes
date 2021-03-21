@@ -8,45 +8,92 @@
 import Foundation
 import AVFoundation
 
-class AVAudioPlayerEmitter: NSObject, AnyAudioEmitter {
-    let audio: AVAudioPlayer
-    
-    weak var delegate: AudioEmitterDelegate? = nil
+class AVAudioPlayerEmitter: NSObject, AudioTrack {
+	let device: AVSingleAudioDevice
+	let file: AVAudioFile
+	let format: AVAudioFormat
+	let duration: TimeInterval?
 
-    init(_ audio: AVAudioPlayer) {
-        self.audio = audio
+	var startTime: TimeInterval = 0
+	var isSwapping: Bool = false
+	
+    weak var delegate: AudioTrackDelegate? = nil
+
+	init(_ device: AVSingleAudioDevice, file: AVAudioFile) {
+		self.device = device
+		self.file = file
+		format = file.processingFormat
+		duration = TimeInterval(file.length) / format.sampleRate
+		
         super.init()
-        audio.delegate = self
+		
+		_seek()
     }
+	
+	var _currentTime: TimeInterval {
+		guard
+			let nodeTime = device.player.lastRenderTime,
+			let playerTime = device.player.playerTime(forNodeTime: nodeTime)
+		else {
+			return startTime
+		}
+		
+		return startTime + TimeInterval(playerTime.sampleTime) / TimeInterval(format.sampleRate)
+	}
     
-    var currentTime: TimeInterval? { audio.currentTime }
-    var isPlaying: Bool { audio.isPlaying }
-
-    var duration: TimeInterval? { audio.duration }
+    var currentTime: TimeInterval? { _currentTime }
+	
+	var isPlaying: Bool { device.player.isPlaying }
     
+	var volume: Double {
+		get { Double(device.player.volume) }
+		set { device.player.volume = Float(newValue) }
+	}
+	
     func move(to time: TimeInterval) {
-        audio.currentTime = time
-        delegate?.emitterUpdatedState(self)
+		startTime = time
+
+		if device.player.isPlaying {
+			isSwapping = true
+			device.player.stop()
+			isSwapping = false
+			_seek()
+			device.player.play()
+		}
+		
+		delegate?.emitterUpdatedState(self)
     }
+	
+	func _seek() {
+		let startSample = AVAudioFramePosition(floor(startTime * format.sampleRate))
+		guard file.length > startSample else {
+			delegate?.emitterDidStop(self)
+			return
+		}
+		
+		let lengthSamples = AVAudioFrameCount(file.length - startSample)
+
+		device.player.scheduleSegment(file, startingFrame: startSample, frameCount: lengthSamples, at: nil) { [weak self] in
+			guard let self = self else { return }
+			// Is this a proper completion?
+			guard !self.isSwapping else { return }
+			
+			self.delegate?.emitterDidStop(self)
+		}
+	}
     
     func start() {
-        audio.play()
+		device.player.play()
         delegate?.emitterUpdatedState(self)
     }
     
     func stop() {
-        audio.stop()
+		startTime = _currentTime
+		// We could pause, but we never know when the user wants to resume anyway
+		isSwapping = true
+		device.player.stop()
+		isSwapping = false
+		_seek()  // Schedule for resume
         delegate?.emitterUpdatedState(self)
-    }
-}
-
-extension AVAudioPlayerEmitter : AVAudioPlayerDelegate {
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        delegate?.emitterDidStop(self)
-    }
-    
-    func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
-        // TODO
-        appLogger.error("Audio Decode Error: \(String(describing: error))")
     }
 }

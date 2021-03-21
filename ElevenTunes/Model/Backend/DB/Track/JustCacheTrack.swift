@@ -10,10 +10,6 @@ import Combine
 import SwiftUI
 
 final class JustCacheTrack: RemoteTrack {
-	enum EmitterFail: Error {
-		case noBackend
-	}
-	
 	let cache: DBTrack
 	
 	enum Request {
@@ -51,8 +47,8 @@ final class JustCacheTrack: RemoteTrack {
 	
 	func invalidateCaches() { }
 		
-	func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
-		Fail(error: EmitterFail.noBackend).eraseToAnyPublisher()
+	func audioTrack(forDevice device: BranchingAudioDevice) throws -> AnyPublisher<AudioTrack, Error> {
+		throw UnsupportedAudioDeviceError()
 	}
 	
 	public func supports(_ capability: TrackCapability) -> Bool {

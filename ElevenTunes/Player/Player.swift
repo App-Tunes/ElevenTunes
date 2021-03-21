@@ -21,7 +21,7 @@ class Player {
             previousEmitter =
                 oldValue?.id == previous?.id ? previousEmitter
                 : previous?.id == current?.id ? currentEmitter
-                : previous?.emitter(context: context)
+                : prepare(previous)
         }
     }
     
@@ -32,7 +32,7 @@ class Player {
                 oldValue?.id == current?.id ? currentEmitter
                 : current?.id == next?.id ? nextEmitter
                 : current?.id == previous?.id ? previousEmitter
-                : current?.emitter(context: context)
+                : prepare(current)
         }
     }
     @Published var next: AnyTrack? {
@@ -41,7 +41,7 @@ class Player {
             nextEmitter =
                 oldValue?.id == next?.id ? nextEmitter
                 : next?.id == current?.id ? currentEmitter
-                : next?.emitter(context: context)
+				: prepare(next)
         }
     }
 
@@ -53,11 +53,11 @@ class Player {
     let singlePlayer = SinglePlayer()
 
     private var currentEmitterTask: AnyCancellable?
-    private var currentEmitter: AnyPublisher<AnyAudioEmitter, Error>? {
+    private var currentEmitter: AnyPublisher<AudioTrack, Error>? {
         didSet { load() }
     }
-    private var previousEmitter: AnyPublisher<AnyAudioEmitter, Error>?
-    private var nextEmitter: AnyPublisher<AnyAudioEmitter, Error>?
+    private var previousEmitter: AnyPublisher<AudioTrack, Error>?
+    private var nextEmitter: AnyPublisher<AudioTrack, Error>?
 
     private var historyObservers = Set<AnyCancellable>()
 
@@ -67,6 +67,21 @@ class Player {
         singlePlayer.$isAlmostDone.assign(to: &$isAlmostNext)
         singlePlayer.delegate = self
     }
+	
+	func prepare(_ track: AnyTrack?) -> AnyPublisher<AudioTrack, Error>? {
+		guard let track = track else {
+			return nil
+		}
+		
+		// TODO
+		let device = BranchingAudioDevice(av: AVAudioDevice(), spotify: SpotifyAudioDevice(spotify: context.spotify))
+		
+		return Future {
+			try track.audioTrack(forDevice: device)
+		}
+			.flatMap { $0 }
+			.eraseToAnyPublisher()
+	}
     
     var history: PlayHistory = PlayHistory() {
         didSet {

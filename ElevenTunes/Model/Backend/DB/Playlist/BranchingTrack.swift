@@ -26,6 +26,10 @@ public class BranchingTrack: AnyTrack {
 		self.secondary = secondary
 	}
 	
+	var all: [AnyTrack] {
+		[primary] + secondary
+	}
+	
 	public var id: String { primary.id }
 	
 	public var origin: URL? { primary.origin }
@@ -43,9 +47,22 @@ public class BranchingTrack: AnyTrack {
 	public func demand(_ demand: Set<TrackAttribute>) -> AnyCancellable {
 		primary.demand(demand)
 	}
-
-	public func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
-		primary.emitter(context: context)
+	
+	enum AudioTrackResult {
+		case track(AudioTrack), error
+	}
+	
+	public func audioTrack(forDevice device: BranchingAudioDevice) throws -> AnyPublisher<AudioTrack, Error> {
+		for track in ([primary] + secondary) {
+			do {
+				return try track.audioTrack(forDevice: device)
+			}
+			catch is UnsupportedAudioDeviceError {
+				// Next
+			}
+		}
+			
+		throw UnsupportedAudioDeviceError()
 	}
 	
 	public func supports(_ capability: TrackCapability) -> Bool {

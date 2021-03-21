@@ -28,10 +28,10 @@ protocol RemoteAudioEndpointDelegate: AnyObject {
     func endpoint(_ endpoint: RemoteAudioEndpoint, updatedState state: PlayerState, at date: Date?)
 }
 
-class RemoteAudioEmitter: AnyAudioEmitter {
+class RemoteAudioEmitter: AudioTrack {
     static let queryTime: TimeInterval = 10
     
-    weak var delegate: AudioEmitterDelegate?
+    weak var delegate: AudioTrackDelegate?
     let endpoint: RemoteAudioEndpoint
         
     var lastStartTime: TimeInterval = 0
@@ -57,7 +57,9 @@ class RemoteAudioEmitter: AnyAudioEmitter {
     var currentTime: TimeInterval? {
         lastStartTime + (lastStartDate.map(Date().timeIntervalSince) ?? 0)
     }
-    
+	
+	var volume: Double = 1 // TODO Direct to player
+	
     var isPlaying: Bool {
         lastStartDate != nil
     }

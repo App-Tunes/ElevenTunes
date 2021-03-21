@@ -28,7 +28,7 @@ public protocol AnyTrack: AnyObject {
 	var attributes: AnyPublisher<TrackAttributes.Update, Never> { get }
 
 	func supports(_ capability: TrackCapability) -> Bool
-    func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error>
+    func audioTrack(forDevice device: BranchingAudioDevice) throws -> AnyPublisher<AudioTrack, Error>
     
     var icon: Image { get }
     var accentColor: Color { get }

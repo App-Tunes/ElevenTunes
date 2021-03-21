@@ -10,8 +10,6 @@ import Combine
 import SwiftUI
 
 class MockTrack: TrackToken, AnyTrack {
-    class MockError: Error {}
-    
     enum CodingKeys: String, CodingKey {
         case attributes
     }
@@ -48,9 +46,9 @@ class MockTrack: TrackToken, AnyTrack {
 		_attributes.$update.eraseToAnyPublisher()
 	}
 
-    func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
-        Fail(error: MockError()).eraseToAnyPublisher()
-    }
+	func audioTrack(forDevice device: BranchingAudioDevice) throws -> AnyPublisher<AudioTrack, Error> {
+		throw UnsupportedAudioDeviceError()
+	}
     
 	func supports(_ capability: TrackCapability) -> Bool {
 		false

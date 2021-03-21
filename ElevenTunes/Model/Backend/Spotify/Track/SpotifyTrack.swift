@@ -114,26 +114,28 @@ public final class SpotifyTrack: RemoteTrack {
 	
 	public var origin: URL? { token.origin }
 	    
-    public func emitter(context: PlayContext) -> AnyPublisher<AnyAudioEmitter, Error> {
-        let spotify = context.spotify
-        
-        let spotifyTrack = spotify.api.track(token)
-            .compactMap(ExistingSpotifyTrack.init)
-        let device = spotify.devices.$selected
-            .compactMap { $0 }
-            .eraseError()
-        
-        return spotifyTrack.combineLatest(device)
-            .map({ (track, device) -> AnyAudioEmitter in
-                RemoteAudioEmitter(SpotifyAudioEmitter(
-                    spotify,
-                    device: device,
-                    context: .uris([track]),
-                    track: track
-                )) as AnyAudioEmitter
-            })
-            .eraseToAnyPublisher()
-    }
+	public func audioTrack(forDevice device: BranchingAudioDevice) throws -> AnyPublisher<AudioTrack, Error> {
+		guard let spotify = device.spotify?.spotify else {
+			throw UnsupportedAudioDeviceError()
+		}
+		
+		let spotifyTrack = spotify.api.track(token)
+			.compactMap(ExistingSpotifyTrack.init)
+		let device = spotify.devices.$selected
+			.compactMap { $0 }
+			.eraseError()
+		
+		return spotifyTrack.combineLatest(device)
+			.map({ (track, device) -> AudioTrack in
+				RemoteAudioEmitter(SpotifyAudioEmitter(
+					spotify,
+					device: device,
+					context: .uris([track]),
+					track: track
+				)) as AudioTrack
+			})
+			.eraseToAnyPublisher()
+	}
 	
 	public func supports(_ capability: TrackCapability) -> Bool {
 		false

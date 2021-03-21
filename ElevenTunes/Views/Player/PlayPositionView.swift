@@ -29,7 +29,7 @@ struct VBar : Shape {
 struct PlayPositionBarsView: View {
     @State var player: SinglePlayer
 
-    let playing: AnyAudioEmitter
+    let playing: AudioTrack
     @State var playerState: PlayerState = .init(isPlaying: false, currentTime: nil)
 
     @State var position: CGFloat? = nil
@@ -106,7 +106,7 @@ struct PlayPositionBarsView: View {
 
 struct PlayPositionView: View {
     @State var player: SinglePlayer
-    @State var playing: AnyAudioEmitter?
+    @State var playing: AudioTrack?
 
     var timeLeft: String {
         guard let time = playing?.duration else {

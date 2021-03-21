@@ -11,7 +11,7 @@ import CombineExt
 
 extension Publisher {
     func onMain() -> Publishers.ReceiveOn<Self, RunLoop> {
-        return receive(on: RunLoop.main)
+        receive(on: RunLoop.main)
     }
     
     // Folds the result of the publisher until nil is returned.
@@ -44,6 +44,15 @@ extension Publisher {
         }
     }
 
+	func replaceError<T>(type t: T.Type, with output: Output) -> AnyPublisher<Output, Error> {
+		tryCatch { error -> AnyPublisher<Output, Error> in
+			error is T
+				? Just(output).eraseError().eraseToAnyPublisher()
+				: Fail(error: error).eraseToAnyPublisher()
+		}
+		.eraseToAnyPublisher()
+	}
+	
     func eraseError() -> Publishers.MapError<Self, Error> {
         return mapError { $0 as Error }
     }
