@@ -114,17 +114,12 @@ public class AVAudioDevice: AudioDevice {
 			return true
 		}
 		
-		do {
-			return try CoreAudioTT.getObjectProperty(
-				object: id,
-				selector: kAudioDevicePropertyIsHidden,
-				scope: kAudioDevicePropertyScopeOutput,
-				example: UInt32()
-			) > 0
-		}
-		catch {
-			return true
-		}
+		return (try? CoreAudioTT.getObjectProperty(
+			object: id,
+			selector: kAudioDevicePropertyIsHidden,
+			scope: kAudioDevicePropertyScopeOutput,
+			example: UInt32()
+		) > 0) ?? true
 	}
 	
 	var icon: String {
