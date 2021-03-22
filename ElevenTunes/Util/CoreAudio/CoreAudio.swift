@@ -115,12 +115,24 @@ class CoreAudioTT {
 	static func getObjectProperty<T>(object: AudioObjectID, address: AudioObjectPropertyAddress, type: T.Type) throws -> T {
 		try getObjectPointer(object: object, address: address, type: type).pointee
 	}
+		
+	static func getObjectPropertyCount<T>(object: AudioObjectID, address: AudioObjectPropertyAddress, forType type: T.Type) throws -> Int {
+		var size: UInt32 = 0
+		var address = address
+
+		let error = AudioObjectGetPropertyDataSize(object, &address, 0, nil, &size)
+
+		guard error == 0 else { throw OSError(code: error) }
+		
+		return Int(size / UInt32(MemoryLayout<T>.size))
+	}
 	
-	static func getObjectProperty<T>(object: AudioObjectID, address: AudioObjectPropertyAddress, type: T.Type, count: Int) throws -> [T] {
+	static func getObjectPropertyList<T>(object: AudioObjectID, address: AudioObjectPropertyAddress, type: T.Type) throws -> [T] {
+		let count = try getObjectPropertyCount(object: object, address: address, forType: type)
 		let pointer = try getObjectPointer(object: object, address: address, type: type, count: count)
 		return Array(UnsafeBufferPointer(start: pointer, count: count))
 	}
-	
+
 	static func setObjectProperty<T>(object: AudioObjectID, address: AudioObjectPropertyAddress, value: T) throws {
 		var property = value
 		var address = address

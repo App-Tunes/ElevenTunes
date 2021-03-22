@@ -47,31 +47,30 @@ public class AVAudioDevice: AudioDevice {
 			return true
 		}
 		
-		var address = AudioObjectPropertyAddress(
+		let address = AudioObjectPropertyAddress(
 			selector: kAudioDevicePropertyStreamConfiguration,
 			scope: kAudioDevicePropertyScopeOutput
 		)
-
-		var propsize:UInt32 = UInt32(MemoryLayout<CFString?>.size);
-		var result:OSStatus = AudioObjectGetPropertyDataSize(deviceID, &address, 0, nil, &propsize);
-		if (result != 0) {
-			return false;
-		}
-
-		let bufferList = UnsafeMutablePointer<AudioBufferList>.allocate(capacity:Int(propsize))
-		result = AudioObjectGetPropertyData(deviceID, &address, 0, nil, &propsize, bufferList);
-		if (result != 0) {
+		
+		guard let count = try? CoreAudioTT.getObjectPropertyCount(
+			object: deviceID,
+			address: address,
+			forType: (CFString?).self
+		) else {
 			return false
 		}
 
-		let buffers = UnsafeMutableAudioBufferListPointer(bufferList)
-		for bufferNum in 0..<buffers.count {
-			if buffers[bufferNum].mNumberChannels > 0 {
-				return true
-			}
+		guard let list = try? CoreAudioTT.getObjectPointer(
+			object: deviceID,
+			address: address,
+			type: AudioBufferList.self,
+			count: count
+		) else {
+			return false
 		}
 
-		return false
+		return UnsafeMutableAudioBufferListPointer(list)
+			.anySatisfy { $0.mNumberChannels > 0 }
 	}
 
 	var uid: String? {
@@ -79,7 +78,7 @@ public class AVAudioDevice: AudioDevice {
 			return "System Default"
 		}
 
-		guard let uid = try? CoreAudioTT.getObjectProperty(
+		return try? CoreAudioTT.getObjectProperty(
 			object: deviceID,
 			address: .init(
 				selector: kAudioDevicePropertyDeviceUID,
@@ -87,11 +86,7 @@ public class AVAudioDevice: AudioDevice {
 				element: kAudioObjectPropertyElementMaster
 			),
 			type: CFString.self
-		) else {
-			return nil
-		}
-		
-		return uid as String
+		) as String
 	}
 
 	public override var name: String {
@@ -99,18 +94,14 @@ public class AVAudioDevice: AudioDevice {
 			return "System Default"
 		}
 
-		guard let name = try? CoreAudioTT.getObjectProperty(
+		return (try? CoreAudioTT.getObjectProperty(
 			object: deviceID,
 			address: .init(
 				selector: kAudioDevicePropertyDeviceNameCFString,
 				scope: kAudioObjectPropertyScopeGlobal
 			),
 			type: CFString.self
-		) else {
-			return "Unknown Device"
-		}
-		
-		return name as String
+		) as String) ?? "Unknown Device"
 	}
 	
 	var isHidden: Bool {
@@ -129,11 +120,12 @@ public class AVAudioDevice: AudioDevice {
 	}
 	
 	var icon: String {
-		guard let deviceID = deviceID else {
+		switch deviceID {
+		case nil:
 			return "􀀀"
+		default:
+			return "􀝎"
 		}
-		
-		return "􀝎"
 	}
 	
 	public override var volume: Double {
@@ -153,29 +145,15 @@ public class AVAudioDevice: AudioDevice {
 
 class AudioDeviceFinder {
 	static func findDevices() -> [AVAudioDevice] {
-		var propsize: UInt32 = 0
-
-		var address = AudioObjectPropertyAddress(
-			selector: kAudioHardwarePropertyDevices,
-			scope: kAudioObjectPropertyScopeGlobal,
-			element: kAudioObjectPropertyElementMaster
-		)
-
-		let result:OSStatus = AudioObjectGetPropertyDataSize(AudioObjectID(kAudioObjectSystemObject), &address, UInt32(MemoryLayout<AudioObjectPropertyAddress>.size), nil, &propsize)
-
-		if (result != 0) {
-			print("Error \(result) from AudioObjectGetPropertyDataSize")
-			return []
-		}
-
-		let deviceCount = Int(propsize / UInt32(MemoryLayout<AudioDeviceID>.size))
-
 		do {
-			let deviceIDS = try CoreAudioTT.getObjectProperty(
+			let deviceIDS = try CoreAudioTT.getObjectPropertyList(
 				object: AudioObjectID(kAudioObjectSystemObject),
-				address: address,
-				type: AudioDeviceID.self,
-				count: deviceCount
+				address: .init(
+					selector: kAudioHardwarePropertyDevices,
+					scope: kAudioObjectPropertyScopeGlobal,
+					element: kAudioObjectPropertyElementMaster
+				),
+				type: AudioDeviceID.self
 			)
 			
 			return deviceIDS.compactMap {
