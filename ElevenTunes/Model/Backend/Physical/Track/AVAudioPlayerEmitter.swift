@@ -26,10 +26,8 @@ class AVAudioPlayerEmitter: NSObject, AudioTrack {
 		duration = TimeInterval(file.length) / format.sampleRate
 		
         super.init()
-		
-		_seek()
     }
-	
+		
 	var _currentTime: TimeInterval {
 		guard
 			let nodeTime = device.player.lastRenderTime,
@@ -59,6 +57,9 @@ class AVAudioPlayerEmitter: NSObject, AudioTrack {
 			isSwapping = false
 			_seek()
 			device.player.play()
+		}
+		else {
+			_seek()
 		}
 		
 		delegate?.emitterUpdatedState(self)

@@ -78,7 +78,7 @@ struct PlayerControlsView: View {
         .onReceive(player.$previous) { self.previous = $0 }
         .onReceive(player.$current) { self.current = $0 }
         .onReceive(player.$next) { self.next = $0 }
-		.onReceive(player.$state) { self.isPlaying = $0.isPlaying }
+		.onReceive(player.$isPlaying) { self.isPlaying = $0 }
 		.onReceive(player.$repeatEnabled) { self.repeatEnabled = $0 }
     }
 }

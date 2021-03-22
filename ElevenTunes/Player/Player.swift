@@ -11,7 +11,7 @@ import Combine
 class Player {
 	@Published var repeatEnabled: Bool = false
 
-    @Published var previous: AnyTrack? {
+    @Published private(set) var previous: AnyTrack? {
         didSet {
             // Re-use last played if possible
             previousEmitter =
@@ -21,7 +21,7 @@ class Player {
         }
     }
     
-    @Published var current: AnyTrack? {
+    @Published private(set) var current: AnyTrack? {
         didSet {
             // If possible, use prepared caches
             currentEmitter =
@@ -31,7 +31,7 @@ class Player {
                 : prepare(current)
         }
     }
-    @Published var next: AnyTrack? {
+    @Published private(set) var next: AnyTrack? {
         didSet {
             // Re-use last played if possible
             nextEmitter =
@@ -40,13 +40,16 @@ class Player {
 				: prepare(next)
         }
     }
+	
+	let context: PlayContext
+	let singlePlayer = SinglePlayer()
 
-    @Published var isAlmostNext: Bool = false
-
-    @Published var state: PlayerState = .init(isPlaying: false, currentTime: nil)
-    let context: PlayContext
-    
-    let singlePlayer = SinglePlayer()
+	/// States in this player convey user intention, not actual state. e.g. it may be "playing"
+	/// while no music is being released, since the track is yet loading. For technical state,
+	/// view singlePlayer states.
+	@Published private(set) var isPlaying: Bool = false
+	@Published private(set) var isAlmostNext: Bool = false
+	private var playingID: String?
 
     private var currentEmitterTask: AnyCancellable?
     private var currentEmitter: AnyPublisher<AudioTrack, Error>? {
@@ -55,13 +58,13 @@ class Player {
     private var previousEmitter: AnyPublisher<AudioTrack, Error>?
     private var nextEmitter: AnyPublisher<AudioTrack, Error>?
 
-    private var historyObservers = Set<AnyCancellable>()
+	private var cancellables = Set<AnyCancellable>()
+	private var historyObservers = Set<AnyCancellable>()
 
     init(context: PlayContext) {
         self.context = context
-        singlePlayer.$state.assign(to: &$state)
+		singlePlayer.delegate = self
         singlePlayer.$isAlmostDone.assign(to: &$isAlmostNext)
-        singlePlayer.delegate = self
     }
 	
 	func prepare(_ track: AnyTrack?) -> AnyPublisher<AudioTrack, Error>? {
@@ -95,6 +98,7 @@ class Player {
 		}
 		
         singlePlayer.toggle()
+		isPlaying = singlePlayer.state.isPlaying
     }
     
     func play(_ track: AnyTrack?) {
@@ -110,11 +114,16 @@ class Player {
     private func load() {
         singlePlayer.stop()
 
-		if currentEmitter == nil {
-			singlePlayer.play(nil)
+		guard let currentEmitter = currentEmitter else {
+			singlePlayer.switchTo(nil)
+			isPlaying = false
+			playingID = nil
+			return
 		}
 
-        currentEmitterTask = currentEmitter?
+		let trackID = current?.id
+		isPlaying = true
+        currentEmitterTask = currentEmitter
             .onMain()
 			.sink(receiveResult: { [weak self] in
 				guard let self = self else { return }
@@ -123,12 +132,23 @@ class Player {
 				case .failure(let error):
 					NSAlert.warning(title: "Play Failure", text: error.localizedDescription)
 					// TODO Think about graceful handling
-					self.singlePlayer.play(nil)
+					self.singlePlayer.switchTo(nil)
 				case .success(let audio):
-					// Start from beginning
-					try? audio.move(to: 0)
-					self.singlePlayer.play(audio)
+					if self.playingID == trackID {
+						// Start from where we were, but in new audio
+						try? audio.move(to: self.singlePlayer.playing?.currentTime ?? 0)
+						self.singlePlayer.switchTo(audio, andPlay: self.isPlaying)
+					}
+					else {
+						// Start from beginning
+						try? audio.move(to: 0)
+						self.singlePlayer.switchTo(audio, andPlay: self.isPlaying)
+					}
 				}
+				
+				// TODO isPlaying should be noted by this Player. singlePlayer only
+				// knows for the current track.
+				self.playingID = trackID
 			})
     }
     

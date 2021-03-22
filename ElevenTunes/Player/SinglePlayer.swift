@@ -62,7 +62,7 @@ class SinglePlayer {
         }
     }
     
-    func play(_ emitter: AudioTrack?) {
+	func switchTo(_ emitter: AudioTrack?, andPlay play: Bool = false) {
         self.playing = emitter // Will toggle stop() on previous
         
         guard let emitter = emitter else {
@@ -72,7 +72,9 @@ class SinglePlayer {
         
         emitter.delegate = self
 		emitter.volume = volume
-        emitter.start()
+		if play {
+			emitter.start()
+		}
     }
     
     func stop() {
@@ -99,7 +101,7 @@ class SinglePlayer {
 
 extension SinglePlayer: AudioTrackDelegate {
     func emitterDidStop(_ emitter: AudioTrack) {
-        DispatchQueue.main.async {
+        DispatchQueue.nowOrAsyncOnMain {
             self.playing = nil
             self._updateState()
             
@@ -108,8 +110,8 @@ extension SinglePlayer: AudioTrackDelegate {
     }
     
     func emitterUpdatedState(_ emitter: AudioTrack) {
-        DispatchQueue.main.async {
-            self._updateState()
-        }
+		DispatchQueue.nowOrAsyncOnMain {
+			self._updateState()
+		}
     }
 }
