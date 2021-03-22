@@ -10,7 +10,7 @@ import Combine
 import AVFoundation
 
 public class PlayContext {
-	@Published var avOutputDevice: AVAudioDevice
+	@Published var avOutputDevice: AVAudioDevice?
 
 	let spotify: Spotify
 	@Published var spotifyDevice: SpotifyAudioDevice?

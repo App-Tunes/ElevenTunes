@@ -108,28 +108,28 @@ class Player {
     }
     
     private func load() {
-        let player = singlePlayer
-        player.stop()
+        singlePlayer.stop()
+
+		if currentEmitter == nil {
+			singlePlayer.play(nil)
+		}
 
         currentEmitterTask = currentEmitter?
             .onMain()
-            .sink(receiveCompletion: { completion in
-                switch completion {
-                case .failure(let error):
-                    appLogger.error("Play Failure: \(error)")
-                    player.play(nil)
-                default:
-                    break
-                }
-            }) { emitter in
-                // Start from beginning
-                try? emitter.move(to: 0)
-                player.play(emitter)
-            }
-        
-        if currentEmitter == nil {
-            player.play(nil)
-        }
+			.sink(receiveResult: { [weak self] in
+				guard let self = self else { return }
+				
+				switch $0 {
+				case .failure(let error):
+					NSAlert.warning(title: "Play Failure", text: error.localizedDescription)
+					// TODO Think about graceful handling
+					self.singlePlayer.play(nil)
+				case .success(let audio):
+					// Start from beginning
+					try? audio.move(to: 0)
+					self.singlePlayer.play(audio)
+				}
+			})
     }
     
     @discardableResult

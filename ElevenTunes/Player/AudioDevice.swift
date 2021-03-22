@@ -12,7 +12,11 @@ public class AudioDevice: ObservableObject {
 	@Published public var volume: Double = 1
 }
 
-class UnsupportedAudioDeviceError: Error { }
+class UnsupportedAudioDeviceError: Error {
+	var localizedDescription: String {
+		"Track is not compatible with any of the selected audio devices."
+	}
+}
 
 public class BranchingAudioDevice {
 	let av: AVAudioDevice?

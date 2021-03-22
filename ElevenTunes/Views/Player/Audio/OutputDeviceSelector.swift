@@ -26,12 +26,13 @@ class AudioDeviceProxy: ObservableObject {
 //		objectWillChange.send()
 //	}
 	
-	func link(_ option: Option) throws {
-		guard current != option else {
-			return // No need
+	func toggle(_ option: Option) {
+		if current == option {
+			context.avOutputDevice = nil
 		}
-		
-		context.avOutputDevice = option
+		else {
+			context.avOutputDevice = option
+		}
 	}
 	
 	var options: [Option] {
@@ -86,12 +87,7 @@ struct OutputDeviceSelectorView: View {
 						self.hoverOption = over ? option : nil
 					}
 					.onTapGesture {
-						do {
-							try self.proxy.link(option)
-						}
-						catch let error {
-							NSAlert.informational(title: "Unable to switch output device", text: error.localizedDescription)
-						}
+						self.proxy.toggle(option)
 					}
 					.onLongPressGesture(pressing: { isDown in
 						self.pressOption = isDown ? option : nil
