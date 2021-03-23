@@ -7,14 +7,30 @@
 
 import Foundation
 
-public class SpotifyAudioDevice: AudioDevice {
+public class SpotifyAudioDevice: AudioDevice {	
 	let spotify: Spotify
 	
 	init(spotify: Spotify) {
 		self.spotify = spotify
 	}
 	
-	public override var name: String {
+	public var id: String {
+		"spotify"
+	}
+	
+	public var name: String? {
 		"Spotify"  // TODO
+	}
+	
+	public var icon: String {
+		"hifispeaker"
+	}
+	
+	public var volume: Double = 1 {
+		willSet { objectWillChange.send() }
+	}
+	
+	public static func ==(lhs: SpotifyAudioDevice, rhs: SpotifyAudioDevice) -> Bool {
+		lhs.id == rhs.id
 	}
 }

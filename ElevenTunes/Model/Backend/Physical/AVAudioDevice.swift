@@ -89,19 +89,19 @@ public class AVAudioDevice: AudioDevice {
 		) as String
 	}
 
-	public override var name: String {
+	public var name: String? {
 		guard let deviceID = deviceID else {
 			return "System Default"
 		}
 
-		return (try? CoreAudioTT.getObjectProperty(
+		return try? CoreAudioTT.getObjectProperty(
 			object: deviceID,
 			address: .init(
 				selector: kAudioDevicePropertyDeviceNameCFString,
 				scope: kAudioObjectPropertyScopeGlobal
 			),
 			type: CFString.self
-		) as String) ?? "Unknown Device"
+		) as String
 	}
 	
 	var isHidden: Bool {
@@ -119,7 +119,7 @@ public class AVAudioDevice: AudioDevice {
 		) > 0) ?? true
 	}
 	
-	var icon: String {
+	public var icon: String {
 		switch deviceID {
 		case nil:
 			return "􀀀"
@@ -128,7 +128,7 @@ public class AVAudioDevice: AudioDevice {
 		}
 	}
 	
-	public override var volume: Double {
+	public var volume: Double {
 		get {
 			(deviceID ?? CoreAudioTT.defaultOutputDevice).flatMap {
 				CoreAudioTT.volume(ofDevice: UInt32($0))

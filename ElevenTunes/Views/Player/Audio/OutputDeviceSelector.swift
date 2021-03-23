@@ -9,52 +9,34 @@ import SwiftUI
 import AVFoundation
 
 @available(OSX 10.15, *)
-class AudioDeviceProxy: ObservableObject {
-	typealias Option = AVAudioDevice
+protocol AudioDeviceProxy: ObservableObject {
+	associatedtype Option: AudioDevice
 	
-	let context: PlayContext
+	var options: [Option] { get }
+	var current: Option? { get set }
+}
 
-	init(context: PlayContext) {
-		self.context = context
+struct ExtendedAudioDeviceView<Device: AudioDevice>: View {
+	@ObservedObject var device: Device
 		
-//		AKManager.addObserver(self, forKeyPath: #keyPath(AKManager.outputDevices), options: [.new], context: nil)
-//		AKManager.addObserver(self, forKeyPath: #keyPath(AKManager.outputDevice), options: [.new], context: nil)
-	}
-	
-//	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-//		print("Change!")
-//		objectWillChange.send()
-//	}
-	
-	func toggle(_ option: Option) {
-		if current == option {
-			context.avOutputDevice = nil
+	var body: some View {
+		HStack {
+			Slider(value: $device.volume, in: 0...1)
+			
+			PlayerAudioView.volumeImage(device.volume)
+				.frame(width: 25, alignment: .leading)
 		}
-		else {
-			context.avOutputDevice = option
-		}
-	}
-	
-	var options: [Option] {
-		[.systemDefault] + AudioDeviceFinder.findDevices()
-	}
-	
-	var current: Option? { context.avOutputDevice }
-	
-	var currentVolume: Double {
-		get { current?.volume ?? 1}
-		set { current?.volume = newValue }
 	}
 }
 
-@available(OSX 10.15, *)
-struct OutputDeviceSelectorView: View {
-	@ObservedObject var proxy: AudioDeviceProxy
-	
-	@State private var pressOption: AudioDeviceProxy.Option?
-	@State private var hoverOption: AudioDeviceProxy.Option?
 
-	func optionView(_ option: AudioDeviceProxy.Option) -> some View {
+struct AudioProviderView<Provider: AudioDeviceProxy>: View {
+	@ObservedObject var provider: Provider
+	
+	@State private var pressOption: Provider.Option?
+	@State private var hoverOption: Provider.Option?
+
+	func optionView(_ option: Provider.Option) -> some View {
 		HStack {
 			Text(option.icon)
 				.frame(width: 25, alignment: .leading)
@@ -62,7 +44,7 @@ struct OutputDeviceSelectorView: View {
 				.frame(width: 300, alignment: .leading)
 			
 			Text("􀆅").foregroundColor(Color.white.opacity(
-				proxy.current == option ? 1 :
+				provider.current == option ? 1 :
 				hoverOption == option ? 0.2 :
 				0
 			))
@@ -70,28 +52,59 @@ struct OutputDeviceSelectorView: View {
 		}
 	}
 	
-	func backgroundOpacity(_ option: AudioDeviceProxy.Option) -> Double? {
+	func backgroundOpacity(_ option: Provider.Option) -> Double? {
 		pressOption == option ? 0.4 :
 		hoverOption == option ? 0.2 :
 			nil
 	}
 
 	var body: some View {
-		VStack(alignment: .leading, spacing: 0) {			
-			ForEach(proxy.options, id: \.deviceID) { option in
-				optionView(option)
-					.padding(.horizontal)
-					.padding(.vertical, 10)
-					.background(backgroundOpacity(option).map(Color.gray.opacity))
-					.onHover { over in
-						self.hoverOption = over ? option : nil
-					}
-					.onTapGesture {
-						self.proxy.toggle(option)
-					}
-					.onLongPressGesture(pressing: { isDown in
-						self.pressOption = isDown ? option : nil
-					}) {}
+		VStack {
+			HStack {
+				Image(systemName: "speaker.wave.2.circle")
+					.foregroundColor(.accentColor)
+
+				if let device = provider.current {
+					Text(device.name ?? "Unknown Device").bold()
+						.padding(.trailing)
+						.frame(maxWidth: .infinity, alignment: .leading)
+					
+					ExtendedAudioDeviceView(device: device)
+						.frame(width: 150)
+				}
+				else {
+					Text("None Selected").bold()
+						.foregroundColor(.secondary)
+						.padding(.trailing)
+						.frame(maxWidth: .infinity, alignment: .leading)
+
+					Slider(value: .constant(1), in: 0...1)
+						.disabled(true)
+						.frame(width: 150)
+
+					PlayerAudioView.volumeImage(0)
+						.frame(width: 25, alignment: .leading)
+				}
+			}
+				.frame(height: 20)
+				.padding()
+
+			VStack(alignment: .leading, spacing: 0) {
+				ForEach(provider.options, id: \.id) { option in
+					optionView(option)
+						.padding(.horizontal)
+						.padding(.vertical, 10)
+						.background(backgroundOpacity(option).map(Color.gray.opacity))
+						.onHover { over in
+							self.hoverOption = over ? option : nil
+						}
+						.onTapGesture {
+							self.provider.current = option
+						}
+						.onLongPressGesture(pressing: { isDown in
+							self.pressOption = isDown ? option : nil
+						}) {}
+				}
 			}
 		}
 	}

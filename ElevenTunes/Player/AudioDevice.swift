@@ -7,9 +7,11 @@
 
 import Foundation
 
-public class AudioDevice: ObservableObject {
-	public var name: String { "Unknown Device" }
-	@Published public var volume: Double = 1
+public protocol AudioDevice: ObservableObject, Identifiable, Equatable {
+	var name: String? { get }
+	var icon: String { get }
+
+	var volume: Double { get set }
 }
 
 class UnsupportedAudioDeviceError: LocalizedError {
