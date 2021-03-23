@@ -6,24 +6,23 @@
 //
 
 import Foundation
+import SpotifyWebAPI
 
-public class SpotifyAudioDevice: AudioDevice {	
+public class SpotifyAudioDevice: AudioDevice {
 	let spotify: Spotify
+	let device: SpotifyWebAPI.Device
 	
-	init(spotify: Spotify) {
+	init(spotify: Spotify, device: SpotifyWebAPI.Device) {
 		self.spotify = spotify
+		self.device = device
 	}
 	
-	public var id: String {
-		"spotify"
-	}
+	public var id: String { device.id! }
 	
-	public var name: String? {
-		"Spotify"  // TODO
-	}
+	public var name: String? { device.name }
 	
 	public var icon: String {
-		"hifispeaker"
+		"􀝎"
 	}
 	
 	public var volume: Double = 1 {

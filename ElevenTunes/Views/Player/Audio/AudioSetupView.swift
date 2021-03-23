@@ -14,13 +14,14 @@ struct AudioSetupView: View {
     var body: some View {
 		ScrollView {
 			VStack {
-				AudioProviderView(provider: AVAudioDeviceProvider(context: context))
+				AudioProviderView(provider: context.avProvider, current: .init(context, value: \.avOutputDevice))
 				
-//				Divider()
-//				
-//				AudioProviderView(provider: SpotifyAudioDeviceProvider(context: context))
+				Divider()
+
+				AudioProviderView(provider: context.spotifyProvider, current: .init(context, value: \.spotifyDevice))
 			}
 		}
+			.padding(.vertical)
 			.frame(maxHeight: 500)
     }
 }

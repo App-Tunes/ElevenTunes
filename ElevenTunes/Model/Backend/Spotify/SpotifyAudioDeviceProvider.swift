@@ -8,18 +8,15 @@
 import Foundation
 
 class SpotifyAudioDeviceProvider: AudioDeviceProxy {
-	let context: PlayContext
+	let spotify: Spotify
 
-	init(context: PlayContext) {
-		self.context = context
+	init(spotify: Spotify) {
+		self.spotify = spotify
 	}
 	
 	var options: [SpotifyAudioDevice] {
-		[]
-	}
-	
-	var current: SpotifyAudioDevice? {
-		get { context.spotifyDevice }
-		set { context.spotifyDevice = newValue }
+		spotify.devices.online.map {
+			SpotifyAudioDevice(spotify: spotify, device: $0)
+		}
 	}
 }

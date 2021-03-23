@@ -13,7 +13,6 @@ protocol AudioDeviceProxy: ObservableObject {
 	associatedtype Option: AudioDevice
 	
 	var options: [Option] { get }
-	var current: Option? { get set }
 }
 
 struct ExtendedAudioDeviceView<Device: AudioDevice>: View {
@@ -32,6 +31,7 @@ struct ExtendedAudioDeviceView<Device: AudioDevice>: View {
 
 struct AudioProviderView<Provider: AudioDeviceProxy>: View {
 	@ObservedObject var provider: Provider
+	@ObservedObject var current: ObservableBinding<Provider.Option?>
 	
 	@State private var pressOption: Provider.Option?
 	@State private var hoverOption: Provider.Option?
@@ -44,7 +44,7 @@ struct AudioProviderView<Provider: AudioDeviceProxy>: View {
 				.frame(width: 300, alignment: .leading)
 			
 			Text("􀆅").foregroundColor(Color.white.opacity(
-				provider.current == option ? 1 :
+				current.value == option ? 1 :
 				hoverOption == option ? 0.2 :
 				0
 			))
@@ -64,7 +64,7 @@ struct AudioProviderView<Provider: AudioDeviceProxy>: View {
 				Image(systemName: "speaker.wave.2.circle")
 					.foregroundColor(.accentColor)
 
-				if let device = provider.current {
+				if let device = current.value {
 					Text(device.name ?? "Unknown Device").bold()
 						.padding(.trailing)
 						.frame(maxWidth: .infinity, alignment: .leading)
@@ -99,7 +99,12 @@ struct AudioProviderView<Provider: AudioDeviceProxy>: View {
 							self.hoverOption = over ? option : nil
 						}
 						.onTapGesture {
-							self.provider.current = option
+							if self.current.value == option {
+								self.current.value = nil
+							}
+							else {
+								self.current.value = option
+							}
 						}
 						.onLongPressGesture(pressing: { isDown in
 							self.pressOption = isDown ? option : nil

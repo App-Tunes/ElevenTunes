@@ -9,22 +9,25 @@ import Foundation
 import Combine
 import AVFoundation
 
-public class PlayContext {
+public class PlayContext: ObservableObject {
+	let avProvider: AVAudioDeviceProvider
 	@Published var avOutputDevice: AVAudioDevice?
 
-	let spotify: Spotify
+	let spotifyProvider: SpotifyAudioDeviceProvider
 	@Published var spotifyDevice: SpotifyAudioDevice?
 		
 	var cancellables: Set<AnyCancellable> = []
 	
 	init(spotify: Spotify) {
-		self.spotify = spotify
+		self.avProvider = .init()
+		self.spotifyProvider = .init(spotify: spotify)
+		
 		avOutputDevice = .systemDefault
 		
-		spotify.authenticator.$isAuthorized.sink { [weak self] in
+		spotify.devices.$online.sink { [weak self] devices in
 			guard let self = self else { return }
 			
-			self.spotifyDevice = $0 ? SpotifyAudioDevice(spotify: self.spotify) : nil
+			self.spotifyDevice = devices.first.map { SpotifyAudioDevice(spotify: spotify, device: $0) }
 		}.store(in: &cancellables)
 	}
 	
