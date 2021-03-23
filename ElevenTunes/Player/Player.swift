@@ -130,9 +130,10 @@ class Player {
 				
 				switch $0 {
 				case .failure(let error):
-					NSAlert.warning(title: "Play Failure", text: error.localizedDescription)
 					// TODO Think about graceful handling
 					self.singlePlayer.switchTo(nil)
+					self.isPlaying = false
+					NSAlert.warning(title: "Play Failure", text: error.localizedDescription)
 				case .success(let audio):
 					if self.playingID == trackID {
 						// Start from where we were, but in new audio
