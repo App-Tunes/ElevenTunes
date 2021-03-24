@@ -225,6 +225,7 @@ struct PlayPositionView: View {
                 }
             }
         }
+		.id(playingTrack?.id) // Required because sometimes bars don't reset :<
 		.onReceive(player.singlePlayer.$playing) {
 			self.playingAudio = $0
 		}
