@@ -37,7 +37,7 @@ class LibraryPlaylist: AnyPlaylist {
 			.title: "Library"
 		], state: .valid))
 		
-        tracksObserver = CDPublisher(request: DBTrack.createFetchRequest(), context: managedObjectContext)
+		tracksObserver = CDPublisher(request: DBTrack.createFetchRequest(), context: managedObjectContext)
             // TODO Apparently, sometimes the same object is emitted twice
             .map { $0.removeDuplicates() }
             .removeDuplicates()

@@ -18,7 +18,7 @@ struct PlayerBarView: View {
                 .frame(height: 0)
 
             HStack {
-                PlayPositionView(player: player.singlePlayer)
+                PlayPositionView(player: player)
             }
             .background(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.6), .clear]).applying(iterations: 10) { pow($0, 0.3) }, startPoint: .bottom, endPoint: .top))
                 .layoutPriority(2)

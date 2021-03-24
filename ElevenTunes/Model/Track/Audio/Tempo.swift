@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct Tempo: Equatable {
-    var value: Double
+    private let value: Double
     
     init(_ value: Double) {
         self.value = value
@@ -25,4 +25,8 @@ struct Tempo: Equatable {
     var color: Color {
         Color(hue: rotation, saturation: 0.2, brightness: 0.75)
     }
+	
+	var bpm: Double { value }
+	
+	var bps: Double { value / 60 }
 }
