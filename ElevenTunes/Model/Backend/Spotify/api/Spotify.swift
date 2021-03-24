@@ -16,7 +16,7 @@ class Spotify {
                 .environment["spotify_client_id"] {
             return clientId
         }
-        fatalError("Could not find 'client_id' in environment variables")
+        fatalError("Could not find 'spotify_client_id' in environment variables")
     }()
     
     private static let clientSecret: String = {
@@ -24,7 +24,7 @@ class Spotify {
                 .environment["spotify_client_secret"] {
             return clientSecret
         }
-        fatalError("Could not find 'client_secret' in environment variables")
+        fatalError("Could not find 'spotify_client_secret' in environment variables")
     }()
     
     /// The key in the keychain that is used to store the authorization
@@ -40,9 +40,15 @@ class Spotify {
     static let scopes: Set<Scope> = [
         .userReadPlaybackState,
         .userModifyPlaybackState,
+		
+		.streaming,
+		.appRemoteControl,
+
 		.playlistReadPrivate,
 		.playlistModifyPrivate,
         .playlistModifyPublic,
+		.playlistReadCollaborative,
+
         .userLibraryRead,
         .userLibraryModify,
         .userReadEmail
@@ -59,6 +65,7 @@ class Spotify {
     var artistCaches: [SpotifyArtistToken: SpotifyArtist] = [:]
     var albumCaches: [SpotifyAlbumToken: SpotifyAlbum] = [:]
 
+	
     init() {
         let api = SpotifyAPI(
             authorizationManager: AuthorizationCodeFlowManager(

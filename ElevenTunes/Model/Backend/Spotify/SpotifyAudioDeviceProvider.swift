@@ -15,7 +15,7 @@ class SpotifyAudioDeviceProvider: AudioDeviceProxy {
 	}
 	
 	var options: [SpotifyAudioDevice] {
-		spotify.devices.online.map {
+		spotify.devices.all.map {
 			SpotifyAudioDevice(spotify: spotify, device: $0)
 		}
 	}
