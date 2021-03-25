@@ -73,7 +73,7 @@ class AVAudioPlayerEmitter: NSObject, AudioTrack {
 			return
 		}
 
-		device.player.scheduleSegment(file, startingFrame: startSample, frameCount: AVAudioFrameCount(file.length), at: nil) { [weak self] in
+		device.player.scheduleSegment(file, startingFrame: startSample, frameCount: AVAudioFrameCount(file.length - startSample), at: nil) { [weak self] in
 			guard let self = self else { return }
 			// Is this a proper completion?
 			guard !self.isSwapping else { return }
