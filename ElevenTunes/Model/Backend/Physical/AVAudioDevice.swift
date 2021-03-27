@@ -6,6 +6,7 @@
 //
 
 import AVFoundation
+import SwiftUI
 
 public class AVAudioDevice: AudioDevice {
 	static let systemDefault = AVAudioDevice(deviceID: nil)
@@ -119,12 +120,12 @@ public class AVAudioDevice: AudioDevice {
 		) > 0) ?? true
 	}
 	
-	public var icon: String {
+	public var icon: Image {
 		switch deviceID {
 		case nil:
-			return "􀀀"
+			return Image(systemName: "circle")
 		default:
-			return "􀝎"
+			return Image(systemName: "hifispeaker")
 		}
 	}
 	

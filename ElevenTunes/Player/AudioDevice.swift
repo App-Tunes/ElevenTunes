@@ -6,10 +6,11 @@
 //
 
 import Foundation
+import SwiftUI
 
 public protocol AudioDevice: ObservableObject, Identifiable, Equatable {
 	var name: String? { get }
-	var icon: String { get }
+	var icon: Image { get }
 
 	var volume: Double { get set }
 }

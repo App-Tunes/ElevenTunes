@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import SwiftUI
 
-class SpotifyAudioDeviceProvider: AudioDeviceProxy {
+class SpotifyAudioDeviceProvider: AudioDeviceProvider {
 	let spotify: Spotify
 
 	init(spotify: Spotify) {
@@ -19,4 +20,8 @@ class SpotifyAudioDeviceProvider: AudioDeviceProxy {
 			SpotifyAudioDevice(spotify: spotify, device: $0)
 		}
 	}
+	
+	var icon: Image { Spotify.logo }
+	
+	var color: Color { Spotify.color }
 }

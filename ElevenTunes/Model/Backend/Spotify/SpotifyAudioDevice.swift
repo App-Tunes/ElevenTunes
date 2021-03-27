@@ -7,6 +7,7 @@
 
 import Foundation
 import SpotifyWebAPI
+import SwiftUI
 
 public class SpotifyAudioDevice: AudioDevice {
 	let spotify: Spotify
@@ -21,8 +22,8 @@ public class SpotifyAudioDevice: AudioDevice {
 	
 	public var name: String? { device.name }
 	
-	public var icon: String {
-		"􀝎"
+	public var icon: Image {
+		Image(systemName: "hifispeaker")
 	}
 	
 	public var volume: Double = 1 {
