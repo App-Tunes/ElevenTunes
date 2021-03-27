@@ -9,18 +9,21 @@ import SwiftUI
 
 extension Gradient {
     func smoothstep(iterations: Int) -> Gradient {
-        applying(iterations: iterations) { t in t * t * (3.0 - 2.0 * t) }
+        applying(iterations: iterations) { (x: CGFloat) -> CGFloat in
+			x * x * (3.0 - 2.0 * x)
+		}
     }
     
     func smootherstep(iterations: Int) -> Gradient {
-        applying(iterations: iterations) {
-            (x: CGFloat) in pow(x, 3) * (6 * pow(x, 2) - 15 * x + 10)
+        applying(iterations: iterations) { (x: CGFloat) -> CGFloat in
+			let result: CGFloat = pow(x, 3) * (6 * pow(x, 2) - 15 * x + 10)
+			return result
         }
     }
     
     func applying(iterations: Int, _ fun: (CGFloat) -> CGFloat) -> Gradient {
         Gradient(colors: (0 ..< iterations).map { i in
-            return sample(at: fun(CGFloat(i) / CGFloat(iterations - 1)))
+            sample(at: fun(CGFloat(i) / CGFloat(iterations - 1)))
         })
     }
     
