@@ -46,10 +46,14 @@ extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
 
 		if
 			item.playlist.contentType != .tracks,
-			item.playlist.primary is JustCachePlaylist,
-			pasteboard.canReadItem(withDataConformingToTypes: [PlaylistsExportManager.playlistsIdentifier])
+			let playlist = item.playlist.primary as? JustCachePlaylist,
+			let playlists = PlaylistsExportManager.read(fromPasteboard: pasteboard, context: library.managedObjectContext)
 		{
 			// Found internal drag
+			guard Set(playlist.ancestors).isDisjoint(with: playlists) else {
+				return []
+			}
+
 			return .move
 		}
 		
@@ -59,7 +63,7 @@ extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
 			PlaylistInterpreter.standard.interpret(pasteboard: pasteboard) != nil
 		{
 			// Found playlists drag
-			return .move
+			return .copy
 		}
 		
 		if
