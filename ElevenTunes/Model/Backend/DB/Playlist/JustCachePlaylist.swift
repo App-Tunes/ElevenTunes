@@ -88,6 +88,10 @@ final class JustCachePlaylist: RemotePlaylist {
 	var contentType: PlaylistContentType {
 		cache.contentType
 	}
+	
+	var ancestors: [DBPlaylist] {
+		Array(sequence(first: cache) { $0.parent })
+	}
 }
 
 extension JustCachePlaylist: RequestMapperDelegate {

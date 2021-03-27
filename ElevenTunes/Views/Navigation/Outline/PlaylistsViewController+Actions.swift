@@ -87,6 +87,11 @@ extension PlaylistsViewController: NSOutlineViewContextSensitiveMenuDelegate {
 			let playlist = item.playlist.primary as? JustCachePlaylist
 		{
 			// Internal cache-only drag; do internal logic
+			guard Set(playlist.ancestors).isDisjoint(with: playlists) else {
+				// playlist's ancestors contain one of the things we want to move; abort!
+				NSAlert.informational(title: "Import Failure", text: "Cannot move a playlist into its children")
+				return false
+			}
 			
 			playlist.cache.children = playlist.cache.children.inserting(contentsOf: playlists, atIndex: index)
 			outlineView.animator().expandItem(item)
