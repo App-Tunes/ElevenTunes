@@ -7,6 +7,8 @@ This media manager focuses on unifying representations of media into a simple, s
  ## Setup
  
  * Place or symlink taglib to Frameworks/TagLib/taglib 
+ * Place or symlink essentia to Frameworks/Essentia/essentia
+ * Install essentia dependencies: brew install eigen ffmpeg libsamplerate libtag
 
  ## Backends
  
