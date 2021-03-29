@@ -260,10 +260,6 @@ inline const TagLib::String TagLibStringFromNS(NSString *string) {
     return [self getID3v2Text:AVMetadataID3MetadataKeyPartOfASet];
 }
 
-- (unsigned int) timeInMilliseconds {
-    return _fileRef.file()->audioProperties()->lengthInMilliseconds();
-}
-
 // ID3v1 is auto-supported with taglib's default setters and getters
 #pragma mark ID3v2
     

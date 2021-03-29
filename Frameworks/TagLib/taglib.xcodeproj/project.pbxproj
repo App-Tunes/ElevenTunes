@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		80BF69E92610F7A000CDCB2F /* TagLibFile.mm in Sources */ = {isa = PBXBuildFile; fileRef = 80BF69E72610F7A000CDCB2F /* TagLibFile.mm */; };
+		80BF69FF2610F96500CDCB2F /* TagLibFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF69E82610F7A000CDCB2F /* TagLibFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80FBD9C9234F530000CBF3E5 /* wavpackproperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 80FBD8C4234F530000CBF3E5 /* wavpackproperties.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80FBD9CA234F530000CBF3E5 /* wavpackfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 80FBD8C5234F530000CBF3E5 /* wavpackfile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80FBD9CB234F530000CBF3E5 /* wavpackfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 80FBD8C6234F530000CBF3E5 /* wavpackfile.cpp */; settings = {COMPILER_FLAGS = "-Wno-documentation-deprecated-sync "; }; };
@@ -225,6 +227,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		80BF69E72610F7A000CDCB2F /* TagLibFile.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TagLibFile.mm; sourceTree = "<group>"; };
+		80BF69E82610F7A000CDCB2F /* TagLibFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagLibFile.h; sourceTree = "<group>"; };
 		80FBD8C4234F530000CBF3E5 /* wavpackproperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wavpackproperties.h; sourceTree = "<group>"; };
 		80FBD8C5234F530000CBF3E5 /* wavpackfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wavpackfile.h; sourceTree = "<group>"; };
 		80FBD8C6234F530000CBF3E5 /* wavpackfile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wavpackfile.cpp; sourceTree = "<group>"; };
@@ -461,7 +465,6 @@
 		80FBD9C6234F530000CBF3E5 /* modtag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = modtag.h; sourceTree = "<group>"; };
 		80FBD9C7234F530000CBF3E5 /* modproperties.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = modproperties.cpp; sourceTree = "<group>"; };
 		80FBD9C8234F530000CBF3E5 /* modfilebase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = modfilebase.h; sourceTree = "<group>"; };
-		80FBDAA9234F539200CBF3E5 /* taglib_config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = taglib_config.h; path = "../../../taglib-src/taglib_config.h"; sourceTree = "<group>"; };
 		BB6A285A2006236900B8BB9A /* libtaglib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libtaglib.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -937,7 +940,8 @@
 		BB6A28512006236900B8BB9A = {
 			isa = PBXGroup;
 			children = (
-				80FBDAA9234F539200CBF3E5 /* taglib_config.h */,
+				80BF69E82610F7A000CDCB2F /* TagLibFile.h */,
+				80BF69E72610F7A000CDCB2F /* TagLibFile.mm */,
 				80FBD8C2234F530000CBF3E5 /* taglib */,
 				BB6A285B2006236900B8BB9A /* Products */,
 				8028C691234E0711008EB762 /* Frameworks */,
@@ -1071,6 +1075,7 @@
 				80FBD9FE234F530100CBF3E5 /* id3v2framefactory.h in Headers */,
 				80FBDAA6234F530100CBF3E5 /* modfilebase.h in Headers */,
 				80FBDA96234F530100CBF3E5 /* tiostream.h in Headers */,
+				80BF69FF2610F96500CDCB2F /* TagLibFile.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1132,6 +1137,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80BF69E92610F7A000CDCB2F /* TagLibFile.mm in Sources */,
 				80FBDA12234F530100CBF3E5 /* generalencapsulatedobjectframe.cpp in Sources */,
 				80FBDA9B234F530100CBF3E5 /* tbytevectorlist.cpp in Sources */,
 				80FBDA62234F530100CBF3E5 /* mp4file.cpp in Sources */,
@@ -1353,6 +1359,7 @@
 		BB6A28662006236900B8BB9A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = GNC759Y8J3;
 				EXECUTABLE_PREFIX = lib;
@@ -1370,6 +1377,7 @@
 		BB6A28672006236900B8BB9A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = GNC759Y8J3;
 				EXECUTABLE_PREFIX = lib;

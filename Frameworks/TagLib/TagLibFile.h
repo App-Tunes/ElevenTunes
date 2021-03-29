@@ -38,8 +38,6 @@
 
 @property(nullable, readonly) NSString *id3Description;
 
-@property(readonly) unsigned int durationInMilliseconds;
-
 -(BOOL)write:(NSError * _Nullable __autoreleasing * _Nullable)error;
 
 @end

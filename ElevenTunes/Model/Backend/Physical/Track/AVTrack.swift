@@ -156,7 +156,16 @@ extension AVTrack: RequestMapperDelegate {
 			}
 			.eraseToAnyPublisher()
 		case .analyze:
-			return Just(.empty(state: .error(AnalysisError.notImplemented)))
+			return Future {
+				let file = EssentiaFile(url: url)
+				let analysis = try file.analyze()
+				let keyAnalysis = analysis.keyAnalysis!
+				
+				return .init(.unsafe([
+					// TODO lol parse these separately
+					.key: MusicalKey.parse("\(keyAnalysis.key)\(keyAnalysis.scale)")
+				]), state: .valid)
+			}
 				.eraseError().eraseToAnyPublisher()
 		}
 	}
