@@ -39,5 +39,6 @@ class AnalysisTests: XCTestCase {
 		//		XCTAssertEqual(keyAnalysis.scale, "major")
 		XCTAssertEqual(keyAnalysis.key, "A")
 		XCTAssertEqual(keyAnalysis.scale, "minor")
+		XCTAssertEqual(keyAnalysis.tuningFrequency, 440)
     }
 }

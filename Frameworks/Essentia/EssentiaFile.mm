@@ -109,11 +109,6 @@ using namespace std;
 
 		// Compute HPCP and key
 
-		// TODO: Tuning frequency is currently provided but not used for HPCP
-		// computation, not clear if it would make an improvement for freesound sounds
-		Real tuningFreq = 440;
-		//Real tuningFreq = pool.value<vector<Real> >(nameSpace + "tuning_frequency").back();
-
 		Algorithm* hpcp_peaks = factory.create("SpectralPeaks",
 											   "maxPeaks", 60,
 											   "magnitudeThreshold", 0.00001,
@@ -129,6 +124,18 @@ using namespace std;
 		hpcp_peaks->input("spectrum").set(spec);
 		hpcp_peaks->output("frequencies").set(frequencies);
 		hpcp_peaks->output("magnitudes").set(magnitudes);
+
+		Real tuningFreq = 0;
+		Real tuningCents = 0;
+		Algorithm* tf = factory.create("TuningFrequency",
+									   "resolution", 1);
+		tf->input("frequencies").set(frequencies);
+		tf->input("magnitudes").set(magnitudes);
+		tf->output("tuningFrequency").set(tuningFreq);
+		tf->output("tuningCents").set(tuningCents);
+
+		loader->compute();
+		tf->compute();
 
 		Algorithm* hpcp_key = factory.create("HPCP",
 											 "size", 36,
@@ -171,8 +178,6 @@ using namespace std;
 
 		/////////// STARTING THE ALGORITHMS //////////////////
 		
-		loader->compute();
-//		le->compute();
 		keyAlgorithm->compute();
 		
 		delete loader;
@@ -184,6 +189,7 @@ using namespace std;
 		EssentiaKeyAnalysis *keyAnalysis = [[EssentiaKeyAnalysis alloc] init];
 		[keyAnalysis setKey: [NSString stringWithSTDstring: key]];
 		[keyAnalysis setScale: [NSString stringWithSTDstring: keyScale]];
+		[keyAnalysis setTuningFrequency: tuningFreq];
 		[keyAnalysis setStrength: keyStrength];
 		[keyAnalysis setPrimaryToSecondaryStrength: firstToSecondStrength];
 
