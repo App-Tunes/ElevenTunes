@@ -32,10 +32,13 @@ class AnalysisTests: XCTestCase {
 		
 		let file = EssentiaFile(url: fileUrl)
 		let analysis = try file.analyze()
+
 		let keyAnalysis = analysis.keyAnalysis!
-		
 		XCTAssertEqual(keyAnalysis.key, "C")
 		XCTAssertEqual(keyAnalysis.scale, "major")
 		XCTAssertEqual(keyAnalysis.tuningFrequency, 440, accuracy: 1)
-    }
+
+		let rhythmAnalysis = analysis.rhythmAnalysis!
+		XCTAssertEqual(rhythmAnalysis.bpm, 121, accuracy: 1)
+}
 }

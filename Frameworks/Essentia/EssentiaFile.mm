@@ -14,6 +14,7 @@
 #pragma clang diagnostic ignored "-Weverything"
 
 #include "TonalAnalyzer.hpp"
+#include "RhythmAnalyzer.hpp"
 
 
 using namespace std;
@@ -55,6 +56,7 @@ using namespace essentia::streaming;
 
 		vector<Real> audio;
 		TonalAnalyzer::createNetworkLowLevel(loader->output("audio"), pool);
+		RhythmAnalyzer::createNetworkLowLevel(loader->output("audio"), pool);
 		scheduler::Network network(loader);
 		network.run();
 
@@ -63,17 +65,22 @@ using namespace essentia::streaming;
 										   "downmix", "mix");
 
 		TonalAnalyzer::createNetwork(loader_2->output("audio"), pool);
+		RhythmAnalyzer::createNetwork(loader_2->output("audio"), pool);
 		scheduler::Network network_2(loader_2);
 		network_2.run();
 
+		// ================================================
+		// Extract from CPP
+		// ================================================
+
+		EssentiaAnalysis *analysis = [[EssentiaAnalysis alloc] init];
+
+		// ---------- Tonal
+		
 		Real tuningFreq = pool.value<vector<Real> >(TonalAnalyzer::nameSpace + "tuningFrequency").back();
 		string key = pool.value<string>(TonalAnalyzer::nameSpace + "key.key");
 		string keyScale = pool.value<string>(TonalAnalyzer::nameSpace + "key.scale");
 		Real keyStrength = pool.value<Real>(TonalAnalyzer::nameSpace + "key.strength");
-		
-		/////////// STARTING THE ALGORITHMS //////////////////
-
-		EssentiaAnalysis *analysis = [[EssentiaAnalysis alloc] init];
 		
 		EssentiaKeyAnalysis *keyAnalysis = [[EssentiaKeyAnalysis alloc] init];
 		[keyAnalysis setKey: [NSString stringWithSTDstring: key]];
@@ -83,6 +90,15 @@ using namespace essentia::streaming;
 
 		[analysis setKeyAnalysis: keyAnalysis];
 		
+		// ---------- Rhythm
+
+		Real bpm = pool.value<Real>(RhythmAnalyzer::nameSpace + "bpm");
+		
+		EssentiaRhythmAnalysis *rhythmAnalysis = [[EssentiaRhythmAnalysis alloc] init];
+		[rhythmAnalysis setBpm: bpm];
+
+		[analysis setRhythmAnalysis: rhythmAnalysis];
+
 		return analysis;
 	}
 	catch (const std::exception& e) {

@@ -12,6 +12,10 @@
 
 @end
 
+@implementation EssentiaRhythmAnalysis
+
+@end
+
 @implementation EssentiaAnalysis
 
 @end

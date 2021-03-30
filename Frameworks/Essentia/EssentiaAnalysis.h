@@ -19,9 +19,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface EssentiaRhythmAnalysis : NSObject
+
+@property double bpm;
+
+@end
+
 @interface EssentiaAnalysis : NSObject
 
 @property (nullable, retain) EssentiaKeyAnalysis* keyAnalysis;
+@property (nullable, retain) EssentiaRhythmAnalysis* rhythmAnalysis;
 
 @end
 
