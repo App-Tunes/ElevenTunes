@@ -63,8 +63,8 @@ public final class AVTrack: RemoteTrack {
 	
 	let mapper = Requests(relation: [
 		.url: [],
-		.taglib: [.title, .key, .bpm, .previewImage, .artists, .album],
-		.analyze: [.bpm, .key]
+		.taglib: [.title, .key, .tempo, .previewImage, .artists, .album],
+		.analyze: [.tempo, .key]
 	])
 
 	init(_ url: URL, isVideo: Bool) {
@@ -138,7 +138,7 @@ extension AVTrack: RequestMapperDelegate {
 				.init(.unsafe([
 					.title: file.title,
 					.previewImage: file.image.flatMap { NSImage(data: $0) },
-					.bpm: file.bpm.flatMap { Double($0) }.map { Tempo($0) },
+					.tempo: file.bpm.flatMap { Double($0) }.map { Tempo(bpm: $0) },
 					.key: file.initialKey.flatMap { MusicalKey.parse($0) },
 					.album: file.album.map { TransientAlbum(attributes: .unsafe([
 						.title: $0
@@ -160,10 +160,12 @@ extension AVTrack: RequestMapperDelegate {
 				let file = EssentiaFile(url: url)
 				let analysis = try file.analyze()
 				let keyAnalysis = analysis.keyAnalysis!
-				
+				let rhythmAnalysis = analysis.rhythmAnalysis!
+
 				return .init(.unsafe([
 					// TODO lol parse these separately
-					.key: MusicalKey.parse("\(keyAnalysis.key)\(keyAnalysis.scale)")
+					.key: MusicalKey.parse("\(keyAnalysis.key)\(keyAnalysis.scale)"),
+					.tempo: Tempo(bpm: rhythmAnalysis.bpm)
 				]), state: .valid)
 			}
 				.eraseError().eraseToAnyPublisher()

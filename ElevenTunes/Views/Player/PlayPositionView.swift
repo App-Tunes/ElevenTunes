@@ -232,8 +232,8 @@ struct PlayPositionView: View {
 		.onReceive(player.$current) {
 			self.playingTrack = $0
 		}
-		.whileActive(playingTrack?.demand([.bpm]))
-		.onReceive(playingTrack?.attribute(TrackAttribute.bpm).map(\.value), default: nil) {
+		.whileActive(playingTrack?.demand([.tempo]))
+		.onReceive(playingTrack?.attribute(TrackAttribute.tempo).map(\.value), default: nil) {
 			self.tempo = $0
 		}
         // TODO hugging / compression resistance:

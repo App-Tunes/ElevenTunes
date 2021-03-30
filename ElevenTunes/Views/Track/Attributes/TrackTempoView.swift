@@ -14,8 +14,8 @@ struct TrackTempoView: View {
     var body: some View {
 		Text(tempo?.title ?? "")
 			.foregroundColor(tempo?.color ?? .clear)
-			.whileActive(track.backend.demand([.bpm]))
-			.onReceive(track.backend.attribute(TrackAttribute.bpm)) {
+			.whileActive(track.backend.demand([.tempo]))
+			.onReceive(track.backend.attribute(TrackAttribute.tempo)) {
 				setIfDifferent(self, \.tempo, $0.value)
 			}
     }

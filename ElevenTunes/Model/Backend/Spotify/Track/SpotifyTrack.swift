@@ -94,7 +94,7 @@ public final class SpotifyTrack: RemoteTrack {
 	
 	let mapper = Requests(relation: [
 		.track: [.title, .album, .artists],
-		.analysis: [.bpm, .key]
+		.analysis: [.tempo, .key]
 	])
 
     init(_ token: SpotifyTrackToken, spotify: Spotify) {
@@ -150,7 +150,7 @@ public final class SpotifyTrack: RemoteTrack {
     
     func extractAttributes(from features: AudioFeatures) -> TypedDict<TrackAttribute> {
 		.unsafe([
-			.bpm: Tempo(features.tempo),
+			.tempo: Tempo(bpm: features.tempo),
 			.key: MusicalNote(pitchClass: features.key).map { MusicalKey(note: $0, mode: features.mode == 1 ? .major : .minor) }
 		])
     }

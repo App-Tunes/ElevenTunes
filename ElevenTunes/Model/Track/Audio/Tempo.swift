@@ -8,25 +8,23 @@
 import SwiftUI
 
 struct Tempo: Equatable {
-    private let value: Double
+    let bpm: Double
     
-    init(_ value: Double) {
-        self.value = value
+    init(bpm: Double) {
+        self.bpm = bpm
     }
     
     var title: String {
-        value.format(precision: 1)
+		bpm.format(precision: 1)
     }
     
     var rotation: Double {
-        log2(value).remainder(dividingBy: 1)
+        log2(bpm).remainder(dividingBy: 1)
     }
     
     var color: Color {
         Color(hue: rotation, saturation: 0.2, brightness: 0.75)
     }
-	
-	var bpm: Double { value }
-	
-	var bps: Double { value / 60 }
+		
+	var bps: Double { bpm / 60 }
 }
