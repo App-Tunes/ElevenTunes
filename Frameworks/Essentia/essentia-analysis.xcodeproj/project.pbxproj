@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		80BF61272610E90800CDCB2F /* essentia.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF5FD52610E72800CDCB2F /* essentia.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		80A6BF0E26127D7F001A151D /* TonalAnalyzer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 80A6BF0C26127D7F001A151D /* TonalAnalyzer.cpp */; };
+		80A6BF0F26127D7F001A151D /* TonalAnalyzer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 80A6BF0D26127D7F001A151D /* TonalAnalyzer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		80BF61422610EDE600CDCB2F /* iotypewrappers_impl.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF5FD62610E72800CDCB2F /* iotypewrappers_impl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80BF61442610EDE600CDCB2F /* range.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF5FD82610E72800CDCB2F /* range.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80BF61452610EDE600CDCB2F /* pool.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF5FD92610E72800CDCB2F /* pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -22,9 +23,7 @@
 		80BF61512610EDE700CDCB2F /* network.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF5FE62610E72800CDCB2F /* network.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80BF61522610EDE700CDCB2F /* networkparser.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF5FE72610E72800CDCB2F /* networkparser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80BF61542610EDE700CDCB2F /* graphutils.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF5FE92610E72800CDCB2F /* graphutils.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		80BF61552610EDE700CDCB2F /* essentiamath.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF5FEA2610E72800CDCB2F /* essentiamath.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80BF61562610EDE700CDCB2F /* stringutil.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF5FEB2610E72800CDCB2F /* stringutil.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		80BF61572610EDE700CDCB2F /* essentiautil.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF5FEC2610E72800CDCB2F /* essentiautil.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80BF61592610EDE700CDCB2F /* yamlast.cpp in Headers */ = {isa = PBXBuildFile; fileRef = 80BF5FEF2610E72800CDCB2F /* yamlast.cpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		80BF615A2610EDE700CDCB2F /* asciidagparser.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF5FF02610E72800CDCB2F /* asciidagparser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80BF615B2610EDE700CDCB2F /* asciidag.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF5FF12610E72800CDCB2F /* asciidag.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -47,7 +46,6 @@
 		80BF616F2610EDE700CDCB2F /* tnt_array3d_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF60072610E72800CDCB2F /* tnt_array3d_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80BF61702610EDE700CDCB2F /* tnt_array2d_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF60082610E72800CDCB2F /* tnt_array2d_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80BF61712610EDE700CDCB2F /* jama_svd.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF60092610E72800CDCB2F /* jama_svd.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		80BF61722610EDE700CDCB2F /* tnt2essentiautils.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF600A2610E72800CDCB2F /* tnt2essentiautils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80BF61732610EDE700CDCB2F /* tnt_fortran_array1d_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF600B2610E72800CDCB2F /* tnt_fortran_array1d_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80BF61742610EDE700CDCB2F /* tnt_i_refvec.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF600C2610E72800CDCB2F /* tnt_i_refvec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80BF61752610EDE700CDCB2F /* tnt_cmat.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF600D2610E72800CDCB2F /* tnt_cmat.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -147,6 +145,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		80A6BF0C26127D7F001A151D /* TonalAnalyzer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TonalAnalyzer.cpp; sourceTree = "<group>"; };
+		80A6BF0D26127D7F001A151D /* TonalAnalyzer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TonalAnalyzer.hpp; sourceTree = "<group>"; };
 		80BF56D62610E72200CDCB2F /* build_config.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build_config.sh; sourceTree = "<group>"; };
 		80BF56D72610E72200CDCB2F /* make_debian_package.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = make_debian_package.sh; sourceTree = "<group>"; };
 		80BF56D82610E72200CDCB2F /* build_3rdparty_static_win32.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build_3rdparty_static_win32.sh; sourceTree = "<group>"; };
@@ -6450,10 +6450,12 @@
 			isa = PBXGroup;
 			children = (
 				80E3003426113011006ED744 /* NSString+STD.h */,
-				80BF6A352611024C00CDCB2F /* EssentiaFile.h */,
-				80BF69F52610F7D400CDCB2F /* EssentiaFile.mm */,
 				80BF6AB82611265200CDCB2F /* EssentiaAnalysis.h */,
 				80BF6AB92611265200CDCB2F /* EssentiaAnalysis.m */,
+				80BF6A352611024C00CDCB2F /* EssentiaFile.h */,
+				80BF69F52610F7D400CDCB2F /* EssentiaFile.mm */,
+				80A6BF0D26127D7F001A151D /* TonalAnalyzer.hpp */,
+				80A6BF0C26127D7F001A151D /* TonalAnalyzer.cpp */,
 				80BF56D42610E72200CDCB2F /* essentia */,
 				80BF6A4B261117F200CDCB2F /* Essentia-Tests */,
 				BB6A285B2006236900B8BB9A /* Products */,
@@ -6477,9 +6479,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				80BF61272610E90800CDCB2F /* essentia.h in Headers */,
 				80BF61422610EDE600CDCB2F /* iotypewrappers_impl.h in Headers */,
 				80BF61442610EDE600CDCB2F /* range.h in Headers */,
+				80A6BF0F26127D7F001A151D /* TonalAnalyzer.hpp in Headers */,
 				80BF61452610EDE600CDCB2F /* pool.h in Headers */,
 				80BF61462610EDE600CDCB2F /* configurable.h in Headers */,
 				80BF61472610EDE600CDCB2F /* streamconnector.h in Headers */,
@@ -6492,9 +6494,7 @@
 				80BF61512610EDE700CDCB2F /* network.h in Headers */,
 				80BF61522610EDE700CDCB2F /* networkparser.h in Headers */,
 				80BF61542610EDE700CDCB2F /* graphutils.h in Headers */,
-				80BF61552610EDE700CDCB2F /* essentiamath.h in Headers */,
 				80BF61562610EDE700CDCB2F /* stringutil.h in Headers */,
-				80BF61572610EDE700CDCB2F /* essentiautil.h in Headers */,
 				80BF61592610EDE700CDCB2F /* yamlast.cpp in Headers */,
 				80BF615A2610EDE700CDCB2F /* asciidagparser.h in Headers */,
 				80BF615B2610EDE700CDCB2F /* asciidag.h in Headers */,
@@ -6518,7 +6518,6 @@
 				80BF616F2610EDE700CDCB2F /* tnt_array3d_utils.h in Headers */,
 				80BF61702610EDE700CDCB2F /* tnt_array2d_utils.h in Headers */,
 				80BF61712610EDE700CDCB2F /* jama_svd.h in Headers */,
-				80BF61722610EDE700CDCB2F /* tnt2essentiautils.h in Headers */,
 				80BF61732610EDE700CDCB2F /* tnt_fortran_array1d_utils.h in Headers */,
 				80BF61742610EDE700CDCB2F /* tnt_i_refvec.h in Headers */,
 				80BF61752610EDE700CDCB2F /* tnt_cmat.h in Headers */,
@@ -6718,6 +6717,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				80BF69F72610F7D400CDCB2F /* EssentiaFile.mm in Sources */,
+				80A6BF0E26127D7F001A151D /* TonalAnalyzer.cpp in Sources */,
 				80E3003B261150EC006ED744 /* EssentiaAnalysis.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6909,12 +6909,12 @@
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
 				HEADER_SEARCH_PATHS = (
-					"${SRCROOT}/essentia/**",
-					"${SRCROOT}/../Frameworks/Eigen/eigen/**",
+					"$(PROJECT_DIR)/essentia/src/**",
+					/usr/local/include,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/./essentia/build/src",
+					"$(PROJECT_DIR)/essentia/build/src",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = "";
@@ -6930,12 +6930,12 @@
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
 				HEADER_SEARCH_PATHS = (
-					"${SRCROOT}/essentia/**",
-					"${SRCROOT}/../Frameworks/Eigen/eigen/**",
+					"$(PROJECT_DIR)/essentia/src/**",
+					/usr/local/include,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/./essentia/build/src",
+					"$(PROJECT_DIR)/essentia/build/src",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = "";

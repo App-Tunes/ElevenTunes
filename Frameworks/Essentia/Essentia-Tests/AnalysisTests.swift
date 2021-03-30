@@ -34,11 +34,8 @@ class AnalysisTests: XCTestCase {
 		let analysis = try file.analyze()
 		let keyAnalysis = analysis.keyAnalysis!
 		
-		// Well, it's supposed to be C major but what can ya do lol
-		//		XCTAssertEqual(keyAnalysis.key, "C")
-		//		XCTAssertEqual(keyAnalysis.scale, "major")
-		XCTAssertEqual(keyAnalysis.key, "A")
-		XCTAssertEqual(keyAnalysis.scale, "minor")
-		XCTAssertEqual(keyAnalysis.tuningFrequency, 440)
+		XCTAssertEqual(keyAnalysis.key, "C")
+		XCTAssertEqual(keyAnalysis.scale, "major")
+		XCTAssertEqual(keyAnalysis.tuningFrequency, 440, accuracy: 1)
     }
 }

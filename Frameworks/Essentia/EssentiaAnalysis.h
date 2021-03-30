@@ -16,7 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, retain) NSString *scale;
 @property double tuningFrequency;
 @property double strength;
-@property double primaryToSecondaryStrength;
 
 @end
 
