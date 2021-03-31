@@ -27,8 +27,7 @@ class AnalysisTests: XCTestCase {
 	
     func testScale() throws {
 		let testBundle = Bundle(for: Self.self)
-		guard let fileUrl = testBundle.url(forResource: "445632__djfroyd__c-major-scale", withExtension: "wav")
-		  else { fatalError() }
+		let fileUrl = testBundle.url(forResource: "445632__djfroyd__c-major-scale", withExtension: "wav")!
 		
 		let file = EssentiaFile(url: fileUrl)
 		let analysis = try file.analyze()
