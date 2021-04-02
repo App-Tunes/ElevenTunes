@@ -114,7 +114,7 @@ public class AVAudioDevice: AudioDevice {
 			object: id,
 			address: .init(
 				selector: kAudioDevicePropertyIsHidden,
-				scope: kAudioObjectPropertyScopeGlobal
+				scope: kAudioObjectPropertyScopeOutput
 			),
 			type: UInt32.self
 		) > 0) ?? true
@@ -136,24 +136,19 @@ public class AVAudioDevice: AudioDevice {
 	}
 		
 	public var icon: Image {
-		if let transportType = transportType {
-			switch transportType {
-			case kAudioDeviceTransportTypeBluetooth, kAudioDeviceTransportTypeBluetoothLE:
-				return Image(systemName: "wave.3.right.circle")
-			case kAudioDeviceTransportTypeBuiltIn:
-				return Image(systemName: "laptopcomputer")
-			case kAudioDeviceTransportTypeAggregate, kAudioDeviceTransportTypeAutoAggregate, kAudioDeviceTransportTypeVirtual:
-				return Image(systemName: "square.stack.3d.down.forward")
-			case kAudioDeviceTransportTypeAirPlay:
-				return Image(systemName: "airplayaudio")
-			default:
-				break
-			}
+		if deviceID == nil {
+			return Image(systemName: "circle")
 		}
 		
-		switch deviceID {
-		case nil:
-			return Image(systemName: "circle")
+		switch transportType {
+		case kAudioDeviceTransportTypeBluetooth, kAudioDeviceTransportTypeBluetoothLE:
+			return Image(systemName: "wave.3.right.circle")
+		case kAudioDeviceTransportTypeBuiltIn:
+			return Image(systemName: "laptopcomputer")
+		case kAudioDeviceTransportTypeAggregate, kAudioDeviceTransportTypeAutoAggregate, kAudioDeviceTransportTypeVirtual:
+			return Image(systemName: "square.stack.3d.down.forward")
+		case kAudioDeviceTransportTypeAirPlay:
+			return Image(systemName: "airplayaudio")
 		default:
 			return Image(systemName: "hifispeaker")
 		}
