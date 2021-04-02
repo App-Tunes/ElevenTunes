@@ -25,7 +25,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" tableStyle="fullWidth" alternatingRowBackgroundColors="YES" columnSelection="YES" autosaveColumns="NO" rowHeight="33" headerView="1en-sV-iwO" viewBased="YES" floatsGroupRows="NO" id="hOV-Xg-aod" customClass="NSTableViewContextSensitiveMenu" customModule="ElevenTunes" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="478" height="240"/>
+                                <rect key="frame" x="0.0" y="0.0" width="478" height="320"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="8" height="4"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -65,6 +65,14 @@
                                             </customView>
                                             <customView identifier="ArtistsCell" id="yCh-XD-93q" customClass="AnyNSHostingView" customModule="ElevenTunes" customModuleProvider="target">
                                                 <rect key="frame" x="4" y="202" width="34" height="36"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            </customView>
+                                            <customView identifier="GenreCell" id="bZE-gN-H6h" customClass="AnyNSHostingView" customModule="ElevenTunes" customModuleProvider="target">
+                                                <rect key="frame" x="4" y="242" width="34" height="36"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            </customView>
+                                            <customView identifier="YearCell" id="Ncs-O3-0Za" customClass="AnyNSHostingView" customModule="ElevenTunes" customModuleProvider="target">
+                                                <rect key="frame" x="4" y="282" width="34" height="36"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             </customView>
                                         </prototypeCellViews>

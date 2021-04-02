@@ -16,6 +16,8 @@ extension TracksViewController: NSTableViewDelegate {
 		static let Key = NSUserInterfaceItemIdentifier(rawValue: "Key")
 		static let Artists = NSUserInterfaceItemIdentifier(rawValue: "Artists")
 		static let Album = NSUserInterfaceItemIdentifier(rawValue: "Album")
+		static let Genre = NSUserInterfaceItemIdentifier(rawValue: "Genre")
+		static let Year = NSUserInterfaceItemIdentifier(rawValue: "Year")
 	}
 
 	enum CellIdentifiers {
@@ -25,6 +27,8 @@ extension TracksViewController: NSTableViewDelegate {
 		static let KeyCell = NSUserInterfaceItemIdentifier(rawValue: "KeyCell")
 		static let AlbumCell = NSUserInterfaceItemIdentifier(rawValue: "AlbumCell")
 		static let ArtistsCell = NSUserInterfaceItemIdentifier(rawValue: "ArtistsCell")
+		static let GenreCell = NSUserInterfaceItemIdentifier(rawValue: "GenreCell")
+		static let YearCell = NSUserInterfaceItemIdentifier(rawValue: "YearCell")
 	}
 
 	func initColumns() {
@@ -59,6 +63,18 @@ extension TracksViewController: NSTableViewDelegate {
 			$0.isHidden = true
 		}
 		
+		addColumn(ColumnIdentifiers.Genre, title: "Genre") {
+			$0.widthRange = 60...CGFloat.infinity
+			$0.headerCell.alignment = .center
+			$0.isHidden = true
+		}
+		
+		addColumn(ColumnIdentifiers.Year, title: "Year") {
+			$0.widthRange = 42...42
+			$0.headerCell.alignment = .center
+			$0.isHidden = true
+		}
+
 		addColumn(ColumnIdentifiers.Tempo, title: "♩=") {
 			$0.widthRange = 52...52
 			$0.headerCell.alignment = .center
@@ -68,7 +84,7 @@ extension TracksViewController: NSTableViewDelegate {
 			$0.widthRange = 42...42
 			$0.headerCell.alignment = .center
 		}
-		
+				
 		tableViewHiddenExtension = .init(tableView: tableView, titles: [
 			ColumnIdentifiers.Image: "Artwork (⸬)",
 			ColumnIdentifiers.Tempo: "Beats per Minute (♩=)",
@@ -123,6 +139,16 @@ extension TracksViewController: NSTableViewDelegate {
 		
 		if let view = createOn(ColumnIdentifiers.Album, cell: CellIdentifiers.AlbumCell) {
 			view.rootView = AnyView(TrackAlbumView(track: track, withIcon: false))
+			return view
+		}
+		
+		if let view = createOn(ColumnIdentifiers.Genre, cell: CellIdentifiers.GenreCell) {
+			view.rootView = AnyView(TrackGenreView(track: track))
+			return view
+		}
+		
+		if let view = createOn(ColumnIdentifiers.Year, cell: CellIdentifiers.YearCell) {
+			view.rootView = AnyView(TrackYearView(track: track))
 			return view
 		}
 		

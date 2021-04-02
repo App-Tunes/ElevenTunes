@@ -63,7 +63,7 @@ public final class AVTrack: RemoteTrack {
 	
 	let mapper = Requests(relation: [
 		.url: [],
-		.taglib: [.title, .key, .tempo, .previewImage, .artists, .album],
+		.taglib: [.title, .key, .tempo, .previewImage, .artists, .album, .genre],
 		.waveform: [.waveform],
 		.analyze: []
 	])
@@ -154,7 +154,9 @@ extension AVTrack: RequestMapperDelegate {
 								.title: $0
 							]))
 						}
-					}
+					},
+					.genre: file.genre,
+					.year: Int(file.year).nonZeroOrNil
 				]), state: .valid)
 			}
 			.eraseToAnyPublisher()

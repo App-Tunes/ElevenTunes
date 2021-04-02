@@ -142,6 +142,8 @@
 		8086969426172E4A0056ECC3 /* Waveform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8086969326172E4A0056ECC3 /* Waveform.swift */; };
 		808696E22617695B0056ECC3 /* libsamplerate.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 808696C22617692E0056ECC3 /* libsamplerate.dylib */; };
 		808696E62617AAC40056ECC3 /* CountdownText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808696E52617AAC40056ECC3 /* CountdownText.swift */; };
+		808696EA2617C1960056ECC3 /* TrackGenreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808696E92617C1960056ECC3 /* TrackGenreView.swift */; };
+		808696EE2617C1CE0056ECC3 /* TrackYearView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808696ED2617C1CE0056ECC3 /* TrackYearView.swift */; };
 		808A761F2593F2EA00B0A9CE /* ContentInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808A761E2593F2EA00B0A9CE /* ContentInterpreter.swift */; };
 		808A7631259405F200B0A9CE /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808A7630259405F200B0A9CE /* URL.swift */; };
 		808A763625940EE400B0A9CE /* ContentInterpreter+SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808A763525940EE400B0A9CE /* ContentInterpreter+SwiftUI.swift */; };
@@ -448,6 +450,8 @@
 		808696D82617692E0056ECC3 /* faq.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = faq.html; sourceTree = "<group>"; };
 		808696D92617692E0056ECC3 /* api_full.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = api_full.html; sourceTree = "<group>"; };
 		808696E52617AAC40056ECC3 /* CountdownText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownText.swift; sourceTree = "<group>"; };
+		808696E92617C1960056ECC3 /* TrackGenreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackGenreView.swift; sourceTree = "<group>"; };
+		808696ED2617C1CE0056ECC3 /* TrackYearView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackYearView.swift; sourceTree = "<group>"; };
 		808A761E2593F2EA00B0A9CE /* ContentInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentInterpreter.swift; sourceTree = "<group>"; };
 		808A7630259405F200B0A9CE /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
 		808A763525940EE400B0A9CE /* ContentInterpreter+SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentInterpreter+SwiftUI.swift"; sourceTree = "<group>"; };
@@ -820,6 +824,8 @@
 				8097F6D925AE76250072E847 /* TrackImageView.swift */,
 				806185C825F534650062AAB3 /* TrackTempoView.swift */,
 				806185CD25F5346D0062AAB3 /* TrackKeyView.swift */,
+				808696E92617C1960056ECC3 /* TrackGenreView.swift */,
+				808696ED2617C1CE0056ECC3 /* TrackYearView.swift */,
 			);
 			path = Attributes;
 			sourceTree = "<group>";
@@ -1756,6 +1762,7 @@
 				8054C01A259F860000A7035A /* SpotifyURIPlaylist.swift in Sources */,
 				8054C008259F6DC900A7035A /* OriginView.swift in Sources */,
 				806B28AC258ED4CE0091EA4D /* SpotifyAudioEmitter.swift in Sources */,
+				808696EA2617C1960056ECC3 /* TrackGenreView.swift in Sources */,
 				8083E85225AA11A200D4CE60 /* RemotePlaylist.swift in Sources */,
 				806185CE25F5346D0062AAB3 /* TrackKeyView.swift in Sources */,
 				80D6DA66259B74AA00879BCF /* NSLock.swift in Sources */,
@@ -1769,6 +1776,7 @@
 				8054C015259F720000A7035A /* PlayerAudioView.swift in Sources */,
 				802E2DA9259643AE00CB91EC /* SpotifyTrack.swift in Sources */,
 				80A8C82125BF556A00F97EF0 /* BranchingPlaylist.swift in Sources */,
+				808696EE2617C1CE0056ECC3 /* TrackYearView.swift in Sources */,
 				806185A725F4E73D0062AAB3 /* ArrayDifference.swift in Sources */,
 				802DBA32259FDA9900EA6DB7 /* Wrappers.swift in Sources */,
 				8054C000259F6DA000A7035A /* TrackCellView.swift in Sources */,

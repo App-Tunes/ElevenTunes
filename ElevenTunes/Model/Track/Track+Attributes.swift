@@ -30,6 +30,8 @@ extension TrackAttribute {
 	
     static let key = Typed<MusicalKey>(rawValue: "key")
 	static let tempo = Typed<Tempo>(rawValue: "tempo")
+	static let genre = Typed<String>(rawValue: "genre")
+	static let year = Typed<Int>(rawValue: "year")
 
 	static let waveform = Typed<Waveform>(rawValue: "waveform")
 

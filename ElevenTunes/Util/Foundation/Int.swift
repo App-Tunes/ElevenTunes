@@ -11,4 +11,8 @@ extension Int {
 	var positiveOrNil: Int? {
 		return self >= 0 ? self : nil
 	}
+
+	var nonZeroOrNil: Int? {
+		return self != 0 ? self : nil
+	}
 }
