@@ -212,13 +212,15 @@ struct PlayPositionView: View {
 	
     var body: some View {
         GeometryReader { geo in
-            ZStack {
+			ZStack(alignment: .bottom) {
                 if let playingAudio = playingAudio {
 					if let waveform = waveform {
 						ResamplingWaveformView(
 							gradient: Gradients.pitch,
 							waveform: waveform
 						)
+							.frame(height: geo.size.height * 0.5)
+							.allowsHitTesting(false)
 					}
 
 					PlayPositionBarsView(
@@ -229,6 +231,7 @@ struct PlayPositionView: View {
 					
 					if geo.size.height >= 20 {
 						PlayPositionLabelsView(playingAudio: playingAudio)
+							.allowsHitTesting(false)
 					}
                 }
             }

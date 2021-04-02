@@ -34,24 +34,22 @@ struct ResamplingWaveformView: View {
 
 	var body: some View {
 		GeometryReader { geo in
-			let samples = Int(geo.size.width / 5)
+			let samples = Int(geo.size.width / 4)
 			
-			if samples < waveform.count {
-				WaveformView(
-					data: ResampleToSize.best(data: waveform.loudness, toSize: samples).map {
-						CGFloat($0)
-					},
-					color: ResampleToSize.best(data: waveform.pitch, toSize: samples).map {
-						$0.isFinite ? gradient[max(0, min(gradient.count - 1, Int($0 * 255)))] : .white
-					}
-				)
-			}
-			else {
-				WaveformView(
-					data: waveform.loudness.map { CGFloat($0) },
-					color: waveform.pitch.map { gradient[Int($0 * 255)] }
-				)
-			}
+			let loudness = samples != waveform.count
+				? ResampleToSize.best(data: waveform.loudness, toSize: samples)
+				: waveform.loudness
+			
+			let pitch = samples != waveform.count
+				? ResampleToSize.best(data: waveform.pitch, toSize: samples)
+				: waveform.pitch
+			
+			WaveformView(
+				data: loudness.map { CGFloat($0) },
+				color: pitch.map {
+					$0.isFinite ? gradient[Int(round(max(0, min(1, $0)) * 255))] : .white
+				}
+			)
 		}
 	}
 }
