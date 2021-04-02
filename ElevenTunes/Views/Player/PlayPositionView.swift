@@ -163,37 +163,36 @@ struct PlayPositionBarsView: View {
 }
 
 struct PlayPositionLabelsView: View {
-	let playingAudio: AudioTrack
-	
-	var timeLeft: String {
-		guard let time = playingAudio.duration else {
-			return ""
-		}
-		
-		let totalSeconds = Int(time)
-		let hours: Int = Int(totalSeconds / 3600)
-		
-		let minutes: Int = Int(totalSeconds % 3600 / 60)
-		let seconds: Int = Int((totalSeconds % 3600) % 60)
-
-		if hours > 0 {
-			return String(format: "%i:%02i:%02i", hours, minutes, seconds)
-		} else {
-			return String(format: "%i:%02i", minutes, seconds)
-		}
-	}
+	let player: SinglePlayer
+	@State var playerState: PlayerState = .init(isPlaying: false, currentTime: nil)
 
 	var body: some View {
+		let now = Date()
+		
 		HStack {
-			Text("0:00")
-				.foregroundColor(.secondary)
-				.padding(.leading)
-			
-			Spacer()
+			if let time = playerState.currentTime {
+				let start = now.advanced(by: -time)
+				
+				CountdownText(referenceDate: start, advancesAutomatically: playerState.isPlaying, currentDate: now)
+					.foregroundColor(.secondary)
+					.frame(width: 60, height: 20)
+					.background(Rectangle().fill(Color.black).cornerRadius(5).opacity(0.4))
+					.padding(.leading)
+				
+				Spacer()
 
-			Text(timeLeft)
-				.foregroundColor(.secondary)
-				.padding(.trailing)
+				if let duration = player.playing?.duration {
+					CountdownText(referenceDate: start.advanced(by: duration), advancesAutomatically: playerState.isPlaying, currentDate: now)
+						.foregroundColor(.secondary)
+						.frame(width: 60, height: 20)
+						.background(Rectangle().fill(Color.black).cornerRadius(5).opacity(0.4))
+						.padding(.trailing)
+				}
+			}
+		}
+		.id(playerState)
+		.onReceive(player.$state) { state in
+			self.playerState = state
 		}
 	}
 }
@@ -229,12 +228,12 @@ struct PlayPositionView: View {
 						playing: playingAudio,
 						moveStep: moveStep
 					)
-					
-					if geo.size.height >= 20 {
-						PlayPositionLabelsView(playingAudio: playingAudio)
-							.allowsHitTesting(false)
-					}
                 }
+				
+				if geo.size.height >= 26 {
+					PlayPositionLabelsView(player: player.singlePlayer)
+						.allowsHitTesting(false)
+				}
             }
         }
 		.id(playingTrack?.id) // Required because sometimes bars don't reset :<

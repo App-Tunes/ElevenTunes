@@ -141,6 +141,7 @@
 		80869687261688C60056ECC3 /* ResampleToSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80869686261688C60056ECC3 /* ResampleToSize.swift */; };
 		8086969426172E4A0056ECC3 /* Waveform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8086969326172E4A0056ECC3 /* Waveform.swift */; };
 		808696E22617695B0056ECC3 /* libsamplerate.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 808696C22617692E0056ECC3 /* libsamplerate.dylib */; };
+		808696E62617AAC40056ECC3 /* CountdownText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808696E52617AAC40056ECC3 /* CountdownText.swift */; };
 		808A761F2593F2EA00B0A9CE /* ContentInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808A761E2593F2EA00B0A9CE /* ContentInterpreter.swift */; };
 		808A7631259405F200B0A9CE /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808A7630259405F200B0A9CE /* URL.swift */; };
 		808A763625940EE400B0A9CE /* ContentInterpreter+SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808A763525940EE400B0A9CE /* ContentInterpreter+SwiftUI.swift */; };
@@ -446,6 +447,7 @@
 		808696D72617692E0056ECC3 /* win32.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = win32.html; sourceTree = "<group>"; };
 		808696D82617692E0056ECC3 /* faq.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = faq.html; sourceTree = "<group>"; };
 		808696D92617692E0056ECC3 /* api_full.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = api_full.html; sourceTree = "<group>"; };
+		808696E52617AAC40056ECC3 /* CountdownText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownText.swift; sourceTree = "<group>"; };
 		808A761E2593F2EA00B0A9CE /* ContentInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentInterpreter.swift; sourceTree = "<group>"; };
 		808A7630259405F200B0A9CE /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
 		808A763525940EE400B0A9CE /* ContentInterpreter+SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentInterpreter+SwiftUI.swift"; sourceTree = "<group>"; };
@@ -750,6 +752,7 @@
 				800C120B259A4F290017A116 /* Button.swift */,
 				80D6DAAB259E2CBF00879BCF /* Link.swift */,
 				80C9A193259FA5E800A038CC /* VisualEffectView.swift */,
+				808696E52617AAC40056ECC3 /* CountdownText.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1650,6 +1653,7 @@
 				80A8C84925BF5B5200F97EF0 /* DBSpotifyTrack+CoreDataProperties.swift in Sources */,
 				8082F11425A9BF3200B1D157 /* KeyedDemand.swift in Sources */,
 				805DF1F825F58EB90056D9C0 /* DBTrack+Changes.swift in Sources */,
+				808696E62617AAC40056ECC3 /* CountdownText.swift in Sources */,
 				800C11FA259A378D0017A116 /* AVTrack.swift in Sources */,
 				8005085E259802B60055FB2D /* RawRepresentable.swift in Sources */,
 				802E2CF52596359300CB91EC /* Track+Attributes.swift in Sources */,

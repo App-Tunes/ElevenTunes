@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PlayerState {
+struct PlayerState: Hashable {
     var isPlaying: Bool
     var currentTime: TimeInterval?
 }
