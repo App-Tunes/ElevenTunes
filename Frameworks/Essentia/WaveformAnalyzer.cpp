@@ -31,7 +31,8 @@ void WaveformAnalyzer::runNetwork(Algorithm *loader, Pool& results){
 	// Loudness Waveform
 	// ================================================
 
-	streaming::Algorithm* loudness = factory.create("LoudnessEBUR128");
+	streaming::Algorithm* loudness = factory.create("LoudnessEBUR128",
+													"startAtZero", true);
 
 	Real inputSampleRate = lastTokenProduced<Real>(loader->output("sampleRate"));
 	resampleR->configure("inputSampleRate", inputSampleRate,
