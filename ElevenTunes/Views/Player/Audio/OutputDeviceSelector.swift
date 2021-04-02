@@ -42,7 +42,7 @@ struct AudioProviderView<Provider: AudioDeviceProvider>: View {
 	func optionView(_ option: Provider.Option) -> some View {
 		HStack {
 			Text(option.icon)
-				.frame(width: 25, alignment: .leading)
+				.frame(width: 25, alignment: .center)
 			Text(option.name ?? "Unknown Device")
 				.frame(width: 300, alignment: .leading)
 			

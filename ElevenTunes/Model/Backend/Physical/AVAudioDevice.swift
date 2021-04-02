@@ -114,13 +114,43 @@ public class AVAudioDevice: AudioDevice {
 			object: id,
 			address: .init(
 				selector: kAudioDevicePropertyIsHidden,
-				scope: kAudioDevicePropertyScopeOutput
+				scope: kAudioObjectPropertyScopeGlobal
 			),
 			type: UInt32.self
 		) > 0) ?? true
 	}
 	
+	public var transportType: UInt32? {
+		guard let id = deviceID ?? CoreAudioTT.defaultOutputDevice else {
+			return nil
+		}
+
+		return try? CoreAudioTT.getObjectProperty(
+			object: id,
+			address: .init(
+				selector: kAudioDevicePropertyTransportType,
+				scope: kAudioObjectPropertyScopeGlobal
+			),
+			type: UInt32.self
+		)
+	}
+		
 	public var icon: Image {
+		if let transportType = transportType {
+			switch transportType {
+			case kAudioDeviceTransportTypeBluetooth, kAudioDeviceTransportTypeBluetoothLE:
+				return Image(systemName: "wave.3.right.circle")
+			case kAudioDeviceTransportTypeBuiltIn:
+				return Image(systemName: "laptopcomputer")
+			case kAudioDeviceTransportTypeAggregate, kAudioDeviceTransportTypeAutoAggregate, kAudioDeviceTransportTypeVirtual:
+				return Image(systemName: "square.stack.3d.down.forward")
+			case kAudioDeviceTransportTypeAirPlay:
+				return Image(systemName: "airplayaudio")
+			default:
+				break
+			}
+		}
+		
 		switch deviceID {
 		case nil:
 			return Image(systemName: "circle")

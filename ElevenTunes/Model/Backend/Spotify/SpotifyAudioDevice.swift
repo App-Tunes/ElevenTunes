@@ -23,7 +23,24 @@ public class SpotifyAudioDevice: AudioDevice {
 	public var name: String? { device.name }
 	
 	public var icon: Image {
-		Image(systemName: "hifispeaker")
+		switch device.type {
+		case .computer:
+			return Image(systemName: "laptopcomputer")
+		case .tablet:
+			return Image(systemName: "ipad")
+		case .smartphone:
+			return Image(systemName: "iphone")
+		case .tv:
+			return Image(systemName: "tv")
+		case .automobile:
+			return Image(systemName: "car")
+		case .avr:
+			return Image(systemName: "cpu")
+		case .gameConsole:
+			return Image(systemName: "gamecontroller")
+		default:
+			return Image(systemName: "hifispeaker")
+		}
 	}
 	
 	public var volume: Double = 1 {
