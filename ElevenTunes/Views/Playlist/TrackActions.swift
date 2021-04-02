@@ -52,7 +52,7 @@ class TrackActions: NSObject {
 
 			Button(action: delete) {
 				Image(systemName: "delete.right")
-				Text("Remove from Library")
+				Text("Delete")
 			}
         }
     }
