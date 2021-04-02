@@ -139,7 +139,7 @@ using namespace essentia::streaming;
 		
 		Real integratedLoudness = pool.value<Real>("loudness_ebu128.integrated");
 		Real loudnessRange = pool.value<Real>("loudness_ebu128.loudness_range");
-		vector<Real> loudness = pool.value<vector<Real>>("loudness_ebu128.short_term");
+		vector<Real> loudness = pool.value<vector<Real>>("loudness_ebu128.momentary");
 		vector<Real> pitch = pool.value<vector<Real>>("spectral.centroid");
 
 		EssentiaWaveform *waveform = [[EssentiaWaveform alloc] initWithCount: count integrated: integratedLoudness range: loudnessRange];
