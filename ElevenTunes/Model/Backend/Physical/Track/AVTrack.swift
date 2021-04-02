@@ -111,7 +111,7 @@ public final class AVTrack: RemoteTrack {
 		}
 		
 		// TODO Return video emitter when possible
-		return Future { [url] in
+		return Future.tryOnQueue(.global(qos: .default)) { [url] in
 			let file = try AVAudioFile(forReading: url)
 			let singleDevice = try device.prepare(file)
 			return AVAudioPlayerEmitter(singleDevice, file: file)
@@ -130,9 +130,11 @@ extension AVTrack: RequestMapperDelegate {
 		
 		switch request {
 		case .url:
-			return Future { self.loadURL() }.eraseToAnyPublisher()
+			return Future.tryOnQueue(.global(qos: .default)) {
+				self.loadURL()
+			}.eraseToAnyPublisher()
 		case .taglib:
-			return Future {
+			return Future.tryOnQueue(.global(qos: .default)) {
 				try TagLibFile(url: url).unwrap(orThrow: TagLibError.cannotRead)
 			}
 			.map { file in
@@ -157,7 +159,7 @@ extension AVTrack: RequestMapperDelegate {
 			}
 			.eraseToAnyPublisher()
 		case .analyze:
-			return Future {
+			return Future.tryOnQueue(.global(qos: .default)) {
 				let file = EssentiaFile(url: url)
 				let analysis = try file.analyze()
 				let keyAnalysis = analysis.keyAnalysis!
@@ -171,7 +173,7 @@ extension AVTrack: RequestMapperDelegate {
 			}
 				.eraseError().eraseToAnyPublisher()
 		case .waveform:
-			return Future.onQueue(.global(qos: .default)) {
+			return Future.tryOnQueue(.global(qos: .default)) {
 				let file = EssentiaFile(url: url)
 				let waveform = try file.analyzeWaveform(512)
 

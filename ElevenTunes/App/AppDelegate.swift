@@ -60,7 +60,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let doc = try documentController.makeUntitledDocument(ofType: "library")
                 as! LibraryDocument
 
-			Future {
+			Future.onQueue(.global(qos: .default)) {
 				LibraryContentInterpreter.standard.compactInterpret(urls: urls)
 			}
 				.map(LibraryContentInterpreter.separate)

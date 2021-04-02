@@ -85,11 +85,11 @@ extension DirectoryPlaylist: RequestMapperDelegate {
 
 		switch request {
 		case .url:
-			return Future {
+			return Future.tryOnQueue(.global(qos: .default)) {
 				self.loadURL()
 			}.eraseToAnyPublisher()
 		case .contents:
-			return Future {
+			return Future.tryOnQueue(.global(qos: .default)) {
 				try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: [.isDirectoryKey])
 			}
 			.map(LibraryContentInterpreter.standard.compactInterpret)

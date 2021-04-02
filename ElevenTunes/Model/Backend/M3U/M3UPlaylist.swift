@@ -117,11 +117,11 @@ extension M3UPlaylist: RequestMapperDelegate {
 		
 		switch request {
 		case .url:
-			return Future {
+			return Future.tryOnQueue(.global(qos: .default)) {
 				self.urlAttributes()
 			}.eraseToAnyPublisher()
 		case .read:
-			return Future {
+			return Future.tryOnQueue(.global(qos: .default)) {
 				try String(contentsOf: url)
 			}
 			.map { file in
