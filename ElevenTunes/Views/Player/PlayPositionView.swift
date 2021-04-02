@@ -112,7 +112,7 @@ struct PlayPositionBarsView: View {
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                let width = max(1, min(2, 3 - geo.size.height / 20))
+				let width = max(1, min(2, 3 - geo.size.height / 20)) + 0.5
                 
                 if let position = position {
                     VBar(position: position)
@@ -212,15 +212,16 @@ struct PlayPositionView: View {
 	
     var body: some View {
         GeometryReader { geo in
-			ZStack(alignment: .bottom) {
+			ZStack {
                 if let playingAudio = playingAudio {
 					if let waveform = waveform {
 						ResamplingWaveformView(
 							gradient: Gradients.pitch,
 							waveform: waveform
 						)
-							.frame(height: geo.size.height * 0.5)
 							.allowsHitTesting(false)
+							.frame(height: geo.size.height * 0.7, alignment: .bottom)
+							.frame(height: geo.size.height, alignment: .bottom)
 					}
 
 					PlayPositionBarsView(

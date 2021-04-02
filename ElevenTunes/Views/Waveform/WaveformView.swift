@@ -19,8 +19,9 @@ struct WaveformView: View {
 				ForEach(0..<count) { i in
 					Rectangle()
 						.foregroundColor(color[i])
-						.frame(height: geo.size.height * max(0, min(1, data[i])))
+						.frame(height: geo.size.height * max(0, min(1, data[i])), alignment: .bottom)
 				}
+				.frame(height: geo.size.height, alignment: .bottom)
 			}
 		}
 			.drawingGroup()
