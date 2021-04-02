@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonnull) NSURL *url;
 
 - (EssentiaAnalysis * _Nullable) analyze: (NSError **)error;
+- (EssentiaWaveform * _Nullable) analyzeWaveform: (int)count error: (NSError **)error;
 
 @end
 

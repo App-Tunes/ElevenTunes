@@ -38,8 +38,8 @@ struct MilkyCoverView: View {
     }
 }
 
-struct MilkyCoverView_Previews: PreviewProvider {
-    static var previews: some View {
-        MilkyCoverView()
-    }
-}
+//struct MilkyCoverView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MilkyCoverView()
+//    }
+//}

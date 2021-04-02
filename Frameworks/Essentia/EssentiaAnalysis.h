@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <stdio.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -29,6 +30,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, retain) EssentiaKeyAnalysis* keyAnalysis;
 @property (nullable, retain) EssentiaRhythmAnalysis* rhythmAnalysis;
+
+@end
+
+@interface EssentiaWaveform : NSObject
+
+@property (readonly)  int count;
+@property (readonly) float totalLoudness;
+@property (readonly) float *loudness;
+@property (readonly) float *pitch;
+
+- (instancetype)initWithCount: (int) count loudness: (float) loudness;
 
 @end
 

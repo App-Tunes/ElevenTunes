@@ -17,8 +17,8 @@ struct FilterBarView: View {
     }
 }
 
-struct FilterBarView_Previews: PreviewProvider {
-    static var previews: some View {
-        FilterBarView()
-    }
-}
+//struct FilterBarView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        FilterBarView()
+//    }
+//}

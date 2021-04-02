@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		80602EC4261660F10044D614 /* ResampleToSize.h in Headers */ = {isa = PBXBuildFile; fileRef = 80602EC2261660F00044D614 /* ResampleToSize.h */; };
+		80602EC5261660F10044D614 /* ResampleToSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 80602EC3261660F10044D614 /* ResampleToSize.m */; };
+		807185202615BE370029E27B /* WaveformAnalyzer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8071851E2615BE370029E27B /* WaveformAnalyzer.cpp */; };
+		807185212615BE370029E27B /* WaveformAnalyzer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8071851F2615BE370029E27B /* WaveformAnalyzer.hpp */; };
+		8086968F26170BD20056ECC3 /* SpectralAnalyzer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8086968D26170BD20056ECC3 /* SpectralAnalyzer.cpp */; };
+		8086969026170BD20056ECC3 /* SpectralAnalyzer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8086968E26170BD20056ECC3 /* SpectralAnalyzer.hpp */; };
 		80A6BF0E26127D7F001A151D /* TonalAnalyzer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 80A6BF0C26127D7F001A151D /* TonalAnalyzer.cpp */; };
 		80A6BF0F26127D7F001A151D /* TonalAnalyzer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 80A6BF0D26127D7F001A151D /* TonalAnalyzer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		80A6BF292613E051001A151D /* RhythmAnalyzer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 80A6BF272613E051001A151D /* RhythmAnalyzer.cpp */; };
@@ -147,6 +153,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		80602EC2261660F00044D614 /* ResampleToSize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ResampleToSize.h; sourceTree = "<group>"; };
+		80602EC3261660F10044D614 /* ResampleToSize.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ResampleToSize.m; sourceTree = "<group>"; };
+		8071851E2615BE370029E27B /* WaveformAnalyzer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WaveformAnalyzer.cpp; sourceTree = "<group>"; };
+		8071851F2615BE370029E27B /* WaveformAnalyzer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WaveformAnalyzer.hpp; sourceTree = "<group>"; };
+		8086968D26170BD20056ECC3 /* SpectralAnalyzer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SpectralAnalyzer.cpp; sourceTree = "<group>"; };
+		8086968E26170BD20056ECC3 /* SpectralAnalyzer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SpectralAnalyzer.hpp; sourceTree = "<group>"; };
 		80A6BF0C26127D7F001A151D /* TonalAnalyzer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TonalAnalyzer.cpp; sourceTree = "<group>"; };
 		80A6BF0D26127D7F001A151D /* TonalAnalyzer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TonalAnalyzer.hpp; sourceTree = "<group>"; };
 		80A6BF272613E051001A151D /* RhythmAnalyzer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RhythmAnalyzer.cpp; sourceTree = "<group>"; };
@@ -6462,6 +6474,12 @@
 				80A6BF0C26127D7F001A151D /* TonalAnalyzer.cpp */,
 				80A6BF282613E051001A151D /* RhythmAnalyzer.hpp */,
 				80A6BF272613E051001A151D /* RhythmAnalyzer.cpp */,
+				8071851F2615BE370029E27B /* WaveformAnalyzer.hpp */,
+				8071851E2615BE370029E27B /* WaveformAnalyzer.cpp */,
+				8086968E26170BD20056ECC3 /* SpectralAnalyzer.hpp */,
+				8086968D26170BD20056ECC3 /* SpectralAnalyzer.cpp */,
+				80602EC2261660F00044D614 /* ResampleToSize.h */,
+				80602EC3261660F10044D614 /* ResampleToSize.m */,
 				80BF56D42610E72200CDCB2F /* essentia */,
 				80BF6A4B261117F200CDCB2F /* Essentia-Tests */,
 				BB6A285B2006236900B8BB9A /* Products */,
@@ -6521,6 +6539,7 @@
 				80BF616B2610EDE700CDCB2F /* tnt_math_utils.h in Headers */,
 				80BF616C2610EDE700CDCB2F /* tnt_array1d.h in Headers */,
 				80BF616D2610EDE700CDCB2F /* tnt_fortran_array2d.h in Headers */,
+				8086969026170BD20056ECC3 /* SpectralAnalyzer.hpp in Headers */,
 				80BF616E2610EDE700CDCB2F /* tnt_version.h in Headers */,
 				80BF616F2610EDE700CDCB2F /* tnt_array3d_utils.h in Headers */,
 				80BF61702610EDE700CDCB2F /* tnt_array2d_utils.h in Headers */,
@@ -6556,6 +6575,7 @@
 				80BF61982610EDE700CDCB2F /* peak.h in Headers */,
 				80BF61992610EDE700CDCB2F /* yamlast.h in Headers */,
 				80BF619A2610EDE700CDCB2F /* jsonconvert.h in Headers */,
+				807185212615BE370029E27B /* WaveformAnalyzer.hpp in Headers */,
 				80BF619B2610EDE700CDCB2F /* atomic.h in Headers */,
 				80BF619C2610EDE700CDCB2F /* bpfutil.h in Headers */,
 				80BF619D2610EDE700CDCB2F /* roguevector.h in Headers */,
@@ -6577,6 +6597,7 @@
 				80BF61B62610EDE700CDCB2F /* streamingalgorithmwrapper.h in Headers */,
 				80BF61B72610EDE700CDCB2F /* sourcebase.h in Headers */,
 				80BF61B92610EDE700CDCB2F /* streamingalgorithmcomposite.h in Headers */,
+				80602EC4261660F10044D614 /* ResampleToSize.h in Headers */,
 				80BF61BC2610EDE700CDCB2F /* phantombuffer_impl.h in Headers */,
 				80BF61BD2610EDE700CDCB2F /* sinkproxy.h in Headers */,
 				80BF61BE2610EDE700CDCB2F /* multiratebuffer.h in Headers */,
@@ -6725,8 +6746,11 @@
 			files = (
 				80BF69F72610F7D400CDCB2F /* EssentiaFile.mm in Sources */,
 				80A6BF292613E051001A151D /* RhythmAnalyzer.cpp in Sources */,
+				807185202615BE370029E27B /* WaveformAnalyzer.cpp in Sources */,
 				80A6BF0E26127D7F001A151D /* TonalAnalyzer.cpp in Sources */,
+				80602EC5261660F10044D614 /* ResampleToSize.m in Sources */,
 				80E3003B261150EC006ED744 /* EssentiaAnalysis.m in Sources */,
+				8086968F26170BD20056ECC3 /* SpectralAnalyzer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

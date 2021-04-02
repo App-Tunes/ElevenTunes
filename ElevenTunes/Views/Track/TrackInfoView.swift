@@ -18,8 +18,8 @@ struct TrackInfoView: View {
     }
 }
 
-struct TrackInfoView_Previews: PreviewProvider {
-    static var previews: some View {
-        TrackInfoView()
-    }
-}
+//struct TrackInfoView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        TrackInfoView()
+//    }
+//}

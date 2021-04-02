@@ -1,5 +1,5 @@
 //
-//  WaveformView.swift
+//  PlayPositionView.swift
 //  ElevenTunes
 //
 //  Created by Lukas Tenbrink on 15.12.20.
@@ -213,6 +213,16 @@ struct PlayPositionView: View {
         GeometryReader { geo in
             ZStack {
                 if let playingAudio = playingAudio {
+//					ResamplingWaveformView(
+//						gradient: Gradients.pitch,
+//						data: (0...500).map {
+//							(sin(Float($0) / 3) + 1) / 2
+//						},
+//						color: (0...500).map {
+//							Float($0) / 500
+//						}
+//					)
+
 					PlayPositionBarsView(
 						player: player.singlePlayer,
 						playing: playingAudio,

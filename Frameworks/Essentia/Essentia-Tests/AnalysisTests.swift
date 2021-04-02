@@ -25,7 +25,7 @@ class AnalysisTests: XCTestCase {
 		}
 	}
 	
-    func testScale() throws {
+	func testScaleAnalysis() throws {
 		let testBundle = Bundle(for: Self.self)
 		let fileUrl = testBundle.url(forResource: "445632__djfroyd__c-major-scale", withExtension: "wav")!
 		
@@ -39,5 +39,28 @@ class AnalysisTests: XCTestCase {
 
 		let rhythmAnalysis = analysis.rhythmAnalysis!
 		XCTAssertEqual(rhythmAnalysis.bpm, 121, accuracy: 1)
-}
+	}
+
+	func testWaveform() throws {
+		let testBundle = Bundle(for: Self.self)
+		// Consists of 4 sections: Pling Silence Pling Silence
+		let fileUrl = testBundle.url(forResource: "445632__djfroyd__c-major-scale", withExtension: "wav")!
+		
+		let file = EssentiaFile(url: fileUrl)
+		let analysis = try file.analyzeWaveform(8)
+
+		XCTAssertEqual(analysis.count, 8)
+
+		XCTAssertEqual(analysis.loudness[0], analysis.loudness[2], accuracy: 1)
+		XCTAssertEqual(analysis.loudness[2], analysis.loudness[4], accuracy: 1)
+		XCTAssertNotEqual(analysis.loudness[0], analysis.loudness[2], accuracy: 1)
+
+		XCTAssertGreaterThan(analysis.loudness[0], analysis.loudness[2])
+		XCTAssertLessThan(analysis.loudness[2], analysis.loudness[4])
+		XCTAssertGreaterThan(analysis.loudness[4], analysis.loudness[6])
+		
+		// Pitch
+		XCTAssertLessThan(analysis.pitch[0], analysis.pitch[1])
+		XCTAssertLessThan(analysis.pitch[4], analysis.pitch[5])
+	}
 }

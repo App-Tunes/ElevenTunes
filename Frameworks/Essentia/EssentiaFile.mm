@@ -15,6 +15,10 @@
 
 #include "TonalAnalyzer.hpp"
 #include "RhythmAnalyzer.hpp"
+#include "WaveformAnalyzer.hpp"
+#include "SpectralAnalyzer.hpp"
+
+#include "ResampleToSize.h"
 
 
 using namespace std;
@@ -47,13 +51,12 @@ using namespace essentia::streaming;
 	string filename = [[[_url absoluteURL] path] STDstring];
 	
 	try {
+		Pool pool;
+
 		Algorithm* loader = factory.create("MonoLoader",
 										  "filename", filename,
 										   "downmix", "mix");
 		
-		// Audio -> FrameCutter
-		Pool pool;
-
 		vector<Real> audio;
 		TonalAnalyzer::createNetworkLowLevel(loader->output("audio"), pool);
 		RhythmAnalyzer::createNetworkLowLevel(loader->output("audio"), pool);
@@ -100,6 +103,49 @@ using namespace essentia::streaming;
 		[analysis setRhythmAnalysis: rhythmAnalysis];
 
 		return analysis;
+	}
+	catch (const std::exception& e) {
+		*error = [NSError errorWithDomain:@"essentia" code:1 userInfo: @{
+			NSLocalizedDescriptionKey: [NSString stringWithSTDstring: e.what()]
+		}];
+		return nil;
+	}
+}
+
+- (EssentiaWaveform *)analyzeWaveform:(int)count error:(NSError *__autoreleasing  _Nullable *)error {
+	AlgorithmFactory& factory = AlgorithmFactory::instance();
+
+	string filename = [[[_url absoluteURL] path] STDstring];
+	
+	try {
+		Pool pool;
+
+		Algorithm* stereo = factory.create("AudioLoader",
+										  "filename", filename,
+										   "computeMD5", false);
+
+		stereo->output("md5")             >> NOWHERE;
+		stereo->output("sampleRate")      >> PC(pool, "metadata.audio_properties.sample_rate");
+		stereo->output("numberChannels")  >> PC(pool, "metadata.audio_properties.number_channels");
+		stereo->output("bit_rate")        >> PC(pool, "metadata.audio_properties.bit_rate");
+		stereo->output("codec")           >> PC(pool, "metadata.audio_properties.codec");
+		
+		WaveformAnalyzer::runNetwork(stereo, pool);
+		SpectralAnalyzer::runNetwork(filename, pool);
+
+		// ================================================
+		// Extract from CPP
+		// ================================================
+		
+		Real totalLoudness = pool.value<Real>("loudness_ebu128.loudness_range");
+		vector<Real> loudness = pool.value<vector<Real>>("loudness_ebu128.short_term");
+		vector<Real> pitch = pool.value<vector<Real>>("spectral.centroid");
+
+		EssentiaWaveform *waveform = [[EssentiaWaveform alloc] initWithCount: count loudness:totalLoudness];
+		[ResampleToSize resampleLinear:loudness.data() count:loudness.size() dst:waveform.loudness count: count];
+		[ResampleToSize resampleLinear:pitch.data() count:pitch.size() dst:waveform.pitch count: count];
+
+		return waveform;
 	}
 	catch (const std::exception& e) {
 		*error = [NSError errorWithDomain:@"essentia" code:1 userInfo: @{

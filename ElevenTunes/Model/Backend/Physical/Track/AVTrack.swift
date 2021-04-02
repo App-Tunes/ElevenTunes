@@ -64,7 +64,7 @@ public final class AVTrack: RemoteTrack {
 	let mapper = Requests(relation: [
 		.url: [],
 		.taglib: [.title, .key, .tempo, .previewImage, .artists, .album],
-		.analyze: [.tempo, .key]
+		.analyze: []
 	])
 
 	init(_ url: URL, isVideo: Bool) {
