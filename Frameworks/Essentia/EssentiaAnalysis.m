@@ -22,11 +22,12 @@
 
 @implementation EssentiaWaveform
 
-- (instancetype)initWithCount:(int)count loudness:(float)loudness {
+- (instancetype)initWithCount: (int) count integrated: (float) integrated range: (float) range {
 	self = [super init];
 	if (self) {
 		_count = count;
-		_totalLoudness = loudness;
+		_integratedLoudness = integrated;
+		_loudnessRange = range;
 		_loudness = (float *) malloc(count * sizeof(float));
 		_pitch = (float *) malloc(count * sizeof(float));
 	}

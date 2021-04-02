@@ -36,11 +36,12 @@ NS_ASSUME_NONNULL_BEGIN
 @interface EssentiaWaveform : NSObject
 
 @property (readonly)  int count;
-@property (readonly) float totalLoudness;
+@property (readonly) float integratedLoudness;
+@property (readonly) float loudnessRange;
 @property (readonly) float *loudness;
 @property (readonly) float *pitch;
 
-- (instancetype)initWithCount: (int) count loudness: (float) loudness;
+- (instancetype)initWithCount: (int) count integrated: (float) integrated range: (float) range;
 
 @end
 

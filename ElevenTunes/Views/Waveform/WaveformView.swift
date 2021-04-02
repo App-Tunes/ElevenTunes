@@ -19,7 +19,7 @@ struct WaveformView: View {
 				ForEach(0..<count) { i in
 					Rectangle()
 						.foregroundColor(color[i])
-						.frame(height: geo.size.height * data[i])
+						.frame(height: geo.size.height * max(0, min(1, data[i])))
 				}
 			}
 		}
@@ -30,28 +30,26 @@ struct WaveformView: View {
 
 struct ResamplingWaveformView: View {
 	var gradient: [Color]
-
-	var data: [Float]
-	var color: [Float]
+	var waveform: Waveform
 
 	var body: some View {
 		GeometryReader { geo in
 			let samples = Int(geo.size.width / 5)
 			
-			if samples < min(data.count, color.count) {
+			if samples < waveform.count {
 				WaveformView(
-					data: ResampleToSize.resampleLinear(data: data, toSize: samples).map {
+					data: ResampleToSize.resampleLinear(data: waveform.loudness, toSize: samples).map {
 						CGFloat($0)
 					},
-					color: ResampleToSize.resampleLinear(data: color, toSize: samples).map {
-						gradient[Int($0 * 255)]
+					color: ResampleToSize.resampleLinear(data: waveform.pitch, toSize: samples).map {
+						gradient[max(0, min(gradient.count, Int($0 * 255)))]
 					}
 				)
 			}
 			else {
 				WaveformView(
-					data: data.map { CGFloat($0) },
-					color: color.map { gradient[Int($0 * 255)] }
+					data: waveform.loudness.map { CGFloat($0) },
+					color: waveform.pitch.map { gradient[Int($0 * 255)] }
 				)
 			}
 		}

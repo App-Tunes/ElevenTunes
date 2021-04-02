@@ -29,7 +29,9 @@ extension TrackAttribute {
 	static let title = Typed<String>(rawValue: "title")
 	
     static let key = Typed<MusicalKey>(rawValue: "key")
-    static let tempo = Typed<Tempo>(rawValue: "tempo")
+	static let tempo = Typed<Tempo>(rawValue: "tempo")
+
+	static let waveform = Typed<Waveform>(rawValue: "waveform")
 
 	static let previewImage = Typed<NSImage>(rawValue: "previewImage")
 }

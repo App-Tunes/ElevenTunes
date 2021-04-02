@@ -204,6 +204,7 @@ struct PlayPositionView: View {
 	@State var playingAudio: AudioTrack?
 	@State var playingTrack: AnyTrack?
 	@State var tempo: Tempo?
+	@State var waveform: Waveform?
 
 	var moveStep: CGFloat? {
 		return tempo.map { CGFloat(1 / $0.bps) * 32 }
@@ -213,15 +214,12 @@ struct PlayPositionView: View {
         GeometryReader { geo in
             ZStack {
                 if let playingAudio = playingAudio {
-//					ResamplingWaveformView(
-//						gradient: Gradients.pitch,
-//						data: (0...500).map {
-//							(sin(Float($0) / 3) + 1) / 2
-//						},
-//						color: (0...500).map {
-//							Float($0) / 500
-//						}
-//					)
+					if let waveform = waveform {
+						ResamplingWaveformView(
+							gradient: Gradients.pitch,
+							waveform: waveform
+						)
+					}
 
 					PlayPositionBarsView(
 						player: player.singlePlayer,
@@ -242,9 +240,12 @@ struct PlayPositionView: View {
 		.onReceive(player.$current) {
 			self.playingTrack = $0
 		}
-		.whileActive(playingTrack?.demand([.tempo]))
+		.whileActive(playingTrack?.demand([.tempo, .waveform]))
 		.onReceive(playingTrack?.attribute(TrackAttribute.tempo).map(\.value), default: nil) {
 			self.tempo = $0
+		}
+		.onReceive(playingTrack?.attribute(TrackAttribute.waveform).map(\.value), default: nil) {
+			self.waveform = $0
 		}
         // TODO hugging / compression resistance:
         // setting min height always compressed down to min height :<

@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 extension Future where Failure == Error {
+	/// TODO Deprecated. Use Just() for local, or onQueue for background tasks.
     convenience init(_ callback: @escaping () throws -> Output) {
         self.init { promise in
             do {
@@ -19,6 +20,19 @@ extension Future where Failure == Error {
             }
         }
     }
+	
+	static func onQueue(_ queue: DispatchQueue, callback: @escaping () throws -> Output) -> Future {
+		Future { promise in
+			queue.async {
+				do {
+					promise(.success(try callback()))
+				}
+				catch let error {
+					promise(.failure(error))
+				}
+			}
+		}
+	}
 }
 
 extension Future where Failure == Never {
