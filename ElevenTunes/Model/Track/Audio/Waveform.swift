@@ -20,9 +20,9 @@ struct Waveform {
 
 		return Waveform(
 			loudness: Array(UnsafeBufferPointer(start: waveform.loudness, count: Int(waveform.count)))
-				.map { ($0 - wmin) / range }, // In LUFS. 23 is recommended standard. We'll use -40 as absolute 0.
+				.map { max(0, min(1, ($0 - wmin) / range)) }, // In LUFS. 23 is recommended standard. We'll use -40 as absolute 0.
 			pitch: Array(UnsafeBufferPointer(start: waveform.pitch, count: Int(waveform.count)))
-				.map { (log(max(1, $0) / 3000) + 2) / 2 }  // in frequency space: log(40 / 3000) ~ -2
+				.map { max(0, min(1, log(max(10, $0) / 3000) + 2) / 2) }  // in frequency space: log(40 / 3000) ~ -2
 		)
 	}
 }
