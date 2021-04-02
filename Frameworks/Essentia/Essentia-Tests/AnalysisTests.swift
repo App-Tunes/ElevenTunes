@@ -51,8 +51,8 @@ class AnalysisTests: XCTestCase {
 
 		XCTAssertEqual(analysis.count, 8)
 
-		XCTAssertEqual(analysis.loudness[0], analysis.loudness[2], accuracy: 1)
-		XCTAssertEqual(analysis.loudness[2], analysis.loudness[4], accuracy: 1)
+		XCTAssertEqual(analysis.loudness[0], analysis.loudness[1], accuracy: 1)
+		XCTAssertEqual(analysis.loudness[3], analysis.loudness[4], accuracy: 1)
 		XCTAssertNotEqual(analysis.loudness[0], analysis.loudness[2], accuracy: 1)
 
 		XCTAssertGreaterThan(analysis.loudness[0], analysis.loudness[2])

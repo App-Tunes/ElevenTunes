@@ -38,11 +38,11 @@ struct ResamplingWaveformView: View {
 			
 			if samples < waveform.count {
 				WaveformView(
-					data: ResampleToSize.decimating(data: waveform.loudness, toSize: samples).map {
+					data: ResampleToSize.best(data: waveform.loudness, toSize: samples).map {
 						CGFloat($0)
 					},
-					color: ResampleToSize.decimating(data: waveform.pitch, toSize: samples).map {
-						gradient[max(0, min(gradient.count, Int($0 * 255)))]
+					color: ResampleToSize.best(data: waveform.pitch, toSize: samples).map {
+						$0.isFinite ? gradient[max(0, min(gradient.count - 1, Int($0 * 255)))] : .white
 					}
 				)
 			}

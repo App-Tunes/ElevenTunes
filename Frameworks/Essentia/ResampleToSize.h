@@ -12,7 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ResampleToSize : NSObject
 
++ (void) best: (const float *)src count: (int) srcCount dst: (float *)dst count: (int) dstCount;
 + (void) decimating: (const float *)src count: (int) srcCount dst: (float *)dst count: (int) dstCount;
++ (void) secretRabbitCode: (const float *)src count: (int) srcCount dst: (float *)dst count: (int) dstCount quality: (int) quality;
 
 @end
 

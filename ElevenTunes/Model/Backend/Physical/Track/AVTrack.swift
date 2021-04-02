@@ -175,7 +175,7 @@ extension AVTrack: RequestMapperDelegate {
 		case .waveform:
 			return Future.tryOnQueue(.global(qos: .default)) {
 				let file = EssentiaFile(url: url)
-				let waveform = try file.analyzeWaveform(512)
+				let waveform = try file.analyzeWaveform(256)
 
 				return .init(.unsafe([
 					.waveform: Waveform.from(waveform),

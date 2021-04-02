@@ -8,14 +8,16 @@
 import Foundation
 
 extension ResampleToSize {
-	static func decimating(data: [Float], toSize count: Int) -> [Float] {
+	static func best(data: [Float], toSize count: Int) -> [Float] {
 		data.withUnsafeBufferPointer { src in
-			var array = [Float](repeating: 0, count: count)
-			array.withUnsafeMutableBufferPointer { dst in
-				decimating(src.baseAddress!, count: Int32(src.count), dst: dst.baseAddress!, count: Int32(dst.count))
-				return
-			}
-			return array
+			let dst = malloc(count * MemoryLayout<Float>.size)!.assumingMemoryBound(to: Float.self)
+			
+			best(src.baseAddress!, count: Int32(src.count), dst: dst, count: Int32(count))
+			let asArray = Array(UnsafeMutableBufferPointer(start: dst, count: count))
+
+			free(dst)
+
+			return asArray
 		}
 	}
 }

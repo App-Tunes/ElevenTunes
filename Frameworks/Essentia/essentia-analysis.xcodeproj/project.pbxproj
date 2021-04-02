@@ -13,6 +13,9 @@
 		807185212615BE370029E27B /* WaveformAnalyzer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8071851F2615BE370029E27B /* WaveformAnalyzer.hpp */; };
 		8086968F26170BD20056ECC3 /* SpectralAnalyzer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8086968D26170BD20056ECC3 /* SpectralAnalyzer.cpp */; };
 		8086969026170BD20056ECC3 /* SpectralAnalyzer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8086968E26170BD20056ECC3 /* SpectralAnalyzer.hpp */; };
+		8086969E261764060056ECC3 /* libessentia.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 80BF5C462610E72500CDCB2F /* libessentia.dylib */; };
+		808696DC2617694A0056ECC3 /* libsamplerate.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 808696DA261769400056ECC3 /* libsamplerate.dylib */; };
+		808696E0261769530056ECC3 /* libsamplerate.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 808696DA261769400056ECC3 /* libsamplerate.dylib */; };
 		80A6BF0E26127D7F001A151D /* TonalAnalyzer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 80A6BF0C26127D7F001A151D /* TonalAnalyzer.cpp */; };
 		80A6BF0F26127D7F001A151D /* TonalAnalyzer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 80A6BF0D26127D7F001A151D /* TonalAnalyzer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		80A6BF292613E051001A151D /* RhythmAnalyzer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 80A6BF272613E051001A151D /* RhythmAnalyzer.cpp */; };
@@ -121,7 +124,6 @@
 		80BF6A4F261117F200CDCB2F /* libessentia-analysis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB6A285A2006236900B8BB9A /* libessentia-analysis.a */; };
 		80BF6A8F26111E8F00CDCB2F /* libessentia.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 80BF61392610ED1800CDCB2F /* libessentia.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		80BF6AA72611221D00CDCB2F /* libessentia.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 80BF61392610ED1800CDCB2F /* libessentia.dylib */; };
-		80BF6AA92611223B00CDCB2F /* libessentia.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 80BF61392610ED1800CDCB2F /* libessentia.dylib */; };
 		80BF6AB1261123CC00CDCB2F /* 445632__djfroyd__c-major-scale.wav in Resources */ = {isa = PBXBuildFile; fileRef = 80BF6AB0261123CC00CDCB2F /* 445632__djfroyd__c-major-scale.wav */; };
 		80BF6AB52611244900CDCB2F /* AnalysisTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80BF6AB42611244900CDCB2F /* AnalysisTests.swift */; };
 		80E3003B261150EC006ED744 /* EssentiaAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 80BF6AB92611265200CDCB2F /* EssentiaAnalysis.m */; };
@@ -159,6 +161,7 @@
 		8071851F2615BE370029E27B /* WaveformAnalyzer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WaveformAnalyzer.hpp; sourceTree = "<group>"; };
 		8086968D26170BD20056ECC3 /* SpectralAnalyzer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SpectralAnalyzer.cpp; sourceTree = "<group>"; };
 		8086968E26170BD20056ECC3 /* SpectralAnalyzer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SpectralAnalyzer.hpp; sourceTree = "<group>"; };
+		808696DA261769400056ECC3 /* libsamplerate.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsamplerate.dylib; path = ../libsamplerate/lib/libsamplerate.dylib; sourceTree = "<group>"; };
 		80A6BF0C26127D7F001A151D /* TonalAnalyzer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TonalAnalyzer.cpp; sourceTree = "<group>"; };
 		80A6BF0D26127D7F001A151D /* TonalAnalyzer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TonalAnalyzer.hpp; sourceTree = "<group>"; };
 		80A6BF272613E051001A151D /* RhythmAnalyzer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RhythmAnalyzer.cpp; sourceTree = "<group>"; };
@@ -2410,7 +2413,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				80BF6A4F261117F200CDCB2F /* libessentia-analysis.a in Frameworks */,
-				80BF6AA92611223B00CDCB2F /* libessentia.dylib in Frameworks */,
+				8086969E261764060056ECC3 /* libessentia.dylib in Frameworks */,
+				808696E0261769530056ECC3 /* libsamplerate.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2419,6 +2423,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				80BF6AA72611221D00CDCB2F /* libessentia.dylib in Frameworks */,
+				808696DC2617694A0056ECC3 /* libsamplerate.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2429,6 +2434,7 @@
 			isa = PBXGroup;
 			children = (
 				80BF61392610ED1800CDCB2F /* libessentia.dylib */,
+				808696DA261769400056ECC3 /* libsamplerate.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -6779,6 +6785,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/./essentia/build/src",
+					"$(PROJECT_DIR)/essentia/build/src",
+					/usr/local/Cellar/libsamplerate/0.1.9_1/lib,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -6805,6 +6813,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/./essentia/build/src",
+					"$(PROJECT_DIR)/essentia/build/src",
+					/usr/local/Cellar/libsamplerate/0.1.9_1/lib,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.1;
 				MTL_FAST_MATH = YES;
@@ -6943,10 +6953,17 @@
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/essentia/src/**",
 					/usr/local/include,
+					/usr/local/Cellar/libsamplerate/0.1.9_1/include,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/essentia/build/src",
+					"$(PROJECT_DIR)",
+					/usr/local/Cellar/libsamplerate/0.1.9_1/lib,
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = "";
@@ -6964,10 +6981,17 @@
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/essentia/src/**",
 					/usr/local/include,
+					/usr/local/Cellar/libsamplerate/0.1.9_1/include,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/essentia/build/src",
+					"$(PROJECT_DIR)",
+					/usr/local/Cellar/libsamplerate/0.1.9_1/lib,
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = "";

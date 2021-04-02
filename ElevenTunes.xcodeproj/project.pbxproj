@@ -140,6 +140,7 @@
 		808445DE25A7996200E27EC8 /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808445DD25A7996200E27EC8 /* Badge.swift */; };
 		80869687261688C60056ECC3 /* ResampleToSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80869686261688C60056ECC3 /* ResampleToSize.swift */; };
 		8086969426172E4A0056ECC3 /* Waveform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8086969326172E4A0056ECC3 /* Waveform.swift */; };
+		808696E22617695B0056ECC3 /* libsamplerate.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 808696C22617692E0056ECC3 /* libsamplerate.dylib */; };
 		808A761F2593F2EA00B0A9CE /* ContentInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808A761E2593F2EA00B0A9CE /* ContentInterpreter.swift */; };
 		808A7631259405F200B0A9CE /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808A7630259405F200B0A9CE /* URL.swift */; };
 		808A763625940EE400B0A9CE /* ContentInterpreter+SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808A763525940EE400B0A9CE /* ContentInterpreter+SwiftUI.swift */; };
@@ -416,6 +417,35 @@
 		808445DD25A7996200E27EC8 /* Badge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
 		80869686261688C60056ECC3 /* ResampleToSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResampleToSize.swift; sourceTree = "<group>"; };
 		8086969326172E4A0056ECC3 /* Waveform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Waveform.swift; sourceTree = "<group>"; };
+		808696B42617692E0056ECC3 /* INSTALL_RECEIPT.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = INSTALL_RECEIPT.json; sourceTree = "<group>"; };
+		808696B62617692E0056ECC3 /* sndfile-resample */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "sndfile-resample"; sourceTree = "<group>"; };
+		808696B82617692E0056ECC3 /* libsamplerate.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = libsamplerate.rb; sourceTree = "<group>"; };
+		808696B92617692E0056ECC3 /* ChangeLog */ = {isa = PBXFileReference; lastKnownFileType = text; path = ChangeLog; sourceTree = "<group>"; };
+		808696BA2617692E0056ECC3 /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
+		808696BB2617692E0056ECC3 /* libsamplerate */ = {isa = PBXFileReference; lastKnownFileType = text; path = libsamplerate; sourceTree = "<group>"; };
+		808696BD2617692E0056ECC3 /* samplerate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = samplerate.h; sourceTree = "<group>"; };
+		808696BE2617692E0056ECC3 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		808696BF2617692E0056ECC3 /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
+		808696C02617692E0056ECC3 /* NEWS */ = {isa = PBXFileReference; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
+		808696C22617692E0056ECC3 /* libsamplerate.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libsamplerate.dylib; sourceTree = "<group>"; };
+		808696C42617692E0056ECC3 /* samplerate.pc */ = {isa = PBXFileReference; lastKnownFileType = text; path = samplerate.pc; sourceTree = "<group>"; };
+		808696C52617692E0056ECC3 /* libsamplerate.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libsamplerate.0.dylib; sourceTree = "<group>"; };
+		808696C62617692E0056ECC3 /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsamplerate.a; sourceTree = "<group>"; };
+		808696CB2617692E0056ECC3 /* SRC.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = SRC.css; sourceTree = "<group>"; };
+		808696CC2617692E0056ECC3 /* api_simple.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = api_simple.html; sourceTree = "<group>"; };
+		808696CD2617692E0056ECC3 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		808696CE2617692E0056ECC3 /* api_misc.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = api_misc.html; sourceTree = "<group>"; };
+		808696CF2617692E0056ECC3 /* SRC.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SRC.png; sourceTree = "<group>"; };
+		808696D02617692E0056ECC3 /* license.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = license.html; sourceTree = "<group>"; };
+		808696D12617692E0056ECC3 /* lists.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = lists.html; sourceTree = "<group>"; };
+		808696D22617692E0056ECC3 /* history.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = history.html; sourceTree = "<group>"; };
+		808696D32617692E0056ECC3 /* quality.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = quality.html; sourceTree = "<group>"; };
+		808696D42617692E0056ECC3 /* download.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = download.html; sourceTree = "<group>"; };
+		808696D52617692E0056ECC3 /* api_callback.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = api_callback.html; sourceTree = "<group>"; };
+		808696D62617692E0056ECC3 /* api.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = api.html; sourceTree = "<group>"; };
+		808696D72617692E0056ECC3 /* win32.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = win32.html; sourceTree = "<group>"; };
+		808696D82617692E0056ECC3 /* faq.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = faq.html; sourceTree = "<group>"; };
+		808696D92617692E0056ECC3 /* api_full.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = api_full.html; sourceTree = "<group>"; };
 		808A761E2593F2EA00B0A9CE /* ContentInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentInterpreter.swift; sourceTree = "<group>"; };
 		808A7630259405F200B0A9CE /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
 		808A763525940EE400B0A9CE /* ContentInterpreter+SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentInterpreter+SwiftUI.swift"; sourceTree = "<group>"; };
@@ -525,6 +555,7 @@
 				80D6DA83259CF23F00879BCF /* CombineExt in Frameworks */,
 				8058C2D0261676BD0027DB8B /* SpotifyAPI in Frameworks */,
 				80BF6AAD261122A100CDCB2F /* libessentia.dylib in Frameworks */,
+				808696E22617695B0056ECC3 /* libsamplerate.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -957,6 +988,114 @@
 			path = Transient;
 			sourceTree = "<group>";
 		};
+		808696B32617692E0056ECC3 /* libsamplerate */ = {
+			isa = PBXGroup;
+			children = (
+				808696B42617692E0056ECC3 /* INSTALL_RECEIPT.json */,
+				808696B52617692E0056ECC3 /* bin */,
+				808696B72617692E0056ECC3 /* .brew */,
+				808696B92617692E0056ECC3 /* ChangeLog */,
+				808696BA2617692E0056ECC3 /* AUTHORS */,
+				808696BB2617692E0056ECC3 /* libsamplerate */,
+				808696BC2617692E0056ECC3 /* include */,
+				808696BE2617692E0056ECC3 /* README */,
+				808696BF2617692E0056ECC3 /* COPYING */,
+				808696C02617692E0056ECC3 /* NEWS */,
+				808696C12617692E0056ECC3 /* lib */,
+				808696C72617692E0056ECC3 /* share */,
+			);
+			path = libsamplerate;
+			sourceTree = "<group>";
+		};
+		808696B52617692E0056ECC3 /* bin */ = {
+			isa = PBXGroup;
+			children = (
+				808696B62617692E0056ECC3 /* sndfile-resample */,
+			);
+			path = bin;
+			sourceTree = "<group>";
+		};
+		808696B72617692E0056ECC3 /* .brew */ = {
+			isa = PBXGroup;
+			children = (
+				808696B82617692E0056ECC3 /* libsamplerate.rb */,
+			);
+			path = .brew;
+			sourceTree = "<group>";
+		};
+		808696BC2617692E0056ECC3 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				808696BD2617692E0056ECC3 /* samplerate.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		808696C12617692E0056ECC3 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				808696C22617692E0056ECC3 /* libsamplerate.dylib */,
+				808696C32617692E0056ECC3 /* pkgconfig */,
+				808696C52617692E0056ECC3 /* libsamplerate.0.dylib */,
+				808696C62617692E0056ECC3 /* libsamplerate.a */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		808696C32617692E0056ECC3 /* pkgconfig */ = {
+			isa = PBXGroup;
+			children = (
+				808696C42617692E0056ECC3 /* samplerate.pc */,
+			);
+			path = pkgconfig;
+			sourceTree = "<group>";
+		};
+		808696C72617692E0056ECC3 /* share */ = {
+			isa = PBXGroup;
+			children = (
+				808696C82617692E0056ECC3 /* doc */,
+			);
+			path = share;
+			sourceTree = "<group>";
+		};
+		808696C82617692E0056ECC3 /* doc */ = {
+			isa = PBXGroup;
+			children = (
+				808696C92617692E0056ECC3 /* libsamplerate0-dev */,
+			);
+			path = doc;
+			sourceTree = "<group>";
+		};
+		808696C92617692E0056ECC3 /* libsamplerate0-dev */ = {
+			isa = PBXGroup;
+			children = (
+				808696CA2617692E0056ECC3 /* html */,
+			);
+			path = "libsamplerate0-dev";
+			sourceTree = "<group>";
+		};
+		808696CA2617692E0056ECC3 /* html */ = {
+			isa = PBXGroup;
+			children = (
+				808696CB2617692E0056ECC3 /* SRC.css */,
+				808696CC2617692E0056ECC3 /* api_simple.html */,
+				808696CD2617692E0056ECC3 /* index.html */,
+				808696CE2617692E0056ECC3 /* api_misc.html */,
+				808696CF2617692E0056ECC3 /* SRC.png */,
+				808696D02617692E0056ECC3 /* license.html */,
+				808696D12617692E0056ECC3 /* lists.html */,
+				808696D22617692E0056ECC3 /* history.html */,
+				808696D32617692E0056ECC3 /* quality.html */,
+				808696D42617692E0056ECC3 /* download.html */,
+				808696D52617692E0056ECC3 /* api_callback.html */,
+				808696D62617692E0056ECC3 /* api.html */,
+				808696D72617692E0056ECC3 /* win32.html */,
+				808696D82617692E0056ECC3 /* faq.html */,
+				808696D92617692E0056ECC3 /* api_full.html */,
+			);
+			path = html;
+			sourceTree = "<group>";
+		};
 		80A8C81425BF552C00F97EF0 /* Playlist */ = {
 			isa = PBXGroup;
 			children = (
@@ -1228,6 +1367,7 @@
 		80F61A8C25FCF7E500AC4CF8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				808696B32617692E0056ECC3 /* libsamplerate */,
 				800835B62610CD360094EA26 /* Essentia */,
 				80F61A8D25FCF7F400AC4CF8 /* TagLib */,
 			);
@@ -1834,6 +1974,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks/Essentia/essentia/build/src",
+					"$(PROJECT_DIR)/Frameworks/libsamplerate/lib",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_LDFLAGS = (
@@ -1875,6 +2016,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks/Essentia/essentia/build/src",
+					"$(PROJECT_DIR)/Frameworks/libsamplerate/lib",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_LDFLAGS = (
