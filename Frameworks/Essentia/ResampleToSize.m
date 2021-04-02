@@ -57,6 +57,10 @@
 
 	src.src_ratio = (float) dstCount / (float) srcCount;
 
+	// Fill 0, the algorithm might not fill the last few elements
+	float zero = 0;
+	vDSP_vfill(&zero, dst, 1, dstCount);
+
 	// do the conversion
 	int error = src_simple(&src, quality, 1);
 
