@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ResampleToSize : NSObject
 
-+ (void) resampleLinear: (const float *)src count: (int) srcCount dst: (float *)dst count: (int) dstCount;
++ (void) decimating: (const float *)src count: (int) srcCount dst: (float *)dst count: (int) dstCount;
 
 @end
 

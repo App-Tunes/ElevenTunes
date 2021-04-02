@@ -11,7 +11,7 @@
 
 @implementation ResampleToSize
 
-+ (void)resampleLinear:(const float *)src count:(int)srcCount dst:(float *)dst count:(int)dstCount {
++ (void)decimating:(const float *)src count:(int)srcCount dst:(float *)dst count:(int)dstCount {
 	vDSP_Length filterCount = srcCount / dstCount;
 
 	vDSP_Stride decimation = filterCount;
