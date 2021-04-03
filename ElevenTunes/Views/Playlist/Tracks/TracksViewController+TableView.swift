@@ -39,6 +39,7 @@ extension TracksViewController: NSTableViewDelegate {
 		func addColumn(_ identifier: NSUserInterfaceItemIdentifier, title: String, fun: (NSTableColumn) -> Void) {
 			let column = NSTableColumn(identifier: identifier)
 			column.title = title
+			column.resizingMask = .userResizingMask
 			fun(column)
 			tableView.addTableColumn(column)
 		}
@@ -52,7 +53,6 @@ extension TracksViewController: NSTableViewDelegate {
 			$0.widthRange = 42...CGFloat.infinity
 			$0.width = 50
 			$0.headerCell.alignment = .center
-			$0.resizingMask = .userResizingMask
 		}
 
 		addColumn(ColumnIdentifiers.Title, title: "Title") {

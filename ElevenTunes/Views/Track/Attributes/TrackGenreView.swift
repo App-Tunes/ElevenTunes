@@ -14,6 +14,7 @@ struct TrackGenreView: View {
 	var body: some View {
 		Text(genre ?? "")
 			.foregroundColor(.secondary)
+			.multilineTextAlignment(.center)
 			.whileActive(track.backend.demand([.genre]))
 			.onReceive(track.backend.attribute(TrackAttribute.genre)) {
 				setIfDifferent(self, \.genre, $0.value)
