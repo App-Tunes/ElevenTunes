@@ -101,9 +101,10 @@ class Player {
 		isPlaying = singlePlayer.state.isPlaying
     }
     
-    func play(_ track: AnyTrack?) {
+	func play(_ track: AnyTrack?, at time: TimeInterval? = nil) {
         history = PlayHistory(track != nil ? [track!] : [])
         forwards()
+		// TODO time is ignored; how to propagate? lol
     }
     
     func play(_ history: PlayHistory) {

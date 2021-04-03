@@ -80,8 +80,12 @@ struct PlayPositionView: View {
 	}
 	
     var body: some View {
-		PlayTrackingView(player: player) { state in
+		PlayTrackingView(player: player) { tstate in
 			GeometryReader { geo in
+				let isCurrent = tstate.track?.id == track.id
+				let audio = isCurrent ? tstate.audio : nil
+				let state = isCurrent ? tstate.state : .init(isPlaying: false, currentTime: nil)
+
 				ZStack {
 					if let waveform = waveform {
 						ResamplingWaveformView(
@@ -93,30 +97,30 @@ struct PlayPositionView: View {
 							.frame(height: geo.size.height, alignment: .bottom)
 					}
 
-					if let duration = (state.track?.id == track.id ? state.audio?.duration : duration) {
+					if let duration = (isCurrent ? audio?.duration : duration) {
 						PositionControl(
-							currentTime: state.state.currentTime,
+							currentTimeProvider: { player.singlePlayer.playing?.currentTime },
 							duration: duration,
-							advancesAutomatically: state.state.isPlaying,
+							advancesAutomatically: state.isPlaying,
 							moveStepDuration: moveStep,
 							moveTo: {
-								if let audio = state.audio, state.track?.id == track.id {
+								if let audio = audio {
 									try? audio.move(to: $0)
 								}
 								else {
-									// TODO Start track from $0
+									player.play(track, at: $0)
 								}
 							},
 							moveBy: {
-								if let audio = state.audio, state.track?.id == track.id, let time = audio.currentTime {
+								if let audio = audio, let time = audio.currentTime {
 									try? audio.move(to: $0 + time)
 								}
 							}
 						)
-							.id(state.state)
+							.id(state)
 						
-						if !isSecondary, state.track?.id == track.id, geo.size.height >= 26, geo.size.width >= 200 {
-							PlayPositionLabelsView(duration: duration, playerState: state.state)
+						if !isSecondary, geo.size.height >= 26, geo.size.width >= 200 {
+							PlayPositionLabelsView(duration: duration, playerState: state)
 								.allowsHitTesting(false)
 						}
 					}

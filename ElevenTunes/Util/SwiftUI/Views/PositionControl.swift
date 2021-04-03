@@ -26,7 +26,8 @@ struct VBar : Shape {
 }
 
 struct PositionControl: View {
-	@State var currentTime: TimeInterval?
+	var currentTimeProvider: () -> TimeInterval?
+	@State var currentTime: TimeInterval? = nil
 	var duration: TimeInterval
 	var advancesAutomatically: Bool
 	var moveStepDuration: TimeInterval? = nil
@@ -41,8 +42,12 @@ struct PositionControl: View {
 	@State var isDragging = false
 	
 	func updatePosition() {
-		guard let currentTime = currentTime, advancesAutomatically else {
+		guard let currentTime = currentTimeProvider(), advancesAutomatically else {
 			return
+		}
+		
+		withAnimation(.instant) {
+			self.currentTime = currentTime
 		}
 		
 		withAnimation(.linear(duration: duration - currentTime)) {
@@ -56,7 +61,7 @@ struct PositionControl: View {
 		if
 			!NSEvent.modifierFlags.contains(.option),
 			let moveStepDuration = moveStepDuration,
-			let currentTime = currentTime
+			let currentTime = currentTimeProvider()
 		{
 			let steps = Int(round((pointTime - currentTime) / moveStepDuration))
 			if steps != 0 {
@@ -74,7 +79,7 @@ struct PositionControl: View {
 		guard
 			!NSEvent.modifierFlags.contains(.option),
 			let moveStepDuration = moveStepDuration,
-			let currentTime = currentTime
+			let currentTime = currentTimeProvider()
 		else {
 			mousePosition = max(0, min(duration, pointTime))
 			mousePositionSteps = nil
@@ -91,13 +96,16 @@ struct PositionControl: View {
 			ZStack {
 				let width = max(1, min(2, 3 - geo.size.height / 20)) + 0.5
 				
+				// Needed, otherwise we won't get hover... :|
+				Rectangle().fill(Color.clear)
+				
 				if let currentTime = currentTime {
 					VBar(position: CGFloat(currentTime) / CGFloat(duration))
 						.stroke(lineWidth: width)
 						.id("playerbar")
 					
 					if let mousePositionSteps = mousePositionSteps, let moveStepDuration = moveStepDuration {
-						VBar(position: CGFloat(currentTime) + CGFloat(mousePositionSteps) * CGFloat(moveStepDuration) / CGFloat(duration))
+						VBar(position: (CGFloat(currentTime) + CGFloat(mousePositionSteps) * CGFloat(moveStepDuration)) / CGFloat(duration))
 							.stroke(lineWidth: width)
 							.opacity(isDragging ? 1 : 0.5)
 							.id("mousebar")

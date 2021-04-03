@@ -11,6 +11,7 @@ class NSHoverPosition: NSView {
     var onChanged:  (CGPoint) -> Void
     var onEnded:  () -> Void
 
+	var isInside = false
     private var trackingArea: NSTrackingArea?
 
     init(onChanged: @escaping (CGPoint) -> Void, onEnded: @escaping () -> Void) {
@@ -35,15 +36,19 @@ class NSHoverPosition: NSView {
     public override func mouseEntered(with event: NSEvent) {
         let location = convert(event.locationInWindow, from: nil)
         onChanged(location)
+		isInside = true
     }
 
     override func mouseMoved(with event: NSEvent) {
-        let location = convert(event.locationInWindow, from: nil)
-        onChanged(location)
+		if isInside {
+			let location = convert(event.locationInWindow, from: nil)
+			onChanged(location)
+		}
     }
 
     public override func mouseExited(with event: NSEvent) {
         onEnded()
+		isInside = false
     }
 }
 

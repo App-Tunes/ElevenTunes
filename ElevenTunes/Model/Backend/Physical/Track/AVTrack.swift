@@ -58,12 +58,13 @@ public final class AVTrack: RemoteTrack {
 	var cache: DBAVTrack? = nil
 
 	enum Request {
-		case url, analyze, taglib, waveform
+		case url, analyze, taglib, avfoundation, waveform
 	}
 	
 	let mapper = Requests(relation: [
 		.url: [],
 		.taglib: [.title, .key, .tempo, .previewImage, .artists, .album, .genre],
+		.avfoundation: [.duration],
 		.waveform: [.waveform],
 		.analyze: []
 	])
@@ -160,6 +161,18 @@ extension AVTrack: RequestMapperDelegate {
 				]), state: .valid)
 			}
 			.eraseToAnyPublisher()
+		case .avfoundation:
+			return Future.tryOnQueue(.global(qos: .default)) {
+				let file = try AppDelegate.heavyWork.waitAndDo {
+					try AVAudioFile(forReading: url)
+				}
+				let format = file.processingFormat
+				
+				return .init(.unsafe([
+					.duration: TimeInterval(file.length) / format.sampleRate
+				]), state: .valid)
+			}
+			.eraseError().eraseToAnyPublisher()
 		case .analyze:
 			return Future.tryOnQueue(.global(qos: .default)) {
 				let file = EssentiaFile(url: url)
