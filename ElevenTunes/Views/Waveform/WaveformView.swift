@@ -51,6 +51,7 @@ struct ResamplingWaveformView: View {
 					$0.isFinite ? gradient[Int(round(max(0, min(1, $0)) * 255))] : .white
 				}
 			)
+				.id(samples)
 		}
 	}
 }

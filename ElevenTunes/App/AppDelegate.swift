@@ -22,6 +22,8 @@ class GlobalSettingsLevel: SettingsLevel {
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
+	static let heavyWork = DispatchSemaphore(value: 2)
+	
     let spotify: Spotify
 
     let settingsWC: SettingsWindowController

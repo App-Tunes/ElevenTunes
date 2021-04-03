@@ -33,6 +33,8 @@ extension TrackAttribute {
 	static let genre = Typed<String>(rawValue: "genre")
 	static let year = Typed<Int>(rawValue: "year")
 
+	static let duration = Typed<TimeInterval>(rawValue: "duration")
+
 	static let waveform = Typed<Waveform>(rawValue: "waveform")
 
 	static let previewImage = Typed<NSImage>(rawValue: "previewImage")

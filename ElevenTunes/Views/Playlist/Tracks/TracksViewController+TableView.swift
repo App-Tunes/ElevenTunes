@@ -18,6 +18,7 @@ extension TracksViewController: NSTableViewDelegate {
 		static let Album = NSUserInterfaceItemIdentifier(rawValue: "Album")
 		static let Genre = NSUserInterfaceItemIdentifier(rawValue: "Genre")
 		static let Year = NSUserInterfaceItemIdentifier(rawValue: "Year")
+		static let Waveform = NSUserInterfaceItemIdentifier(rawValue: "Waveform")
 	}
 
 	enum CellIdentifiers {
@@ -29,6 +30,7 @@ extension TracksViewController: NSTableViewDelegate {
 		static let ArtistsCell = NSUserInterfaceItemIdentifier(rawValue: "ArtistsCell")
 		static let GenreCell = NSUserInterfaceItemIdentifier(rawValue: "GenreCell")
 		static let YearCell = NSUserInterfaceItemIdentifier(rawValue: "YearCell")
+		static let WaveformCell = NSUserInterfaceItemIdentifier(rawValue: "WaveformCell")
 	}
 
 	func initColumns() {
@@ -46,6 +48,13 @@ extension TracksViewController: NSTableViewDelegate {
 			$0.headerCell.alignment = .center
 		}
 		
+		addColumn(ColumnIdentifiers.Waveform, title: "􀙫") {
+			$0.widthRange = 42...CGFloat.infinity
+			$0.width = 50
+			$0.headerCell.alignment = .center
+			$0.resizingMask = .userResizingMask
+		}
+
 		addColumn(ColumnIdentifiers.Title, title: "Title") {
 			$0.widthRange = 150...CGFloat.infinity
 			$0.resizingMask = [.autoresizingMask, .userResizingMask]
@@ -84,11 +93,12 @@ extension TracksViewController: NSTableViewDelegate {
 			$0.widthRange = 42...42
 			$0.headerCell.alignment = .center
 		}
-				
+
 		tableViewHiddenExtension = .init(tableView: tableView, titles: [
 			ColumnIdentifiers.Image: "Artwork (⸬)",
 			ColumnIdentifiers.Tempo: "Beats per Minute (♩=)",
 			ColumnIdentifiers.Key: "Initial Key (♫)",
+			ColumnIdentifiers.Waveform: "Waveform (􀙫)",
 		], affix: [ColumnIdentifiers.Title])
 		tableViewHiddenExtension.attach()
 		
@@ -122,6 +132,11 @@ extension TracksViewController: NSTableViewDelegate {
 			return view
 		}
 
+		if let view = createOn(ColumnIdentifiers.Waveform, cell: CellIdentifiers.WaveformCell) {
+			view.rootView = AnyView(PlayPositionView(player: player, track: track.backend, isSecondary: true))
+			return view
+		}
+		
 		if let view = createOn(ColumnIdentifiers.Tempo, cell: CellIdentifiers.TempoCell) {
 			view.rootView = AnyView(TrackTempoView(track: track))
 			return view

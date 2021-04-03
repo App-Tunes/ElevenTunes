@@ -8,163 +8,9 @@
 import SwiftUI
 import AVFoundation
 
-struct VBar : Shape {
-    var position: CGFloat
-
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-
-        path.move(to: .init(x: rect.size.width * position, y: rect.size.height))
-        path.addLine(to: .init(x: rect.size.width * position, y: 0))
-
-        return path
-    }
-
-    var animatableData: CGFloat {
-        get { return position }
-        set { position = newValue }
-    }
-}
-
-struct PlayPositionBarsView: View {
-    let player: SinglePlayer
-
-	let playing: AudioTrack
-	/// Single move step in seconds
-	let moveStep: CGFloat?
-
-    @State var playerState: PlayerState = .init(isPlaying: false, currentTime: nil)
-
-    @State var position: CGFloat? = nil
-
-	// 'free' moues position vs 'stepped' are handled differently,
-	// so 'stepped' is animated properly and the jump can be exact
-	@State var mousePosition: CGFloat? = nil
-	@State var mousePositionSteps: Int? = nil
-    @State var isDragging = false
-    
-    func updatePosition() {
-        guard let duration = playing.duration, let currentTime = playing.currentTime else {
-            position = nil // TODO Show infinite loading-bar style progress bar
-            return
-        }
-        
-        withAnimation(.instant) {
-            position = CGFloat(currentTime / duration)
-        }
-
-        if playerState.isPlaying {
-            let timeLeft = duration - currentTime
-            
-            withAnimation(.linear(duration: timeLeft)) {
-                position = 1
-            }
-        }
-    }
-    
-    func move(to point: CGFloat) {
-		guard let duration = playing.duration else {
-			return
-		}
-		
-		let pointTime = TimeInterval(point) * duration
-
-        do {
-			if
-				!NSEvent.modifierFlags.contains(.option),
-				let moveStep = moveStep.map({ TimeInterval($0) }),
-				let currentTime = playing.currentTime
-			{
-				let steps = round((pointTime - currentTime) / moveStep)
-				if abs(steps) < 0.0001 {
-					return // Why bother? 0 Steps
-				}
-				
-				try playing.move(to: max(0, min(duration, currentTime + steps * moveStep)))
-			}
-			else {
-				try playing.move(to: max(0, min(duration, pointTime)))
-			}
-        } catch let error {
-            appLogger.error("Error moving to time: \(error)")
-        }
-    }
-	
-	func updateMousePosition(_ position: CGFloat) {
-		let position = max(0, min(1, position))
-		
-		guard
-			let duration = playing.duration.map({ CGFloat($0) }),
-			let moveStep = moveStep.map({ CGFloat($0) }),
-			let currentTime = playing.currentTime.map({ CGFloat($0) }),
-			!NSEvent.modifierFlags.contains(.option)
-		else {
-			mousePosition = position
-			mousePositionSteps = nil
-			return
-		}
-		
-		mousePositionSteps = Int(round((position * duration - currentTime) / moveStep))
-		mousePosition = nil
-		updatePosition()  // To start animating mouse too
-	}
-    
-    var body: some View {
-        GeometryReader { geo in
-            ZStack {
-				let width = max(1, min(2, 3 - geo.size.height / 20)) + 0.5
-                
-                if let position = position {
-                    VBar(position: position)
-                        .stroke(lineWidth: width)
-						.id("playerbar")
-					
-					if let mousePositionSteps = mousePositionSteps, let duration = playing.duration, let moveStep = moveStep {
-						VBar(position: position + CGFloat(mousePositionSteps) * moveStep / CGFloat(duration))
-							.stroke(lineWidth: width)
-							.opacity(isDragging ? 1 : 0.5)
-							.id("mousebar")
-					}
-                }
-                
-                if playing.duration != nil, let mousePosition = mousePosition {
-                    VBar(position: mousePosition)
-                        .stroke(lineWidth: width)
-                        .opacity(isDragging ? 1 : 0.5)
-						.id("mousebar")
-                }
-            }
-            .contentShape(Rectangle())
-            .gesture(
-                DragGesture(minimumDistance: 0, coordinateSpace: .local)
-                    .onChanged { value in
-                        updateMousePosition(value.location.x / geo.size.width)
-                        isDragging = true
-                    }
-                    .onEnded { value in
-						move(to: value.location.x / geo.size.width)
-                        isDragging = false
-						mousePosition = nil
-						mousePositionSteps = nil
-                    }
-            )
-            .onHoverLocation { location in
-                updateMousePosition(location.x / geo.size.width)
-            } onEnded: {
-                mousePosition = nil
-				mousePositionSteps = nil
-            }
-        }
-        .onReceive(player.$state) { state in
-            self.playerState = state
-            updatePosition()
-        }
-    }
-}
-
 struct PlayPositionLabelsView: View {
-	let player: SinglePlayer
-	@State var playerState: PlayerState = .init(isPlaying: false, currentTime: nil)
+	var duration: TimeInterval?
+	var playerState: PlayerState
 
 	var body: some View {
 		let now = Date()
@@ -181,7 +27,7 @@ struct PlayPositionLabelsView: View {
 				
 				Spacer()
 
-				if let duration = player.playing?.duration {
+				if let duration = duration {
 					CountdownText(referenceDate: start.advanced(by: duration), advancesAutomatically: playerState.isPlaying, currentDate: now)
 						.foregroundColor(.secondary)
 						.frame(width: 60, height: 20)
@@ -191,28 +37,52 @@ struct PlayPositionLabelsView: View {
 			}
 		}
 		.id(playerState)
-		.onReceive(player.$state) { state in
-			self.playerState = state
-		}
+	}
+}
+
+struct PlayTrackingView<V: View>: View {
+	struct PlayerTrackState {
+		var track: AnyTrack? = nil
+		var audio: AudioTrack? = nil
+		var state: PlayerState = .init(isPlaying: false, currentTime: nil)
+	}
+	
+	var player: Player
+	var callback: (PlayerTrackState) -> V
+
+	@State var state: PlayerTrackState = .init()
+
+	var body: some View {
+		callback(state)
+			.onReceive(player.singlePlayer.$playing) {
+				self.state.audio = $0
+			}
+			.onReceive(player.$current) {
+				self.state.track = $0
+			}
+			.onReceive(player.singlePlayer.$state) {
+				self.state.state = $0
+			}
 	}
 }
 
 struct PlayPositionView: View {
-    let player: Player
-	
-	@State var playingAudio: AudioTrack?
-	@State var playingTrack: AnyTrack?
+    var player: Player
+	var track: AnyTrack
+	var isSecondary: Bool = false
+
+	@State var duration: TimeInterval?
 	@State var tempo: Tempo?
 	@State var waveform: Waveform?
 
-	var moveStep: CGFloat? {
-		return tempo.map { CGFloat(1 / $0.bps) * 32 }
+	var moveStep: TimeInterval? {
+		return tempo.map { TimeInterval(1 / $0.bps) * 32 }
 	}
 	
     var body: some View {
-        GeometryReader { geo in
-			ZStack {
-                if let playingAudio = playingAudio {
+		PlayTrackingView(player: player) { state in
+			GeometryReader { geo in
+				ZStack {
 					if let waveform = waveform {
 						ResamplingWaveformView(
 							gradient: Gradients.pitch,
@@ -223,44 +93,73 @@ struct PlayPositionView: View {
 							.frame(height: geo.size.height, alignment: .bottom)
 					}
 
-					PlayPositionBarsView(
-						player: player.singlePlayer,
-						playing: playingAudio,
-						moveStep: moveStep
-					)
-                }
-				
-				if geo.size.height >= 26 {
-					PlayPositionLabelsView(player: player.singlePlayer)
-						.allowsHitTesting(false)
+					if let duration = (state.track?.id == track.id ? state.audio?.duration : duration) {
+						PositionControl(
+							currentTime: state.state.currentTime,
+							duration: duration,
+							advancesAutomatically: state.state.isPlaying,
+							moveStepDuration: moveStep,
+							moveTo: {
+								if let audio = state.audio, state.track?.id == track.id {
+									try? audio.move(to: $0)
+								}
+								else {
+									// TODO Start track from $0
+								}
+							},
+							moveBy: {
+								if let audio = state.audio, state.track?.id == track.id, let time = audio.currentTime {
+									try? audio.move(to: $0 + time)
+								}
+							}
+						)
+							.id(state.state)
+						
+						if !isSecondary, state.track?.id == track.id, geo.size.height >= 26, geo.size.width >= 200 {
+							PlayPositionLabelsView(duration: duration, playerState: state.state)
+								.allowsHitTesting(false)
+						}
+					}
 				}
-            }
-        }
-		.id(playingTrack?.id) // Required because sometimes bars don't reset :<
-		.onReceive(player.singlePlayer.$playing) {
-			self.playingAudio = $0
+			}
 		}
-		.onReceive(player.$current) {
-			self.playingTrack = $0
-		}
-		.whileActive(playingTrack?.demand([.tempo, .waveform]))
-		.onReceive(playingTrack?.attribute(TrackAttribute.tempo).map(\.value), default: nil) {
-			self.tempo = $0
-		}
-		.onReceive(playingTrack?.attribute(TrackAttribute.waveform).map(\.value), default: nil) {
-			self.waveform = $0
+		.id(track.id) // Required because sometimes bars don't reset :<
+		.whileActive(track.demand([.tempo, .waveform, .duration]))
+		.onReceive(track.attributes) { (snapshot, _) in
+			setIfDifferent(self, \.duration, snapshot[TrackAttribute.duration].value)
+			setIfDifferent(self, \.tempo, snapshot[TrackAttribute.tempo].value)
+			setIfDifferent(self, \.waveform, snapshot[TrackAttribute.waveform].value)
 		}
         // TODO hugging / compression resistance:
         // setting min height always compressed down to min height :<
-        .frame(minHeight: 20, idealHeight: 30, maxHeight: 50)
     }
 }
 
-struct PlayPositionView_Previews: PreviewProvider {
-    static var previews: some View {
-		let player = Player(context: .init())
-		player.play(LibraryMock.track())
-		
-		return PlayPositionView(player: player)
-    }
+struct CurrentPlayPositionView: View {
+	var player: Player
+	@State var track: AnyTrack?
+
+	var body: some View {
+		Group {
+			if let track = track {
+				PlayPositionView(player: player, track: track)
+			}
+			else {
+				// Otherwise we don't have any size...
+				Rectangle().fill(Color.clear)
+			}
+		}
+		.onReceive(player.$current) {
+			self.track = $0
+		}
+	}
 }
+
+//struct PlayPositionView_Previews: PreviewProvider {
+//    static var previews: some View {
+//		let player = Player(context: .init())
+//		player.play(LibraryMock.track())
+//
+//		return PlayPositionView(player: player)
+//    }
+//}

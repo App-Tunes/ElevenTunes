@@ -14,6 +14,8 @@ class TracksViewController: NSViewController {
 	var tableViewSynchronizer: NSTableView.ActiveSynchronizer!
 
 	var library: Library
+	var player: Player
+
 	var playlist: Playlist {
 		didSet {
 			updatePlaylistObserver()
@@ -30,9 +32,10 @@ class TracksViewController: NSViewController {
 	
 	var cancellables = Set<AnyCancellable>()
 	
-	init(_ playlist: Playlist, library: Library) {
+	init(_ playlist: Playlist, library: Library, player: Player) {
 		self.playlist = playlist
 		self.library = library
+		self.player = player
 		super.init(nibName: nil, bundle: .main)
 		updatePlaylistObserver()
 	}

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Waveform {
+struct Waveform: Hashable {
 	var loudness: [Float]
 	var pitch: [Float]
 	

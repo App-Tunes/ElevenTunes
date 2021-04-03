@@ -17,13 +17,12 @@ struct PlayerBarView: View {
                 .edgesIgnoringSafeArea([.top, .leading])
                 .frame(height: 0)
 
-            HStack {
-                PlayPositionView(player: player)
-            }
-            .background(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.6), .clear]).applying(iterations: 10) { pow($0, 0.3) }, startPoint: .bottom, endPoint: .top))
+			CurrentPlayPositionView(player: player)
+				.frame(minHeight: 20, idealHeight: 30, maxHeight: 50)
+				.background(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.6), .clear]).applying(iterations: 10) { pow($0, 0.3) }, startPoint: .bottom, endPoint: .top))
                 .layoutPriority(2)
         }
-        .background(PlayerMilkyCoverView().edgesIgnoringSafeArea(.top))
+			.background(PlayerMilkyCoverView().edgesIgnoringSafeArea(.top))
     }
 }
 
