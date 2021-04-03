@@ -19,10 +19,25 @@ class StaticMenu {
 	let menu = NSMenu()
 	let receiver = Receiver()
 	
-	func addItem(withTitle title: String, callback: @escaping () -> Void) {
+	@discardableResult
+	func addItem(withTitle title: String, disabled: Bool = false, callback: @escaping () -> Void) -> NSMenuItem {
 		let item = NSMenuItem(title: title, action: #selector(Receiver.onClick(_:)), keyEquivalent: "")
 		item.target = receiver
-		item.representedObject = (receiver, callback)
+		item.isEnabled = !disabled
+		if (!disabled) {
+			item.representedObject = (receiver, callback)
+		}
 		menu.addItem(item)
+		return item
+	}
+	
+	func addSubmenu(withTitle title: String) -> StaticMenu {
+		let item = NSMenuItem(title: title, action: #selector(Receiver.onClick(_:)), keyEquivalent: "")
+		let submenu = StaticMenu()
+		item.submenu = submenu.menu
+		item.target = receiver
+		item.representedObject = (receiver, {})
+		menu.addItem(item)
+		return submenu
 	}
 }

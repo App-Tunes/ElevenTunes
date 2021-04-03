@@ -11,18 +11,20 @@ import AppKit
 
 class TrackActions: NSObject {
 	let tracks: Set<Track>
+	let algorithms: [(String, [TrackAlgorithm])]
 
 	init(tracks: Set<Track>) {
 		self.tracks = tracks
+		algorithms = TrackAlgorithms.for(tracks.map(\.backend))
 	}
 
-	init(track: Track, selection: Set<Track>) {
-		self.tracks = selection.allIfContains(track)
+	convenience init(track: Track, selection: Set<Track>) {
+		self.init(tracks: selection.allIfContains(track))
 	}
 
-    init(tracks: [Track], idx: Int, selected: Set<Int>) {
+	convenience init(tracks: [Track], idx: Int, selected: Set<Int>) {
         let sindices = selected.allIfContains(idx)
-		self.tracks = Set(sindices.map { tracks[$0] })
+		self.init(tracks: Set(sindices.map { tracks[$0] }))
     }
         
     func callAsFunction() -> some View {
@@ -42,6 +44,19 @@ class TrackActions: NSObject {
                     Text("Visit Origin")
                 }
             }
+			
+			if let algorithms = algorithms.nonEmpty {
+				Menu("􀫥 Analyze...") {
+					ForEach(algorithms, id: \.0) { (name, algorithm) in
+						Button(action: {
+							TrackAlgorithms.run(algorithm)
+						}) {
+							Text(name)
+						}
+						.disabled(true)
+					}
+				}
+			}
 			
 			if tracks.map(\.backend) as? [BranchingTrack] != nil{
 				Button(action: unlink) {
@@ -69,6 +84,15 @@ class TrackActions: NSObject {
 		if let track = tracks.one, let origin = track.backend.origin {
 			menu.addItem(withTitle: "Visit Origin") {
 				NSWorkspace.shared.open(origin)
+			}
+		}
+		
+		if !algorithms.isEmpty {
+			let algorithmsMenu = menu.addSubmenu(withTitle: "Analyze...")
+			for (name, algorithm) in algorithms {
+				algorithmsMenu.addItem(withTitle: name, disabled: true) {
+					TrackAlgorithms.run(algorithm)
+				}
 			}
 		}
 		

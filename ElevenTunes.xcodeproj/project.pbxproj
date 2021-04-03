@@ -194,6 +194,9 @@
 		80AD69A5258829C400192BED /* PlaylistBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AD69A4258829C400192BED /* PlaylistBarView.swift */; };
 		80AD69AA258829EE00192BED /* FilterBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AD69A9258829EE00192BED /* FilterBarView.swift */; };
 		80AD69B725882D1200192BED /* PlayPositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AD69B625882D1200192BED /* PlayPositionView.swift */; };
+		80AF40942618F1BE00117F06 /* EssentiaAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AF40932618F1BE00117F06 /* EssentiaAnalyzer.swift */; };
+		80AF409A2618F1D000117F06 /* TrackAlgorithms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AF40992618F1D000117F06 /* TrackAlgorithms.swift */; };
+		80AF409E2618F77F00117F06 /* AlgorithmRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AF409D2618F77F00117F06 /* AlgorithmRunner.swift */; };
 		80B357D225F6FAC400180A4A /* NSTableView+Synchronization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B357D125F6FAC400180A4A /* NSTableView+Synchronization.swift */; };
 		80BF6A9B26111FC600CDCB2F /* libessentia.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 80BF6A9A26111FC600CDCB2F /* libessentia.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		80BF6AA32611208D00CDCB2F /* libessentia-analysis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80BF6A7F26111BE500CDCB2F /* libessentia-analysis.a */; };
@@ -512,6 +515,9 @@
 		80AD69A4258829C400192BED /* PlaylistBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistBarView.swift; sourceTree = "<group>"; };
 		80AD69A9258829EE00192BED /* FilterBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBarView.swift; sourceTree = "<group>"; };
 		80AD69B625882D1200192BED /* PlayPositionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayPositionView.swift; sourceTree = "<group>"; };
+		80AF40932618F1BE00117F06 /* EssentiaAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EssentiaAnalyzer.swift; sourceTree = "<group>"; };
+		80AF40992618F1D000117F06 /* TrackAlgorithms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackAlgorithms.swift; sourceTree = "<group>"; };
+		80AF409D2618F77F00117F06 /* AlgorithmRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlgorithmRunner.swift; sourceTree = "<group>"; };
 		80B357D125F6FAC400180A4A /* NSTableView+Synchronization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTableView+Synchronization.swift"; sourceTree = "<group>"; };
 		80BF6A9A26111FC600CDCB2F /* libessentia.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libessentia.dylib; path = Frameworks/Essentia/essentia/build/src/libessentia.dylib; sourceTree = "<group>"; };
 		80C9A177259F8FD300A038CC /* MilkyImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MilkyImageView.swift; sourceTree = "<group>"; };
@@ -888,6 +894,7 @@
 			isa = PBXGroup;
 			children = (
 				805FD8B325A128CE00F32BFB /* Audio */,
+				80AF408F2618F19700117F06 /* Algorithm */,
 				806E1FC12596A12C003EEA83 /* AnyTrack.swift */,
 				80A8C89825BF738500F97EF0 /* AnyTrackCache.swift */,
 				80A8C88B25BF5FA400F97EF0 /* TrackToken.swift */,
@@ -1302,6 +1309,16 @@
 			path = Playlist;
 			sourceTree = "<group>";
 		};
+		80AF408F2618F19700117F06 /* Algorithm */ = {
+			isa = PBXGroup;
+			children = (
+				80AF409D2618F77F00117F06 /* AlgorithmRunner.swift */,
+				80AF40992618F1D000117F06 /* TrackAlgorithms.swift */,
+				80AF40932618F1BE00117F06 /* EssentiaAnalyzer.swift */,
+			);
+			path = Algorithm;
+			sourceTree = "<group>";
+		};
 		80BF6A7A26111BE500CDCB2F /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -1675,6 +1692,7 @@
 				8005085E259802B60055FB2D /* RawRepresentable.swift in Sources */,
 				802E2CF52596359300CB91EC /* Track+Attributes.swift in Sources */,
 				806B0D3425A9EF1400603E64 /* SetRelation.swift in Sources */,
+				80AF409E2618F77F00117F06 /* AlgorithmRunner.swift in Sources */,
 				802E2D8A259640BF00CB91EC /* DirectoryPlaylist.swift in Sources */,
 				80A8C84F25BF5B5200F97EF0 /* DBTrack+CoreDataProperties.swift in Sources */,
 				802E2CC9259602F200CB91EC /* SettingsWindowController.swift in Sources */,
@@ -1740,6 +1758,7 @@
 				806185A225F4E6FA0062AAB3 /* NSOutlineView.swift in Sources */,
 				802E2BC12594DE1F00CB91EC /* LibraryDocument.swift in Sources */,
 				805C9682260AA6EC004AF5A9 /* SpotifyAudioDeviceProvider.swift in Sources */,
+				80AF40942618F1BE00117F06 /* EssentiaAnalyzer.swift in Sources */,
 				80A8C84325BF5B5200F97EF0 /* DBAVTrack+CoreDataProperties.swift in Sources */,
 				806B28D8258FB4F50091EA4D /* NSItemProvider+Combine.swift in Sources */,
 				805C968F260AB219004AF5A9 /* ObservableBinding.swift in Sources */,
@@ -1769,6 +1788,7 @@
 				800C11FF259A3EF10017A116 /* TrackRowView.swift in Sources */,
 				806E1FDB2596A9A3003EEA83 /* CodableTransformer.swift in Sources */,
 				806185C925F534650062AAB3 /* TrackTempoView.swift in Sources */,
+				80AF409A2618F1D000117F06 /* TrackAlgorithms.swift in Sources */,
 				80C9A18F259FA13000A038CC /* Optional.swift in Sources */,
 				802376CB26095E0000A5E826 /* DispatchQueue.swift in Sources */,
 				8054C01A259F860000A7035A /* SpotifyURIPlaylist.swift in Sources */,

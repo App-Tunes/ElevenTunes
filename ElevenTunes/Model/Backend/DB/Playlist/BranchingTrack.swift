@@ -90,4 +90,8 @@ extension AnyTrack {
 	var primary: AnyTrack {
 		(self as? BranchingTrack)?.primary ?? self
 	}
+	
+	var allRepresentations: [AnyTrack] {
+		(self as? BranchingTrack)?.all ?? [self]
+	}
 }
