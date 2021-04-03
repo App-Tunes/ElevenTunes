@@ -61,17 +61,16 @@ public class AVAudioDevice: AudioDevice {
 			return false
 		}
 
-		guard let list = try? CoreAudioTT.getObjectPointer(
+		return (try? CoreAudioTT.withObjectProperty(
 			object: deviceID,
 			address: address,
 			type: AudioBufferList.self,
-			count: count
-		) else {
-			return false
-		}
-
-		return UnsafeMutableAudioBufferListPointer(list)
-			.anySatisfy { $0.mNumberChannels > 0 }
+			count: count,
+			map: {
+				UnsafeMutableAudioBufferListPointer($0)
+					.anySatisfy { $0.mNumberChannels > 0 }
+			}
+		)) ?? false
 	}
 
 	var uid: String? {

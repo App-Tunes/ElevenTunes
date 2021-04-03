@@ -99,21 +99,24 @@ class CoreAudioTT {
 		return nil
 	}
 	
-	static func getObjectPointer<T>(object: AudioObjectID, address: AudioObjectPropertyAddress, type: T.Type, count: Int = 1) throws -> UnsafeMutablePointer<T> {
+	static func withObjectProperty<T, R>(object: AudioObjectID, address: AudioObjectPropertyAddress, type: T.Type, count: Int = 1, map: (UnsafeMutablePointer<T>) -> R) throws -> R {
 		var propertySize = UInt32(MemoryLayout<T>.size) * UInt32(count)
 		
 		var address = address
 
 		let obj = malloc(Int(propertySize))!
+		defer { free(obj) }
 		let error = AudioObjectGetPropertyData(object, &address, 0, nil, &propertySize, obj)
 
 		guard error == 0 else { throw OSError(code: error) }
 		
-		return obj.assumingMemoryBound(to: T.self)
+		return map(obj.assumingMemoryBound(to: T.self))
 	}
 	
 	static func getObjectProperty<T>(object: AudioObjectID, address: AudioObjectPropertyAddress, type: T.Type) throws -> T {
-		try getObjectPointer(object: object, address: address, type: type).pointee
+		try withObjectProperty(object: object, address: address, type: type) {
+			$0.pointee
+		}
 	}
 		
 	static func getObjectPropertyCount<T>(object: AudioObjectID, address: AudioObjectPropertyAddress, forType type: T.Type) throws -> Int {
@@ -129,8 +132,9 @@ class CoreAudioTT {
 	
 	static func getObjectPropertyList<T>(object: AudioObjectID, address: AudioObjectPropertyAddress, type: T.Type) throws -> [T] {
 		let count = try getObjectPropertyCount(object: object, address: address, forType: type)
-		let pointer = try getObjectPointer(object: object, address: address, type: type, count: count)
-		return Array(UnsafeBufferPointer(start: pointer, count: count))
+		return try withObjectProperty(object: object, address: address, type: type, count: count) {
+			Array(UnsafeBufferPointer(start: $0, count: count))
+		}
 	}
 
 	static func setObjectProperty<T>(object: AudioObjectID, address: AudioObjectPropertyAddress, value: T) throws {
