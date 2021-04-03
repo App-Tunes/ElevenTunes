@@ -21,8 +21,9 @@ struct TrackYearView: View {
 	}
 }
 
-//struct TrackYearView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TrackYearView()
-//    }
-//}
+struct TrackYearView_Previews: PreviewProvider {
+    static var previews: some View {
+		TrackYearView(track: Track(LibraryMock.track()))
+			.frame(width: 200, height: 100)
+    }
+}

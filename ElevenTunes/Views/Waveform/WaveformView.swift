@@ -55,15 +55,11 @@ struct ResamplingWaveformView: View {
 	}
 }
 
-struct WaveformView_Previews: PreviewProvider {
+struct ResamplingWaveformView_Previews: PreviewProvider {
     static var previews: some View {
-		WaveformView(
-			data: (0...80).map {
-				(sin(CGFloat($0) / 3) + 1) / 2
-			},
-			color: (0...80).map {
-				Gradients.pitch[Int((sin(CGFloat($0) / 2) + 1) / 2 * 255)]
-			}
+		ResamplingWaveformView(
+			gradient: Gradients.pitch, waveform: LibraryMock.waveform()
 		)
+			.frame(width: 500, height: 100)
     }
 }

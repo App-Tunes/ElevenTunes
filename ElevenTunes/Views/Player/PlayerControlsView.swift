@@ -82,11 +82,9 @@ struct PlayerControlsView: View {
 		.onReceive(player.$repeatEnabled) { self.repeatEnabled = $0 }
     }
 }
-//
-//struct PlayerControlsView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        let player = Player()
-//        
-//        PlayerControlsView(player: player)
-//    }
-//}
+
+struct PlayerControlsView_Previews: PreviewProvider {
+    static var previews: some View {
+        PlayerControlsView(player: Player(context: .init()))
+    }
+}

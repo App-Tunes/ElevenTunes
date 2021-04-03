@@ -13,22 +13,24 @@ public class PlayContext: ObservableObject {
 	let avProvider: AVAudioDeviceProvider
 	@Published var avOutputDevice: AVAudioDevice?
 
-	let spotifyProvider: SpotifyAudioDeviceProvider
+	let spotifyProvider: SpotifyAudioDeviceProvider?
 	@Published var spotifyDevice: SpotifyAudioDevice?
 		
 	var cancellables: Set<AnyCancellable> = []
 	
-	init(spotify: Spotify) {
+	init(spotify: Spotify? = nil) {
 		self.avProvider = .init()
-		self.spotifyProvider = .init(spotify: spotify)
+		self.spotifyProvider = spotify.map { .init(spotify: $0) }
 		
 		avOutputDevice = .systemDefault
 		
-		spotify.devices.$online.sink { [weak self] devices in
-			guard let self = self else { return }
-			
-			self.spotifyDevice = devices.first.map { SpotifyAudioDevice(spotify: spotify, device: $0) }
-		}.store(in: &cancellables)
+		if let spotify = spotify {
+			spotify.devices.$online.sink { [weak self] devices in
+				guard let self = self else { return }
+				
+				self.spotifyDevice = devices.first.map { SpotifyAudioDevice(spotify: spotify, device: $0) }
+			}.store(in: &cancellables)
+		}
 	}
 	
 	var deviceStream: AnyPublisher<BranchingAudioDevice, Never> {

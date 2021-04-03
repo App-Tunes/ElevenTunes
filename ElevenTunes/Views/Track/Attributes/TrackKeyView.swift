@@ -21,8 +21,9 @@ struct TrackKeyView: View {
     }
 }
 
-//struct TrackKeyView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TrackKeyView()
-//    }
-//}
+struct TrackKeyView_Previews: PreviewProvider {
+    static var previews: some View {
+		TrackKeyView(track: Track(LibraryMock.track()))
+			.frame(width: 200, height: 100)
+    }
+}

@@ -21,8 +21,9 @@ struct TrackGenreView: View {
 	}
 }
 
-//struct TrackGenreView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TrackGenreView()
-//    }
-//}
+struct TrackGenreView_Previews: PreviewProvider {
+    static var previews: some View {
+		TrackGenreView(track: Track(LibraryMock.track()))
+			.frame(width: 200, height: 100)
+    }
+}

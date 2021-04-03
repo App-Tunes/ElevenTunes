@@ -15,10 +15,12 @@ struct AudioSetupView: View {
 		ScrollView {
 			VStack {
 				AudioProviderView(provider: context.avProvider, current: .init(context, value: \.avOutputDevice))
-				
-				Divider()
 
-				AudioProviderView(provider: context.spotifyProvider, current: .init(context, value: \.spotifyDevice))
+				if let spotify = context.spotifyProvider {
+					Divider()
+
+					AudioProviderView(provider: spotify, current: .init(context, value: \.spotifyDevice))
+				}
 			}
 		}
 			.padding(.vertical)

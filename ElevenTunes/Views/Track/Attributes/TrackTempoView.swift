@@ -21,8 +21,9 @@ struct TrackTempoView: View {
     }
 }
 
-//struct TrackTempoView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TrackTempoView()
-//    }
-//}
+struct TrackTempoView_Previews: PreviewProvider {
+    static var previews: some View {
+		TrackTempoView(track: Track(LibraryMock.track()))
+			.frame(width: 200, height: 100)
+    }
+}

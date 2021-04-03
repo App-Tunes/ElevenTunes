@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import SwiftUI
+import AVFoundation
 
 class MockTrack: TrackToken, AnyTrack {
     enum CodingKeys: String, CodingKey {
@@ -39,7 +40,9 @@ class MockTrack: TrackToken, AnyTrack {
 	@Published var version: TrackVersion
 
 	func demand(_ demand: Set<TrackAttribute>) -> AnyCancellable {
-		AnyCancellable {}
+		// The ones we don't have, we can never fulfill either
+		_attributes.updateEmptyMissing(demand)
+		return AnyCancellable { }
 	}
 	
 	var attributes: AnyPublisher<TrackAttributes.Update, Never> {
@@ -47,7 +50,20 @@ class MockTrack: TrackToken, AnyTrack {
 	}
 
 	func audioTrack(forDevice device: BranchingAudioDevice) throws -> AnyPublisher<AudioTrack, Error> {
-		throw UnsupportedAudioDeviceError()
+		// TODO This doesn't work yet
+		guard
+			let device = device.av,
+			let url = Bundle.main.url(forResource: "445632__djfroyd__c-major-scale", withExtension: "wav")
+		else {
+			throw UnsupportedAudioDeviceError()
+		}
+		
+		return Future.tryOnQueue(.global(qos: .default)) { [url] in
+			let file = try AVAudioFile(forReading: url)
+			let singleDevice = try device.prepare(file)
+			return AVAudioPlayerEmitter(singleDevice, file: file)
+		}
+			.eraseToAnyPublisher()
 	}
     
 	func supports(_ capability: TrackCapability) -> Bool {

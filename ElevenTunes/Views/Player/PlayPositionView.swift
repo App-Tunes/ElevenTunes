@@ -256,8 +256,11 @@ struct PlayPositionView: View {
     }
 }
 
-//struct PlayPositionView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PlayPositionView(player: SinglePlayer())
-//    }
-//}
+struct PlayPositionView_Previews: PreviewProvider {
+    static var previews: some View {
+		let player = Player(context: .init())
+		player.play(LibraryMock.track())
+		
+		return PlayPositionView(player: player)
+    }
+}

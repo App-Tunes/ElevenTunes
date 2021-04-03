@@ -21,7 +21,7 @@ struct CountdownText: View {
 	var timeLeft: String {
 		let time = abs(referenceDate.timeIntervalSince(currentDate))
 		
-		let totalSeconds = Int(time)
+		let totalSeconds = Int(round(time))
 		let hours: Int = Int(totalSeconds / 3600)
 		
 		let minutes: Int = Int(totalSeconds % 3600 / 60)
@@ -45,7 +45,8 @@ struct CountdownText: View {
 struct CountdownText_Previews: PreviewProvider {
     static var previews: some View {
         CountdownText(
-			referenceDate: Date().advanced(by: 10), advancesAutomatically: false, currentDate: Date()
+			referenceDate: Date().advanced(by: 10), advancesAutomatically: true, currentDate: Date()
 		)
+			.frame(width: 60, height: 15)
     }
 }

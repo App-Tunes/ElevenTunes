@@ -103,6 +103,7 @@
 		806185C325F51C220062AAB3 /* TracksViewController+TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185C225F51C220062AAB3 /* TracksViewController+TableView.swift */; };
 		806185C925F534650062AAB3 /* TrackTempoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185C825F534650062AAB3 /* TrackTempoView.swift */; };
 		806185CE25F5346D0062AAB3 /* TrackKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185CD25F5346D0062AAB3 /* TrackKeyView.swift */; };
+		8066112F261862CB00BFC40D /* 445632__djfroyd__c-major-scale.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8066112E261862CB00BFC40D /* 445632__djfroyd__c-major-scale.wav */; };
 		806B0D2F25A9E47800603E64 /* VolatileAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D2E25A9E47800603E64 /* VolatileAttributes.swift */; };
 		806B0D3425A9EF1400603E64 /* SetRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D3325A9EF1400603E64 /* SetRelation.swift */; };
 		806B0D4225A9FE3F00603E64 /* RequestMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D4125A9FE3F00603E64 /* RequestMapper.swift */; };
@@ -384,6 +385,7 @@
 		806185C225F51C220062AAB3 /* TracksViewController+TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TracksViewController+TableView.swift"; sourceTree = "<group>"; };
 		806185C825F534650062AAB3 /* TrackTempoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTempoView.swift; sourceTree = "<group>"; };
 		806185CD25F5346D0062AAB3 /* TrackKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackKeyView.swift; sourceTree = "<group>"; };
+		8066112E261862CB00BFC40D /* 445632__djfroyd__c-major-scale.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "445632__djfroyd__c-major-scale.wav"; sourceTree = "<group>"; };
 		806B0D2E25A9E47800603E64 /* VolatileAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolatileAttributes.swift; sourceTree = "<group>"; };
 		806B0D3325A9EF1400603E64 /* SetRelation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRelation.swift; sourceTree = "<group>"; };
 		806B0D4125A9FE3F00603E64 /* RequestMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestMapper.swift; sourceTree = "<group>"; };
@@ -1241,6 +1243,7 @@
 		80AD6970258825FD00192BED /* ElevenTunesUITests */ = {
 			isa = PBXGroup;
 			children = (
+				8066112E261862CB00BFC40D /* 445632__djfroyd__c-major-scale.wav */,
 				80AD6971258825FD00192BED /* ElevenTunesUITests.swift */,
 				80AD6973258825FD00192BED /* Info.plist */,
 			);
@@ -1581,6 +1584,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8066112F261862CB00BFC40D /* 445632__djfroyd__c-major-scale.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
