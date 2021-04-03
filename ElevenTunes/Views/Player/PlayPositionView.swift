@@ -99,7 +99,8 @@ struct PlayPositionView: View {
 
 					if let duration = (isCurrent ? audio?.duration : duration) {
 						PositionControl(
-							currentTimeProvider: { player.singlePlayer.playing?.currentTime },
+							currentTimeProvider: { audio?.currentTime },
+							currentTime: audio?.currentTime,
 							duration: duration,
 							advancesAutomatically: state.isPlaying,
 							moveStepDuration: moveStep,

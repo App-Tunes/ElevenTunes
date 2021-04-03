@@ -42,7 +42,7 @@ struct PositionControl: View {
 	@State var isDragging = false
 	
 	func updatePosition() {
-		guard let currentTime = currentTimeProvider(), advancesAutomatically else {
+		guard let currentTime = currentTimeProvider() else {
 			return
 		}
 		
@@ -50,8 +50,10 @@ struct PositionControl: View {
 			self.currentTime = currentTime
 		}
 		
-		withAnimation(.linear(duration: duration - currentTime)) {
-			self.currentTime = duration
+		if advancesAutomatically {
+			withAnimation(.linear(duration: duration - currentTime)) {
+				self.currentTime = duration
+			}
 		}
 	}
 	
