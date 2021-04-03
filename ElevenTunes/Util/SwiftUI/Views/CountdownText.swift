@@ -7,21 +7,9 @@
 
 import SwiftUI
 
-struct CountdownText: View {
-	let referenceDate: Date
-	let advancesAutomatically: Bool
-	
-	@State var currentDate: Date
-	var timer: Timer? {
-		advancesAutomatically ? Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-			self.currentDate = Date()
-		} : nil
-	}
-
-	var timeLeft: String {
-		let time = abs(referenceDate.timeIntervalSince(currentDate))
-		
-		let totalSeconds = Int(round(time))
+extension TimeInterval {
+	var humanReadableText: String {
+		let totalSeconds = Int(rounded())
 		let hours: Int = Int(totalSeconds / 3600)
 		
 		let minutes: Int = Int(totalSeconds % 3600 / 60)
@@ -33,9 +21,21 @@ struct CountdownText: View {
 			return String(format: "%i:%02i", minutes, seconds)
 		}
 	}
+}
+
+struct CountdownText: View {
+	let referenceDate: Date
+	let advancesAutomatically: Bool
+	
+	@State var currentDate: Date
+	var timer: Timer? {
+		advancesAutomatically ? Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+			self.currentDate = Date()
+		} : nil
+	}
 
     var body: some View {
-		Text(timeLeft)
+		Text(abs(referenceDate.timeIntervalSince(currentDate)).humanReadableText)
 			.onAppear(perform: {
 				let _ = self.timer
 			})

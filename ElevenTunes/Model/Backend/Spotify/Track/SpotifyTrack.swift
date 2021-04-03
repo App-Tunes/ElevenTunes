@@ -20,7 +20,7 @@ struct MinimalSpotifyTrack: Codable, Hashable {
 }
 
 struct DetailedSpotifyTrack: Codable, Hashable {
-    static let filters = "id,name,album(id),artists(id,name)"
+    static let filters = "id,name,duration_ms,album(id),artists(id,name)"
 
     struct Album: Codable, Hashable {
         var id: String
@@ -32,12 +32,18 @@ struct DetailedSpotifyTrack: Codable, Hashable {
     }
     
     var id: String
-    var name: String
+	var name: String
+	var duration: TimeInterval
     var album: Album?
     var artists: [Artist]
     
     static func from(_ track: SpotifyWebAPI.Track) -> DetailedSpotifyTrack {
-		DetailedSpotifyTrack(id: track.id!, name: track.name, album: track.album.map { Album(id: $0.id!) }, artists: (track.artists ?? []).map { Artist(id: $0.id!, name: $0.name) })
+		DetailedSpotifyTrack(
+			id: track.id!,
+			name: track.name,
+			duration: TimeInterval(track.durationMS!) / 1000,
+			album: track.album.map { Album(id: $0.id!) },
+			artists: (track.artists ?? []).map { Artist(id: $0.id!, name: $0.name) })
     }
 }
 
@@ -93,7 +99,7 @@ public final class SpotifyTrack: RemoteTrack {
 	}
 	
 	let mapper = Requests(relation: [
-		.track: [.title, .album, .artists],
+		.track: [.title, .album, .artists, .duration],
 		.analysis: [.tempo, .key]
 	])
 
@@ -141,6 +147,7 @@ public final class SpotifyTrack: RemoteTrack {
     func extractAttributes(from track: DetailedSpotifyTrack) -> TypedDict<TrackAttribute> {
 		.unsafe([
 			.title: track.name,
+			.duration: track.duration,
 			.album: track.album.map { spotify.album(SpotifyAlbumToken($0.id)) },
 			.artists:  track.artists.map {
 				spotify.artist(SpotifyArtistToken($0.id), details: $0)

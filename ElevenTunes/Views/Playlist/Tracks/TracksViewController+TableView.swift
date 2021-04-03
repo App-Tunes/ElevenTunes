@@ -19,6 +19,7 @@ extension TracksViewController: NSTableViewDelegate {
 		static let Genre = NSUserInterfaceItemIdentifier(rawValue: "Genre")
 		static let Year = NSUserInterfaceItemIdentifier(rawValue: "Year")
 		static let Waveform = NSUserInterfaceItemIdentifier(rawValue: "Waveform")
+		static let Duration = NSUserInterfaceItemIdentifier(rawValue: "Duration")
 	}
 
 	enum CellIdentifiers {
@@ -31,6 +32,7 @@ extension TracksViewController: NSTableViewDelegate {
 		static let GenreCell = NSUserInterfaceItemIdentifier(rawValue: "GenreCell")
 		static let YearCell = NSUserInterfaceItemIdentifier(rawValue: "YearCell")
 		static let WaveformCell = NSUserInterfaceItemIdentifier(rawValue: "WaveformCell")
+		static let DurationCell = NSUserInterfaceItemIdentifier(rawValue: "DurationCell")
 	}
 
 	func initColumns() {
@@ -94,11 +96,17 @@ extension TracksViewController: NSTableViewDelegate {
 			$0.headerCell.alignment = .center
 		}
 
+		addColumn(ColumnIdentifiers.Duration, title: "􀐫") {
+			$0.widthRange = 52...52
+			$0.headerCell.alignment = .center
+		}
+
 		tableViewHiddenExtension = .init(tableView: tableView, titles: [
 			ColumnIdentifiers.Image: "Artwork (⸬)",
 			ColumnIdentifiers.Tempo: "Beats per Minute (♩=)",
 			ColumnIdentifiers.Key: "Initial Key (♫)",
 			ColumnIdentifiers.Waveform: "Waveform (􀙫)",
+			ColumnIdentifiers.Duration: "Duration (􀐫)",
 		], affix: [ColumnIdentifiers.Title])
 		tableViewHiddenExtension.attach()
 		
@@ -162,8 +170,8 @@ extension TracksViewController: NSTableViewDelegate {
 			return view
 		}
 		
-		if let view = createOn(ColumnIdentifiers.Year, cell: CellIdentifiers.YearCell) {
-			view.rootView = AnyView(TrackYearView(track: track))
+		if let view = createOn(ColumnIdentifiers.Duration, cell: CellIdentifiers.DurationCell) {
+			view.rootView = AnyView(TrackDurationView(track: track))
 			return view
 		}
 		
