@@ -43,7 +43,10 @@ struct PlayingTrackView: View {
 				TrackTempoView(track: current)
 				
 				TrackKeyView(track: current)
-					.padding(.leading)
+					.padding(.horizontal)
+				
+				TrackDurationView(track: current)
+					.frame(width: 52)
             }
             else {
                 Text("Nothing Playing").opacity(0.5)
