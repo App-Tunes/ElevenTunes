@@ -233,7 +233,7 @@
 		80F61BB325FE314E00AC4CF8 /* Navigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F61BB225FE314E00AC4CF8 /* Navigator.swift */; };
 		80F61BB825FE4AF700AC4CF8 /* DelayedAutoExpander.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F61BB725FE4AF700AC4CF8 /* DelayedAutoExpander.swift */; };
 		80F66AB72606654700696EE5 /* AudioSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F66AB62606654700696EE5 /* AudioSetupView.swift */; };
-		80F66AC22606665C00696EE5 /* OutputDeviceSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F66AC12606665C00696EE5 /* OutputDeviceSelector.swift */; };
+		80F66AC22606665C00696EE5 /* AudioProviderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F66AC12606665C00696EE5 /* AudioProviderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -549,7 +549,7 @@
 		80F61BB725FE4AF700AC4CF8 /* DelayedAutoExpander.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayedAutoExpander.swift; sourceTree = "<group>"; };
 		80F66AAE26064AD500696EE5 /* taglib_config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = taglib_config.h; sourceTree = "<group>"; };
 		80F66AB62606654700696EE5 /* AudioSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSetupView.swift; sourceTree = "<group>"; };
-		80F66AC12606665C00696EE5 /* OutputDeviceSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputDeviceSelector.swift; sourceTree = "<group>"; };
+		80F66AC12606665C00696EE5 /* AudioProviderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioProviderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1408,7 +1408,7 @@
 			children = (
 				8054C014259F720000A7035A /* PlayerAudioView.swift */,
 				80F66AB62606654700696EE5 /* AudioSetupView.swift */,
-				80F66AC12606665C00696EE5 /* OutputDeviceSelector.swift */,
+				80F66AC12606665C00696EE5 /* AudioProviderView.swift */,
 			);
 			path = Audio;
 			sourceTree = "<group>";
@@ -1720,7 +1720,7 @@
 				80A8C85225BF5B5200F97EF0 /* DBAlbum.swift in Sources */,
 				80F61BAE25FD190600AC4CF8 /* NSRegularExpression.swift in Sources */,
 				80C9A17D259F902D00A038CC /* MilkyCoverView.swift in Sources */,
-				80F66AC22606665C00696EE5 /* OutputDeviceSelector.swift in Sources */,
+				80F66AC22606665C00696EE5 /* AudioProviderView.swift in Sources */,
 				80A8C84725BF5B5200F97EF0 /* DBDirectoryPlaylist+CoreDataProperties.swift in Sources */,
 				806E202825975A0E003EEA83 /* MockTrack.swift in Sources */,
 				806185C325F51C220062AAB3 /* TracksViewController+TableView.swift in Sources */,

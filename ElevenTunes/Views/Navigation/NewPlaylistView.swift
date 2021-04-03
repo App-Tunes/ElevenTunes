@@ -71,8 +71,8 @@ struct NewPlaylistView: View {
     }
 }
 
-//struct NewPlaylistView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        NewPlaylistView()
-//    }
-//}
+struct NewPlaylistView_Previews: PreviewProvider {
+    static var previews: some View {
+		NewPlaylistView(directory: Playlist(LibraryMock.directory()), selection: .empty)
+    }
+}

@@ -53,8 +53,8 @@ struct PlaylistBarView: View {
     }
 }
 
-//struct PlaylistBarView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PlaylistBarView(playlist: LibraryMock.playlist())
-//    }
-//}
+struct PlaylistBarView_Previews: PreviewProvider {
+    static var previews: some View {
+        PlaylistBarView(playlist: Playlist(LibraryMock.playlist()))
+    }
+}

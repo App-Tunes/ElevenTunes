@@ -63,8 +63,8 @@ struct NavigationBarView: View {
     }
 }
 
-//struct NavigationBarView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        NavigationBarView()
-//    }
-//}
+struct NavigationBarView_Previews: PreviewProvider {
+    static var previews: some View {
+		NavigationBarView(playlist: Playlist(LibraryMock.playlist()), navigator: Navigator(root: Playlist(LibraryMock.directory())))
+    }
+}

@@ -27,8 +27,9 @@ struct PlayerBarView: View {
     }
 }
 
-//struct PlayerBarView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PlayerBarView()
-//    }
-//}
+struct PlayerBarView_Previews: PreviewProvider {
+    static var previews: some View {
+        PlayerBarView()
+			.environment(\.player, Player(context: .init()))
+    }
+}

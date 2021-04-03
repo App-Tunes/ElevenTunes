@@ -121,9 +121,8 @@ struct AudioProviderView<Provider: AudioDeviceProvider>: View {
 	}
 }
 
-//@available(OSX 10.15, *)
-//struct OutputDeviceSelectorView_Previews: PreviewProvider {
-//	static var previews: some View {
-//		OutputDeviceSelectorView()
-//	}
-//}
+struct AudioProviderView_Previews: PreviewProvider {
+	static var previews: some View {
+		AudioProviderView(provider: AVAudioDeviceProvider(), current: .constant(AVAudioDevice(deviceID: nil)))
+	}
+}

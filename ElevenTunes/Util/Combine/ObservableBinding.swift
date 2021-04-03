@@ -8,6 +8,11 @@
 import Combine
 
 class ObservableBinding<Value>: ObservableObject {
+	private class Constant: ObservableObject {
+		@Published var value: Value
+		init(_ value: Value) { self.value = value }
+	}
+	
 	private var observation: AnyCancellable?
 	
 	let get: () -> Value
@@ -21,6 +26,10 @@ class ObservableBinding<Value>: ObservableObject {
 		}
 	}
 	
+	static func constant(_ value: Value) -> ObservableBinding {
+		.init(Constant(value), value: \.value)
+	}
+
 	var value: Value {
 		get { get() }
 		set { set(newValue) }

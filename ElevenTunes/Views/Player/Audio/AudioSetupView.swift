@@ -28,8 +28,8 @@ struct AudioSetupView: View {
     }
 }
 
-//struct AudioSetupView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AudioSetupView()
-//    }
-//}
+struct AudioSetupView_Previews: PreviewProvider {
+    static var previews: some View {
+		AudioSetupView(context: .init())
+    }
+}
