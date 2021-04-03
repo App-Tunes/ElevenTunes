@@ -12,8 +12,13 @@ struct TrackDurationView: View {
 	@State var duration: TimeInterval?
 
 	var body: some View {
-		Text(duration?.humanReadableText ?? "")
-			.foregroundColor(.secondary)
+		HStack {
+			Spacer()
+			
+			Text(duration?.humanReadableText ?? "")
+				.foregroundColor(.secondary)
+				.padding(.horizontal, 4)
+		}
 			.whileActive(track.backend.demand([.duration]))
 			.onReceive(track.backend.attribute(TrackAttribute.duration)) {
 				setIfDifferent(self, \.duration, $0.value)
