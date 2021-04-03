@@ -197,6 +197,7 @@
 		80AF40942618F1BE00117F06 /* EssentiaAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AF40932618F1BE00117F06 /* EssentiaAnalyzer.swift */; };
 		80AF409A2618F1D000117F06 /* TrackAlgorithms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AF40992618F1D000117F06 /* TrackAlgorithms.swift */; };
 		80AF409E2618F77F00117F06 /* AlgorithmRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AF409D2618F77F00117F06 /* AlgorithmRunner.swift */; };
+		80AF40A4261904C500117F06 /* NSWorkspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AF40A3261904C500117F06 /* NSWorkspace.swift */; };
 		80B357D225F6FAC400180A4A /* NSTableView+Synchronization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B357D125F6FAC400180A4A /* NSTableView+Synchronization.swift */; };
 		80BF6A9B26111FC600CDCB2F /* libessentia.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 80BF6A9A26111FC600CDCB2F /* libessentia.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		80BF6AA32611208D00CDCB2F /* libessentia-analysis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80BF6A7F26111BE500CDCB2F /* libessentia-analysis.a */; };
@@ -518,6 +519,7 @@
 		80AF40932618F1BE00117F06 /* EssentiaAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EssentiaAnalyzer.swift; sourceTree = "<group>"; };
 		80AF40992618F1D000117F06 /* TrackAlgorithms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackAlgorithms.swift; sourceTree = "<group>"; };
 		80AF409D2618F77F00117F06 /* AlgorithmRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlgorithmRunner.swift; sourceTree = "<group>"; };
+		80AF40A3261904C500117F06 /* NSWorkspace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSWorkspace.swift; sourceTree = "<group>"; };
 		80B357D125F6FAC400180A4A /* NSTableView+Synchronization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTableView+Synchronization.swift"; sourceTree = "<group>"; };
 		80BF6A9A26111FC600CDCB2F /* libessentia.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libessentia.dylib; path = Frameworks/Essentia/essentia/build/src/libessentia.dylib; sourceTree = "<group>"; };
 		80C9A177259F8FD300A038CC /* MilkyImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MilkyImageView.swift; sourceTree = "<group>"; };
@@ -1374,6 +1376,7 @@
 				806185AB25F5038F0062AAB3 /* Int.swift */,
 				802376CA26095E0000A5E826 /* DispatchQueue.swift */,
 				806611442618BAFC00BFC40D /* DispatchSemaphore.swift */,
+				80AF40A3261904C500117F06 /* NSWorkspace.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -1766,6 +1769,7 @@
 				806B27EE258D7D880091EA4D /* Player.swift in Sources */,
 				806B2796258D5D540091EA4D /* PlaylistsView.swift in Sources */,
 				802DBA6225A1175200EA6DB7 /* NavigationBarView.swift in Sources */,
+				80AF40A4261904C500117F06 /* NSWorkspace.swift in Sources */,
 				801F7E1A25D84B47004372CE /* NSItemProvider.swift in Sources */,
 				80151EF52593C98500D9539A /* SpotifyDeviceView.swift in Sources */,
 				80A8C89125BF734D00F97EF0 /* AnyPlaylistCache.swift in Sources */,

@@ -35,7 +35,7 @@ class PlaylistActions: NSObject {
 			
 			if let playlist = playlists.one, let origin = playlist.backend.origin {
 				Button(action: {
-					NSWorkspace.shared.open(origin)
+					NSWorkspace.shared.visit(origin)
 				}) {
 					Image(systemName: "link")
 					Text("Visit Origin")
@@ -71,7 +71,7 @@ class PlaylistActions: NSObject {
 
 		if let playlist = playlists.one, let origin = playlist.backend.origin {
 			menu.addItem(withTitle: "Visit Origin") {
-				NSWorkspace.shared.open(origin)
+				NSWorkspace.shared.visit(origin)
 			}
 		}
 		
@@ -88,10 +88,6 @@ class PlaylistActions: NSObject {
 	
 	func reloadMetadata() {
 		playlists.forEach { $0.backend.invalidateCaches() }
-	}
-	
-	func openOrigin(_ origin: URL) {
-		NSWorkspace.shared.open(origin)
 	}
 	
 	func delete() {

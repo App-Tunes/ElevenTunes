@@ -38,7 +38,7 @@ class TrackActions: NSObject {
 
 			if let track = tracks.one, let origin = track.backend.origin {
                 Button(action: {
-                    NSWorkspace.shared.open(origin)
+					NSWorkspace.shared.visit(origin)
                 }) {
                     Image(systemName: "link")
                     Text("Visit Origin")
@@ -83,7 +83,7 @@ class TrackActions: NSObject {
 
 		if let track = tracks.one, let origin = track.backend.origin {
 			menu.addItem(withTitle: "Visit Origin") {
-				NSWorkspace.shared.open(origin)
+				NSWorkspace.shared.visit(origin)
 			}
 		}
 		

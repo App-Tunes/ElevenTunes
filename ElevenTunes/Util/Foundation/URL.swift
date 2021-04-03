@@ -15,5 +15,5 @@ extension URL {
     
     func modificationDate() throws -> Date {
         return try self.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate!
-    }
+    }	
 }

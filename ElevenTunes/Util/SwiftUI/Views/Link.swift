@@ -24,7 +24,7 @@ struct UnderlinedLink: View {
             Text(description)
                 .underline(isHovering)
                 .onTapGesture {
-                    NSWorkspace.shared.open(destination)
+					NSWorkspace.shared.visit(destination)
                 }
                 .padding(0)
                 .onHover { isHovering = $0 }
