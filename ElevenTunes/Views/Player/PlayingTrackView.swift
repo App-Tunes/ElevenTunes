@@ -46,7 +46,7 @@ struct PlayingTrackView: View {
 					.padding(.horizontal)
 				
 				TrackDurationView(track: current)
-					.frame(width: 52)
+					.frame(width: 60)
             }
             else {
                 Text("Nothing Playing").opacity(0.5)
