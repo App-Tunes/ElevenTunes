@@ -68,7 +68,11 @@ class AVSeekableAudioPlayerNode {
 	}
 	
 	private func seekPlayer(_ player: AVAudioPlayerNode, to time: TimeInterval) {
-		let startSample = max(0, AVAudioFramePosition(round(time * format.sampleRate)))
+		let startSample = AVAudioFramePosition(round(time * format.sampleRate))
+		guard startSample < file.length, startSample >= 0 else {
+			return
+		}
+		
 		player.scheduleSegment(file, startingFrame: startSample, frameCount: AVAudioFrameCount(file.length - startSample), at: nil, completionCallbackType: .dataPlayedBack) { [weak self] type in
 			guard type == .dataPlayedBack else { return } // No clue why it calls for other types too
 			guard let self = self else { return }
