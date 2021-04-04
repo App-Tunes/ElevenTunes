@@ -19,10 +19,12 @@ struct PlayerBarView: View {
 
 			CurrentPlayPositionView(player: player)
 				.frame(minHeight: 20, idealHeight: 30, maxHeight: 50)
-				.background(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.6), .clear]).applying(iterations: 10) { pow($0, 0.3) }, startPoint: .bottom, endPoint: .top))
                 .layoutPriority(2)
         }
-			.background(PlayerMilkyCoverView().edgesIgnoringSafeArea(.top))
+			.background(
+				LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.6), .clear]).applying(iterations: 10) { pow($0, 0.5) }, startPoint: .bottom, endPoint: .top)
+					.background(PlayerMilkyCoverView().edgesIgnoringSafeArea(.top))
+			)
     }
 }
 
