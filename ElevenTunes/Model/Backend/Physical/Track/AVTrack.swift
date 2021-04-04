@@ -39,7 +39,7 @@ public struct AVTrackToken: TrackToken {
 	}
 	
 	public func expand(_ context: Library) throws -> AnyTrack {
-		AVTrack(url, isVideo: isVideo)
+		AVTrack(url, isVideo: isVideo, caches: context.fileCaches)
 	}
 }
 
@@ -55,6 +55,7 @@ public final class AVTrack: RemoteTrack {
 	public let url: URL
 	public let isVideo: Bool
 
+	let caches: LibraryFileCaches
 	var cache: DBAVTrack? = nil
 
 	enum Request {
@@ -67,15 +68,16 @@ public final class AVTrack: RemoteTrack {
 		.waveform: [.waveform]
 	])
 
-	init(_ url: URL, isVideo: Bool) {
+	init(_ url: URL, isVideo: Bool, caches: LibraryFileCaches) {
 		self.url = url
 		self.isVideo = isVideo
+		self.caches = caches
 		mapper.delegate = self
 		mapper.offer(.url, update: loadURL())
 	}
 	 
-	convenience init(cache: DBAVTrack) {
-		self.init(cache.url, isVideo: cache.isVideo)
+	convenience init(cache: DBAVTrack, caches: LibraryFileCaches) {
+		self.init(cache.url, isVideo: cache.isVideo, caches: caches)
 		self.cache = cache
 	}
 	 
@@ -89,6 +91,12 @@ public final class AVTrack: RemoteTrack {
 	
 	public var origin: URL? { url }
 
+	public func invalidateCaches() {
+		cache?.metadata?.delete()
+		
+		mapper.invalidateCaches()
+	}
+	
 	func loadURL() -> TrackAttributes.PartialGroupSnapshot {
 		.init(.unsafe([
 			.title: url.lastPathComponent
@@ -144,6 +152,8 @@ extension AVTrack: RequestMapperDelegate {
 	}
 
 	func readFile() throws -> TrackAttributes.PartialGroupSnapshot {
+		let caches = self.caches
+
 		if
 			let cache = cache,
 			let snapshot: TrackAttributes.PartialGroupSnapshot = cache.managedObjectContext!.withChildTaskTranslate(cache, ({ cache in
@@ -151,7 +161,7 @@ extension AVTrack: RequestMapperDelegate {
 				
 				return .init(.unsafe([
 					.title: metadata.title,
-					.previewImage: nil,  // TODO
+					.previewImage: try? caches.avPreviewImages.get(cache.owner.uuid),
 					.tempo: metadata.tempo,
 					.key: metadata.key.flatMap { MusicalKey.parse($0) },
 					.album: metadata.album.map { TransientAlbum(attributes: .unsafe([
@@ -174,16 +184,21 @@ extension AVTrack: RequestMapperDelegate {
 		{
 			return snapshot
 		}
-		
+				
 		let file = try TagLibFile(url: url).unwrap(orThrow: TagLibError.cannotRead)
 		let audioFile = try AVAudioFile(forReading: url)
 		let format = audioFile.processingFormat
 
+		let image = file.image.flatMap { NSImage(data: $0) }
 		let duration = TimeInterval(audioFile.length) / format.sampleRate
 		
 		if let cache = cache {
 			cache.managedObjectContext?.trySaveOnChildTask { context in
 				guard let cache = context.translate(cache) else { return }
+				
+				if let image = image {
+					try caches.avPreviewImages.insert(image, for: cache.owner.uuid)
+				}
 				
 				let metadata = DBFileMetadata(context: context)
 				metadata.title = file.title
@@ -201,7 +216,7 @@ extension AVTrack: RequestMapperDelegate {
 		
 		return .init(.unsafe([
 			.title: file.title,
-			.previewImage: file.image.flatMap { NSImage(data: $0) },
+			.previewImage: image,
 			.tempo: file.bpm.flatMap { Double($0) }.map { Tempo(bpm: $0) },
 			.key: file.initialKey.flatMap { MusicalKey.parse($0) },
 			.album: file.album.map { TransientAlbum(attributes: .unsafe([

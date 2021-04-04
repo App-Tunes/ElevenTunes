@@ -65,12 +65,10 @@ final class JustCacheTrack: RemoteTrack {
 
 extension JustCacheTrack: RequestMapperDelegate {
 	func onDemand(_ request: Request) -> AnyPublisher<TrackAttributes.PartialGroupSnapshot, Error> {
-		let cache = self.cache
-		
 		switch request {
 		case .attributes:
 			return Just(.init(.unsafe([
-				.title: cache.title
+				.title: "Unknown Track"
 			]), state: .valid)
 			).eraseError().eraseToAnyPublisher()
 		}

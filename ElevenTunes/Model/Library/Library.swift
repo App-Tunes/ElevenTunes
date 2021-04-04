@@ -26,6 +26,7 @@ public class Library {
 	let playContext: PlayContext
         
     let settings: LibrarySettingsLevel
+	let fileCaches: LibraryFileCaches
     
     let player: Player
     
@@ -33,9 +34,10 @@ public class Library {
         didSet { settings.defaultPlaylist = defaultPlaylist?.uuid }
     }
     
-    init(managedObjectContext: NSManagedObjectContext, settings: LibrarySettingsLevel) {
-        self.managedObjectContext = managedObjectContext
-        self.settings = settings
+	init(document: LibraryDocument) {
+		self.managedObjectContext = document.managedObjectContext
+		self.settings = document.settings
+		fileCaches = .init(url: { document.fileURL })
 
         let playContext = PlayContext(spotify: settings.spotify)
 		self.playContext = playContext

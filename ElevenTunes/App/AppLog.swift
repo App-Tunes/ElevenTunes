@@ -21,11 +21,11 @@ func appLogErrors(_ completion: Subscribers.Completion<Error>) {
 }
 
 extension NSManagedObjectContext {
-	@discardableResult
 	func trySaveOnChildTask(concurrencyType: NSManagedObjectContextConcurrencyType = .privateQueueConcurrencyType, _ task: @escaping (NSManagedObjectContext) throws -> Void) {
 		let context = self.child(concurrencyType: concurrencyType)
 
-		context.perform {
+		// TODO Need to wait for now because otherwise it won't get called (context dealloc?)
+		context.performAndWait {
 			do {
 				try task(context)
 				try context.save()

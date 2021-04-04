@@ -19,7 +19,10 @@ public class DBTrack: NSManagedObject {
 	@Published public var representationsP: [Representation: AnyTrackCache] = [:]
 	
 	public override func awakeFromFetch() { initialSetup() }
-	public override func awakeFromInsert() { initialSetup() }
+	public override func awakeFromInsert() {
+		initialSetup()
+		uuid = UUID()
+	}
 	
 	func initialSetup() {
 		primaryRepresentationP = primaryRepresentation

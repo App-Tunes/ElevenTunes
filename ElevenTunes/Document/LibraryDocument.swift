@@ -50,7 +50,8 @@ class LibrarySettingsLevel: SettingsLevel, Codable {
         managedObjectContext.automaticallyMergesChangesFromParent = true
     }
 	
-	private(set) lazy var library = Library(managedObjectContext: managedObjectContext, settings: settings)
+	// TODO Suboptimal... Where should this be created?
+	private(set) lazy var library = Library(document: self)
 
     @Published var settings: LibrarySettingsLevel
     

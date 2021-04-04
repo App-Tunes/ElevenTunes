@@ -62,7 +62,7 @@
     </entity>
     <entity name="DBTrack" representedClassName="DBTrack" syncable="YES">
         <attribute name="primaryRepresentation" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="title" optional="YES" attributeType="String" spotlightIndexingEnabled="YES"/>
+        <attribute name="uuid" attributeType="UUID" usesScalarValueType="NO" spotlightIndexingEnabled="YES"/>
         <relationship name="album" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DBAlbum" inverseName="tracks" inverseEntity="DBAlbum"/>
         <relationship name="avRepresentation" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DBAVTrack" inverseName="owner" inverseEntity="DBAVTrack"/>
         <relationship name="references" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DBPlaylist" inverseName="tracks" inverseEntity="DBPlaylist"/>
@@ -78,6 +78,6 @@
         <element name="DBPlaylist" positionX="-44.54730224609375" positionY="-194.6527709960938" width="128" height="208"/>
         <element name="DBSpotifyPlaylist" positionX="-395.667236328125" positionY="-85.90283203125" width="128" height="88"/>
         <element name="DBSpotifyTrack" positionX="-437.600341796875" positionY="250.6975708007812" width="128" height="73"/>
-        <element name="DBTrack" positionX="-254.6779174804688" positionY="50.274658203125" width="128" height="133"/>
+        <element name="DBTrack" positionX="-254.6779174804688" positionY="50.274658203125" width="128" height="119"/>
     </elements>
 </model>

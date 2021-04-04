@@ -17,7 +17,7 @@ extension DBTrack {
 	}
 
     @NSManaged public var primaryRepresentation: Representation
-    @NSManaged public var title: String?
+    @NSManaged public var uuid: UUID
     @NSManaged public var album: DBAlbum?
     @NSManaged public var avRepresentation: DBAVTrack?
     @NSManaged public var references: NSSet

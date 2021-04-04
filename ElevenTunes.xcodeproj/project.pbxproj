@@ -106,6 +106,8 @@
 		8066112F261862CB00BFC40D /* 445632__djfroyd__c-major-scale.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8066112E261862CB00BFC40D /* 445632__djfroyd__c-major-scale.wav */; };
 		8066113F2618908F00BFC40D /* PositionControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8066113E2618908E00BFC40D /* PositionControl.swift */; };
 		806611452618BAFC00BFC40D /* DispatchSemaphore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806611442618BAFC00BFC40D /* DispatchSemaphore.swift */; };
+		8069E43E261A14CA0086BBFB /* ImageDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8069E43D261A14CA0086BBFB /* ImageDatabase.swift */; };
+		8069E445261A1A010086BBFB /* LibraryFileCaches.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8069E444261A1A010086BBFB /* LibraryFileCaches.swift */; };
 		806B0D2F25A9E47800603E64 /* VolatileAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D2E25A9E47800603E64 /* VolatileAttributes.swift */; };
 		806B0D3425A9EF1400603E64 /* SetRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D3325A9EF1400603E64 /* SetRelation.swift */; };
 		806B0D4225A9FE3F00603E64 /* RequestMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D4125A9FE3F00603E64 /* RequestMapper.swift */; };
@@ -395,6 +397,8 @@
 		8066112E261862CB00BFC40D /* 445632__djfroyd__c-major-scale.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "445632__djfroyd__c-major-scale.wav"; sourceTree = "<group>"; };
 		8066113E2618908E00BFC40D /* PositionControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionControl.swift; sourceTree = "<group>"; };
 		806611442618BAFC00BFC40D /* DispatchSemaphore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchSemaphore.swift; sourceTree = "<group>"; };
+		8069E43D261A14CA0086BBFB /* ImageDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDatabase.swift; sourceTree = "<group>"; };
+		8069E444261A1A010086BBFB /* LibraryFileCaches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryFileCaches.swift; sourceTree = "<group>"; };
 		806B0D2E25A9E47800603E64 /* VolatileAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolatileAttributes.swift; sourceTree = "<group>"; };
 		806B0D3325A9EF1400603E64 /* SetRelation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRelation.swift; sourceTree = "<group>"; };
 		806B0D4125A9FE3F00603E64 /* RequestMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestMapper.swift; sourceTree = "<group>"; };
@@ -686,6 +690,7 @@
 				80D6DA7C259CD68500879BCF /* Library+Contents.swift */,
 				8005082C25978E270055FB2D /* Library+Conversion.swift */,
 				800508582597FEEB0055FB2D /* Library+Prune.swift */,
+				8069E444261A1A010086BBFB /* LibraryFileCaches.swift */,
 				802E2CD62596082E00CB91EC /* LibraryPlaylist.swift */,
 			);
 			path = Library;
@@ -848,6 +853,14 @@
 			path = Attributes;
 			sourceTree = "<group>";
 		};
+		8069E439261A14B10086BBFB /* FileDatabase */ = {
+			isa = PBXGroup;
+			children = (
+				8069E43D261A14CA0086BBFB /* ImageDatabase.swift */,
+			);
+			path = FileDatabase;
+			sourceTree = "<group>";
+		};
 		806B2794258D5D390091EA4D /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
@@ -936,6 +949,7 @@
 				806B281D258D8E020091EA4D /* Combine */,
 				802E2DD325966C2B00CB91EC /* Coding */,
 				804D3C1025D96E8900705D42 /* Cocoa */,
+				8069E439261A14B10086BBFB /* FileDatabase */,
 				806B0D3325A9EF1400603E64 /* SetRelation.swift */,
 				806B27D0258D6ADB0091EA4D /* TypedDict.swift */,
 				8082F11325A9BF3200B1D157 /* KeyedDemand.swift */,
@@ -1640,6 +1654,7 @@
 				805DF1EA25F582970056D9C0 /* TracksExportManager.swift in Sources */,
 				8066113F2618908F00BFC40D /* PositionControl.swift in Sources */,
 				808D548D259F3BC9006F7435 /* Color.swift in Sources */,
+				8069E43E261A14CA0086BBFB /* ImageDatabase.swift in Sources */,
 				806B28C8258F93D90091EA4D /* Spotify.swift in Sources */,
 				80D6DA7D259CD68500879BCF /* Library+Contents.swift in Sources */,
 				806B2840258E5A960091EA4D /* SinglePlayer.swift in Sources */,
@@ -1744,6 +1759,7 @@
 				80ED767B258FD5B600B8B9C3 /* PlaylistInterpreter.swift in Sources */,
 				8082F10725A8905A00B1D157 /* Hasher.swift in Sources */,
 				80D653D825993CDC007221D5 /* PlaylistRowView.swift in Sources */,
+				8069E445261A1A010086BBFB /* LibraryFileCaches.swift in Sources */,
 				802E2DAD259643AE00CB91EC /* SpotifyUser.swift in Sources */,
 				80AD6956258825FA00192BED /* ContentView.swift in Sources */,
 				808445DE25A7996200E27EC8 /* Badge.swift in Sources */,
