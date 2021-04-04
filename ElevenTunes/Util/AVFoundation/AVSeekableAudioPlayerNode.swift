@@ -115,7 +115,8 @@ class AVSeekableAudioPlayerNode {
 		startTime = currentTime + time + buffer
 		
 		let volume = self.volume
-		
+		secondary.volume = 0
+
 		// Prepare secondary. Prepare to play exactly on cue
 		seekPlayer(secondary, to: startTime)
 		let startSampleTime = renderTime.sampleTime + AVAudioFramePosition(buffer * format.sampleRate)
@@ -126,8 +127,8 @@ class AVSeekableAudioPlayerNode {
 		Thread.sleep(until: beginning.addingTimeInterval(buffer))
 		
 		// Hotswap, volume is the fastest way
-		primary.volume = 0
 		secondary.volume = volume
+		primary.volume = 0
 		
 		// Stop secondary, and reset volume
 		isSwapping = true
