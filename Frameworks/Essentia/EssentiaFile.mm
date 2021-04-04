@@ -35,11 +35,7 @@ using namespace essentia::streaming;
 
 -(instancetype)initWithURL:(NSURL * _Nonnull)url {
 	self = [super init];
-	if (self) {
-		if (!essentia::isInitialized()) {
-			essentia::init();
-		}
-		
+	if (self) {		
 		_url = url;
 	}
 	return self;

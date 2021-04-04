@@ -64,4 +64,8 @@ class ImageDatabase<ID: CustomStringConvertible> {
 	func insert(_ image: NSImage, for id: ID) throws {
 		try toData(image).write(to: url(for: id))
 	}
+	
+	func delete(_ id: ID) throws {
+		try FileManager.default.removeItem(at: url(for: id))
+	}
 }

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		80602EC4261660F10044D614 /* ResampleToSize.h in Headers */ = {isa = PBXBuildFile; fileRef = 80602EC2261660F00044D614 /* ResampleToSize.h */; };
 		80602EC5261660F10044D614 /* ResampleToSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 80602EC3261660F10044D614 /* ResampleToSize.m */; };
+		8069E456261A324B0086BBFB /* Essentia.h in Headers */ = {isa = PBXBuildFile; fileRef = 8069E454261A324B0086BBFB /* Essentia.h */; };
+		8069E457261A324B0086BBFB /* Essentia.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8069E455261A324B0086BBFB /* Essentia.mm */; };
 		807185202615BE370029E27B /* WaveformAnalyzer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8071851E2615BE370029E27B /* WaveformAnalyzer.cpp */; };
 		807185212615BE370029E27B /* WaveformAnalyzer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8071851F2615BE370029E27B /* WaveformAnalyzer.hpp */; };
 		8086968F26170BD20056ECC3 /* SpectralAnalyzer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8086968D26170BD20056ECC3 /* SpectralAnalyzer.cpp */; };
@@ -157,6 +159,8 @@
 /* Begin PBXFileReference section */
 		80602EC2261660F00044D614 /* ResampleToSize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ResampleToSize.h; sourceTree = "<group>"; };
 		80602EC3261660F10044D614 /* ResampleToSize.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ResampleToSize.m; sourceTree = "<group>"; };
+		8069E454261A324B0086BBFB /* Essentia.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Essentia.h; sourceTree = "<group>"; };
+		8069E455261A324B0086BBFB /* Essentia.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Essentia.mm; sourceTree = "<group>"; };
 		8071851E2615BE370029E27B /* WaveformAnalyzer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WaveformAnalyzer.cpp; sourceTree = "<group>"; };
 		8071851F2615BE370029E27B /* WaveformAnalyzer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WaveformAnalyzer.hpp; sourceTree = "<group>"; };
 		8086968D26170BD20056ECC3 /* SpectralAnalyzer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SpectralAnalyzer.cpp; sourceTree = "<group>"; };
@@ -6472,6 +6476,8 @@
 			isa = PBXGroup;
 			children = (
 				80E3003426113011006ED744 /* NSString+STD.h */,
+				8069E454261A324B0086BBFB /* Essentia.h */,
+				8069E455261A324B0086BBFB /* Essentia.mm */,
 				80BF6AB82611265200CDCB2F /* EssentiaAnalysis.h */,
 				80BF6AB92611265200CDCB2F /* EssentiaAnalysis.m */,
 				80BF6A352611024C00CDCB2F /* EssentiaFile.h */,
@@ -6537,6 +6543,7 @@
 				80BF61642610EDE700CDCB2F /* MusicTonalDescriptors.h in Headers */,
 				80BF61652610EDE700CDCB2F /* MusicRhythmDescriptors.h in Headers */,
 				80BF61662610EDE700CDCB2F /* tagwhitelist.h in Headers */,
+				8069E456261A324B0086BBFB /* Essentia.h in Headers */,
 				80BF61672610EDE700CDCB2F /* bpmutil.h in Headers */,
 				80BF61682610EDE700CDCB2F /* output.h in Headers */,
 				80A6BF2A2613E051001A151D /* RhythmAnalyzer.hpp in Headers */,
@@ -6751,6 +6758,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				80BF69F72610F7D400CDCB2F /* EssentiaFile.mm in Sources */,
+				8069E457261A324B0086BBFB /* Essentia.mm in Sources */,
 				80A6BF292613E051001A151D /* RhythmAnalyzer.cpp in Sources */,
 				807185202615BE370029E27B /* WaveformAnalyzer.cpp in Sources */,
 				80A6BF0E26127D7F001A151D /* TonalAnalyzer.cpp in Sources */,

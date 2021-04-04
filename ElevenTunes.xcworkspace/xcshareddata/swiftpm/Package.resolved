@@ -56,6 +56,15 @@
         }
       },
       {
+        "package": "StickyEncoding",
+        "repositoryURL": "https://github.com/stickytools/sticky-encoding",
+        "state": {
+          "branch": null,
+          "revision": "ba9ec3ffef7cd53a7a8b88b5af8332af0a0cfaec",
+          "version": "1.0.0-beta.5"
+        }
+      },
+      {
         "package": "swift-crypto",
         "repositoryURL": "https://github.com/apple/swift-crypto.git",
         "state": {

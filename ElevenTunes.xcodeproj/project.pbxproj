@@ -108,6 +108,9 @@
 		806611452618BAFC00BFC40D /* DispatchSemaphore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806611442618BAFC00BFC40D /* DispatchSemaphore.swift */; };
 		8069E43E261A14CA0086BBFB /* ImageDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8069E43D261A14CA0086BBFB /* ImageDatabase.swift */; };
 		8069E445261A1A010086BBFB /* LibraryFileCaches.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8069E444261A1A010086BBFB /* LibraryFileCaches.swift */; };
+		8069E44B261A2D080086BBFB /* WaveformDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8069E44A261A2D080086BBFB /* WaveformDatabase.swift */; };
+		8069E450261A2F110086BBFB /* StickyEncoding in Frameworks */ = {isa = PBXBuildFile; productRef = 8069E44F261A2F110086BBFB /* StickyEncoding */; };
+		8069E451261A2F110086BBFB /* StickyEncoding in Embed Libraries */ = {isa = PBXBuildFile; productRef = 8069E44F261A2F110086BBFB /* StickyEncoding */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		806B0D2F25A9E47800603E64 /* VolatileAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D2E25A9E47800603E64 /* VolatileAttributes.swift */; };
 		806B0D3425A9EF1400603E64 /* SetRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D3325A9EF1400603E64 /* SetRelation.swift */; };
 		806B0D4225A9FE3F00603E64 /* RequestMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D4125A9FE3F00603E64 /* RequestMapper.swift */; };
@@ -290,6 +293,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				8069E451261A2F110086BBFB /* StickyEncoding in Embed Libraries */,
 				80BF6A9B26111FC600CDCB2F /* libessentia.dylib in Embed Libraries */,
 			);
 			name = "Embed Libraries";
@@ -399,6 +403,7 @@
 		806611442618BAFC00BFC40D /* DispatchSemaphore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchSemaphore.swift; sourceTree = "<group>"; };
 		8069E43D261A14CA0086BBFB /* ImageDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDatabase.swift; sourceTree = "<group>"; };
 		8069E444261A1A010086BBFB /* LibraryFileCaches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryFileCaches.swift; sourceTree = "<group>"; };
+		8069E44A261A2D080086BBFB /* WaveformDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveformDatabase.swift; sourceTree = "<group>"; };
 		806B0D2E25A9E47800603E64 /* VolatileAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolatileAttributes.swift; sourceTree = "<group>"; };
 		806B0D3325A9EF1400603E64 /* SetRelation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRelation.swift; sourceTree = "<group>"; };
 		806B0D4125A9FE3F00603E64 /* RequestMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestMapper.swift; sourceTree = "<group>"; };
@@ -579,6 +584,7 @@
 				80429D602610D48900B54ACA /* libtaglib.a in Frameworks */,
 				806B28BB258F91E50091EA4D /* KeychainAccess in Frameworks */,
 				80D6DA83259CF23F00879BCF /* CombineExt in Frameworks */,
+				8069E450261A2F110086BBFB /* StickyEncoding in Frameworks */,
 				8058C2D0261676BD0027DB8B /* SpotifyAPI in Frameworks */,
 				80BF6AAD261122A100CDCB2F /* libessentia.dylib in Frameworks */,
 				808696E22617695B0056ECC3 /* libsamplerate.dylib in Frameworks */,
@@ -857,6 +863,7 @@
 			isa = PBXGroup;
 			children = (
 				8069E43D261A14CA0086BBFB /* ImageDatabase.swift */,
+				8069E44A261A2D080086BBFB /* WaveformDatabase.swift */,
 			);
 			path = FileDatabase;
 			sourceTree = "<group>";
@@ -1485,6 +1492,7 @@
 				806B28BA258F91E50091EA4D /* KeychainAccess */,
 				80D6DA82259CF23F00879BCF /* CombineExt */,
 				8058C2CF261676BD0027DB8B /* SpotifyAPI */,
+				8069E44F261A2F110086BBFB /* StickyEncoding */,
 			);
 			productName = ElevenTunes;
 			productReference = 80AD694E258825FA00192BED /* ElevenTunes.app */;
@@ -1565,6 +1573,7 @@
 				806B2868258E97260091EA4D /* XCRemoteSwiftPackageReference "SpotifyAPI" */,
 				806B28B9258F91E50091EA4D /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				80D6DA81259CF23F00879BCF /* XCRemoteSwiftPackageReference "CombineExt" */,
+				8069E44E261A2F110086BBFB /* XCRemoteSwiftPackageReference "sticky-encoding" */,
 			);
 			productRefGroup = 80AD694F258825FA00192BED /* Products */;
 			projectDirPath = "";
@@ -1703,6 +1712,7 @@
 				802E2CD72596082E00CB91EC /* LibraryPlaylist.swift in Sources */,
 				80AD6952258825FA00192BED /* ElevenTunesApp.swift in Sources */,
 				802E2CED259614EC00CB91EC /* AnyPlaylist.swift in Sources */,
+				8069E44B261A2D080086BBFB /* WaveformDatabase.swift in Sources */,
 				805FD8BD25A12B4B00F32BFB /* Double.swift in Sources */,
 				80A8C84B25BF5B5200F97EF0 /* DBSpotifyPlaylist+CoreDataProperties.swift in Sources */,
 				802DBA22259FA9B000EA6DB7 /* Gradient.swift in Sources */,
@@ -2232,6 +2242,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		8069E44E261A2F110086BBFB /* XCRemoteSwiftPackageReference "sticky-encoding" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stickytools/sticky-encoding";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = "1.0.0-beta.5";
+			};
+		};
 		806B2868258E97260091EA4D /* XCRemoteSwiftPackageReference "SpotifyAPI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Peter-Schorn/SpotifyAPI";
@@ -2263,6 +2281,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 806B2868258E97260091EA4D /* XCRemoteSwiftPackageReference "SpotifyAPI" */;
 			productName = SpotifyAPI;
+		};
+		8069E44F261A2F110086BBFB /* StickyEncoding */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8069E44E261A2F110086BBFB /* XCRemoteSwiftPackageReference "sticky-encoding" */;
+			productName = StickyEncoding;
 		};
 		806B2869258E97260091EA4D /* _SpotifyAPITestUtilities */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -92,7 +92,12 @@ public final class AVTrack: RemoteTrack {
 	public var origin: URL? { url }
 
 	public func invalidateCaches() {
-		cache?.metadata?.delete()
+		if let cache = cache {
+			try? caches.avPreviewImages.delete(cache.owner.uuid)
+			try? caches.avWaveforms.delete(cache.owner.uuid)
+
+			cache.metadata?.delete()
+		}
 		
 		mapper.invalidateCaches()
 	}
@@ -124,8 +129,6 @@ public final class AVTrack: RemoteTrack {
 
 extension AVTrack: RequestMapperDelegate {
 	func onDemand(_ request: Request) -> AnyPublisher<TrackAttributes.PartialGroupSnapshot, Error> {
-		let url = self.url
-		
 		switch request {
 		case .url:
 			return Future.tryOnQueue(.global(qos: .default)) {
@@ -138,14 +141,7 @@ extension AVTrack: RequestMapperDelegate {
 			.eraseToAnyPublisher()
 		case .waveform:
 			return Future.tryOnQueue(.global(qos: .default)) {
-				let file = EssentiaFile(url: url)
-				let waveform = try AppDelegate.heavyWork.waitAndDo {
-					try file.analyzeWaveform(256)
-				}
-
-				return .init(.unsafe([
-					.waveform: Waveform.from(waveform),
-				]), state: .valid)
+				try self.analyzeWaveform()
 			}
 			.eraseError().eraseToAnyPublisher()
 		}
@@ -234,6 +230,34 @@ extension AVTrack: RequestMapperDelegate {
 			.genre: file.genre,
 			.year: Int(file.year).nonZeroOrNil,
 			.duration: duration,
+		]), state: .valid)
+	}
+	
+	func analyzeWaveform() throws -> TrackAttributes.PartialGroupSnapshot {
+		let caches = self.caches
+		
+		if
+			let cache = cache,
+			let waveform = cache.managedObjectContext!.withChildTaskTranslate(cache, { cache in
+				try? caches.avWaveforms.get(cache.owner.uuid)
+			})
+		{
+			return .init(.unsafe([
+				.waveform: waveform,
+			]), state: .valid)
+		}
+		
+		let file = EssentiaFile(url: url)
+		let waveform = Waveform.from(try AppDelegate.heavyWork.waitAndDo {
+			try file.analyzeWaveform(256)
+		})
+		
+		cache?.managedObjectContext!.withChildTaskTranslate(cache, { cache in
+			try? caches.avWaveforms.insert(waveform, for: cache.owner.uuid)
+		})
+
+		return .init(.unsafe([
+			.waveform: waveform,
 		]), state: .valid)
 	}
 	

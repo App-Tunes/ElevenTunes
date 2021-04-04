@@ -45,6 +45,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+		Essentia.initAlgorithms()
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

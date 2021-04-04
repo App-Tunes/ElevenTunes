@@ -6,6 +6,7 @@
 
 #import <TagLibFile.h>
 
+#import <Essentia.h>
 #import <EssentiaFile.h>
 #import <EssentiaAnalysis.h>
 #import <ResampleToSize.h>
