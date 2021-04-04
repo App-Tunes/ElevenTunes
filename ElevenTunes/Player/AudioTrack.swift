@@ -29,7 +29,9 @@ public protocol AudioTrack: AnyObject {
 	
 	var volume: Double { get set }
 
-    func move(to time: TimeInterval) throws
+	func move(to time: TimeInterval) throws
+	func move(by time: TimeInterval) throws
+
     func start()
     func stop()
 }

@@ -10,6 +10,10 @@ extension BinaryInteger {
 		return self >= 0 ? self : nil
 	}
 
+	var truePositiveOrNil: Self? {
+		return self > 0 ? self : nil
+	}
+
 	var nonZeroOrNil: Self? {
 		return self != 0 ? self : nil
 	}

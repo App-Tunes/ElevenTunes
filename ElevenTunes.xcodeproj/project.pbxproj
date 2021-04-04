@@ -111,6 +111,7 @@
 		8069E44B261A2D080086BBFB /* WaveformDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8069E44A261A2D080086BBFB /* WaveformDatabase.swift */; };
 		8069E450261A2F110086BBFB /* StickyEncoding in Frameworks */ = {isa = PBXBuildFile; productRef = 8069E44F261A2F110086BBFB /* StickyEncoding */; };
 		8069E451261A2F110086BBFB /* StickyEncoding in Embed Libraries */ = {isa = PBXBuildFile; productRef = 8069E44F261A2F110086BBFB /* StickyEncoding */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		8069E45D261A535F0086BBFB /* AVSeekableAudioPlayerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8069E45C261A535F0086BBFB /* AVSeekableAudioPlayerNode.swift */; };
 		806B0D2F25A9E47800603E64 /* VolatileAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D2E25A9E47800603E64 /* VolatileAttributes.swift */; };
 		806B0D3425A9EF1400603E64 /* SetRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D3325A9EF1400603E64 /* SetRelation.swift */; };
 		806B0D4225A9FE3F00603E64 /* RequestMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D4125A9FE3F00603E64 /* RequestMapper.swift */; };
@@ -404,6 +405,7 @@
 		8069E43D261A14CA0086BBFB /* ImageDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDatabase.swift; sourceTree = "<group>"; };
 		8069E444261A1A010086BBFB /* LibraryFileCaches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryFileCaches.swift; sourceTree = "<group>"; };
 		8069E44A261A2D080086BBFB /* WaveformDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveformDatabase.swift; sourceTree = "<group>"; };
+		8069E45C261A535F0086BBFB /* AVSeekableAudioPlayerNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVSeekableAudioPlayerNode.swift; sourceTree = "<group>"; };
 		806B0D2E25A9E47800603E64 /* VolatileAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolatileAttributes.swift; sourceTree = "<group>"; };
 		806B0D3325A9EF1400603E64 /* SetRelation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRelation.swift; sourceTree = "<group>"; };
 		806B0D4125A9FE3F00603E64 /* RequestMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestMapper.swift; sourceTree = "<group>"; };
@@ -868,6 +870,14 @@
 			path = FileDatabase;
 			sourceTree = "<group>";
 		};
+		8069E45B261A53480086BBFB /* AVFoundation */ = {
+			isa = PBXGroup;
+			children = (
+				8069E45C261A535F0086BBFB /* AVSeekableAudioPlayerNode.swift */,
+			);
+			path = AVFoundation;
+			sourceTree = "<group>";
+		};
 		806B2794258D5D390091EA4D /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
@@ -946,6 +956,7 @@
 		806B27D5258D6D7A0091EA4D /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				8069E45B261A53480086BBFB /* AVFoundation */,
 				80DC23572619EF7700ACC889 /* Swift */,
 				80E7D84C25A7AAC300413630 /* Operator */,
 				805338362598FD28006F06DC /* SwiftUI */,
@@ -1791,6 +1802,7 @@
 				806185C325F51C220062AAB3 /* TracksViewController+TableView.swift in Sources */,
 				806611452618BAFC00BFC40D /* DispatchSemaphore.swift in Sources */,
 				80A8C84425BF5B5200F97EF0 /* DBPlaylist.swift in Sources */,
+				8069E45D261A535F0086BBFB /* AVSeekableAudioPlayerNode.swift in Sources */,
 				806B0D4225A9FE3F00603E64 /* RequestMapper.swift in Sources */,
 				80A8C89925BF738500F97EF0 /* AnyTrackCache.swift in Sources */,
 				806B287A258E9A320091EA4D /* SpotifySettingsView.swift in Sources */,

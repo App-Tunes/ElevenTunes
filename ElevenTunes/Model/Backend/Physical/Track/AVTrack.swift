@@ -158,7 +158,7 @@ extension AVTrack: RequestMapperDelegate {
 				return .init(.unsafe([
 					.title: metadata.title,
 					.previewImage: try? caches.avPreviewImages.get(cache.owner.uuid),
-					.tempo: metadata.tempo,
+					.tempo: metadata.tempo.truePositiveOrNil.map { Tempo(bpm: $0) },
 					.key: metadata.key.flatMap { MusicalKey.parse($0) },
 					.album: metadata.album.map { TransientAlbum(attributes: .unsafe([
 						.title: $0

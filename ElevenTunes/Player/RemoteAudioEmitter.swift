@@ -79,6 +79,10 @@ class RemoteAudioEmitter: AudioTrack {
             endpoint.seek(to: time)
         }
     }
+	
+	func move(by time: TimeInterval) throws {
+		try currentTime.map { try move(to: $0 + time) }
+	}
     
     func start() {
         endpoint.start(at: lastStartTime)

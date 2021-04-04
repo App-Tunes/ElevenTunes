@@ -113,9 +113,7 @@ struct PlayPositionView: View {
 								}
 							},
 							moveBy: {
-								if let audio = audio, let time = audio.currentTime {
-									try? audio.move(to: $0 + time)
-								}
+								try? audio?.move(by: $0)
 							}
 						)
 							.id(state)

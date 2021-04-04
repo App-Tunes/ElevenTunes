@@ -18,7 +18,7 @@ public class AVAudioDevice: AudioDevice {
 	}
 	
 	func prepare(_ file: AVAudioFile) throws -> AVSingleAudioDevice {
-		let device = AVSingleAudioDevice()
+		let device = AVSingleAudioDevice(player: .init(file: file))
 
 		if let deviceID = self.deviceID {
 			var deviceID = deviceID
@@ -30,10 +30,18 @@ public class AVAudioDevice: AudioDevice {
 				&deviceID,
 				UInt32(MemoryLayout<String>.size)
 			)
+			
+			if error != .zero {
+				throw CoreAudioTT.OSError(code: error)
+			}
 		}
 
-		device.engine.attach(device.player)
-		device.engine.connect(device.player, to: device.engine.mainMixerNode, format: file.processingFormat)
+		device.player.players.forEach {
+			device.engine.attach($0)
+			device.engine.connect($0, to: device.engine.mainMixerNode, format: file.processingFormat)
+		}
+		device.player.prepare()
+		
 		device.engine.prepare()
 
 		try device.engine.start()
@@ -201,5 +209,9 @@ extension AVAudioDevice: Equatable {
 
 public class AVSingleAudioDevice {
 	let engine = AVAudioEngine()
-	let player = AVAudioPlayerNode()
+	let player: AVSeekableAudioPlayerNode
+	
+	init(player: AVSeekableAudioPlayerNode) {
+		self.player = player
+	}
 }
