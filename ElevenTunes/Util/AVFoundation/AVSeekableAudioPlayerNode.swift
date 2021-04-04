@@ -84,11 +84,18 @@ class AVSeekableAudioPlayerNode {
 	
 	func move(to time: TimeInterval) {
 		// We COULD just move normally, but the other method ensures
-		// there is no gap in playing
-		move(by: time - currentTime)
+		// there is no gap in playing. But less buffer, because whoever
+		// is calling probably wants the swap to be fast-ish
+		move(by: time - currentTime, buffer: 0.02)
 	}
 	
-	func move(by time: TimeInterval, buffer: TimeInterval = 0.1) {
+	func move(by time: TimeInterval, buffer: TimeInterval = 0.05) {
+		guard isPlaying else {
+			startTime = currentTime + time
+			seekPlayer(primary, to: startTime)
+			return
+		}
+		
 		// Where are we at?
 		let beginning = Date()
 		guard let renderTime = secondary.lastRenderTime else {
