@@ -27,7 +27,7 @@ struct NavigationBarView: View {
             Button {
 				navigator.selectRoot()
             } label: {
-                Image(systemName: "music.note.house")
+				playlist.backend.icon
             }
 				.foregroundColor(navigator.isRootSelected ? .accentColor : .primary)
 

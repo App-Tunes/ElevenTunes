@@ -119,7 +119,7 @@ class LibraryPlaylist: AnyPlaylist {
         return request
     }
         
-    var icon: Image { Image(systemName: "house.fill" ) }
+    var icon: Image { Image(systemName: "music.note.house.fill" ) }
 	
 	public func supports(_ capability: PlaylistCapability) -> Bool {
 		switch capability {
