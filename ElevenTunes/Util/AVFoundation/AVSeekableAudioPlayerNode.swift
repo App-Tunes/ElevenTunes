@@ -103,13 +103,18 @@ class AVSeekableAudioPlayerNode {
 	func move(by time: TimeInterval, buffer: TimeInterval = 0.1) {
 		// Where are we at?
 		let beginning = Date()
+		guard let renderTime = secondary.lastRenderTime else {
+			appLogger.error("AVAudioPlayerNode not connected; can't move!")
+			return
+		}
+		
 		startTime = currentTime + time + buffer
 		
 		let volume = self.volume
 		
 		// Prepare secondary. Prepare to play exactly on cue
 		seekPlayer(secondary, to: startTime)
-		let startSampleTime = secondary.lastRenderTime!.sampleTime + AVAudioFramePosition(buffer * format.sampleRate)
+		let startSampleTime = renderTime.sampleTime + AVAudioFramePosition(buffer * format.sampleRate)
 		let startTime = AVAudioTime(sampleTime: startSampleTime, atRate: format.sampleRate)
 		secondary.play(at: startTime)
 
@@ -117,8 +122,8 @@ class AVSeekableAudioPlayerNode {
 		Thread.sleep(until: beginning.addingTimeInterval(buffer))
 		
 		// Hotswap, volume is the fastest way
-		secondary.volume = volume
 		primary.volume = 0
+		secondary.volume = volume
 		
 		// Stop secondary, and reset volume
 		isSwapping = true
