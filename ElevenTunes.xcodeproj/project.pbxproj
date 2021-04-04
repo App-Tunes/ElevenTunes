@@ -209,7 +209,6 @@
 		80BF6A9B26111FC600CDCB2F /* libessentia.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 80BF6A9A26111FC600CDCB2F /* libessentia.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		80BF6AA32611208D00CDCB2F /* libessentia-analysis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80BF6A7F26111BE500CDCB2F /* libessentia-analysis.a */; };
 		80BF6AAD261122A100CDCB2F /* libessentia.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 80BF6A9A26111FC600CDCB2F /* libessentia.dylib */; };
-		80C9A178259F8FD300A038CC /* MilkyImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C9A177259F8FD300A038CC /* MilkyImageView.swift */; };
 		80C9A17D259F902D00A038CC /* MilkyCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C9A17C259F902D00A038CC /* MilkyCoverView.swift */; };
 		80C9A185259F916F00A038CC /* Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C9A184259F916F00A038CC /* Combine.swift */; };
 		80C9A18A259F9BDB00A038CC /* RemoteImageCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C9A189259F9BDB00A038CC /* RemoteImageCollection.swift */; };
@@ -535,7 +534,6 @@
 		80AF40A72619091000117F06 /* TrackDurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackDurationView.swift; sourceTree = "<group>"; };
 		80B357D125F6FAC400180A4A /* NSTableView+Synchronization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTableView+Synchronization.swift"; sourceTree = "<group>"; };
 		80BF6A9A26111FC600CDCB2F /* libessentia.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libessentia.dylib; path = Frameworks/Essentia/essentia/build/src/libessentia.dylib; sourceTree = "<group>"; };
-		80C9A177259F8FD300A038CC /* MilkyImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MilkyImageView.swift; sourceTree = "<group>"; };
 		80C9A17C259F902D00A038CC /* MilkyCoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MilkyCoverView.swift; sourceTree = "<group>"; };
 		80C9A184259F916F00A038CC /* Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Combine.swift; sourceTree = "<group>"; };
 		80C9A189259F9BDB00A038CC /* RemoteImageCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageCollection.swift; sourceTree = "<group>"; };
@@ -780,7 +778,6 @@
 		8053383C2599001B006F06DC /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				80C9A177259F8FD300A038CC /* MilkyImageView.swift */,
 				8053383D2599002A006F06DC /* BlinkingImage.swift */,
 				800C120B259A4F290017A116 /* Button.swift */,
 				80D6DAAB259E2CBF00879BCF /* Link.swift */,
@@ -1705,7 +1702,6 @@
 				80869687261688C60056ECC3 /* ResampleToSize.swift in Sources */,
 				80D6DAA7259E2AE100879BCF /* SpotifyAlbum.swift in Sources */,
 				80602ECC261668D40044D614 /* WaveformView.swift in Sources */,
-				80C9A178259F8FD300A038CC /* MilkyImageView.swift in Sources */,
 				806E1FD32596A5FA003EEA83 /* Playlist+Attributes.swift in Sources */,
 				802ACDDD25C08A43007324AF /* JustCachePlaylist.swift in Sources */,
 				801B4F5125A60A0E0053BFC4 /* BSManagedDocument.m in Sources */,
