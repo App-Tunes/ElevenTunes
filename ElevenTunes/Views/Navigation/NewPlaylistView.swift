@@ -53,7 +53,7 @@ struct NewPlaylistView: View {
 				]))
 				createPlaylist(playlist)
 			} label: {
-				Image(systemName: "folder")
+				Image(systemName: "folder.fill")
 					.badge(systemName: "plus.circle.fill")
 					.help("New Folder")
 			}
@@ -65,7 +65,7 @@ struct NewPlaylistView: View {
 				]))
 				createPlaylist(playlist)
 			} label: {
-				Image(systemName: "questionmark.folder")
+				Image(systemName: "questionmark.folder.fill")
 					.badge(systemName: "plus.circle.fill")
 					.help("New Hybrid Folder")
 			}

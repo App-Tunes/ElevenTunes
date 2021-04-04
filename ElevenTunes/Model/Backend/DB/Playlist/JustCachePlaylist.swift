@@ -79,9 +79,9 @@ final class JustCachePlaylist: RemotePlaylist {
 		case .tracks:
 			return Image(systemName: "music.note.list")
 		case .playlists:
-			return Image(systemName: "folder")
+			return Image(systemName: "folder.fill")
 		case .hybrid:
-			return Image(systemName: "questionmark.folder")
+			return Image(systemName: "questionmark.folder.fill")
 		}
 	}
 	

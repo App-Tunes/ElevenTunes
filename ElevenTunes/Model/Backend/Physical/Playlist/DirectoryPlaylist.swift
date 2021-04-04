@@ -53,8 +53,7 @@ public final class DirectoryPlaylist: RemotePlaylist {
 		mapper.offer(.url, update: loadURL())
     }
     
-	static let _icon: Image = Image(systemName: "folder")
-	public var icon: Image { DirectoryPlaylist._icon }
+	public var icon: Image { Image(systemName: "folder.fill") }
 	public var accentColor: Color { SystemUI.color }
 		
 	public var contentType: PlaylistContentType { .hybrid }
