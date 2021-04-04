@@ -28,7 +28,6 @@ class PlaylistActions: NSObject {
 			
 			if playlists.contains(where: \.backend.hasCaches) {
 				Button(action: { self.reloadMetadata() }) {
-                    Image(systemName: "arrow.clockwise")
                     Text("Reload Metadata")
                 }
             }
@@ -37,21 +36,18 @@ class PlaylistActions: NSObject {
 				Button(action: {
 					NSWorkspace.shared.visit(origin)
 				}) {
-					Image(systemName: "link")
 					Text("Visit Origin")
 				}
 			}
 			
 			if playlists.map(\.backend) as? [BranchingPlaylist] != nil {
 				Button(action: delete) {
-					Image(systemName: "delete.right")
 					Text("Delete")
 				}
 			}
 			
 			if playlists.allSatisfy({ $0.backend.supports(.delete) }) {
 				Button(action: unlink) {
-					Image(systemName: "delete.right")
 					Text("Remove from Library")
 				}
 			}

@@ -32,7 +32,6 @@ class TrackActions: NSObject {
 			let tracks = self.tracks
 
             Button(action: reloadMetadata) {
-                Image(systemName: "arrow.clockwise")
                 Text("Reload Metadata")
             }
 
@@ -40,13 +39,12 @@ class TrackActions: NSObject {
                 Button(action: {
 					NSWorkspace.shared.visit(origin)
                 }) {
-                    Image(systemName: "link")
                     Text("Visit Origin")
                 }
             }
 			
 			if let algorithms = algorithms.nonEmpty {
-				Menu("􀫥 Analyze...") {
+				Menu("Analyze...") {
 					ForEach(algorithms, id: \.0) { (name, algorithm) in
 						Button(action: {
 							TrackAlgorithms.run(algorithm)
@@ -60,14 +58,14 @@ class TrackActions: NSObject {
 			
 			if tracks.map(\.backend) as? [BranchingTrack] != nil{
 				Button(action: unlink) {
-					Image(systemName: "delete.right")
 					Text("Remove from Library")
 				}
 			}
 
-			Button(action: delete) {
-				Image(systemName: "delete.right")
-				Text("Delete")
+			if tracks.allSatisfy({ $0.backend.supports(.delete) }) {
+				Button(action: delete) {
+					Text("Delete")
+				}
 			}
         }
     }
