@@ -83,25 +83,9 @@ class AVSeekableAudioPlayerNode {
 	}
 	
 	func move(to time: TimeInterval) {
-		startTime = time
-
-		guard primary.isPlaying else {
-			// Prepare at new position
-			seekPlayer(primary, to: time)
-			return
-		}
-		
-		// Prepare secondary
-		seekPlayer(secondary, to: time)
-		secondary.prepare(withFrameCount: 5000)
-		
-		// Hotswap when it's ready - no need to wait longer
-		isSwapping = true
-		primary.stop()
-		isSwapping = false
-		secondary.play()
-		
-		players.reverse()
+		// We COULD just move normally, but the other method ensures
+		// there is no gap in playing
+		move(by: time - currentTime)
 	}
 	
 	func move(by time: TimeInterval, buffer: TimeInterval = 0.1) {
