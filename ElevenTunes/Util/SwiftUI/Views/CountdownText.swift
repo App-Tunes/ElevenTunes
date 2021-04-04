@@ -39,6 +39,7 @@ struct CountdownText: View {
 			.onAppear(perform: {
 				let _ = self.timer
 			})
+			.font(.system(.body, design: .monospaced))
     }
 }
 

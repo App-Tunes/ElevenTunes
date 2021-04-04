@@ -17,6 +17,7 @@ struct TrackDurationView: View {
 			
 			Text(duration?.humanReadableText ?? "")
 				.foregroundColor(.secondary)
+				.font(.system(.body, design: .monospaced))
 				.padding(.horizontal, 4)
 		}
 			.whileActive(track.backend.demand([.duration]))

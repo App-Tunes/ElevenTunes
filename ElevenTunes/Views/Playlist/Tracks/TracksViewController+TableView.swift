@@ -97,7 +97,7 @@ extension TracksViewController: NSTableViewDelegate {
 		}
 
 		addColumn(ColumnIdentifiers.Duration, title: "􀐫") {
-			$0.widthRange = 52...52
+			$0.widthRange = 60...60
 			$0.headerCell.alignment = .center
 		}
 
