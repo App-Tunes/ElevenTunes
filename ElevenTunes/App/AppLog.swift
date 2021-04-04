@@ -19,3 +19,17 @@ func appLogErrors(_ completion: Subscribers.Completion<Error>) {
         return
     }
 }
+
+extension NSManagedObjectContext {
+	@discardableResult
+	func trySaveOnChildTask(concurrencyType: NSManagedObjectContextConcurrencyType = .privateQueueConcurrencyType, _ task: @escaping (NSManagedObjectContext) throws -> Void) -> Bool {
+		do {
+			try saveOnChildTask(concurrencyType: concurrencyType, task)
+			return true
+		}
+		catch let error {
+			appLogger.error("Error on commit: \(error)")
+			return false
+		}
+	}
+}

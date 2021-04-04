@@ -5,14 +5,12 @@
 //  Created by Lukas Tenbrink on 07.03.21.
 //
 
-import Foundation
-
-extension Int {
-	var positiveOrNil: Int? {
+extension BinaryInteger {
+	var positiveOrNil: Self? {
 		return self >= 0 ? self : nil
 	}
 
-	var nonZeroOrNil: Int? {
+	var nonZeroOrNil: Self? {
 		return self != 0 ? self : nil
 	}
 }

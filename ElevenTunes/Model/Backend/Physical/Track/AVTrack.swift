@@ -58,13 +58,12 @@ public final class AVTrack: RemoteTrack {
 	var cache: DBAVTrack? = nil
 
 	enum Request {
-		case url, taglib, avfoundation, waveform
+		case url, read, waveform
 	}
 	
 	let mapper = Requests(relation: [
 		.url: [],
-		.taglib: [.title, .key, .tempo, .previewImage, .artists, .album, .genre],
-		.avfoundation: [.duration],
+		.read: [.title, .key, .tempo, .previewImage, .artists, .album, .genre, .duration],
 		.waveform: [.waveform]
 	])
 
@@ -77,10 +76,6 @@ public final class AVTrack: RemoteTrack {
 	 
 	convenience init(cache: DBAVTrack) {
 		self.init(cache.url, isVideo: cache.isVideo)
-		// It's reasonable to assume for the moment
-		// that the track is always read on import, so
-		// when we're created from DB we assume values as valid
-//		mapper.attributes.update(cache.owner.attributes.snapshot)
 		self.cache = cache
 	}
 	 
@@ -95,14 +90,9 @@ public final class AVTrack: RemoteTrack {
 	public var origin: URL? { url }
 
 	func loadURL() -> TrackAttributes.PartialGroupSnapshot {
-		do {
-			return .init(.unsafe([
-				.title: url.lastPathComponent
-			]), state: .missing)
-		}
-		catch let error {
-			return .empty(state: .error(error))
-		}
+		.init(.unsafe([
+			.title: url.lastPathComponent
+		]), state: .missing)
 	}
 	
 	public func audioTrack(forDevice device: BranchingAudioDevice) throws -> AnyPublisher<AudioTrack, Error> {
@@ -133,45 +123,11 @@ extension AVTrack: RequestMapperDelegate {
 			return Future.tryOnQueue(.global(qos: .default)) {
 				self.loadURL()
 			}.eraseToAnyPublisher()
-		case .taglib:
+		case .read:
 			return Future.tryOnQueue(.global(qos: .default)) {
-				try TagLibFile(url: url).unwrap(orThrow: TagLibError.cannotRead)
-			}
-			.map { file in
-				.init(.unsafe([
-					.title: file.title,
-					.previewImage: file.image.flatMap { NSImage(data: $0) },
-					.tempo: file.bpm.flatMap { Double($0) }.map { Tempo(bpm: $0) },
-					.key: file.initialKey.flatMap { MusicalKey.parse($0) },
-					.album: file.album.map { TransientAlbum(attributes: .unsafe([
-						.title: $0
-					])) },
-					.artists: file.artist.map {
-						let artists = TransientArtist.splitNames($0)
-						
-						return artists.map {
-							TransientArtist(attributes: .unsafe([
-								.title: $0
-							]))
-						}
-					},
-					.genre: file.genre,
-					.year: Int(file.year).nonZeroOrNil
-				]), state: .valid)
+				try self.readFile()
 			}
 			.eraseToAnyPublisher()
-		case .avfoundation:
-			return Future.tryOnQueue(.global(qos: .default)) {
-				let file = try AppDelegate.heavyWork.waitAndDo {
-					try AVAudioFile(forReading: url)
-				}
-				let format = file.processingFormat
-				
-				return .init(.unsafe([
-					.duration: TimeInterval(file.length) / format.sampleRate
-				]), state: .valid)
-			}
-			.eraseError().eraseToAnyPublisher()
 		case .waveform:
 			return Future.tryOnQueue(.global(qos: .default)) {
 				let file = EssentiaFile(url: url)
@@ -185,6 +141,85 @@ extension AVTrack: RequestMapperDelegate {
 			}
 			.eraseError().eraseToAnyPublisher()
 		}
+	}
+
+	func readFile() throws -> TrackAttributes.PartialGroupSnapshot {
+		if
+			let cache = cache,
+			let snapshot: TrackAttributes.PartialGroupSnapshot = cache.managedObjectContext!.withChildTaskTranslate(cache, ({ cache in
+				guard let metadata = cache.metadata else { return nil }
+				
+				return .init(.unsafe([
+					.title: metadata.title,
+					.previewImage: nil,  // TODO
+					.tempo: metadata.tempo,
+					.key: metadata.key.flatMap { MusicalKey.parse($0) },
+					.album: metadata.album.map { TransientAlbum(attributes: .unsafe([
+						.title: $0
+					])) },
+					.artists: metadata.artists.map {
+						let artists = TransientArtist.splitNames($0)
+						
+						return artists.map {
+							TransientArtist(attributes: .unsafe([
+								.title: $0
+							]))
+						}
+					},
+					.genre: metadata.genre,
+					.year: Int(metadata.year).nonZeroOrNil,
+					.duration: metadata.duration
+				]), state: .valid)
+			}))
+		{
+			return snapshot
+		}
+		
+		let file = try TagLibFile(url: url).unwrap(orThrow: TagLibError.cannotRead)
+		let audioFile = try AVAudioFile(forReading: url)
+		let format = audioFile.processingFormat
+
+		let duration = TimeInterval(audioFile.length) / format.sampleRate
+		
+		if let cache = cache {
+			cache.managedObjectContext?.trySaveOnChildTask { context in
+				guard let cache = context.translate(cache) else { return }
+				
+				let metadata = DBFileMetadata(context: context)
+				metadata.title = file.title
+				metadata.tempo = file.bpm.flatMap { Double($0) } ?? 0
+				metadata.key = file.initialKey
+				metadata.album = file.album
+				metadata.artists = file.artist
+				metadata.genre = file.genre
+				metadata.year = Int32(file.year)
+				metadata.duration = duration
+				
+				cache.metadata = metadata
+			}
+		}
+		
+		return .init(.unsafe([
+			.title: file.title,
+			.previewImage: file.image.flatMap { NSImage(data: $0) },
+			.tempo: file.bpm.flatMap { Double($0) }.map { Tempo(bpm: $0) },
+			.key: file.initialKey.flatMap { MusicalKey.parse($0) },
+			.album: file.album.map { TransientAlbum(attributes: .unsafe([
+				.title: $0
+			])) },
+			.artists: file.artist.map {
+				let artists = TransientArtist.splitNames($0)
+				
+				return artists.map {
+					TransientArtist(attributes: .unsafe([
+						.title: $0
+					]))
+				}
+			},
+			.genre: file.genre,
+			.year: Int(file.year).nonZeroOrNil,
+			.duration: duration,
+		]), state: .valid)
 	}
 	
 	func onUpdate(_ snapshot: VolatileAttributes<TrackAttribute, String>.PartialGroupSnapshot, from request: Request) {

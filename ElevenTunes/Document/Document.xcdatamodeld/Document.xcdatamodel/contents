@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="20C69" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="20D74" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="DBAlbum" representedClassName="DBAlbum" syncable="YES">
         <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="artists" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="DBArtist" inverseName="albums" inverseEntity="DBArtist"/>
@@ -13,12 +13,25 @@
     <entity name="DBAVTrack" representedClassName="DBAVTrack" syncable="YES">
         <attribute name="isVideo" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="url" attributeType="URI"/>
+        <relationship name="metadata" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DBFileMetadata" inverseName="owner" inverseEntity="DBFileMetadata"/>
         <relationship name="owner" maxCount="1" deletionRule="Nullify" destinationEntity="DBTrack" inverseName="avRepresentation" inverseEntity="DBTrack"/>
     </entity>
     <entity name="DBDirectoryPlaylist" representedClassName="DBDirectoryPlaylist" syncable="YES">
         <attribute name="fileChangedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="url" attributeType="URI"/>
         <relationship name="owner" maxCount="1" deletionRule="Nullify" destinationEntity="DBPlaylist" inverseName="directoryRepresentation" inverseEntity="DBPlaylist"/>
+    </entity>
+    <entity name="DBFileMetadata" representedClassName="DBFileMetadata" syncable="YES" codeGenerationType="class">
+        <attribute name="album" optional="YES" attributeType="String"/>
+        <attribute name="artists" optional="YES" attributeType="String"/>
+        <attribute name="duration" optional="YES" attributeType="Double" usesScalarValueType="YES"/>
+        <attribute name="genre" optional="YES" attributeType="String"/>
+        <attribute name="key" optional="YES" attributeType="String"/>
+        <attribute name="tempo" optional="YES" attributeType="Double" usesScalarValueType="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="year" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <relationship name="owner" maxCount="1" deletionRule="Nullify" destinationEntity="DBAVTrack" inverseName="metadata" inverseEntity="DBAVTrack"/>
     </entity>
     <entity name="DBM3UPlaylist" representedClassName="DBM3UPlaylist" syncable="YES">
         <attribute name="fileChangedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -56,14 +69,15 @@
         <relationship name="spotifyRepresentation" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DBSpotifyTrack" inverseName="owner" inverseEntity="DBSpotifyTrack"/>
     </entity>
     <elements>
-        <element name="DBAlbum" positionX="72" positionY="189" width="128" height="74"/>
-        <element name="DBArtist" positionX="90" positionY="198" width="128" height="74"/>
-        <element name="DBAVTrack" positionX="81" positionY="180" width="128" height="74"/>
-        <element name="DBDirectoryPlaylist" positionX="63" positionY="162" width="128" height="74"/>
-        <element name="DBM3UPlaylist" positionX="72" positionY="171" width="128" height="74"/>
-        <element name="DBPlaylist" positionX="27" positionY="72" width="128" height="194"/>
-        <element name="DBSpotifyPlaylist" positionX="54" positionY="153" width="128" height="74"/>
-        <element name="DBSpotifyTrack" positionX="99" positionY="198" width="128" height="59"/>
-        <element name="DBTrack" positionX="18" positionY="63" width="128" height="119"/>
+        <element name="DBAlbum" positionX="-39.6551513671875" positionY="67.97872924804688" width="128" height="88"/>
+        <element name="DBArtist" positionX="189.429443359375" positionY="-41.12469482421875" width="128" height="88"/>
+        <element name="DBAVTrack" positionX="-460.4373779296875" positionY="64.0576171875" width="128" height="103"/>
+        <element name="DBDirectoryPlaylist" positionX="-378.817626953125" positionY="-344.9844055175781" width="128" height="88"/>
+        <element name="DBFileMetadata" positionX="-641.9356079101562" positionY="62.8311767578125" width="128" height="193"/>
+        <element name="DBM3UPlaylist" positionX="-396.23486328125" positionY="-209.0165405273438" width="128" height="88"/>
+        <element name="DBPlaylist" positionX="-44.54730224609375" positionY="-194.6527709960938" width="128" height="208"/>
+        <element name="DBSpotifyPlaylist" positionX="-395.667236328125" positionY="-85.90283203125" width="128" height="88"/>
+        <element name="DBSpotifyTrack" positionX="-437.600341796875" positionY="250.6975708007812" width="128" height="73"/>
+        <element name="DBTrack" positionX="-254.6779174804688" positionY="50.274658203125" width="128" height="133"/>
     </elements>
 </model>

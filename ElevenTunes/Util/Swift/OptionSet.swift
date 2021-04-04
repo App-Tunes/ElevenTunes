@@ -5,8 +5,6 @@
 //  Created by Lukas Tenbrink on 29.12.20.
 //
 
-import Foundation
-
 extension FixedWidthInteger {
     init(bitComponents : [Self]) {
         self = bitComponents.reduce(0, +)

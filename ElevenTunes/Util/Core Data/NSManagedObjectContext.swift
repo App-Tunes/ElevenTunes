@@ -19,12 +19,46 @@ extension NSManagedObjectContext {
         return child
     }
     
-    func performChildTask(concurrencyType: NSManagedObjectContextConcurrencyType, wait: Bool = false, _ task: @escaping (NSManagedObjectContext) -> Swift.Void) {
-        let context = self.child(concurrencyType: concurrencyType)
-        (wait ? context.performAndWait : context.perform) {
-            task(context)
-        }
-    }
+	func performAsyncChildTask(concurrencyType: NSManagedObjectContextConcurrencyType, _ task: @escaping (NSManagedObjectContext) -> Swift.Void) {
+		let context = self.child(concurrencyType: concurrencyType)
+		context.perform {
+			task(context)
+		}
+	}
+
+	func performChildTask<R>(concurrencyType: NSManagedObjectContextConcurrencyType, _ task: @escaping (NSManagedObjectContext) -> R) -> R {
+		let context = self.child(concurrencyType: concurrencyType)
+		var r: R? = nil
+		context.performAndWait {
+			r = task(context)
+		}
+		return r!
+	}
+	
+	func withChildTaskTranslate<T: NSManagedObject, R>(_ object: T?, concurrencyType: NSManagedObjectContextConcurrencyType = .privateQueueConcurrencyType, _ task: @escaping (T) -> R?) -> R? {
+		guard let object = object else { return nil }
+		return performChildTask(concurrencyType: concurrencyType) { context in
+			context.translate(object).flatMap { task($0) }
+		}
+	}
+
+	func saveOnChildTask(concurrencyType: NSManagedObjectContextConcurrencyType = .privateQueueConcurrencyType, _ task: @escaping (NSManagedObjectContext) throws -> Void) throws {
+		let context = self.child(concurrencyType: concurrencyType)
+		var error: Error?
+		context.performAndWait {
+			do {
+				try task(context)
+				try context.save()
+			}
+			catch let inError {
+				error = inError
+			}
+		}
+		
+		if let error = error {
+			throw error
+		}
+	}
 
     func translate<T: NSManagedObject>(_ object: T) -> T? {
         self.object(with: object.objectID) as? T

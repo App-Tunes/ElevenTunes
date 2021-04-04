@@ -5,8 +5,6 @@
 //  Created by Lukas Tenbrink on 20.12.20.
 //
 
-import Foundation
-
 extension Array {
     public subscript(index: Int, default defaultValue: @autoclosure () -> Element) -> Element {
         guard index >= 0, index < endIndex else {

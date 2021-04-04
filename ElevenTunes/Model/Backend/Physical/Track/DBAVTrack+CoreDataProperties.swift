@@ -18,6 +18,7 @@ extension DBAVTrack {
 
     @NSManaged public var isVideo: Bool
 	@NSManaged public var url: URL
+	@NSManaged public var metadata: DBFileMetadata?
     @NSManaged public var owner: DBTrack
 
 }

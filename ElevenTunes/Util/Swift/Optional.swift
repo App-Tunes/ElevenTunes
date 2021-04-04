@@ -5,8 +5,6 @@
 //  Created by Lukas Tenbrink on 01.01.21.
 //
 
-import Foundation
-
 extension Optional {
     func unwrap(orThrow error: @autoclosure () -> Error) throws -> Wrapped {
         switch self {

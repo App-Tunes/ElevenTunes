@@ -926,6 +926,7 @@
 		806B27D5258D6D7A0091EA4D /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				80DC23572619EF7700ACC889 /* Swift */,
 				80E7D84C25A7AAC300413630 /* Operator */,
 				805338362598FD28006F06DC /* SwiftUI */,
 				8053381425989A73006F06DC /* Core Data */,
@@ -1349,6 +1350,24 @@
 			path = Album;
 			sourceTree = "<group>";
 		};
+		80DC23572619EF7700ACC889 /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				80ED7690258FF41200B8B9C3 /* Array.swift */,
+				80F53EBB25D9BED0003A98B3 /* Collection.swift */,
+				80CD394F25A3CE99002C5A56 /* Dictionary.swift */,
+				805FD8BC25A12B4B00F32BFB /* Double.swift */,
+				8082F10625A8905A00B1D157 /* Hasher.swift */,
+				806185AB25F5038F0062AAB3 /* Int.swift */,
+				800C1216259B48620017A116 /* OptionSet.swift */,
+				80C9A18E259FA13000A038CC /* Optional.swift */,
+				8005085D259802B60055FB2D /* RawRepresentable.swift */,
+				800C1203259A4AC10017A116 /* Set.swift */,
+				805338222598BA5B006F06DC /* Sequence.swift */,
+			);
+			path = Swift;
+			sourceTree = "<group>";
+		};
 		80E7D84C25A7AAC300413630 /* Operator */ = {
 			isa = PBXGroup;
 			children = (
@@ -1360,23 +1379,12 @@
 		80ED768F258FF40A00B8B9C3 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
-				80ED7690258FF41200B8B9C3 /* Array.swift */,
-				80F53EBB25D9BED0003A98B3 /* Collection.swift */,
-				80CD394F25A3CE99002C5A56 /* Dictionary.swift */,
 				801F7E1925D84B47004372CE /* NSItemProvider.swift */,
-				800C1203259A4AC10017A116 /* Set.swift */,
 				808A7630259405F200B0A9CE /* URL.swift */,
 				8082F10125A88BE700B1D157 /* Date.swift */,
-				8082F10625A8905A00B1D157 /* Hasher.swift */,
 				802E2DCE2596573900CB91EC /* NSOrderedSet.swift */,
-				8005085D259802B60055FB2D /* RawRepresentable.swift */,
-				805338222598BA5B006F06DC /* Sequence.swift */,
-				800C1216259B48620017A116 /* OptionSet.swift */,
-				80C9A18E259FA13000A038CC /* Optional.swift */,
 				80D6DA65259B74AA00879BCF /* NSLock.swift */,
-				805FD8BC25A12B4B00F32BFB /* Double.swift */,
 				80F53EC525D9D5B5003A98B3 /* StaticMenu.swift */,
-				806185AB25F5038F0062AAB3 /* Int.swift */,
 				802376CA26095E0000A5E826 /* DispatchQueue.swift */,
 				806611442618BAFC00BFC40D /* DispatchSemaphore.swift */,
 				80AF40A3261904C500117F06 /* NSWorkspace.swift */,
