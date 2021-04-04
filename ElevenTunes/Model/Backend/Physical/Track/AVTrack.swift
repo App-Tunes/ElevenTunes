@@ -99,6 +99,7 @@ public final class AVTrack: RemoteTrack {
 			cache.metadata?.delete()
 		}
 		
+		invalidateSubCaches()
 		mapper.invalidateCaches()
 	}
 	

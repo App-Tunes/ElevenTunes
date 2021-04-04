@@ -26,7 +26,14 @@ extension RemoteTrack {
 	
 	public var hasCaches: Bool { true }
 	
+	public func invalidateSubCaches() {
+		let attributes = mapper.attributes.snapshot.attributes
+		attributes[TrackAttribute.artists]?.forEach { $0.invalidateCaches() }
+		attributes[TrackAttribute.album]?.invalidateCaches()
+	}
+	
 	public func invalidateCaches() {
+		invalidateSubCaches()
 		mapper.invalidateCaches()
 	}
 	

@@ -64,9 +64,6 @@ class RequestMapper<Attribute: AnyObject & Hashable, Version: Hashable, Delegate
 	}
 	
 	func invalidateCaches() {
-		attributes.snapshot.attributes[TrackAttribute.artists]?.forEach { $0.invalidateCaches() }
-		attributes.snapshot.attributes[TrackAttribute.album]?.invalidateCaches()
-
 		attributes.invalidate()
 		requestFeatureSet.clear()
 		

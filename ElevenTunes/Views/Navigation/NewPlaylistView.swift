@@ -43,6 +43,7 @@ struct NewPlaylistView: View {
 			} label: {
 				Image(systemName: "music.note.list")
 					.badge(systemName: "plus.circle.fill")
+					.help("New Playlist")
 			}
 				.disabled(!(insertPlaylist?.supports(.addChildren(.tracks)) ?? false))
 
@@ -54,6 +55,7 @@ struct NewPlaylistView: View {
 			} label: {
 				Image(systemName: "folder")
 					.badge(systemName: "plus.circle.fill")
+					.help("New Folder")
 			}
 				.disabled(!(insertPlaylist?.supports(.addChildren(.playlists)) ?? false))
 
@@ -65,6 +67,7 @@ struct NewPlaylistView: View {
 			} label: {
 				Image(systemName: "questionmark.folder")
 					.badge(systemName: "plus.circle.fill")
+					.help("New Hybrid Folder")
 			}
 				.disabled(!(insertPlaylist?.supports(.addChildren(.hybrid)) ?? false))
 		}
