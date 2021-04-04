@@ -22,14 +22,17 @@ func appLogErrors(_ completion: Subscribers.Completion<Error>) {
 
 extension NSManagedObjectContext {
 	@discardableResult
-	func trySaveOnChildTask(concurrencyType: NSManagedObjectContextConcurrencyType = .privateQueueConcurrencyType, _ task: @escaping (NSManagedObjectContext) throws -> Void) -> Bool {
-		do {
-			try saveOnChildTask(concurrencyType: concurrencyType, task)
-			return true
-		}
-		catch let error {
-			appLogger.error("Error on commit: \(error)")
-			return false
+	func trySaveOnChildTask(concurrencyType: NSManagedObjectContextConcurrencyType = .privateQueueConcurrencyType, _ task: @escaping (NSManagedObjectContext) throws -> Void) {
+		let context = self.child(concurrencyType: concurrencyType)
+
+		context.perform {
+			do {
+				try task(context)
+				try context.save()
+			}
+			catch let error {
+				appLogger.error("Error on commit: \(error)")
+			}
 		}
 	}
 }

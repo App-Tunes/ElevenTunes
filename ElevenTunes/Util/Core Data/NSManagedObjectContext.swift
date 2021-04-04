@@ -42,24 +42,6 @@ extension NSManagedObjectContext {
 		}
 	}
 
-	func saveOnChildTask(concurrencyType: NSManagedObjectContextConcurrencyType = .privateQueueConcurrencyType, _ task: @escaping (NSManagedObjectContext) throws -> Void) throws {
-		let context = self.child(concurrencyType: concurrencyType)
-		var error: Error?
-		context.performAndWait {
-			do {
-				try task(context)
-				try context.save()
-			}
-			catch let inError {
-				error = inError
-			}
-		}
-		
-		if let error = error {
-			throw error
-		}
-	}
-
     func translate<T: NSManagedObject>(_ object: T) -> T? {
         self.object(with: object.objectID) as? T
     }
