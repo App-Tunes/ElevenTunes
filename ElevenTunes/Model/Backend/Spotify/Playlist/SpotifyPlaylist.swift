@@ -78,7 +78,7 @@ public final class SpotifyPlaylist: SpotifyURIPlaylist {
 		])
 	}
 		
-	static func attributes(of playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistsItemsReference>) -> TypedDict<PlaylistAttribute> {
+	static func attributes(of playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItemsReference>) -> TypedDict<PlaylistAttribute> {
 		return .unsafe([
 			.title: playlist.name
 		])
@@ -95,7 +95,7 @@ public final class SpotifyPlaylist: SpotifyURIPlaylist {
             .decodeSpotifyObject(MinimalPagingObject<MinimalPlaylistItemContainer<DetailedSpotifyTrack>>.self)
             .zip(Just(uris[split...]).eraseError()).map { (full, partial) in
                 full.items
-                    .map { SpotifyTrack(track: $0.track, spotify: spotify) }
+					.map { spotify.track(SpotifyTrackToken($0.track.id), details: $0.track) }
                 + partial.map { SpotifyTrack($0, spotify: spotify) }
             }
             .eraseToAnyPublisher()

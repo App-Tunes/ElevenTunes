@@ -22,13 +22,29 @@ extension Spotify {
         return artist
     }
 
-    func album(_ token: SpotifyAlbumToken, info: SpotifyWebAPI.Album? = nil) -> SpotifyAlbum {
-        let album = albumCaches.get(token, insertingDefault: SpotifyAlbum(token, spotify: self))
-        
-        if let info = info {
-            album.offerCache(info)
-        }
+	func album(_ token: SpotifyAlbumToken, info: SpotifyWebAPI.Album? = nil, details: DetailedSpotifyTrack.Album? = nil) -> SpotifyAlbum {
+		let album = albumCaches.get(token, insertingDefault: SpotifyAlbum(token, spotify: self))
+		
+		if let info = info {
+			album.offerCache(info)
+		}
+		if let details = details {
+			album.offerCache(details)
+		}
 
-        return album
-    }
+		return album
+	}
+
+	func track(_ token: SpotifyTrackToken, info: SpotifyWebAPI.Track? = nil, details: DetailedSpotifyTrack? = nil) -> SpotifyTrack {
+		let track = trackCaches.get(token, insertingDefault: SpotifyTrack(token, spotify: self))
+		
+		if let info = info {
+			track.offerCache(info)
+		}
+		if let details = details {
+			track.offerCache(details)
+		}
+
+		return track
+	}
 }

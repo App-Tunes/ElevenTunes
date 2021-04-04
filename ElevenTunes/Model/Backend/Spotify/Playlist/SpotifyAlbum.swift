@@ -52,16 +52,26 @@ public final class SpotifyAlbum: SpotifyURIPlaylist, AnyAlbum {
 	
 	public var origin: URL? { token.origin }
     
-    func offerCache(_ album: SpotifyWebAPI.Album) {
+	func offerCache(_ album: SpotifyWebAPI.Album) {
 		mapper.offer(.info, update: read(album))
-    }
-    
+	}
+	
+	func offerCache(_ album: DetailedSpotifyTrack.Album) {
+		mapper.offer(.info, update: read(album))
+	}
+	
 	func read(_ album: SpotifyWebAPI.Album) -> PlaylistAttributes.PartialGroupSnapshot {
 		.init(.unsafe([
-            .title: album.name
+			.title: album.name
 		]), state: .valid)
-    }
-    
+	}
+	
+	func read(_ album: DetailedSpotifyTrack.Album) -> PlaylistAttributes.PartialGroupSnapshot {
+		.init(.unsafe([
+			.title: album.name
+		]), state: .valid)
+	}
+	
     public func bestImageForPreview(_ images: [SpotifyWebAPI.SpotifyImage]) -> URL? {
         guard let image = (images.sorted {
                 max($0.width ?? 0, $0.height ?? 0) <
@@ -107,9 +117,10 @@ extension SpotifyAlbum: RequestMapperDelegate {
 				.map { $0.flatMap { $0.items } }
 				.map { items in
 					items.map { (model: SpotifyWebAPI.Track) -> SpotifyTrack in
-						var track = DetailedSpotifyTrack.from(model)
-						track.album = .init(id: token.id)  // Album requests don't return albums
-						return SpotifyTrack(track: track, spotify: spotify) }
+						// TODO This does NOT include the album, we should set this
+						// so the track doesn't have to fetch this info itself
+						spotify.track(SpotifyTrackToken(model.id!), info: model)
+					}
 				}
 				.map { tracks in
 					.init(.unsafe([

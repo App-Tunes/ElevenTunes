@@ -63,7 +63,8 @@ class Spotify {
     
     // TODO This is a reference cycle :|
     var artistCaches: [SpotifyArtistToken: SpotifyArtist] = [:]
-    var albumCaches: [SpotifyAlbumToken: SpotifyAlbum] = [:]
+	var albumCaches: [SpotifyAlbumToken: SpotifyAlbum] = [:]
+	var trackCaches: [SpotifyTrackToken: SpotifyTrack] = [:]
 
 	
     init() {

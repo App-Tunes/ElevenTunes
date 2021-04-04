@@ -27,9 +27,11 @@ extension NSTableView {
 			moveObserver = NotificationCenter.default.addObserver(forName: NSTableView.columnDidMoveNotification, object: nil, queue: .main) { [weak tableView] notification in
 				guard let tableView = tableView else { return }
 				
-				let updateTableView = notification.object as! NSTableView
-
-				guard updateTableView != tableView, updateTableView.autosaveName == tableView.autosaveName else {
+				guard
+					let updateTableView = notification.object as? NSTableView,
+					updateTableView != tableView,
+					updateTableView.autosaveName == tableView.autosaveName
+				else {
 					return
 				}
 				
@@ -46,10 +48,12 @@ extension NSTableView {
 
 			resizeObserver = NotificationCenter.default.addObserver(forName: NSTableView.columnDidResizeNotification, object: nil, queue: .main) { [weak tableView] notification in
 				guard let tableView = tableView else { return }
-				
-				let updateTableView = notification.object as! NSTableView
-				
-				guard updateTableView != tableView, updateTableView.autosaveName == tableView.autosaveName else {
+								
+				guard
+					let updateTableView = notification.object as? NSTableView,
+					updateTableView != tableView,
+					updateTableView.autosaveName == tableView.autosaveName
+				else {
 					return
 				}
 
@@ -67,10 +71,12 @@ extension NSTableView {
 
 			visibleObserver = NotificationCenter.default.addObserver(forName: NSTableView.columnDidChangeVisibilityNotification, object: nil, queue: .main) { [weak tableView] notification in
 				guard let tableView = tableView else { return }
-				
-				let updateTableView = notification.object as! NSTableView
-				
-				guard updateTableView != tableView, updateTableView.autosaveName == tableView.autosaveName else {
+								
+				guard
+					let updateTableView = notification.object as? NSTableView,
+					updateTableView != tableView,
+					updateTableView.autosaveName == tableView.autosaveName
+				else {
 					return
 				}
 

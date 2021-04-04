@@ -20,10 +20,11 @@ struct MinimalSpotifyTrack: Codable, Hashable {
 }
 
 struct DetailedSpotifyTrack: Codable, Hashable {
-    static let filters = "id,name,duration_ms,album(id),artists(id,name)"
+    static let filters = "id,name,duration_ms,album(id,name),artists(id,name)"
 
     struct Album: Codable, Hashable {
         var id: String
+		var name: String
     }
     
     struct Artist: Codable, Hashable {
@@ -33,7 +34,7 @@ struct DetailedSpotifyTrack: Codable, Hashable {
     
     var id: String
 	var name: String
-	var duration: TimeInterval
+	var duration_ms: Int
     var album: Album?
     var artists: [Artist]
     
@@ -41,13 +42,13 @@ struct DetailedSpotifyTrack: Codable, Hashable {
 		DetailedSpotifyTrack(
 			id: track.id!,
 			name: track.name,
-			duration: TimeInterval(track.durationMS!) / 1000,
-			album: track.album.map { Album(id: $0.id!) },
+			duration_ms: track.durationMS!,
+			album: track.album.map { Album(id: $0.id!, name: $0.name) },
 			artists: (track.artists ?? []).map { Artist(id: $0.id!, name: $0.name) })
     }
 }
 
-public class SpotifyTrackToken: TrackToken, SpotifyURIConvertible {
+public class SpotifyTrackToken: TrackToken, SpotifyURIConvertible, Hashable {
     enum CodingKeys: String, CodingKey {
       case trackID
     }
@@ -88,6 +89,14 @@ public class SpotifyTrackToken: TrackToken, SpotifyURIConvertible {
 	public func expand(_ context: Library) throws -> AnyTrack {
 		SpotifyTrack(self, spotify: context.spotify)
 	}
+	
+	public func hash(into hasher: inout Hasher) {
+		hasher.combine(id)
+	}
+	
+	public static func == (lhs: SpotifyTrackToken, rhs: SpotifyTrackToken) -> Bool {
+		lhs.id == rhs.id
+	}
 }
 
 public final class SpotifyTrack: RemoteTrack {
@@ -109,11 +118,6 @@ public final class SpotifyTrack: RemoteTrack {
 		mapper.delegate = self
     }
 
-    convenience init(track: DetailedSpotifyTrack, spotify: Spotify) {
-		self.init(SpotifyTrackToken(track.id), spotify: spotify)
-		mapper.offer(.track, update: .init(extractAttributes(from: track), state: .valid))
-    }
-    
     public var accentColor: Color { Spotify.color }
 	
 	public var id: String { token.id }
@@ -144,22 +148,32 @@ public final class SpotifyTrack: RemoteTrack {
 		false
 	}
     
-    func extractAttributes(from track: DetailedSpotifyTrack) -> TypedDict<TrackAttribute> {
-		.unsafe([
+	func offerCache(_ track: SpotifyWebAPI.Track) {
+		mapper.offer(.track, update: read(DetailedSpotifyTrack.from(track)))
+	}
+	
+	func offerCache(_ track: DetailedSpotifyTrack) {
+		mapper.offer(.track, update: read(track))
+	}
+
+	func read(_ track: DetailedSpotifyTrack) -> TrackAttributes.PartialGroupSnapshot {
+		.init(.unsafe([
 			.title: track.name,
-			.duration: track.duration,
-			.album: track.album.map { spotify.album(SpotifyAlbumToken($0.id)) },
+			.duration: TimeInterval(track.duration_ms) / 1000,
+			.album: track.album.map {
+				spotify.album(SpotifyAlbumToken($0.id), details: $0)
+			},
 			.artists:  track.artists.map {
 				spotify.artist(SpotifyArtistToken($0.id), details: $0)
 			}
-		])
+		]), state: .valid)
     }
     
-    func extractAttributes(from features: AudioFeatures) -> TypedDict<TrackAttribute> {
-		.unsafe([
+	func read(_ features: AudioFeatures) -> TrackAttributes.PartialGroupSnapshot {
+		.init(.unsafe([
 			.tempo: Tempo(bpm: features.tempo),
 			.key: MusicalNote(pitchClass: features.key).map { MusicalKey(note: $0, mode: features.mode == 1 ? .major : .minor) }
-		])
+		]), state: .valid)
     }
 }
 
@@ -169,19 +183,13 @@ extension SpotifyTrack: RequestMapperDelegate {
 		case .track:
 			return spotify.api.track(token)
 				.map { [unowned self] track in
-					.init(
-						self.extractAttributes(from: DetailedSpotifyTrack.from(track)),
-						state: .valid
-					)
+					self.read(DetailedSpotifyTrack.from(track))
 				}
 				.eraseToAnyPublisher()
 		case .analysis:
 			return spotify.api.trackAudioFeatures(token)
 				.map { [unowned self] features in
-					.init(
-						self.extractAttributes(from: features),
-						state: .valid
-					)
+					self.read(features)
 				}
 				.eraseToAnyPublisher()
 		}
