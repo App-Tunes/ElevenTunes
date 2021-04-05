@@ -145,13 +145,9 @@ struct CurrentPlayPositionView: View {
 	@State var track: AnyTrack?
 
 	var body: some View {
-		Group {
+		ZStack {
 			if let track = track {
 				PlayPositionView(player: player, track: track)
-			}
-			else {
-				// Otherwise we don't have any size...
-				Rectangle().fill(Color.clear)
 			}
 		}
 		.onReceive(player.$current) {
