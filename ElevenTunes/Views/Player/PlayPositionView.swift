@@ -76,7 +76,8 @@ struct PlayPositionView: View {
 	@State var waveform: TrackAttributes.ValueSnapshot<Waveform> = .missing()
 
 	var moveStep: TimeInterval? {
-		return tempo.map { TimeInterval(1 / $0.bps) * 32 }
+		// 16 beats = 4 bars = 1 phrase
+		return tempo.map { TimeInterval(1 / $0.bps) * 16 }
 	}
 	
     var body: some View {
