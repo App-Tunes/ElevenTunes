@@ -11,18 +11,24 @@ struct ToolbarView: View {
     @State var player: Player
 
     var body: some View {
-        HStack {
-            PlayingTrackView(player: player)
-                .frame(minWidth: 250, maxWidth: .infinity, alignment: .leading)
-                .padding([.leading, .trailing])
-                .layoutPriority(2)
-            
-            PlayerControlsView(player: player)
-                .padding(.top, 8)
+		VStack {
+			HStack {
+				PlayingTrackView(player: player)
+					.frame(minWidth: 250, maxWidth: .infinity, alignment: .leading)
+					.padding([.leading, .trailing])
+					.layoutPriority(2)
+				
+				PlayerControlsView(player: player)
+					.padding(.top, 8)
 
-            PlayHistoryAccessorView()
-                .padding(.top, 8)
-                .padding(.trailing)
-        }
+				PlayHistoryAccessorView()
+					.padding(.top, 8)
+					.padding(.trailing, 12)
+			}
+				.padding(.top, 1)
+			
+			// Top Alignment
+			Spacer()
+		}
     }
 }

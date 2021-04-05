@@ -140,6 +140,9 @@
 		806E20222596C26A003EEA83 /* RemoteTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E20212596C26A003EEA83 /* RemoteTrack.swift */; };
 		806E202825975A0E003EEA83 /* MockTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E202725975A0E003EEA83 /* MockTrack.swift */; };
 		806E203025975A15003EEA83 /* TransientPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E202F25975A15003EEA83 /* TransientPlaylist.swift */; };
+		808174C6261B74C300A62097 /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808174C4261B74C300A62097 /* LibraryViewController.swift */; };
+		808174C7261B74C300A62097 /* LibraryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 808174C5261B74C300A62097 /* LibraryViewController.xib */; };
+		808174CB261B75F800A62097 /* MainContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808174CA261B75F800A62097 /* MainContentView.swift */; };
 		8082F10225A88BE700B1D157 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8082F10125A88BE700B1D157 /* Date.swift */; };
 		8082F10725A8905A00B1D157 /* Hasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8082F10625A8905A00B1D157 /* Hasher.swift */; };
 		8082F11425A9BF3200B1D157 /* KeyedDemand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8082F11325A9BF3200B1D157 /* KeyedDemand.swift */; };
@@ -188,7 +191,6 @@
 		80A8C89125BF734D00F97EF0 /* AnyPlaylistCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80A8C89025BF734D00F97EF0 /* AnyPlaylistCache.swift */; };
 		80A8C89925BF738500F97EF0 /* AnyTrackCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80A8C89825BF738500F97EF0 /* AnyTrackCache.swift */; };
 		80AD6952258825FA00192BED /* ElevenTunesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AD6951258825FA00192BED /* ElevenTunesApp.swift */; };
-		80AD6956258825FA00192BED /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AD6955258825FA00192BED /* ContentView.swift */; };
 		80AD6958258825FD00192BED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80AD6957258825FD00192BED /* Assets.xcassets */; };
 		80AD695B258825FD00192BED /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80AD695A258825FD00192BED /* Preview Assets.xcassets */; };
 		80AD6967258825FD00192BED /* ElevenTunesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AD6966258825FD00192BED /* ElevenTunesTests.swift */; };
@@ -432,6 +434,9 @@
 		806E20212596C26A003EEA83 /* RemoteTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTrack.swift; sourceTree = "<group>"; };
 		806E202725975A0E003EEA83 /* MockTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTrack.swift; sourceTree = "<group>"; };
 		806E202F25975A15003EEA83 /* TransientPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransientPlaylist.swift; sourceTree = "<group>"; };
+		808174C4261B74C300A62097 /* LibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
+		808174C5261B74C300A62097 /* LibraryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LibraryViewController.xib; sourceTree = "<group>"; };
+		808174CA261B75F800A62097 /* MainContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContentView.swift; sourceTree = "<group>"; };
 		8082F10125A88BE700B1D157 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		8082F10625A8905A00B1D157 /* Hasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hasher.swift; sourceTree = "<group>"; };
 		8082F11325A9BF3200B1D157 /* KeyedDemand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyedDemand.swift; sourceTree = "<group>"; };
@@ -509,7 +514,6 @@
 		80A8C89825BF738500F97EF0 /* AnyTrackCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyTrackCache.swift; sourceTree = "<group>"; };
 		80AD694E258825FA00192BED /* ElevenTunes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ElevenTunes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		80AD6951258825FA00192BED /* ElevenTunesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevenTunesApp.swift; sourceTree = "<group>"; };
-		80AD6955258825FA00192BED /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		80AD6957258825FD00192BED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		80AD695A258825FD00192BED /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		80AD695C258825FD00192BED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1302,7 +1306,9 @@
 			children = (
 				802E2C9C2595FEB800CB91EC /* Main.storyboard */,
 				802E2CC0259601FE00CB91EC /* Environment.swift */,
-				80AD6955258825FA00192BED /* ContentView.swift */,
+				808174C4261B74C300A62097 /* LibraryViewController.swift */,
+				808174C5261B74C300A62097 /* LibraryViewController.xib */,
+				808174CA261B75F800A62097 /* MainContentView.swift */,
 				80ED76A12590A9A000B8B9C3 /* Preferences */,
 				80AD69AE25882A2B00192BED /* Player */,
 				806B2794258D5D390091EA4D /* Navigation */,
@@ -1635,6 +1641,7 @@
 			files = (
 				804D3C0225D93A5E00705D42 /* PlaylistsViewController.xib in Resources */,
 				802E2C9D2595FEB900CB91EC /* Main.storyboard in Resources */,
+				808174C7261B74C300A62097 /* LibraryViewController.xib in Resources */,
 				80AD695B258825FD00192BED /* Preview Assets.xcassets in Resources */,
 				806185BE25F51B460062AAB3 /* TracksViewController.xib in Resources */,
 				80AD6958258825FD00192BED /* Assets.xcassets in Resources */,
@@ -1701,6 +1708,7 @@
 				803A870425F54C9C00D7B9E1 /* NSTableView.swift in Sources */,
 				80869687261688C60056ECC3 /* ResampleToSize.swift in Sources */,
 				80D6DAA7259E2AE100879BCF /* SpotifyAlbum.swift in Sources */,
+				808174C6261B74C300A62097 /* LibraryViewController.swift in Sources */,
 				80602ECC261668D40044D614 /* WaveformView.swift in Sources */,
 				806E1FD32596A5FA003EEA83 /* Playlist+Attributes.swift in Sources */,
 				802ACDDD25C08A43007324AF /* JustCachePlaylist.swift in Sources */,
@@ -1778,7 +1786,6 @@
 				80D653D825993CDC007221D5 /* PlaylistRowView.swift in Sources */,
 				8069E445261A1A010086BBFB /* LibraryFileCaches.swift in Sources */,
 				802E2DAD259643AE00CB91EC /* SpotifyUser.swift in Sources */,
-				80AD6956258825FA00192BED /* ContentView.swift in Sources */,
 				808445DE25A7996200E27EC8 /* Badge.swift in Sources */,
 				80CD393625A3C4D0002C5A56 /* SpotifyInterpretation.swift in Sources */,
 				80D6DAA2259E28B300879BCF /* SpotifyArtist.swift in Sources */,
@@ -1847,6 +1854,7 @@
 				8083E85225AA11A200D4CE60 /* RemotePlaylist.swift in Sources */,
 				806185CE25F5346D0062AAB3 /* TrackKeyView.swift in Sources */,
 				80D6DA66259B74AA00879BCF /* NSLock.swift in Sources */,
+				808174CB261B75F800A62097 /* MainContentView.swift in Sources */,
 				8053381625989A7A006F06DC /* NSManagedObjectContext.swift in Sources */,
 				808D5485259F3A4A006F7435 /* SystemUI.swift in Sources */,
 				80A8C88725BF5F9500F97EF0 /* PlaylistToken.swift in Sources */,

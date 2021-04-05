@@ -56,17 +56,6 @@ class LibrarySettingsLevel: SettingsLevel, Codable {
     @Published var settings: LibrarySettingsLevel
     
     override func makeWindowControllers() {
-        // Create the SwiftUI view and set the context as the value for the managedObjectContext environment keyPath.
-        // Add `@Environment(\.managedObjectContext)` in the views that will need the context
-		let mainPlaylist = LibraryPlaylist(library: library, playContext: library.playContext)
-		let wrappedMainPlaylist = Playlist(mainPlaylist)
-		
-		let contentView = ContentView(mainPlaylist: wrappedMainPlaylist, navigator: Navigator(root: wrappedMainPlaylist))
-            .environment(\.managedObjectContext, self.managedObjectContext!)
-            .environment(\.library, library)
-            .environment(\.player, library.player)
-
-        // Create the window and set the content view.
         let window = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 1000, height: 500),
             styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
@@ -75,17 +64,32 @@ class LibrarySettingsLevel: SettingsLevel, Codable {
         window.toolbar = NSToolbar()
         window.toolbarStyle = .unifiedCompact
         window.titlebarAppearsTransparent = true
+		window.titlebarSeparatorStyle = .none
+		
+		let titleBarVC = NSTitlebarAccessoryViewController()
+		titleBarVC.view = NSHostingView(rootView: ToolbarView(player: library.player))
+		titleBarVC.view.translatesAutoresizingMaskIntoConstraints = false
+		titleBarVC.automaticallyAdjustsSize = true
+		titleBarVC.layoutAttribute = .right
+		window.addTitlebarAccessoryViewController(titleBarVC)
 
-        window.isReleasedWhenClosed = false
-        window.contentView = NSHostingView(rootView: contentView)
+		window.isReleasedWhenClosed = false
+
+		let libraryVC = LibraryViewController(nibName: nil, bundle: .main)
+		libraryVC.toolbarView = titleBarVC.view
+		libraryVC.library = library
+		
+		window.contentViewController = libraryVC
         window.center()
+		
         let windowController = NSWindowController(window: window)
         self.addWindowController(windowController)
         
-        // So it doesn't cover the rest of the GUI
-        if !window.constrainMaxTitleSize(110) {
-            appLogger.error("Failed to constrain window title size")
-        }
+		// Don't need this now since we have the toolbar
+//        // So it doesn't cover the rest of the GUI
+//        if !window.constrainMaxTitleSize(110) {
+//            appLogger.error("Failed to constrain window title size")
+//        }
         
         updateChangeCount(.changeCleared)
     }

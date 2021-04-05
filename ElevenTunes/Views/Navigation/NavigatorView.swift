@@ -9,23 +9,28 @@ import SwiftUI
 import Combine
 
 struct NavigatorView: View {
-    let directory: Playlist
 	let navigator: Navigator
 	
     @Environment(\.library) private var library: Library!
 
     var body: some View {
-        VStack(spacing: 0) {
-			NavigationSearchBar()
-				.padding()
-				.visualEffectBackground(material: .sidebar)
+		ZStack(alignment: .top) {
+			VStack(spacing: 0) {
+				NavigationSearchBar()
+					.padding()
+					.visualEffectBackground(material: .sidebar)
 
-			PlaylistsView(directory: directory, navigator: navigator)
-				.frame(maxWidth: .infinity, maxHeight: .infinity)
-				.layoutPriority(2)
+				PlaylistsView(directory: navigator.root, navigator: navigator)
+					.frame(maxWidth: .infinity, maxHeight: .infinity)
+					.layoutPriority(2)
 
-			NavigationBarView(playlist: directory, navigator: navigator)
-        }
+				NavigationBarView(playlist: navigator.root, navigator: navigator)
+			}
+
+			VisualEffectView(material: .sidebar, blendingMode: .behindWindow, emphasized: false)
+				.frame(height: 50)
+				.edgesIgnoringSafeArea(.top)
+		}
     }
 }
 

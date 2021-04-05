@@ -141,7 +141,7 @@ struct PlayPositionView: View {
 }
 
 struct CurrentPlayPositionView: View {
-	var player: Player
+	@Environment(\.player) private var player: Player!
 	@State var track: AnyTrack?
 
 	var body: some View {
