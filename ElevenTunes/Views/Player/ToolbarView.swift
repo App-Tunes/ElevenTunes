@@ -25,7 +25,6 @@ struct ToolbarView: View {
 					.padding(.top, 8)
 					.padding(.trailing, 12)
 			}
-				.padding(.top, 1)
 			
 			// Top Alignment
 			Spacer()

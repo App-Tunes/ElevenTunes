@@ -62,7 +62,7 @@ class LibrarySettingsLevel: SettingsLevel, Codable {
             backing: .buffered, defer: false)
 
         window.toolbar = NSToolbar()
-        window.toolbarStyle = .unifiedCompact
+        window.toolbarStyle = .unified
         window.titlebarAppearsTransparent = true
 		window.titlebarSeparatorStyle = .none
 		
