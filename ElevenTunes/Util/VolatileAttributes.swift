@@ -74,7 +74,14 @@ public class VolatileAttributes<Key: AnyObject & Hashable, Version: Hashable> {
 	private let lock = NSLock()
 
 	@Published private(set) var snapshot: Snapshot = .init()
-	@Published private(set) var update: Update = (.init(), [])
+	@Published private var update: Update = (.init(), [])
+	
+	// Basically, the first push to new subscribers will be the whole snapshot,
+	// and then only updates (ignoring the initial push).
+	lazy private(set) var updates: AnyPublisher<Update, Never> = $snapshot.first()
+		.map { ($0, Set($0.keys)) }
+		.append($update.dropFirst())
+		.eraseToAnyPublisher()
 	
 	var knownKeys: Set<Key> {
 		lock.perform { snapshot.knownKeys }
@@ -95,13 +102,10 @@ public class VolatileAttributes<Key: AnyObject & Hashable, Version: Hashable> {
 	func update(_ snapshot: Snapshot) {
 		guard !snapshot.isEmpty else { return }
 
-		let fullSnapshot = lock.perform { () -> Snapshot in
+		lock.perform {
 			self.snapshot = self.snapshot.merging(update: snapshot)
-
-			return self.snapshot
+			self.update = (self.snapshot, change: Set(snapshot.states.keys))
 		}
-		
-		self.update = (fullSnapshot, change: Set(snapshot.states.keys))
 	}
 	
 	func invalidate() {
@@ -211,36 +215,17 @@ extension VolatileAttributes {
 }
 
 extension Publisher {
-//	func publisher(_ attributes: Set<Key>) -> AnyPublisher<Snapshot, Never> {
-//		// Always push the initial value through, and from then on only if relevant
-//		Just(snapshot.0).append(
-//			$snapshot.dropFirst().compactMap { (values, change) in
-//				if change.isDisjoint(with: attributes) {
-//					return nil
-//				}
-//
-//				return values
-//			}
-//		).eraseToAnyPublisher()
-//	}
-
 	func filtered<Key, Version>(toChanges keys: Set<Key>) -> AnyPublisher<VolatileAttributes<Key, Version>.Snapshot, Failure> where Output == VolatileAttributes<Key, Version>.Update {
-		var isFirst = true
-		
-		return compactMap { (values, change) -> VolatileAttributes<Key, Version>.Snapshot? in
-			if !isFirst, change.isDisjoint(with: keys) {
-				return nil
-			}
-			
-			isFirst = false
-			return values
+		compactMap { (values, change) in
+			change.isDisjoint(with: keys) ? nil : values
 		}
 			.eraseToAnyPublisher()
 	}
 	
 	func filtered<Key, TK: TypedKey, Version>(toJust key: TK) -> AnyPublisher<VolatileSnapshot<TK.Value, Version>, Failure> where Output == VolatileAttributes<Key, Version>.Update {
-		filtered(toChanges: [key as! Key])
-			.map { $0[key] }
+		compactMap { (values, change) in
+			change.contains(key as! Key) ? .some(values[key]) : nil
+		}
 			.eraseToAnyPublisher()
 	}
 }

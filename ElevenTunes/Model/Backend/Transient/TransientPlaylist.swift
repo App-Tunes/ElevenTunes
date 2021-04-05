@@ -50,7 +50,7 @@ class TransientPlaylist: PlaylistToken, AnyPlaylist {
 	}
 	
 	var attributes: AnyPublisher<PlaylistAttributes.Update, Never> {
-		_attributes.$update.eraseToAnyPublisher()
+		_attributes.updates.eraseToAnyPublisher()
 	}
 	
 	public func supports(_ capability: PlaylistCapability) -> Bool {

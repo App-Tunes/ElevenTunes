@@ -17,7 +17,7 @@ protocol RemoteTrack: AnyTrack, RequestMapperDelegate where Snapshot == TrackAtt
 
 extension RemoteTrack {
 	public var attributes: AnyPublisher<TrackAttributes.Update, Never> {
-		mapper.attributes.$update.eraseToAnyPublisher()
+		mapper.attributes.updates.eraseToAnyPublisher()
 	}
 	
 	public func demand(_ demand: Set<TrackAttribute>) -> AnyCancellable {

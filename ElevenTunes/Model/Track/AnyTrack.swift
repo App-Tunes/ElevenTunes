@@ -49,6 +49,8 @@ extension AnyTrack {
 	
 	public var previewImage: AnyPublisher<VolatileSnapshot<NSImage, String>, Never> {
 		let demand = self.demand([.previewImage])
+		// Create here already so we don't need self in there - also avoid recreating
+		let albumStream = self.attribute(TrackAttribute.album)
 		
 		return attribute(TrackAttribute.previewImage)
 			.attach(demand)
@@ -60,7 +62,7 @@ extension AnyTrack {
 				}
 				
 				// Refer to album image
-				return self.attribute(TrackAttribute.album)
+				return albumStream
 					.flatMap { (albumSnapshot: VolatileSnapshot<AnyAlbum, String>) -> AnyPublisher<VolatileSnapshot<NSImage, String>, Never> in
 						guard let album = albumSnapshot.value else {
 							// No album, can't ask, but we can propagate the state

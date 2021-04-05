@@ -46,7 +46,7 @@ class MockTrack: TrackToken, AnyTrack {
 	}
 	
 	var attributes: AnyPublisher<TrackAttributes.Update, Never> {
-		_attributes.$update.eraseToAnyPublisher()
+		_attributes.updates.eraseToAnyPublisher()
 	}
 
 	func audioTrack(forDevice device: BranchingAudioDevice) throws -> AnyPublisher<AudioTrack, Error> {

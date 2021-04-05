@@ -26,12 +26,23 @@ struct PlayerMilkyCoverView: View {
 
     var body: some View {
 		ZStack {
-			Image(nsImage: oldImage ?? NSImage())
-				.resizable()
+			Rectangle().fill(Color.black)
 
-			Image(nsImage: image ?? NSImage())
-				.resizable()
-				.opacity(transition)
+			if let image = image {
+				Image(nsImage: image)
+					.resizable()
+			}
+			
+			ZStack {
+				Rectangle().fill(Color.black)
+
+				if let oldImage = oldImage {
+					Image(nsImage: oldImage)
+						.resizable()
+				}
+			}
+				.drawingGroup()
+				.opacity(1 - transition)
 		}
 			.onReceive(player.$current) { newTrack in
 				guard newTrack?.id != track?.id else {

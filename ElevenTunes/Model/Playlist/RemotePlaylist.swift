@@ -16,7 +16,7 @@ protocol RemotePlaylist: AnyPlaylist, RequestMapperDelegate where Snapshot == Pl
 
 extension RemotePlaylist {
 	public var attributes: AnyPublisher<PlaylistAttributes.Update, Never> {
-		mapper.attributes.$update.eraseToAnyPublisher()
+		mapper.attributes.updates.eraseToAnyPublisher()
 	}
 	
 	public func demand(_ demand: Set<PlaylistAttribute>) -> AnyCancellable {

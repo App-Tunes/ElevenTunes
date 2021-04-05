@@ -73,7 +73,7 @@ struct PlayPositionView: View {
 
 	@State var duration: TimeInterval?
 	@State var tempo: Tempo?
-	@State var waveform: Waveform?
+	@State var waveform: TrackAttributes.ValueSnapshot<Waveform> = .missing()
 
 	var moveStep: TimeInterval? {
 		return tempo.map { TimeInterval(1 / $0.bps) * 32 }
@@ -87,7 +87,7 @@ struct PlayPositionView: View {
 				let state = isCurrent ? tstate.state : .init(isPlaying: false, currentTime: nil)
 
 				ZStack {
-					if let waveform = waveform {
+					if let waveform = waveform.value {
 						ResamplingWaveformView(
 							gradient: Gradients.pitch,
 							waveform: waveform
@@ -95,6 +95,7 @@ struct PlayPositionView: View {
 							.allowsHitTesting(false)
 							.frame(height: geo.size.height * 0.7, alignment: .bottom)
 							.frame(height: geo.size.height, alignment: .bottom)
+							.opacity(self.waveform.state == .valid ? 1 : 0.5)
 					}
 
 					if let duration = (isCurrent ? audio?.duration : duration) {
@@ -131,7 +132,7 @@ struct PlayPositionView: View {
 		.onReceive(track.attributes) { (snapshot, _) in
 			setIfDifferent(self, \.duration, snapshot[TrackAttribute.duration].value)
 			setIfDifferent(self, \.tempo, snapshot[TrackAttribute.tempo].value)
-			setIfDifferent(self, \.waveform, snapshot[TrackAttribute.waveform].value)
+			setIfDifferent(self, \.waveform, snapshot[TrackAttribute.waveform])
 		}
         // TODO hugging / compression resistance:
         // setting min height always compressed down to min height :<

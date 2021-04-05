@@ -78,7 +78,7 @@ struct TrackArtistsView: View {
 
 	var body: some View {
 		HStack(spacing: 4) {
-			if snapshot.state == .valid {
+			if snapshot.state != .missing {
 				if let artists = snapshot.value, !artists.isEmpty {
 					ForEach(artists, id: \.id) {
 						ArtistCellView(artist: $0)

@@ -109,7 +109,7 @@ class LibraryPlaylist: AnyPlaylist {
 	}
 
 	var attributes: AnyPublisher<PlaylistAttributes.Update, Never> {
-		_attributes.$update.eraseToAnyPublisher()
+		_attributes.updates.eraseToAnyPublisher()
 	}
 
     static var playlistFetchRequest: NSFetchRequest<DBPlaylist> {
