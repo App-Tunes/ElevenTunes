@@ -146,6 +146,10 @@ struct CurrentPlayPositionView: View {
 
 	var body: some View {
 		ZStack {
+			// If this isn't here, we might not have a size, and .background
+			// modifiers won't work
+			Rectangle().fill(Color.clear)
+
 			if let track = track {
 				PlayPositionView(player: player, track: track)
 			}
