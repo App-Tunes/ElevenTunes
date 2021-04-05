@@ -58,7 +58,7 @@ class LibrarySettingsLevel: SettingsLevel, Codable {
     override func makeWindowControllers() {
         let window = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 1000, height: 500),
-            styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
+			styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView, .unifiedTitleAndToolbar],
             backing: .buffered, defer: false)
 
         window.toolbar = NSToolbar()
@@ -79,6 +79,7 @@ class LibrarySettingsLevel: SettingsLevel, Codable {
 		libraryVC.toolbarView = titleBarVC.view
 		libraryVC.library = library
 		
+		window.delegate = libraryVC
 		window.contentViewController = libraryVC
         window.center()
 		
