@@ -272,6 +272,7 @@ inline const TagLib::String TagLibStringFromNS(NSString *string) {
     }
     else if (TagLib::RIFF::AIFF::File *file = dynamic_cast<TagLib::RIFF::AIFF::File *>(_fileRef.file())) {
         if (file->hasID3v2Tag()) {
+			return file->File::tag();
             return file->tag();
         }
     }
@@ -322,15 +323,23 @@ inline const TagLib::String TagLibStringFromNS(NSString *string) {
 }
 
 + (NSString *)getID3TextIn:(TagLib::ID3v2::Tag *)tag forKey:(NSString *)key {
+	auto key_str = key.UTF8String;
+	
     TagLib::ID3v2::FrameList::ConstIterator it = tag->frameList().begin();
     for(; it != tag->frameList().end(); it++) {
-        if(auto text_frame = dynamic_cast<TagLib::ID3v2::TextIdentificationFrame *>(*it)) {
-            auto frame_id = text_frame->frameID();
-            
-            if (frame_id == key.UTF8String) {
-                return TagLibStringToNS(text_frame->toString());
-            }
-        }
+		auto frame = dynamic_cast<TagLib::ID3v2::Frame *>(*it);
+		auto frame_id = frame->frameID();
+
+		if (frame_id != key_str) {
+			continue;
+		}
+
+		if (auto text_frame = dynamic_cast<TagLib::ID3v2::TextIdentificationFrame *>(frame)) {
+			return TagLibStringToNS(text_frame->toString());
+		}
+		else {
+			NSLog(@"Failed to textify frame for key: %@", key);
+		}
     }
     
     return nil;
