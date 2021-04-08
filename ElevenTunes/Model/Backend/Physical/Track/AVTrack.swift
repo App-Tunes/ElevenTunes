@@ -44,6 +44,14 @@ public struct AVTrackToken: TrackToken {
 }
 
 public final class AVTrack: RemoteTrack {
+	enum PlayError: Error, LocalizedError {
+		case fileDoesntExist
+		
+		var errorDescription: String? {
+			"The file doesn't exist."
+		}
+	}
+	
 	enum AnalysisError: Error {
 		case notImplemented
 	}
@@ -116,6 +124,10 @@ public final class AVTrack: RemoteTrack {
 		
 		// TODO Return video emitter when possible
 		return Future.tryOnQueue(.global(qos: .default)) { [url] in
+			if !((try? url.checkResourceIsReachable()) ?? false) {
+				throw PlayError.fileDoesntExist
+			}
+			
 			let file = try AVAudioFile(forReading: url)
 			let singleDevice = try device.prepare(file)
 			return AVAudioPlayerEmitter(singleDevice, file: file)
