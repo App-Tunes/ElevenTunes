@@ -91,11 +91,14 @@ struct MusicalKey: Equatable {
 	let note: MusicalNote
 	let mode: MusicalMode
 	
-    static let colors: [Color] = (0..<12).map {
-        // / 12 * 5 gives close representations to notes being quint / quart apart
-        Color(hue: Double($0) / 12 * 5, saturation: 0.5, brightness: 0.75)
-    }
-	
+	static let colors: [Color] = (0..<12).map {
+		// / 12 * 5 gives close representations to notes being quint / quart apart
+		Color(hue: Double($0) / 12 * 5, saturation: 0.5, brightness: 0.75)
+	}
+	static let nscolors: [NSColor] = (0..<12).map {
+		NSColor(hue: (CGFloat($0) / 12 * 5).truncatingRemainder(dividingBy: 1), saturation: 0.5, brightness: 0.75, alpha: 1)
+	}
+
 	static func parse(_ toParse: String) -> MusicalKey? {
 		if toParse.count == 0 {
 			return nil
@@ -146,4 +149,6 @@ struct MusicalKey: Equatable {
 	}
     
 	var color: Color { Self.colors[likenessIndex] }
+
+	var nscolor: NSColor { Self.nscolors[likenessIndex] }
 }

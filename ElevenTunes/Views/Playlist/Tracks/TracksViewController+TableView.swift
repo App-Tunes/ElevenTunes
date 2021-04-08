@@ -8,6 +8,10 @@
 import Cocoa
 import SwiftUI
 
+class NSTableCellViewAttachedObject: NSTableCellView {
+	var representedObject: Any? = nil
+}
+
 extension TracksViewController: NSTableViewDelegate {
 	enum ColumnIdentifiers {
 		static let Title = NSUserInterfaceItemIdentifier(rawValue: "Title")
@@ -33,6 +37,7 @@ extension TracksViewController: NSTableViewDelegate {
 		static let YearCell = NSUserInterfaceItemIdentifier(rawValue: "YearCell")
 		static let WaveformCell = NSUserInterfaceItemIdentifier(rawValue: "WaveformCell")
 		static let DurationCell = NSUserInterfaceItemIdentifier(rawValue: "DurationCell")
+		static let TextCell = NSUserInterfaceItemIdentifier(rawValue: "TextCell")
 	}
 
 	func initColumns() {
@@ -128,6 +133,21 @@ extension TracksViewController: NSTableViewDelegate {
 			return nil
 		}
 		
+		func makeTextView<T: TypedKey & TrackAttribute>(for id: NSUserInterfaceItemIdentifier, attribute: T, update: @escaping (NSTextField, T.Value?) -> Void) -> NSView? {
+			if let view = tableView.makeView(withIdentifier: id, owner: nil) as? NSTableCellViewAttachedObject, let textField = view.textField {
+				textField.stringValue = ""
+				view.representedObject = (
+					track.backend.demand([attribute]),
+					track.backend.attribute(attribute).sink { [weak textField] snapshot in
+						textField.map { update($0, snapshot.value) }
+					}
+				)
+				return view
+			}
+			appLogger.error("Failed to create known track text view: \(id)")
+			return nil
+		}
+		
 		switch tableColumn?.identifier {
 		case ColumnIdentifiers.Title:
 			return makeView(for: CellIdentifiers.TrackCell) {
@@ -135,22 +155,15 @@ extension TracksViewController: NSTableViewDelegate {
 			}
 		case ColumnIdentifiers.Image:
 			return makeView(for: CellIdentifiers.ImageCell) {
-				$0.rootView = AnyView(PlayTrackImageView(track: track, context: .playlist(playlist.backend, tracks: tracks.map(\.backend), track: track.backend))
-										.environment(\.library, library)
-							.environment(\.player, library.player)
-						)
+				$0.rootView = AnyView(
+					PlayTrackImageView(track: track, context: .playlist(playlist.backend, tracks: tracks.map(\.backend), track: track.backend))
+					.environment(\.library, library)
+					.environment(\.player, library.player)
+				)
 			}
 		case ColumnIdentifiers.Waveform:
 			return makeView(for: CellIdentifiers.WaveformCell) {
 				$0.rootView = AnyView(PlayPositionView(player: player, track: track.backend, isSecondary: true))
-			}
-		case ColumnIdentifiers.Tempo:
-			return makeView(for: CellIdentifiers.TempoCell) {
-				$0.rootView = AnyView(TrackTempoView(track: track))
-			}
-		case ColumnIdentifiers.Key:
-			return makeView(for: CellIdentifiers.KeyCell) {
-				$0.rootView = AnyView(TrackKeyView(track: track))
 			}
 		case ColumnIdentifiers.Artists:
 			return makeView(for: CellIdentifiers.ArtistsCell) {
@@ -160,14 +173,31 @@ extension TracksViewController: NSTableViewDelegate {
 			return makeView(for: CellIdentifiers.AlbumCell) {
 				$0.rootView = AnyView(TrackAlbumView(track: track, withIcon: false))
 			}
+		case ColumnIdentifiers.Tempo:
+			return makeTextView(for: CellIdentifiers.TextCell, attribute: TrackAttribute.tempo, update: { (view, value) in
+				view.stringValue = value?.title ?? ""
+				view.textColor = value?.nscolor ?? .clear
+			})
+		case ColumnIdentifiers.Key:
+			return makeTextView(for: CellIdentifiers.TextCell, attribute: TrackAttribute.key, update: { (view, value) in
+				view.stringValue = value?.title ?? ""
+				view.textColor = value?.nscolor ?? .clear
+			})
+		case ColumnIdentifiers.Year:
+			return makeTextView(for: CellIdentifiers.TextCell, attribute: TrackAttribute.year, update: { (view, value) in
+				view.stringValue = value.map { String($0) } ?? ""
+				view.textColor = .secondaryLabelColor
+			})
 		case ColumnIdentifiers.Genre:
-			return makeView(for: CellIdentifiers.GenreCell) {
-				$0.rootView = AnyView(TrackGenreView(track: track))
-			}
+			return makeTextView(for: CellIdentifiers.TextCell, attribute: TrackAttribute.genre, update: { (view, value) in
+				view.stringValue = value ?? ""
+				view.textColor = .secondaryLabelColor
+			})
 		case ColumnIdentifiers.Duration:
-			return makeView(for: CellIdentifiers.DurationCell) {
-				$0.rootView = AnyView(TrackDurationView(track: track))
-			}
+			return makeTextView(for: CellIdentifiers.DurationCell, attribute: TrackAttribute.duration, update: { (view, value) in
+				view.stringValue = value?.humanReadableText ?? ""
+				view.textColor = .secondaryLabelColor
+			})
 		default:
 			appLogger.error("Unrecognized track view: \(String(describing: tableColumn))")
 			return nil
