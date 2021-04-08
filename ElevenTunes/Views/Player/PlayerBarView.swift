@@ -10,7 +10,6 @@ import SwiftUI
 struct PlayerBarView: View {
     var body: some View {
 		CurrentPlayPositionView()
-			.frame(minHeight: 20, idealHeight: 30, maxHeight: 50)
 			.background(
 				LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.6), .clear]).applying(iterations: 20) { pow($0, 0.4) }, startPoint: .bottom, endPoint: .top)
 					.background(

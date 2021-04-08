@@ -24,14 +24,13 @@ struct MainContentView: View {
     var body: some View {
 		VSplitView {
 			PlayerBarView()
-				.frame(maxWidth: .infinity)
+				.frame(maxWidth: .infinity, minHeight: 20, idealHeight: 30, maxHeight: 50)
 
 			PlaylistMultiplicityView(playlists: navigator.playlists)
-				.frame(minWidth: 200, idealWidth: 250, maxWidth: .infinity, minHeight: 100, idealHeight: 400, maxHeight: .infinity)
+				.frame(maxWidth: .infinity, minHeight: 200, idealHeight: 400, maxHeight: .infinity)
 				.layoutPriority(2)
 		}
-			.preferredColorScheme(.dark)
-			.frame(maxWidth: .infinity, maxHeight: .infinity)
+			.frame(minWidth: 700, idealWidth: 800, maxWidth: .infinity, minHeight: 350, idealHeight: 400, maxHeight: .infinity)
 			.layoutPriority(2)
     }
 }
