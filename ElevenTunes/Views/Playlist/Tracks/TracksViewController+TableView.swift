@@ -117,7 +117,7 @@ extension TracksViewController: NSTableViewDelegate {
 	}
 	
 	func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-		let track = self.tracks[row]
+		let track = tracks[row]
 		
 		func makeView(for id: NSUserInterfaceItemIdentifier, fun: (AnyNSHostingView) -> Void) -> NSView? {
 			if let view = tableView.makeView(withIdentifier: id, owner: nil) as? AnyNSHostingView {

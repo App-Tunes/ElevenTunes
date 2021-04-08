@@ -22,11 +22,8 @@ class TracksViewController: NSViewController {
 		}
 	}
 	
-	var tracks: [Track] = [] {
-		didSet {
-			tableView?.animateDifference(from: oldValue, to: tracks)
-		}
-	}
+	private(set) var tracks: [Track] = []
+	private(set) var tracksState: TrackAttributes.State = .missing
 	
 	var playlistObserver: AnyCancellable?
 	
@@ -57,13 +54,35 @@ class TracksViewController: NSViewController {
 		tableView.sizeToFit()
 	}
 	
+	private func updateTracks(_ tracks: [Track], animate: Bool) {
+		let oldValue = self.tracks
+		
+		self.tracks = tracks
+		if animate {
+			tableView?.animateDifference(from: oldValue, to: self.tracks)
+		}
+		else {
+			tableView?.reloadData()
+		}
+	}
+	
 	private func updatePlaylistObserver() {
-		playlistObserver = playlist.backend.attribute(PlaylistAttribute.tracks).sink { [weak self] tracks in
-			guard let self = self else {
+		// No animation when changing playlists
+		self.updateTracks([], animate: false)
+		self.tracksState = .missing
+
+		playlistObserver = playlist.backend.attribute(PlaylistAttribute.tracks).sink { [weak self] snapshot in
+			guard let self = self else { return }
+			
+			// Don't update for unknown states, they will resolve soon enough
+			guard snapshot.state.isKnown else {
+				self.tracksState = snapshot.state
 				return
 			}
-			
-			self.tracks = tracks.value?.map { Track($0) } ?? []
+
+			// Animate only between known values
+			self.updateTracks(snapshot.value?.map { Track($0) } ?? [], animate: self.tracksState.isKnown && snapshot.state.isKnown)
+			self.tracksState = snapshot.state
 		}
 	}
 }

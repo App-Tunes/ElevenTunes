@@ -58,6 +58,7 @@
 		802E2DC6259644FF00CB91EC /* M3UPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2DC4259644FF00CB91EC /* M3UPlaylist.swift */; };
 		802E2DCF2596573900CB91EC /* NSOrderedSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802E2DCE2596573900CB91EC /* NSOrderedSet.swift */; };
 		80314711260812A800D82374 /* CoreAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80314710260812A800D82374 /* CoreAudio.swift */; };
+		80368AA7261F942C008763CF /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80368AA6261F942C008763CF /* View.swift */; };
 		803A86FF25F5387700D7B9E1 /* HostingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803A86FE25F5387700D7B9E1 /* HostingView.swift */; };
 		803A870425F54C9C00D7B9E1 /* NSTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803A870325F54C9C00D7B9E1 /* NSTableView.swift */; };
 		803A870925F554A700D7B9E1 /* NSTableView+Visibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803A870825F554A700D7B9E1 /* NSTableView+Visibility.swift */; };
@@ -359,6 +360,7 @@
 		802E2DC4259644FF00CB91EC /* M3UPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = M3UPlaylist.swift; sourceTree = "<group>"; };
 		802E2DCE2596573900CB91EC /* NSOrderedSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSOrderedSet.swift; sourceTree = "<group>"; };
 		80314710260812A800D82374 /* CoreAudio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreAudio.swift; sourceTree = "<group>"; };
+		80368AA6261F942C008763CF /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		803A86FE25F5387700D7B9E1 /* HostingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostingView.swift; sourceTree = "<group>"; };
 		803A870325F54C9C00D7B9E1 /* NSTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTableView.swift; sourceTree = "<group>"; };
 		803A870825F554A700D7B9E1 /* NSTableView+Visibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTableView+Visibility.swift"; sourceTree = "<group>"; };
@@ -779,6 +781,7 @@
 				802DBA21259FA9B000EA6DB7 /* Gradient.swift */,
 				80E0AD7325AC5D3100274597 /* WhileActive.swift */,
 				803A86FE25F5387700D7B9E1 /* HostingView.swift */,
+				80368AA6261F942C008763CF /* View.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -1865,6 +1868,7 @@
 				808D5485259F3A4A006F7435 /* SystemUI.swift in Sources */,
 				80A8C88725BF5F9500F97EF0 /* PlaylistToken.swift in Sources */,
 				8053381E2598A871006F06DC /* NSManagedObject.swift in Sources */,
+				80368AA7261F942C008763CF /* View.swift in Sources */,
 				80F66AB72606654700696EE5 /* AudioSetupView.swift in Sources */,
 				806B27D1258D6ADB0091EA4D /* TypedDict.swift in Sources */,
 				803BF16E25D0A05D006372F2 /* NewPlaylistView.swift in Sources */,
