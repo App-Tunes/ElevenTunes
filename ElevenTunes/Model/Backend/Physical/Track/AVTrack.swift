@@ -195,12 +195,17 @@ extension AVTrack: RequestMapperDelegate {
 		}
 				
 		let file = try TagLibFile(url: url).unwrap(orThrow: TagLibError.cannotRead)
-		let audioFile = try AVAudioFile(forReading: url)
-		let format = audioFile.processingFormat
-
-		let image = file.image.flatMap { NSImage(data: $0) }
-		let duration = TimeInterval(audioFile.length) / format.sampleRate
+		let avImporter = AVFoundationImporter(AVURLAsset(url: url))
 		
+		let image = file.image.flatMap { NSImage(data: $0) }
+		let duration = TimeInterval(CMTimeGetSeconds(avImporter.duration))
+		
+		let bpm = file.bpm
+			?? avImporter.string(withKey: .id3MetadataKeyBeatsPerMinute, keySpace: .id3)
+			?? avImporter.string(withKey: .iTunesMetadataKeyBeatsPerMin, keySpace: .iTunes)
+		let key = file.initialKey
+			?? avImporter.string(withKey: .id3MetadataKeyInitialKey, keySpace: .id3)
+
 		if let cache = cache {
 			cache.managedObjectContext?.trySaveOnChildTask { context in
 				guard let cache = context.translate(cache) else { return }
@@ -211,8 +216,8 @@ extension AVTrack: RequestMapperDelegate {
 				
 				let metadata = DBFileMetadata(context: context)
 				metadata.title = file.title
-				metadata.tempo = file.bpm.flatMap { Double($0) } ?? 0
-				metadata.key = file.initialKey
+				metadata.tempo = bpm.flatMap { Double($0) } ?? 0
+				metadata.key = key
 				metadata.album = file.album
 				metadata.artists = file.artist
 				metadata.genre = file.genre
@@ -226,8 +231,8 @@ extension AVTrack: RequestMapperDelegate {
 		return .init(.unsafe([
 			.title: file.title,
 			.previewImage: image,
-			.tempo: file.bpm.flatMap { Double($0) }.map { Tempo(bpm: $0) },
-			.key: file.initialKey.flatMap { MusicalKey.parse($0) },
+			.tempo: bpm.flatMap { Double($0) }.map { Tempo(bpm: $0) },
+			.key: key.flatMap { MusicalKey.parse($0) },
 			.album: file.album.map { TransientAlbum(attributes: .unsafe([
 				.title: $0
 			])) },
