@@ -64,6 +64,7 @@
 		803BF16E25D0A05D006372F2 /* NewPlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803BF16D25D0A05D006372F2 /* NewPlaylistView.swift */; };
 		80429D602610D48900B54ACA /* libtaglib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80F61B9B25FCF7F500AC4CF8 /* libtaglib.a */; };
 		8043CA85261F2C3700DDE9D5 /* TrackAlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8043CA84261F2C3700DDE9D5 /* TrackAlbumView.swift */; };
+		8043CA8F261F376800DDE9D5 /* libsamplerate.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 808696C22617692E0056ECC3 /* libsamplerate.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		804D3C0125D93A5E00705D42 /* PlaylistsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804D3BFF25D93A5E00705D42 /* PlaylistsViewController.swift */; };
 		804D3C0225D93A5E00705D42 /* PlaylistsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 804D3C0025D93A5E00705D42 /* PlaylistsViewController.xib */; };
 		804D3C0725D93BAD00705D42 /* PlaylistsViewController+Outline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804D3C0625D93BAD00705D42 /* PlaylistsViewController+Outline.swift */; };
@@ -298,6 +299,7 @@
 			files = (
 				8069E451261A2F110086BBFB /* StickyEncoding in Embed Libraries */,
 				80BF6A9B26111FC600CDCB2F /* libessentia.dylib in Embed Libraries */,
+				8043CA8F261F376800DDE9D5 /* libsamplerate.dylib in Embed Libraries */,
 			);
 			name = "Embed Libraries";
 			runOnlyForDeploymentPostprocessing = 0;
