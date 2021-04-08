@@ -19,7 +19,7 @@ extension EnvironmentValues {
 }
 
 struct MainContentView: View {
-	let navigator: Navigator
+	@ObservedObject var navigator: Navigator
 	
     var body: some View {
 		VSplitView {
