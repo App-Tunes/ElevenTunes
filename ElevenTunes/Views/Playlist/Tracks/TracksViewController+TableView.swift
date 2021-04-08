@@ -119,63 +119,59 @@ extension TracksViewController: NSTableViewDelegate {
 	func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		let track = self.tracks[row]
 		
-		func createOn(_ identifier: NSUserInterfaceItemIdentifier, cell: NSUserInterfaceItemIdentifier) -> AnyNSHostingView? {
-			if tableColumn?.identifier == identifier {
-				let view = tableView.makeView(withIdentifier: cell, owner: nil) as! AnyNSHostingView
+		func makeView(for id: NSUserInterfaceItemIdentifier, fun: (AnyNSHostingView) -> Void) -> NSView? {
+			if let view = tableView.makeView(withIdentifier: id, owner: nil) as? AnyNSHostingView {
+				fun(view)
 				return view
 			}
+			appLogger.error("Failed to create known track view: \(id)")
 			return nil
 		}
 		
-		if let view = createOn(ColumnIdentifiers.Title, cell: CellIdentifiers.TrackCell) {
-			view.rootView = AnyView(TrackCellView(track: track))
-			return view
+		switch tableColumn?.identifier {
+		case ColumnIdentifiers.Title:
+			return makeView(for: CellIdentifiers.TrackCell) {
+				$0.rootView = AnyView(TrackCellView(track: track))
+			}
+		case ColumnIdentifiers.Image:
+			return makeView(for: CellIdentifiers.ImageCell) {
+				$0.rootView = AnyView(PlayTrackImageView(track: track, context: .playlist(playlist.backend, tracks: tracks.map(\.backend), track: track.backend))
+										.environment(\.library, library)
+							.environment(\.player, library.player)
+						)
+			}
+		case ColumnIdentifiers.Waveform:
+			return makeView(for: CellIdentifiers.WaveformCell) {
+				$0.rootView = AnyView(PlayPositionView(player: player, track: track.backend, isSecondary: true))
+			}
+		case ColumnIdentifiers.Tempo:
+			return makeView(for: CellIdentifiers.TempoCell) {
+				$0.rootView = AnyView(TrackTempoView(track: track))
+			}
+		case ColumnIdentifiers.Key:
+			return makeView(for: CellIdentifiers.KeyCell) {
+				$0.rootView = AnyView(TrackKeyView(track: track))
+			}
+		case ColumnIdentifiers.Artists:
+			return makeView(for: CellIdentifiers.ArtistsCell) {
+				$0.rootView = AnyView(TrackArtistsView(track: track))
+			}
+		case ColumnIdentifiers.Album:
+			return makeView(for: CellIdentifiers.AlbumCell) {
+				$0.rootView = AnyView(TrackAlbumView(track: track, withIcon: false))
+			}
+		case ColumnIdentifiers.Genre:
+			return makeView(for: CellIdentifiers.GenreCell) {
+				$0.rootView = AnyView(TrackGenreView(track: track))
+			}
+		case ColumnIdentifiers.Duration:
+			return makeView(for: CellIdentifiers.DurationCell) {
+				$0.rootView = AnyView(TrackDurationView(track: track))
+			}
+		default:
+			appLogger.error("Unrecognized track view: \(String(describing: tableColumn))")
+			return nil
 		}
-		
-		if let view = createOn(ColumnIdentifiers.Image, cell: CellIdentifiers.ImageCell) {
-			view.rootView = AnyView(PlayTrackImageView(track: track, context: .playlist(playlist.backend, tracks: tracks.map(\.backend), track: track.backend))
-									.environment(\.library, library)
-						.environment(\.player, library.player)
-					)
-			return view
-		}
-
-		if let view = createOn(ColumnIdentifiers.Waveform, cell: CellIdentifiers.WaveformCell) {
-			view.rootView = AnyView(PlayPositionView(player: player, track: track.backend, isSecondary: true))
-			return view
-		}
-		
-		if let view = createOn(ColumnIdentifiers.Tempo, cell: CellIdentifiers.TempoCell) {
-			view.rootView = AnyView(TrackTempoView(track: track))
-			return view
-		}
-
-		if let view = createOn(ColumnIdentifiers.Key, cell: CellIdentifiers.KeyCell) {
-			view.rootView = AnyView(TrackKeyView(track: track))
-			return view
-		}
-		
-		if let view = createOn(ColumnIdentifiers.Artists, cell: CellIdentifiers.ArtistsCell) {
-			view.rootView = AnyView(TrackArtistsView(track: track))
-			return view
-		}
-		
-		if let view = createOn(ColumnIdentifiers.Album, cell: CellIdentifiers.AlbumCell) {
-			view.rootView = AnyView(TrackAlbumView(track: track, withIcon: false))
-			return view
-		}
-		
-		if let view = createOn(ColumnIdentifiers.Genre, cell: CellIdentifiers.GenreCell) {
-			view.rootView = AnyView(TrackGenreView(track: track))
-			return view
-		}
-		
-		if let view = createOn(ColumnIdentifiers.Duration, cell: CellIdentifiers.DurationCell) {
-			view.rootView = AnyView(TrackDurationView(track: track))
-			return view
-		}
-		
-		return nil
 	}
 	
 	func tableView(_ tableView: NSTableView, shouldTypeSelectFor event: NSEvent, withCurrentSearch searchString: String?) -> Bool {
