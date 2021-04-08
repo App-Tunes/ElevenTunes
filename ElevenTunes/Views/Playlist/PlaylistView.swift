@@ -9,7 +9,6 @@ import SwiftUI
 
 struct PlaylistView: View {
     let playlist: Playlist
-    @Environment(\.library) var library: Library!
     
 	@State var state: PlaylistAttributes.State = .missing
     
@@ -30,7 +29,6 @@ struct PlaylistView: View {
                         
 //            TrackInfoView()
         }
-		.id(playlist.id)
         .listStyle(DefaultListStyle())
 		.whileActive(playlist.backend.demand([.tracks]))
 		.onReceive(playlist.backend.attribute(PlaylistAttribute.tracks)) {
