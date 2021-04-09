@@ -92,6 +92,9 @@ class AVSeekableAudioPlayerNode {
 	func move(by time: TimeInterval, buffer: TimeInterval = 0.05) {
 		guard isPlaying else {
 			startTime = currentTime + time
+			isSwapping = true
+			primary.stop()
+			isSwapping = false
 			seekPlayer(primary, to: startTime)
 			return
 		}
