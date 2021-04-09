@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct WaveformView: View {
 	let data: [CGFloat]
@@ -32,26 +33,36 @@ struct WaveformView: View {
 struct ResamplingWaveformView: View {
 	var gradient: [Color]
 	var waveform: Waveform
+	@State var resampled: Waveform = Waveform(loudness: [], pitch: [])
 
 	var body: some View {
 		GeometryReader { geo in
-			let samples = Int(geo.size.width / 4)
-			
-			let loudness = samples != waveform.count
-				? ResampleToSize.best(data: waveform.loudness, toSize: samples)
-				: waveform.loudness
-			
-			let pitch = samples != waveform.count
-				? ResampleToSize.best(data: waveform.pitch, toSize: samples)
-				: waveform.pitch
-			
 			WaveformView(
-				data: loudness.map { CGFloat($0) },
-				color: pitch.map {
+				data:resampled.loudness.map { CGFloat($0) },
+				color: resampled.pitch.map {
 					$0.isFinite ? gradient[Int(round(max(0, min(1, $0)) * 255))] : .white
 				}
 			)
-				.id(samples)
+				.onReceive(
+					Future.onQueue(.global(qos: .default)) { waveform }
+				) { waveform in
+					let samples = Int(geo.size.width / 4)
+					guard self.waveform.count != samples else {
+						return
+					}
+					
+					let loudness = samples != waveform.count
+						? ResampleToSize.best(data: waveform.loudness, toSize: samples)
+						: waveform.loudness
+					
+					let pitch = samples != waveform.count
+						? ResampleToSize.best(data: waveform.pitch, toSize: samples)
+						: waveform.pitch
+
+					DispatchQueue.main.async {
+						self.resampled = Waveform(loudness: loudness, pitch: pitch)
+					}
+				}
 		}
 	}
 }
