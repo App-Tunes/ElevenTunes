@@ -68,38 +68,33 @@ struct PlayTrackingView<V: View>: View {
 
 struct PlayPositionView: View {
     var player: Player
-	var track: AnyTrack
+	var track: AnyTrack?
 	var isSecondary: Bool = false
 
-	@State var duration: TimeInterval?
-	@State var tempo: Tempo?
-	@State var waveform: TrackAttributes.ValueSnapshot<Waveform> = .missing()
+	@ObservedObject var snapshot: TrackAnalysisSnapshot
 
 	var moveStep: TimeInterval? {
 		// 16 beats = 4 bars = 1 phrase
-		return tempo.map { TimeInterval(1 / $0.bps) * 16 }
+		snapshot.tempo.map { TimeInterval(1 / $0.bps) * 16 }
 	}
 	
     var body: some View {
 		PlayTrackingView(player: player) { tstate in
 			GeometryReader { geo in
-				let isCurrent = tstate.track?.id == track.id
+				let isCurrent = tstate.track?.id == track?.id
 				let audio = isCurrent ? tstate.audio : nil
 				let state = isCurrent ? tstate.state : .init(isPlaying: false, currentTime: nil)
 
 				ZStack {
-					if let waveform = waveform.value {
-						ResamplingWaveformView(
-							gradient: Gradients.pitch,
-							waveform: waveform
-						)
-							.allowsHitTesting(false)
-							.frame(height: geo.size.height * 0.7, alignment: .bottom)
-							.frame(height: geo.size.height, alignment: .bottom)
-							.opacity(self.waveform.state == .valid ? 1 : 0.5)
-					}
+					ResamplingWaveformView(
+						gradient: Gradients.pitch,
+						waveform: snapshot.waveform
+					)
+						.allowsHitTesting(false)
+						.frame(height: geo.size.height * 0.7, alignment: .bottom)
+						.frame(height: geo.size.height, alignment: .bottom)
 
-					if let duration = (isCurrent ? audio?.duration : duration) {
+					if let duration = (isCurrent ? audio?.duration : snapshot.duration) {
 						PositionControl(
 							currentTimeProvider: { audio?.currentTime },
 							currentTime: audio?.currentTime,
@@ -128,34 +123,23 @@ struct PlayPositionView: View {
 				}
 			}
 		}
-		.id(track.id) // Required because sometimes bars don't reset :<
-		.whileActive(track.demand([.tempo, .waveform, .duration]))
-		.onReceive(track.attributes) { (snapshot, _) in
-			setIfDifferent(self, \.duration, snapshot[TrackAttribute.duration].value)
-			setIfDifferent(self, \.tempo, snapshot[TrackAttribute.tempo].value)
-			setIfDifferent(self, \.waveform, snapshot[TrackAttribute.waveform])
-		}
+		.id(track?.id) // Required because sometimes bars don't reset :<
         // TODO hugging / compression resistance:
         // setting min height always compressed down to min height :<
     }
 }
 
 struct CurrentPlayPositionView: View {
+	@ObservedObject var snapshot: TrackAnalysisSnapshot
 	@Environment(\.player) private var player: Player!
-	@State var track: AnyTrack?
-
+	
 	var body: some View {
 		ZStack {
 			// If this isn't here, we might not have a size, and .background
 			// modifiers won't work
 			Rectangle().fill(Color.clear)
 
-			if let track = track {
-				PlayPositionView(player: player, track: track)
-			}
-		}
-		.onReceive(player.$current) {
-			self.track = $0
+			PlayPositionView(player: player, track: snapshot.track, snapshot: snapshot)
 		}
 	}
 }

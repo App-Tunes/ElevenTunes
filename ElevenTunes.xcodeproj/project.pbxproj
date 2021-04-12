@@ -84,6 +84,7 @@
 		8054C00D259F6DE600A7035A /* PlayTrackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8054C00C259F6DE600A7035A /* PlayTrackView.swift */; };
 		8054C015259F720000A7035A /* PlayerAudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8054C014259F720000A7035A /* PlayerAudioView.swift */; };
 		8054C01A259F860000A7035A /* SpotifyURIPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8054C019259F860000A7035A /* SpotifyURIPlaylist.swift */; };
+		8057D0132621FA0700E9EF9C /* TrackAnalysisSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8057D0122621FA0700E9EF9C /* TrackAnalysisSnapshot.swift */; };
 		8058C2D0261676BD0027DB8B /* SpotifyAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 8058C2CF261676BD0027DB8B /* SpotifyAPI */; };
 		8058C2D426167ECF0027DB8B /* Gradients.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8058C2D326167ECF0027DB8B /* Gradients.swift */; };
 		805C967C260A9E47004AF5A9 /* AVAudioDeviceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805C967B260A9E47004AF5A9 /* AVAudioDeviceProvider.swift */; };
@@ -165,6 +166,7 @@
 		808D5480259F395C006F7435 /* Spotify+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808D547F259F395C006F7435 /* Spotify+UI.swift */; };
 		808D5485259F3A4A006F7435 /* SystemUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808D5484259F3A4A006F7435 /* SystemUI.swift */; };
 		808D548D259F3BC9006F7435 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808D548C259F3BC9006F7435 /* Color.swift */; };
+		808E17C92621008D00DC37DB /* GeoChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808E17C82621008D00DC37DB /* GeoChange.swift */; };
 		8097704726076CCF00129BD6 /* AudioDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8097704626076CCF00129BD6 /* AudioDevice.swift */; };
 		8097705226076D8700129BD6 /* SpotifyAudioDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8097705126076D8700129BD6 /* SpotifyAudioDevice.swift */; };
 		8097705726076D9B00129BD6 /* AVAudioDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8097705626076D9B00129BD6 /* AVAudioDevice.swift */; };
@@ -386,6 +388,7 @@
 		8054C00C259F6DE600A7035A /* PlayTrackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTrackView.swift; sourceTree = "<group>"; };
 		8054C014259F720000A7035A /* PlayerAudioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerAudioView.swift; sourceTree = "<group>"; };
 		8054C019259F860000A7035A /* SpotifyURIPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyURIPlaylist.swift; sourceTree = "<group>"; };
+		8057D0122621FA0700E9EF9C /* TrackAnalysisSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackAnalysisSnapshot.swift; sourceTree = "<group>"; };
 		8058C2D326167ECF0027DB8B /* Gradients.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gradients.swift; sourceTree = "<group>"; };
 		805C967B260A9E47004AF5A9 /* AVAudioDeviceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAudioDeviceProvider.swift; sourceTree = "<group>"; };
 		805C9681260AA6EC004AF5A9 /* SpotifyAudioDeviceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAudioDeviceProvider.swift; sourceTree = "<group>"; };
@@ -491,6 +494,7 @@
 		808D547F259F395C006F7435 /* Spotify+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Spotify+UI.swift"; sourceTree = "<group>"; };
 		808D5484259F3A4A006F7435 /* SystemUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemUI.swift; sourceTree = "<group>"; };
 		808D548C259F3BC9006F7435 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		808E17C82621008D00DC37DB /* GeoChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoChange.swift; sourceTree = "<group>"; };
 		8097704626076CCF00129BD6 /* AudioDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioDevice.swift; sourceTree = "<group>"; };
 		8097705126076D8700129BD6 /* SpotifyAudioDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAudioDevice.swift; sourceTree = "<group>"; };
 		8097705626076D9B00129BD6 /* AVAudioDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAudioDevice.swift; sourceTree = "<group>"; };
@@ -783,6 +787,7 @@
 				802DBA21259FA9B000EA6DB7 /* Gradient.swift */,
 				80E0AD7325AC5D3100274597 /* WhileActive.swift */,
 				803A86FE25F5387700D7B9E1 /* HostingView.swift */,
+				808E17C82621008D00DC37DB /* GeoChange.swift */,
 				80368AA6261F942C008763CF /* View.swift */,
 			);
 			path = SwiftUI;
@@ -807,6 +812,7 @@
 				806185C725F534150062AAB3 /* Attributes */,
 				80AD699F258828F400192BED /* TrackInfoView.swift */,
 				80C9A189259F9BDB00A038CC /* RemoteImageCollection.swift */,
+				8057D0122621FA0700E9EF9C /* TrackAnalysisSnapshot.swift */,
 			);
 			path = Track;
 			sourceTree = "<group>";
@@ -1705,6 +1711,7 @@
 				80D6DA8B259D38E500879BCF /* CurrentValueSubjectPublishingDemand.swift in Sources */,
 				80A8C84525BF5B5200F97EF0 /* DBPlaylist+CoreDataProperties.swift in Sources */,
 				805FD8B525A128D600F32BFB /* Key.swift in Sources */,
+				808E17C92621008D00DC37DB /* GeoChange.swift in Sources */,
 				80CD395025A3CE99002C5A56 /* Dictionary.swift in Sources */,
 				80A8C85025BF5B5200F97EF0 /* DBM3UPlaylist.swift in Sources */,
 				80A8C84E25BF5B5200F97EF0 /* DBTrack.swift in Sources */,
@@ -1905,6 +1912,7 @@
 				806B28E6258FB9A10091EA4D /* AnyPublisher.swift in Sources */,
 				805338382598FD2E006F06DC /* Animation.swift in Sources */,
 				802E2CA22595FEC700CB91EC /* AppDelegate.swift in Sources */,
+				8057D0132621FA0700E9EF9C /* TrackAnalysisSnapshot.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

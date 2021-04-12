@@ -139,8 +139,14 @@ using namespace essentia::streaming;
 		vector<Real> pitch = pool.value<vector<Real>>("spectral.centroid");
 
 		EssentiaWaveform *waveform = [[EssentiaWaveform alloc] initWithCount: count integrated: integratedLoudness range: loudnessRange];
-		[ResampleToSize best:loudness.data() count:loudness.size() dst:waveform.loudness count: count];
-		[ResampleToSize best:pitch.data() count:pitch.size() dst:waveform.pitch count: count];
+		
+		if ([ResampleToSize best:loudness.data() count:loudness.size() dst:waveform.loudness count: count error: error]) {
+			return nil;
+		}
+		
+		if ([ResampleToSize best:pitch.data() count:pitch.size() dst:waveform.pitch count: count error: error]) {
+			return nil;
+		}
 
 		vector<Real> pitchAfter = vector<Real>(count);
 		for (int i = 0; i < count; i++) {

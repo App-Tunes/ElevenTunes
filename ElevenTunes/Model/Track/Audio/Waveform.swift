@@ -13,6 +13,8 @@ struct Waveform: Hashable, Codable {
 	
 	var count: Int { min(loudness.count, pitch.count) }
 	
+	static var empty: Waveform = .init(loudness: [], pitch: [])
+	
 	static func from(_ waveform: EssentiaWaveform) -> Waveform {
 		let wmax = waveform.integratedLoudness + 6
 		let wmin = waveform.integratedLoudness - waveform.loudnessRange - 6

@@ -89,9 +89,9 @@ extension Publisher {
             .autoconnect()
     }
 	
-	/// Attaches a cancellable to the stream - the stream will hold a reference to it until deallocated.
-	/// Will not cancel the cancellable if the stream simply terminates.
-	func attach(_ cancellable: AnyCancellable) -> Publishers.Map<Self, Self.Output> {
+	/// Attaches an object to the stream - the stream will hold a reference to it until deallocated.
+	/// Will not deallocate if the stream simply terminates.
+	func attach(_ cancellable: Any?) -> Publishers.Map<Self, Self.Output> {
 		map {
 			_ = cancellable
 			return $0

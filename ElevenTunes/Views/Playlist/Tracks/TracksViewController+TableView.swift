@@ -7,6 +7,7 @@
 
 import Cocoa
 import SwiftUI
+import Combine
 
 class NSTableCellViewAttachedObject: NSTableCellView {
 	var representedObject: Any? = nil
@@ -163,7 +164,7 @@ extension TracksViewController: NSTableViewDelegate {
 			}
 		case ColumnIdentifiers.Waveform:
 			return makeView(for: CellIdentifiers.WaveformCell) {
-				$0.rootView = AnyView(PlayPositionView(player: player, track: track.backend, isSecondary: true))
+				$0.rootView = AnyView(PlayPositionView(player: player, track: track.backend, isSecondary: true, snapshot: .init(track: Just(.some(track.backend)))))
 			}
 		case ColumnIdentifiers.Artists:
 			return makeView(for: CellIdentifiers.ArtistsCell) {

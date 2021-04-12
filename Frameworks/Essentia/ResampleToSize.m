@@ -15,24 +15,32 @@
 
 @implementation ResampleToSize
 
-+ (void)best:(const float *)src count:(int)srcCount dst:(float *)dst count:(int)dstCount {
-	if (srcCount == dstCount) {
++ (int)best:(const float *)src count:(int)srcCount dst:(float *)dst count:(int)dstCount error:(NSError *__autoreleasing  _Nullable * _Nullable)error {
+	if (dstCount == 0) {
 		// lol
+		return YES;
+	}
+	if (srcCount == dstCount) {
+		// gg ez
 		memcpy(dst, src, srcCount * sizeof(float));
-		return;
+		return YES;
 	}
 	
 	float factor = (float) srcCount / (float) dstCount;
 	if (factor < SRC_MAX_RATIO && 1 / factor < SRC_MAX_RATIO) {
 		[ResampleToSize secretRabbitCode:src count:srcCount dst:dst count:dstCount quality: 1];
+		return YES;
 	}
 	else if (dstCount < srcCount) {
 		// This will bulldoze up to 1/256th of the frames, but it's ok.
 		[ResampleToSize decimating:src count:srcCount dst:dst count:dstCount];
+		return YES;
 	}
 	else {
-		// TODO Strong upsampling, can't deal with this. Accept error?
-		exit(1);
+		if (error) {
+			*error = [NSError errorWithDomain:@"Resample" code:1 userInfo: nil];
+		}
+		return NO;
 	}
 }
 

@@ -8,11 +8,14 @@
 import Foundation
 
 extension ResampleToSize {
-	static func best(data: [Float], toSize count: Int) -> [Float] {
-		data.withUnsafeBufferPointer { src in
+	static func best(data: [Float], toSize count: Int) throws -> [Float] {
+		// Don't need to do this here, but doing it avoids some copying
+		guard data.count != count else { return data }
+		
+		return try data.withUnsafeBufferPointer { src in
 			let dst = malloc(count * MemoryLayout<Float>.size)!.assumingMemoryBound(to: Float.self)
 			
-			best(src.baseAddress!, count: Int32(src.count), dst: dst, count: Int32(count))
+			try best(src.baseAddress!, count: Int32(src.count), dst: dst, count: Int32(count))
 			let asArray = Array(UnsafeMutableBufferPointer(start: dst, count: count))
 
 			free(dst)
