@@ -13,16 +13,16 @@ extension NSOutlineView {
 	}
 	
 	func animateDifference<Element : Equatable>(childrenOf parent: Any?, from: [Element]?, to: [Element]?) {
-		let fromCount = from?.count ?? 0
-		let toCount = to?.count ?? 0
+		let from = from ?? []
+		let to = to ?? []
 		
-		guard abs(fromCount - toCount) < 100 else {
+		guard abs(from.count - to.count) < 100 else {
 			// Give up, this will look shite anyhow
 			reloadItem(parent, reloadChildren: true)
 			return
 		}
 		
-		if let from = from, let to = to, let editDiff = from.editDifference(from: to) {
+		if let editDiff = from.editDifference(from: to) {
 			guard editDiff.array.count < 100 else {
 				// Give up, this will look shite anyhow
 				reloadItem(parent, reloadChildren: true)
@@ -36,7 +36,7 @@ extension NSOutlineView {
 				insertItems(at: IndexSet(added), inParent: parent, withAnimation: .slideUp)
 			}
 		}
-		else if let from = from, let to = to, let movement = from.editMovement(to: to) {
+		else if let movement = from.editMovement(to: to) {
 			for (src, dst) in movement {
 				moveItem(at: src, inParent: parent, to: dst, inParent: parent)
 			}
