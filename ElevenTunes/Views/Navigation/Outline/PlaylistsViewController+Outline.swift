@@ -17,12 +17,28 @@ extension PlaylistsViewController: NSOutlineViewDelegate {
 
 	func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item raw: Any) -> NSView? {
 		let item = self.item(raw: raw)
+		let playlist = item.playlist
 		let isTopLevel = item.parent == directoryItem
 		
+//		if let view = outlineView.makeView(withIdentifier: isTopLevel ? CellIdentifiers.HeaderCell : CellIdentifiers.DataCell, owner: nil) as? NSTableCellViewAttachedObject {
+//
+//			view.imageView?.image = NSImage(systemSymbolName: "gear", accessibilityDescription: "Gear")
+//
+//			view.representedObject = (
+//				playlist.demand([PlaylistAttribute.title]),
+//				playlist.attribute(PlaylistAttribute.title).sink { [weak view] snapshot in
+//					view?.textField?.stringValue = snapshot.value ?? ""
+//				}
+//			)
+//
+//			return view
+//		}
+		
 		if let view = outlineView.makeView(withIdentifier: CellIdentifiers.PlaylistCell, owner: nil) as? AnyNSHostingView {
-			view.rootView = AnyView(PlaylistRowView(playlist: Playlist(item.playlist), isTopLevel: isTopLevel))
+			view.rootView = AnyView(PlaylistRowView(playlist: Playlist(playlist), isTopLevel: isTopLevel))
 			return view
 		}
+
 
 		return nil
 	}

@@ -42,12 +42,12 @@
                                         </textFieldCell>
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
-                                            <tableCellView identifier="HeaderCell" id="VVL-2I-h4c">
+                                            <tableCellView identifier="HeaderCell" id="VVL-2I-h4c" customClass="NSTableCellViewAttachedObject" customModule="ElevenTunes" customModuleProvider="target">
                                                 <rect key="frame" x="11" y="0.0" width="457" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cV6-oZ-ZQb">
-                                                        <rect key="frame" x="0.0" y="1" width="457" height="14"/>
+                                                        <rect key="frame" x="26" y="2" width="435" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="HEADER CELL" id="vxj-73-L2Q">
                                                             <font key="font" metaFont="smallSystemBold"/>
@@ -55,12 +55,18 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
+                                                    <imageView wantsLayer="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5iM-kA-jFC">
+                                                        <rect key="frame" x="3" y="0.0" width="17" height="17"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <imageCell key="cell" refusesFirstResponder="YES" imageScaling="proportionallyDown" image="NSActionTemplate" id="3cs-la-Aah"/>
+                                                    </imageView>
                                                 </subviews>
                                                 <connections>
+                                                    <outlet property="imageView" destination="5iM-kA-jFC" id="y1E-Wl-i1G"/>
                                                     <outlet property="textField" destination="cV6-oZ-ZQb" id="yZm-8R-hki"/>
                                                 </connections>
                                             </tableCellView>
-                                            <tableCellView identifier="DataCell" id="vcu-OM-jcd">
+                                            <tableCellView identifier="DataCell" id="vcu-OM-jcd" customClass="NSTableCellViewAttachedObject" customModule="ElevenTunes" customModuleProvider="target">
                                                 <rect key="frame" x="11" y="17" width="457" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
