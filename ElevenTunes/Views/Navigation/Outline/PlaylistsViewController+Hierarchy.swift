@@ -35,7 +35,7 @@ extension PlaylistsViewController {
 			
 			self.delegate = delegate
 
-			self.childrenState = .missing()
+			self.childrenState = .missing([])
 			
 			self.observer = playlist.attribute(PlaylistAttribute.children)
 				.onMain()
