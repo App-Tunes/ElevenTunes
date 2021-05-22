@@ -19,7 +19,7 @@ import KeychainAccess
  Its most important role is to handle changes to the authorzation
  information and save them to persistent storage in the keychain.
  */
-final class SpotifyAuthenticator: ObservableObject {    
+final class SpotifyAuthenticator<Backend: AuthorizationCodeFlowBackend>: ObservableObject {
     /// A cryptographically-secure random string used to ensure
     /// than an incoming redirect from Spotify was the result of a request
     /// made by this app, and not an attacker. **This value is regenerated**
@@ -56,7 +56,7 @@ final class SpotifyAuthenticator: ObservableObject {
     
     /// An instance of `SpotifyAPI` that you use to make requests to
     /// the Spotify web API.
-    let api: SpotifyAPI<AuthorizationCodeFlowManager>
+    let api: SpotifyAPI<AuthorizationCodeFlowBackendManager<Backend>>
     let authManagerKey: String
     let loginCallbackURL: URL
     
@@ -66,7 +66,7 @@ final class SpotifyAuthenticator: ObservableObject {
     var cancellables: Set<AnyCancellable> = []
     
     init(
-        api: SpotifyAPI<AuthorizationCodeFlowManager>,
+        api: SpotifyAPI<AuthorizationCodeFlowBackendManager<Backend>>,
         authManagerKey: String,
         loginCallbackURL: URL,
         scopes: Set<Scope>,
@@ -100,7 +100,7 @@ final class SpotifyAuthenticator: ObservableObject {
             do {
                 // Try to decode the data.
                 let authorizationManager = try JSONDecoder().decode(
-                    AuthorizationCodeFlowManager.self,
+                    AuthorizationCodeFlowBackendManager<Backend>.self,
                     from: authManagerData
                 )
                 print("found authorization information in keychain")

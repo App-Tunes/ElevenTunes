@@ -31,7 +31,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var cancellables = Set<AnyCancellable>()
     
     override init() {
-        let spotify = Spotify()
+		let spotify = Spotify(backend: .init(
+			clientId: ProcessInfo.processInfo.environment["spotify_client_id"]!,
+			tokensURL: URL(string: ProcessInfo.processInfo.environment["spotify_tokens_url"]!)!,
+			tokenRefreshURL: URL(string: ProcessInfo.processInfo.environment["spotify_tokens_refresh_url"]!)!
+		))
         self.spotify = spotify
 
         GlobalSettingsLevel._instance = GlobalSettingsLevel(spotify: spotify)

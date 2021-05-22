@@ -31,12 +31,12 @@ struct SpotifyDeviceView: View {
 }
 
 struct SpotifyDevicesView: View {
-    @ObservedObject var devices: SpotifyDevices
+    @ObservedObject var devices: SpotifyDevices<AuthorizationCodeFlowProxyBackend>
     
     @State var selected: Device?
     @State var rotation: Double = 0
 
-    init(devices: SpotifyDevices) {
+    init(devices: SpotifyDevices<AuthorizationCodeFlowProxyBackend>) {
         self.devices = devices
     }
     

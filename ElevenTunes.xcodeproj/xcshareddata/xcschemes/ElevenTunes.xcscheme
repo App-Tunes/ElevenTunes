@@ -72,13 +72,18 @@
       </BuildableProductRunnable>
       <EnvironmentVariables>
          <EnvironmentVariable
-            key = "spotify_client_secret"
-            value = "c5f5b5d2b1754b3b8b26272505a74c15"
+            key = "spotify_client_id"
+            value = "803ae578571240d9aec0a0ac8469dd79"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
-            key = "spotify_client_id"
-            value = "803ae578571240d9aec0a0ac8469dd79"
+            key = "spotify_tokens_url"
+            value = "https://heliotrope-airy-dimple.glitch.me/api/token"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "spotify_tokens_refresh_url"
+            value = "https://heliotrope-airy-dimple.glitch.me/api/refresh_token"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>

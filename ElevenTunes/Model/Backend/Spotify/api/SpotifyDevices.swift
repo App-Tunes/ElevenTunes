@@ -10,8 +10,8 @@ import SpotifyWebAPI
 import Combine
 import SwiftUI
 
-class SpotifyDevices: ObservableObject {
-    let api: SpotifyAPI<AuthorizationCodeFlowManager>
+class SpotifyDevices<Backend: AuthorizationCodeFlowBackend>: ObservableObject {
+    let api: SpotifyAPI<AuthorizationCodeFlowBackendManager<Backend>>
     var cancellables = Set<AnyCancellable>()
     
     @Published var rememberAllDevices = true
@@ -28,7 +28,7 @@ class SpotifyDevices: ObservableObject {
         didSet { if favorite != nil && selected == nil { selected = favorite } }
     }
 
-    init(api: SpotifyAPI<AuthorizationCodeFlowManager>) {
+    init(api: SpotifyAPI<AuthorizationCodeFlowBackendManager<Backend>>) {
         self.api = api
         // assign and didSet doesn't work :(
         self.$all.map(\.first).sink { [weak self] favorite in

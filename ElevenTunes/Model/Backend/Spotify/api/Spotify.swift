@@ -11,22 +11,10 @@ import AppKit
 import Combine
 
 class Spotify {
-    private static let clientId: String = {
-        if let clientId = ProcessInfo.processInfo
-                .environment["spotify_client_id"] {
-            return clientId
-        }
-        fatalError("Could not find 'spotify_client_id' in environment variables")
-    }()
-    
-    private static let clientSecret: String = {
-        if let clientSecret = ProcessInfo.processInfo
-                .environment["spotify_client_secret"] {
-            return clientSecret
-        }
-        fatalError("Could not find 'spotify_client_secret' in environment variables")
-    }()
-    
+	enum SpotifySetupError {
+		case missingInformation
+	}
+        
     /// The key in the keychain that is used to store the authorization
     /// information: "authorizationManager".
     static let authorizationManagerKey = "authorizationManager"
@@ -54,10 +42,10 @@ class Spotify {
         .userReadEmail
     ]
     
-    let api: SpotifyAPI<AuthorizationCodeFlowManager>
+    let api: SpotifyAPI<AuthorizationCodeFlowBackendManager<AuthorizationCodeFlowProxyBackend>>
     
-    let authenticator: SpotifyAuthenticator
-    let devices: SpotifyDevices
+    let authenticator: SpotifyAuthenticator<AuthorizationCodeFlowProxyBackend>
+    let devices: SpotifyDevices<AuthorizationCodeFlowProxyBackend>
     
     var cancellables = Set<AnyCancellable>()
     
@@ -67,12 +55,8 @@ class Spotify {
 	var trackCaches: [SpotifyTrackToken: SpotifyTrack] = [:]
 
 	
-    init() {
-        let api = SpotifyAPI(
-            authorizationManager: AuthorizationCodeFlowManager(
-                clientId: Self.clientId, clientSecret: Self.clientSecret
-            )
-        )
+	init(backend: AuthorizationCodeFlowProxyBackend) {
+        let api = SpotifyAPI(authorizationManager: AuthorizationCodeFlowBackendManager(backend: backend))
         
         self.api = api
         
