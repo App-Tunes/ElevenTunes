@@ -32,9 +32,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     override init() {
 		let spotify = Spotify(backend: .init(
-			clientId: ProcessInfo.processInfo.environment["spotify_client_id"]!,
-			tokensURL: URL(string: ProcessInfo.processInfo.environment["spotify_tokens_url"]!)!,
-			tokenRefreshURL: URL(string: ProcessInfo.processInfo.environment["spotify_tokens_refresh_url"]!)!
+			clientId: "803ae578571240d9aec0a0ac8469dd79",
+			tokensURL: URL(string: "https://heliotrope-airy-dimple.glitch.me/api/token")!,
+			tokenRefreshURL: URL(string: "https://heliotrope-airy-dimple.glitch.me/api/refresh_token")!
 		))
         self.spotify = spotify
 
