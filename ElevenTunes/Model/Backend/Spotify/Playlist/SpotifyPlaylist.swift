@@ -61,7 +61,7 @@ public final class SpotifyPlaylist: SpotifyURIPlaylist {
 		self.mapper.offer(.playlist, update: .init(SpotifyPlaylist.attributes(of: playlist), state: .valid))
 	}
 	
-	convenience init(playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistsItemsReference>, spotify: Spotify) {
+	convenience init(playlist: SpotifyWebAPI.Playlist<SpotifyWebAPI.PlaylistItemsReference>, spotify: Spotify) {
 		self.init(SpotifyPlaylistToken(playlist.id), spotify: spotify)
 		self.mapper.offer(.playlist, update: .init(SpotifyPlaylist.attributes(of: playlist), state: .valid))
 	}

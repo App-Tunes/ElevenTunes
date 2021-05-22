@@ -2082,7 +2082,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"ElevenTunes/Preview Content\"";
-				DEVELOPMENT_TEAM = 5GU22J823J;
+				DEVELOPMENT_TEAM = 8Y879P9TDW;
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
 				EXCLUDED_ARCHS = arm64;
@@ -2125,7 +2125,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"ElevenTunes/Preview Content\"";
-				DEVELOPMENT_TEAM = 5GU22J823J;
+				DEVELOPMENT_TEAM = 8Y879P9TDW;
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
 				EXCLUDED_ARCHS = arm64;
@@ -2294,8 +2294,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Peter-Schorn/SpotifyAPI";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.2;
+				branch = master;
+				kind = branch;
 			};
 		};
 		806B28B9258F91E50091EA4D /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {

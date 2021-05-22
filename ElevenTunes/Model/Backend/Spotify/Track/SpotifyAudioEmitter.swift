@@ -30,12 +30,12 @@ class SpotifyAudioEmitter: RemoteAudioEndpoint {
     let spotify: Spotify
     var device: Device
     
-    let context: ContextOption
+	let context: PlaybackRequest.Context
     let track: ExistingSpotifyTrack
 
     var cancellables: Set<AnyCancellable> = []
     
-    init(_ spotify: Spotify, device: Device, context: ContextOption,
+    init(_ spotify: Spotify, device: Device, context: PlaybackRequest.Context,
          track: ExistingSpotifyTrack) {
         self.spotify = spotify
         self.device = device

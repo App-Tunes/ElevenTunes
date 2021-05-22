@@ -73,7 +73,8 @@ class Player {
 		}
 		
 		return context.deviceStream.eraseError()
-			.tryFlatMap { try track.audioTrack(forDevice: $0) }
+			.tryMap { try track.audioTrack(forDevice: $0) }
+			.flatMap { $0 }
 			.eraseToAnyPublisher()
 	}
     

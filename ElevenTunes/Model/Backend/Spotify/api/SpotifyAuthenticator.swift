@@ -174,7 +174,7 @@ final class SpotifyAuthenticator: ObservableObject {
      */
     func handleChangesToAuthorizationManager() {
 		self.isAuthorized = self.api.authorizationManager.isAuthorized()
-			&& (self.api.authorizationManager.scopes?.isSuperset(of: scopes) ?? false)
+			&& self.api.authorizationManager.scopes.isSuperset(of: scopes)
 
         print(
             "Spotify.handleChangesToAuthorizationManager: isAuthorized:",

@@ -81,7 +81,7 @@ public final class SpotifyArtist: SpotifyURIPlaylist, AnyArtist {
                 return nil
             }
         
-        return URL(string: image.url)
+        return image.url
     }
 	
 	public func supports(_ capability: PlaylistCapability) -> Bool {
