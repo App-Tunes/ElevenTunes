@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import TunesUI
 
 struct NavigatorView: View {
 	let navigator: Navigator

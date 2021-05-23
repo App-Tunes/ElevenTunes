@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import TunesUI
 
 public typealias TrackVersion = String
 

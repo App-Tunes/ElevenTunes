@@ -7,6 +7,7 @@
 
 import Foundation
 import StickyEncoding
+import TunesUI
 
 class WaveformDatabase<ID: CustomStringConvertible> {
 	enum ReadError: Error {

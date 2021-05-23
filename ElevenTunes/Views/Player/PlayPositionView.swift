@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AVFoundation
+import TunesUI
 
 struct PlayPositionLabelsView: View {
 	var duration: TimeInterval?
@@ -19,7 +20,7 @@ struct PlayPositionLabelsView: View {
 			if let time = playerState.currentTime {
 				let start = now.advanced(by: -time)
 				
-				CountdownText(referenceDate: start, advancesAutomatically: playerState.isPlaying, currentDate: now)
+				CountdownText(to: start, currentDate: now, advancesAutomatically: playerState.isPlaying)
 					.foregroundColor(.secondary)
 					.frame(width: 60, height: 20)
 					.background(Rectangle().fill(Color.black).cornerRadius(5).opacity(0.4))
@@ -28,7 +29,7 @@ struct PlayPositionLabelsView: View {
 				Spacer()
 
 				if let duration = duration {
-					CountdownText(referenceDate: start.advanced(by: duration), advancesAutomatically: playerState.isPlaying, currentDate: now)
+					CountdownText(to: start.advanced(by: duration), currentDate: now, advancesAutomatically: playerState.isPlaying)
 						.foregroundColor(.secondary)
 						.frame(width: 60, height: 20)
 						.background(Rectangle().fill(Color.black).cornerRadius(5).opacity(0.4))

@@ -9,6 +9,7 @@ import Foundation
 import AVFoundation
 import Combine
 import Cocoa
+import TunesUI
 
 class LibraryMock {
     static func children(title: String = "Mock Directory") -> [TransientPlaylist] {
