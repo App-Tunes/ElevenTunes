@@ -18,6 +18,7 @@ This media manager focuses on unifying representations of media into a simple, s
  * [✓] Spotify
  * [  ] Soundcloud
  * [  ] YouTube
+ * [  ] Apple Music
  
  ## Architecture
 
