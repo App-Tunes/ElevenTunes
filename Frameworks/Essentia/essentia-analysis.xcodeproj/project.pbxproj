@@ -93,6 +93,7 @@
 		80BF6AB82611265200CDCB2F /* EssentiaAnalysis.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EssentiaAnalysis.h; sourceTree = "<group>"; };
 		80BF6AB92611265200CDCB2F /* EssentiaAnalysis.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EssentiaAnalysis.m; sourceTree = "<group>"; };
 		80E3003426113011006ED744 /* NSString+STD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+STD.h"; sourceTree = "<group>"; };
+		80FB0C93265AA9EB009DC261 /* essentia.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = essentia.xctestplan; sourceTree = "<group>"; };
 		BB6A285A2006236900B8BB9A /* libessentia-analysis.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libessentia-analysis.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -160,6 +161,7 @@
 		80BF6A4B261117F200CDCB2F /* Essentia-Tests */ = {
 			isa = PBXGroup;
 			children = (
+				80FB0C93265AA9EB009DC261 /* essentia.xctestplan */,
 				80BF6AB0261123CC00CDCB2F /* 445632__djfroyd__c-major-scale.wav */,
 				80BF6AB42611244900CDCB2F /* AnalysisTests.swift */,
 				80BF6A4E261117F200CDCB2F /* Info.plist */,
