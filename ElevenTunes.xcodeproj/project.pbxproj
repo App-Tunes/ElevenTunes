@@ -65,7 +65,6 @@
 		803BF16E25D0A05D006372F2 /* NewPlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803BF16D25D0A05D006372F2 /* NewPlaylistView.swift */; };
 		80429D602610D48900B54ACA /* libtaglib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80F61B9B25FCF7F500AC4CF8 /* libtaglib.a */; };
 		8043CA85261F2C3700DDE9D5 /* TrackAlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8043CA84261F2C3700DDE9D5 /* TrackAlbumView.swift */; };
-		8043CA8F261F376800DDE9D5 /* libsamplerate.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 808696C22617692E0056ECC3 /* libsamplerate.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		804D3C0125D93A5E00705D42 /* PlaylistsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804D3BFF25D93A5E00705D42 /* PlaylistsViewController.swift */; };
 		804D3C0225D93A5E00705D42 /* PlaylistsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 804D3C0025D93A5E00705D42 /* PlaylistsViewController.xib */; };
 		804D3C0725D93BAD00705D42 /* PlaylistsViewController+Outline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804D3C0625D93BAD00705D42 /* PlaylistsViewController+Outline.swift */; };
@@ -156,7 +155,6 @@
 		808445DE25A7996200E27EC8 /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808445DD25A7996200E27EC8 /* Badge.swift */; };
 		80869687261688C60056ECC3 /* ResampleToSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80869686261688C60056ECC3 /* ResampleToSize.swift */; };
 		8086969426172E4A0056ECC3 /* Waveform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8086969326172E4A0056ECC3 /* Waveform.swift */; };
-		808696E22617695B0056ECC3 /* libsamplerate.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 808696C22617692E0056ECC3 /* libsamplerate.dylib */; };
 		808696E62617AAC40056ECC3 /* CountdownText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808696E52617AAC40056ECC3 /* CountdownText.swift */; };
 		808696EA2617C1960056ECC3 /* TrackGenreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808696E92617C1960056ECC3 /* TrackGenreView.swift */; };
 		808696EE2617C1CE0056ECC3 /* TrackYearView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808696ED2617C1CE0056ECC3 /* TrackYearView.swift */; };
@@ -213,9 +211,7 @@
 		80AF40A4261904C500117F06 /* NSWorkspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AF40A3261904C500117F06 /* NSWorkspace.swift */; };
 		80AF40A82619091000117F06 /* TrackDurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AF40A72619091000117F06 /* TrackDurationView.swift */; };
 		80B357D225F6FAC400180A4A /* NSTableView+Synchronization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B357D125F6FAC400180A4A /* NSTableView+Synchronization.swift */; };
-		80BF6A9B26111FC600CDCB2F /* libessentia.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 80BF6A9A26111FC600CDCB2F /* libessentia.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		80BF6AA32611208D00CDCB2F /* libessentia-analysis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80BF6A7F26111BE500CDCB2F /* libessentia-analysis.a */; };
-		80BF6AAD261122A100CDCB2F /* libessentia.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 80BF6A9A26111FC600CDCB2F /* libessentia.dylib */; };
 		80C9A17D259F902D00A038CC /* MilkyCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C9A17C259F902D00A038CC /* MilkyCoverView.swift */; };
 		80C9A185259F916F00A038CC /* Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C9A184259F916F00A038CC /* Combine.swift */; };
 		80C9A18A259F9BDB00A038CC /* RemoteImageCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C9A189259F9BDB00A038CC /* RemoteImageCollection.swift */; };
@@ -254,6 +250,7 @@
 		80F61BB825FE4AF700AC4CF8 /* DelayedAutoExpander.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F61BB725FE4AF700AC4CF8 /* DelayedAutoExpander.swift */; };
 		80F66AB72606654700696EE5 /* AudioSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F66AB62606654700696EE5 /* AudioSetupView.swift */; };
 		80F66AC22606665C00696EE5 /* AudioProviderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F66AC12606665C00696EE5 /* AudioProviderView.swift */; };
+		80FB0C7C265A66FC009DC261 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80FB0C78265A66FC009DC261 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -302,8 +299,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				8069E451261A2F110086BBFB /* StickyEncoding in Embed Libraries */,
-				80BF6A9B26111FC600CDCB2F /* libessentia.dylib in Embed Libraries */,
-				8043CA8F261F376800DDE9D5 /* libsamplerate.dylib in Embed Libraries */,
 			);
 			name = "Embed Libraries";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -456,35 +451,6 @@
 		808445DD25A7996200E27EC8 /* Badge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
 		80869686261688C60056ECC3 /* ResampleToSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResampleToSize.swift; sourceTree = "<group>"; };
 		8086969326172E4A0056ECC3 /* Waveform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Waveform.swift; sourceTree = "<group>"; };
-		808696B42617692E0056ECC3 /* INSTALL_RECEIPT.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = INSTALL_RECEIPT.json; sourceTree = "<group>"; };
-		808696B62617692E0056ECC3 /* sndfile-resample */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "sndfile-resample"; sourceTree = "<group>"; };
-		808696B82617692E0056ECC3 /* libsamplerate.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = libsamplerate.rb; sourceTree = "<group>"; };
-		808696B92617692E0056ECC3 /* ChangeLog */ = {isa = PBXFileReference; lastKnownFileType = text; path = ChangeLog; sourceTree = "<group>"; };
-		808696BA2617692E0056ECC3 /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
-		808696BB2617692E0056ECC3 /* libsamplerate */ = {isa = PBXFileReference; lastKnownFileType = text; path = libsamplerate; sourceTree = "<group>"; };
-		808696BD2617692E0056ECC3 /* samplerate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = samplerate.h; sourceTree = "<group>"; };
-		808696BE2617692E0056ECC3 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
-		808696BF2617692E0056ECC3 /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
-		808696C02617692E0056ECC3 /* NEWS */ = {isa = PBXFileReference; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
-		808696C22617692E0056ECC3 /* libsamplerate.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libsamplerate.dylib; sourceTree = "<group>"; };
-		808696C42617692E0056ECC3 /* samplerate.pc */ = {isa = PBXFileReference; lastKnownFileType = text; path = samplerate.pc; sourceTree = "<group>"; };
-		808696C52617692E0056ECC3 /* libsamplerate.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libsamplerate.0.dylib; sourceTree = "<group>"; };
-		808696C62617692E0056ECC3 /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsamplerate.a; sourceTree = "<group>"; };
-		808696CB2617692E0056ECC3 /* SRC.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = SRC.css; sourceTree = "<group>"; };
-		808696CC2617692E0056ECC3 /* api_simple.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = api_simple.html; sourceTree = "<group>"; };
-		808696CD2617692E0056ECC3 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
-		808696CE2617692E0056ECC3 /* api_misc.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = api_misc.html; sourceTree = "<group>"; };
-		808696CF2617692E0056ECC3 /* SRC.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SRC.png; sourceTree = "<group>"; };
-		808696D02617692E0056ECC3 /* license.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = license.html; sourceTree = "<group>"; };
-		808696D12617692E0056ECC3 /* lists.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = lists.html; sourceTree = "<group>"; };
-		808696D22617692E0056ECC3 /* history.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = history.html; sourceTree = "<group>"; };
-		808696D32617692E0056ECC3 /* quality.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = quality.html; sourceTree = "<group>"; };
-		808696D42617692E0056ECC3 /* download.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = download.html; sourceTree = "<group>"; };
-		808696D52617692E0056ECC3 /* api_callback.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = api_callback.html; sourceTree = "<group>"; };
-		808696D62617692E0056ECC3 /* api.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = api.html; sourceTree = "<group>"; };
-		808696D72617692E0056ECC3 /* win32.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = win32.html; sourceTree = "<group>"; };
-		808696D82617692E0056ECC3 /* faq.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = faq.html; sourceTree = "<group>"; };
-		808696D92617692E0056ECC3 /* api_full.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = api_full.html; sourceTree = "<group>"; };
 		808696E52617AAC40056ECC3 /* CountdownText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownText.swift; sourceTree = "<group>"; };
 		808696E92617C1960056ECC3 /* TrackGenreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackGenreView.swift; sourceTree = "<group>"; };
 		808696ED2617C1CE0056ECC3 /* TrackYearView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackYearView.swift; sourceTree = "<group>"; };
@@ -548,7 +514,6 @@
 		80AF40A3261904C500117F06 /* NSWorkspace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSWorkspace.swift; sourceTree = "<group>"; };
 		80AF40A72619091000117F06 /* TrackDurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackDurationView.swift; sourceTree = "<group>"; };
 		80B357D125F6FAC400180A4A /* NSTableView+Synchronization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTableView+Synchronization.swift"; sourceTree = "<group>"; };
-		80BF6A9A26111FC600CDCB2F /* libessentia.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libessentia.dylib; path = Frameworks/Essentia/essentia/build/src/libessentia.dylib; sourceTree = "<group>"; };
 		80C9A17C259F902D00A038CC /* MilkyCoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MilkyCoverView.swift; sourceTree = "<group>"; };
 		80C9A184259F916F00A038CC /* Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Combine.swift; sourceTree = "<group>"; };
 		80C9A189259F9BDB00A038CC /* RemoteImageCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageCollection.swift; sourceTree = "<group>"; };
@@ -589,6 +554,7 @@
 		80F66AAE26064AD500696EE5 /* taglib_config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = taglib_config.h; sourceTree = "<group>"; };
 		80F66AB62606654700696EE5 /* AudioSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSetupView.swift; sourceTree = "<group>"; };
 		80F66AC12606665C00696EE5 /* AudioProviderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioProviderView.swift; sourceTree = "<group>"; };
+		80FB0C78265A66FC009DC261 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -596,14 +562,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80FB0C7C265A66FC009DC261 /* AVFoundation.framework in Frameworks */,
 				80BF6AA32611208D00CDCB2F /* libessentia-analysis.a in Frameworks */,
 				80429D602610D48900B54ACA /* libtaglib.a in Frameworks */,
 				806B28BB258F91E50091EA4D /* KeychainAccess in Frameworks */,
 				80D6DA83259CF23F00879BCF /* CombineExt in Frameworks */,
 				8069E450261A2F110086BBFB /* StickyEncoding in Frameworks */,
 				8058C2D0261676BD0027DB8B /* SpotifyAPI in Frameworks */,
-				80BF6AAD261122A100CDCB2F /* libessentia.dylib in Frameworks */,
-				808696E22617695B0056ECC3 /* libsamplerate.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1067,114 +1032,6 @@
 			path = Transient;
 			sourceTree = "<group>";
 		};
-		808696B32617692E0056ECC3 /* libsamplerate */ = {
-			isa = PBXGroup;
-			children = (
-				808696B42617692E0056ECC3 /* INSTALL_RECEIPT.json */,
-				808696B52617692E0056ECC3 /* bin */,
-				808696B72617692E0056ECC3 /* .brew */,
-				808696B92617692E0056ECC3 /* ChangeLog */,
-				808696BA2617692E0056ECC3 /* AUTHORS */,
-				808696BB2617692E0056ECC3 /* libsamplerate */,
-				808696BC2617692E0056ECC3 /* include */,
-				808696BE2617692E0056ECC3 /* README */,
-				808696BF2617692E0056ECC3 /* COPYING */,
-				808696C02617692E0056ECC3 /* NEWS */,
-				808696C12617692E0056ECC3 /* lib */,
-				808696C72617692E0056ECC3 /* share */,
-			);
-			path = libsamplerate;
-			sourceTree = "<group>";
-		};
-		808696B52617692E0056ECC3 /* bin */ = {
-			isa = PBXGroup;
-			children = (
-				808696B62617692E0056ECC3 /* sndfile-resample */,
-			);
-			path = bin;
-			sourceTree = "<group>";
-		};
-		808696B72617692E0056ECC3 /* .brew */ = {
-			isa = PBXGroup;
-			children = (
-				808696B82617692E0056ECC3 /* libsamplerate.rb */,
-			);
-			path = .brew;
-			sourceTree = "<group>";
-		};
-		808696BC2617692E0056ECC3 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				808696BD2617692E0056ECC3 /* samplerate.h */,
-			);
-			path = include;
-			sourceTree = "<group>";
-		};
-		808696C12617692E0056ECC3 /* lib */ = {
-			isa = PBXGroup;
-			children = (
-				808696C22617692E0056ECC3 /* libsamplerate.dylib */,
-				808696C32617692E0056ECC3 /* pkgconfig */,
-				808696C52617692E0056ECC3 /* libsamplerate.0.dylib */,
-				808696C62617692E0056ECC3 /* libsamplerate.a */,
-			);
-			path = lib;
-			sourceTree = "<group>";
-		};
-		808696C32617692E0056ECC3 /* pkgconfig */ = {
-			isa = PBXGroup;
-			children = (
-				808696C42617692E0056ECC3 /* samplerate.pc */,
-			);
-			path = pkgconfig;
-			sourceTree = "<group>";
-		};
-		808696C72617692E0056ECC3 /* share */ = {
-			isa = PBXGroup;
-			children = (
-				808696C82617692E0056ECC3 /* doc */,
-			);
-			path = share;
-			sourceTree = "<group>";
-		};
-		808696C82617692E0056ECC3 /* doc */ = {
-			isa = PBXGroup;
-			children = (
-				808696C92617692E0056ECC3 /* libsamplerate0-dev */,
-			);
-			path = doc;
-			sourceTree = "<group>";
-		};
-		808696C92617692E0056ECC3 /* libsamplerate0-dev */ = {
-			isa = PBXGroup;
-			children = (
-				808696CA2617692E0056ECC3 /* html */,
-			);
-			path = "libsamplerate0-dev";
-			sourceTree = "<group>";
-		};
-		808696CA2617692E0056ECC3 /* html */ = {
-			isa = PBXGroup;
-			children = (
-				808696CB2617692E0056ECC3 /* SRC.css */,
-				808696CC2617692E0056ECC3 /* api_simple.html */,
-				808696CD2617692E0056ECC3 /* index.html */,
-				808696CE2617692E0056ECC3 /* api_misc.html */,
-				808696CF2617692E0056ECC3 /* SRC.png */,
-				808696D02617692E0056ECC3 /* license.html */,
-				808696D12617692E0056ECC3 /* lists.html */,
-				808696D22617692E0056ECC3 /* history.html */,
-				808696D32617692E0056ECC3 /* quality.html */,
-				808696D42617692E0056ECC3 /* download.html */,
-				808696D52617692E0056ECC3 /* api_callback.html */,
-				808696D62617692E0056ECC3 /* api.html */,
-				808696D72617692E0056ECC3 /* win32.html */,
-				808696D82617692E0056ECC3 /* faq.html */,
-				808696D92617692E0056ECC3 /* api_full.html */,
-			);
-			path = html;
-			sourceTree = "<group>";
-		};
 		80A8C81425BF552C00F97EF0 /* Playlist */ = {
 			isa = PBXGroup;
 			children = (
@@ -1253,7 +1110,6 @@
 		80AD6945258825FA00192BED = {
 			isa = PBXGroup;
 			children = (
-				80BF6A9A26111FC600CDCB2F /* libessentia.dylib */,
 				80ED7688258FDFD700B8B9C3 /* README.md */,
 				80F61A8C25FCF7E500AC4CF8 /* Frameworks */,
 				80AD6950258825FA00192BED /* ElevenTunes */,
@@ -1468,7 +1324,7 @@
 		80F61A8C25FCF7E500AC4CF8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				808696B32617692E0056ECC3 /* libsamplerate */,
+				80FB0C78265A66FC009DC261 /* AVFoundation.framework */,
 				800835B62610CD360094EA26 /* Essentia */,
 				80F61A8D25FCF7F400AC4CF8 /* TagLib */,
 			);

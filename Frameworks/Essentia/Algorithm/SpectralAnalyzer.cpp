@@ -14,7 +14,7 @@ void SpectralAnalyzer::runNetwork(string filename, Pool& results){
 	Real analysisSampleRate = 44100;
 	streaming::AlgorithmFactory& factory = streaming::AlgorithmFactory::instance();
 
-	Algorithm* loader = factory.create("MonoLoader",
+	Algorithm* loader = factory.create("AVMonoLoader",
 									  "filename", filename);
 
 	streaming::Algorithm* equalLoudness = factory.create("EqualLoudness",

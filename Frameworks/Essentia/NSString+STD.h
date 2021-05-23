@@ -36,15 +36,15 @@ const NSStringEncoding kEncoding_wchar_t = CFStringConvertEncodingToNSStringEnco
 	NSString* result = [[NSString alloc] initWithBytes:data length:size encoding:kEncoding_wchar_t];
 	return result;
 }
+
 +(NSString*) stringWithSTDstring:(const std::string&)s
 {
-	NSString* result = [[NSString alloc] initWithUTF8String:s.c_str()];
-	return result;
+	return [NSString stringWithUTF8String: s.c_str()];
 }
 
 -(std::wstring) STDwstring
 {
-	NSData* asData = [self dataUsingEncoding:kEncoding_wchar_t];
+	NSData* asData = [self dataUsingEncoding: kEncoding_wchar_t];
 	return std::wstring((wchar_t*)[asData bytes], [asData length] / sizeof(wchar_t));
 }
 -(std::string) STDstring

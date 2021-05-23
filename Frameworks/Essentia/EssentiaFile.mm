@@ -9,23 +9,17 @@
 
 #import "NSString+STD.h"
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wall"
-#pragma clang diagnostic ignored "-Weverything"
+#import "TonalAnalyzer.hpp"
+#import "RhythmAnalyzer.hpp"
+#import "WaveformAnalyzer.hpp"
+#import "SpectralAnalyzer.hpp"
 
-#include "TonalAnalyzer.hpp"
-#include "RhythmAnalyzer.hpp"
-#include "WaveformAnalyzer.hpp"
-#include "SpectralAnalyzer.hpp"
-
-#include "ResampleToSize.h"
+#import "ResampleToSize.h"
 
 
 using namespace std;
 using namespace essentia;
 using namespace essentia::streaming;
-
-#pragma clang diagnostic pop
 
 @interface EssentiaFile ()
 
@@ -42,14 +36,14 @@ using namespace essentia::streaming;
 }
 
 - (EssentiaAnalysis *)analyze:(NSError *__autoreleasing  _Nullable *)error {
-	AlgorithmFactory& factory = AlgorithmFactory::instance();
-
-	string filename = [[[_url absoluteURL] path] STDstring];
-	
 	try {
+		AlgorithmFactory& factory = AlgorithmFactory::instance();
+
+		string filename = [[[_url absoluteURL] path] STDstring];
+
 		Pool pool;
 
-		Algorithm* loader = factory.create("MonoLoader",
+		Algorithm* loader = factory.create("AVMonoLoader",
 										  "filename", filename,
 										   "downmix", "mix");
 		
@@ -59,7 +53,7 @@ using namespace essentia::streaming;
 		scheduler::Network network(loader);
 		network.run();
 
-		Algorithm* loader_2 = factory.create("MonoLoader",
+		Algorithm* loader_2 = factory.create("AVMonoLoader",
 										  "filename", filename,
 										   "downmix", "mix");
 
@@ -109,14 +103,14 @@ using namespace essentia::streaming;
 }
 
 - (EssentiaWaveform *)analyzeWaveform:(int)count error:(NSError *__autoreleasing  _Nullable *)error {
-	AlgorithmFactory& factory = AlgorithmFactory::instance();
-
-	string filename = [[[_url absoluteURL] path] STDstring];
-	
 	try {
+		AlgorithmFactory& factory = AlgorithmFactory::instance();
+
+		string filename = [[[_url absoluteURL] path] STDstring];
+
 		Pool pool;
 
-		Algorithm* stereo = factory.create("AudioLoader",
+		Algorithm* stereo = factory.create("AVAudioLoader",
 										  "filename", filename,
 										   "computeMD5", false);
 
@@ -140,11 +134,11 @@ using namespace essentia::streaming;
 
 		EssentiaWaveform *waveform = [[EssentiaWaveform alloc] initWithCount: count integrated: integratedLoudness range: loudnessRange];
 		
-		if ([ResampleToSize best:loudness.data() count:loudness.size() dst:waveform.loudness count: count error: error]) {
+		if (![ResampleToSize best:loudness.data() count:loudness.size() dst:waveform.loudness count: count error: error]) {
 			return nil;
 		}
 		
-		if ([ResampleToSize best:pitch.data() count:pitch.size() dst:waveform.pitch count: count error: error]) {
+		if (![ResampleToSize best:pitch.data() count:pitch.size() dst:waveform.pitch count: count error: error]) {
 			return nil;
 		}
 

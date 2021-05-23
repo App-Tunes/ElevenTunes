@@ -8,7 +8,7 @@
 
 #import "ResampleToSize.h"
 #import <Accelerate/Accelerate.h>
-#include <samplerate.h>
+#import <samplerate.h>
 
 // From libsamplerate / common.h
 #define	SRC_MAX_RATIO			256
