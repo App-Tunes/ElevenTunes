@@ -31,6 +31,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var cancellables = Set<AnyCancellable>()
     
     override init() {
+		// No light mode supported yet, i.e. looks shit. Gotta spend some time improving
+		// it before this is removed.
+		NSApp.appearance = NSAppearance(named: .darkAqua)
+
 		let spotify = Spotify(backend: .init(
 			clientId: "803ae578571240d9aec0a0ac8469dd79",
 			tokensURL: URL(string: "https://heliotrope-airy-dimple.glitch.me/api/token")!,
