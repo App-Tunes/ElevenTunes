@@ -63,7 +63,6 @@
 		803A870425F54C9C00D7B9E1 /* NSTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803A870325F54C9C00D7B9E1 /* NSTableView.swift */; };
 		803A870925F554A700D7B9E1 /* NSTableView+Visibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803A870825F554A700D7B9E1 /* NSTableView+Visibility.swift */; };
 		803BF16E25D0A05D006372F2 /* NewPlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803BF16D25D0A05D006372F2 /* NewPlaylistView.swift */; };
-		80429D602610D48900B54ACA /* libtaglib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80F61B9B25FCF7F500AC4CF8 /* libtaglib.a */; };
 		8043CA85261F2C3700DDE9D5 /* TrackAlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8043CA84261F2C3700DDE9D5 /* TrackAlbumView.swift */; };
 		804D3C0125D93A5E00705D42 /* PlaylistsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804D3BFF25D93A5E00705D42 /* PlaylistsViewController.swift */; };
 		804D3C0225D93A5E00705D42 /* PlaylistsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 804D3C0025D93A5E00705D42 /* PlaylistsViewController.xib */; };
@@ -251,6 +250,9 @@
 		80F66AB72606654700696EE5 /* AudioSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F66AB62606654700696EE5 /* AudioSetupView.swift */; };
 		80F66AC22606665C00696EE5 /* AudioProviderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F66AC12606665C00696EE5 /* AudioProviderView.swift */; };
 		80FB0C7C265A66FC009DC261 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80FB0C78265A66FC009DC261 /* AVFoundation.framework */; };
+		80FB0C83265A98EB009DC261 /* libtaglib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80F61B9B25FCF7F500AC4CF8 /* libtaglib.a */; };
+		80FB0C88265AA6B2009DC261 /* tag.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80FB0C87265AA6B2009DC261 /* tag.framework */; };
+		80FB0C8F265AA782009DC261 /* tag.framework in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 80FB0C87265AA6B2009DC261 /* tag.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -298,6 +300,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				80FB0C8F265AA782009DC261 /* tag.framework in Embed Libraries */,
 				8069E451261A2F110086BBFB /* StickyEncoding in Embed Libraries */,
 			);
 			name = "Embed Libraries";
@@ -551,10 +554,10 @@
 		80F61BAD25FD190600AC4CF8 /* NSRegularExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRegularExpression.swift; sourceTree = "<group>"; };
 		80F61BB225FE314E00AC4CF8 /* Navigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigator.swift; sourceTree = "<group>"; };
 		80F61BB725FE4AF700AC4CF8 /* DelayedAutoExpander.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayedAutoExpander.swift; sourceTree = "<group>"; };
-		80F66AAE26064AD500696EE5 /* taglib_config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = taglib_config.h; sourceTree = "<group>"; };
 		80F66AB62606654700696EE5 /* AudioSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSetupView.swift; sourceTree = "<group>"; };
 		80F66AC12606665C00696EE5 /* AudioProviderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioProviderView.swift; sourceTree = "<group>"; };
 		80FB0C78265A66FC009DC261 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		80FB0C87265AA6B2009DC261 /* tag.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = tag.framework; path = ./TagLib/taglib/build/taglib/tag.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -563,8 +566,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				80FB0C7C265A66FC009DC261 /* AVFoundation.framework in Frameworks */,
+				80FB0C88265AA6B2009DC261 /* tag.framework in Frameworks */,
 				80BF6AA32611208D00CDCB2F /* libessentia-analysis.a in Frameworks */,
-				80429D602610D48900B54ACA /* libtaglib.a in Frameworks */,
+				80FB0C83265A98EB009DC261 /* libtaglib.a in Frameworks */,
 				806B28BB258F91E50091EA4D /* KeychainAccess in Frameworks */,
 				80D6DA83259CF23F00879BCF /* CombineExt in Frameworks */,
 				8069E450261A2F110086BBFB /* StickyEncoding in Frameworks */,
@@ -1324,6 +1328,7 @@
 		80F61A8C25FCF7E500AC4CF8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				80FB0C87265AA6B2009DC261 /* tag.framework */,
 				80FB0C78265A66FC009DC261 /* AVFoundation.framework */,
 				800835B62610CD360094EA26 /* Essentia */,
 				80F61A8D25FCF7F400AC4CF8 /* TagLib */,
@@ -1334,7 +1339,6 @@
 		80F61A8D25FCF7F400AC4CF8 /* TagLib */ = {
 			isa = PBXGroup;
 			children = (
-				80F66AAE26064AD500696EE5 /* taglib_config.h */,
 				80F61B9525FCF7F500AC4CF8 /* taglib.xcodeproj */,
 			);
 			path = TagLib;
@@ -1942,7 +1946,7 @@
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
 				EXCLUDED_ARCHS = arm64;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = "\"${SRCROOT}/Frameworks/TagLib/taglib/build/taglib\"";
 				HEADER_SEARCH_PATHS = (
 					"${SRCROOT}/Frameworks/TagLib",
 					"${SRCROOT}/Frameworks/Essentia",
@@ -1955,7 +1959,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks/Essentia/essentia/build/src",
-					"$(PROJECT_DIR)/Frameworks/libsamplerate/lib",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 0.1;
@@ -1986,7 +1989,7 @@
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
 				EXCLUDED_ARCHS = arm64;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = "\"${SRCROOT}/Frameworks/TagLib/taglib/build/taglib\"";
 				HEADER_SEARCH_PATHS = (
 					"${SRCROOT}/Frameworks/TagLib",
 					"${SRCROOT}/Frameworks/Essentia",
@@ -1999,7 +2002,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks/Essentia/essentia/build/src",
-					"$(PROJECT_DIR)/Frameworks/libsamplerate/lib",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 0.1;
