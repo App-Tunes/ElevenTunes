@@ -334,7 +334,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd libsamplerate\nmkdir -p build\ncd build\ncmake ..\nmake\n";
+			shellScript = "export MACOSX_DEPLOYMENT_TARGET=11.0\ncd libsamplerate\nmkdir -p build\ncd build\ncmake ..\nmake\n";
 		};
 		80BF56782610E35900CDCB2F /* Build Essentia */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -352,7 +352,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd essentia\n./waf configure --fft=ACCELERATE --build-static --lightweight=libsamplerate\n./waf\n";
+			shellScript = "export MACOSX_DEPLOYMENT_TARGET=11.0\ncd essentia\n./waf configure --fft=ACCELERATE --build-static --lightweight=libsamplerate\n./waf\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
