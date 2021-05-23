@@ -17,7 +17,7 @@ class TrackAnalysisSnapshot: ObservableObject {
 	@Published var duration: TimeInterval? = nil
 	@Published var tempo: Tempo? = nil
 
-	let waveform = ResamplingWaveform(debounce: 0.3, resample: ResampleToSize.best)
+	let waveform = ResamplingWaveform(debounce: 0.1, resample: ResampleToSize.best)
 
 	private var trackObserver: AnyCancellable?
 	private var attributesObserver: AnyCancellable?
