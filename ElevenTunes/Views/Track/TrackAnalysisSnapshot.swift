@@ -37,7 +37,7 @@ class TrackAnalysisSnapshot: ObservableObject {
 				
 				setIfDifferent(self, \.duration, attributes?[TrackAttribute.duration].value)
 				setIfDifferent(self, \.tempo, attributes?[TrackAttribute.tempo].value)
-				setIfDifferent(self.waveform, \.source, attributes?[TrackAttribute.waveform].value ?? .empty)
+				setIfDifferent(self.waveform, \.source, attributes?[TrackAttribute.waveform].value)
 			}
 	}
 }
