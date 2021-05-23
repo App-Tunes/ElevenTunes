@@ -7,16 +7,13 @@
 
 import SwiftUI
 import Combine
+import TunesUI
 
 struct PlayerMilkyCoverView: View {
     @Environment(\.player) private var player: Player!
 
 	@State var track: AnyTrack?
-
 	@State var image: NSImage?
-	@State var oldImage: NSImage?
-
-	@State var transition: Double = 1
 	
 	var liveImage: AnyPublisher<NSImage?, Never>? {
 		track?.previewImage
@@ -25,41 +22,14 @@ struct PlayerMilkyCoverView: View {
 	}
 
     var body: some View {
-		ZStack {
-			Rectangle().fill(Color.black)
-
-			if let image = image {
-				Image(nsImage: image)
-					.resizable()
-			}
-			
-			ZStack {
-				Rectangle().fill(Color.black)
-
-				if let oldImage = oldImage {
-					Image(nsImage: oldImage)
-						.resizable()
-				}
-			}
-				.drawingGroup()
-				.opacity(1 - transition)
-		}
+		TransitioningImageView(image)
 			.onReceive(player.$current) { newTrack in
-				guard newTrack?.id != track?.id else {
-					return
-				}
-				
-				withAnimation(.instant) {
-					oldImage = image
-					track = newTrack
-					transition = 0
-				}
+				guard track?.id != newTrack?.id else { return }
+				track = newTrack
 			}
 			.onReceive(liveImage, default: nil) { (img: NSImage?) in
-				withAnimation(.easeInOut(duration: 0.2)) {
-					image = img
-					transition = 1
-				}
+				// TODO Add a timeout before which it's not set, but after which it's set to nil
+				setIfDifferent(self, \.image, img)
 			}
     }
 }

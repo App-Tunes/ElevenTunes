@@ -51,7 +51,7 @@
         "repositoryURL": "https://github.com/Peter-Schorn/SpotifyAPI",
         "state": {
           "branch": "master",
-          "revision": "5cf9f8f7bb7d27a4b9841a30aefd102bc1e6c044",
+          "revision": "a7309f894164ef2e88d05f72db54dfe9ecd698e4",
           "version": null
         }
       },
@@ -87,7 +87,7 @@
         "repositoryURL": "https://github.com/App-Tunes/TunesUI",
         "state": {
           "branch": "main",
-          "revision": "a188b34297bab3be8ac7058b89b5438e0243f9d0",
+          "revision": "0e64ff273676e0d9e201787bac0283bc857b85d7",
           "version": null
         }
       },
