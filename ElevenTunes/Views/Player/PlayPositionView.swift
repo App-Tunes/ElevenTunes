@@ -88,7 +88,7 @@ struct PlayPositionView: View {
 
 				ZStack {
 					ResamplingWaveformView(
-						gradient: Gradients.pitch,
+						colorLUT: Gradients.pitchCG,
 						waveform: snapshot.waveform
 					)
 						.allowsHitTesting(false)
