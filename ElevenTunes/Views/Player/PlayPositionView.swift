@@ -112,11 +112,12 @@ struct PlayPositionView: View {
 										player.play(track, at: TimeInterval(position))
 									}
 								}
-							},
-							jumpInterval: moveStep.map(CGFloat.init),
-							useJumpInterval: { !NSEvent.modifierFlags.contains(.option) },
-							barWidth: max(1, min(2, 3 - geo.size.height / 20)) + 0.5
+							}
 						)
+							.jumpInterval(moveStep.map(CGFloat.init)) {
+								!NSEvent.modifierFlags.contains(.option)
+							}
+							.barWidth(max(1, min(2, 3 - geo.size.height / 20)) + 0.5)
 						
 						if !isSecondary, geo.size.height >= 26, geo.size.width >= 200 {
 							PlayPositionLabelsView(duration: duration, playerState: state)
