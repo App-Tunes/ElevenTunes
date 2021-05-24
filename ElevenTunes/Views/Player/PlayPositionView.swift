@@ -97,25 +97,26 @@ struct PlayPositionView: View {
 						.frame(height: geo.size.height, alignment: .bottom)
 
 					if let duration = (isCurrent ? audio?.duration : snapshot.duration) {
-						PositionControl(
-							currentTimeProvider: { audio?.currentTime },
-							currentTime: audio?.currentTime,
-							duration: duration,
-							advancesAutomatically: state.isPlaying,
-							moveStepDuration: moveStep,
-							moveTo: {
-								if let audio = audio {
-									try? audio.move(to: $0)
-								}
-								else {
-									player.play(track, at: $0)
+						PositionControlView(
+							locationProvider: { audio?.currentTime.map(CGFloat.init) },
+							range: 0...CGFloat(duration),
+							action: {
+								switch $0 {
+								case .relative(let movement):
+									try? audio?.move(by: TimeInterval(movement))
+								case .absolute(let position):
+									if let audio = audio {
+										try? audio.move(to: TimeInterval(position))
+									}
+									else {
+										player.play(track, at: TimeInterval(position))
+									}
 								}
 							},
-							moveBy: {
-								try? audio?.move(by: $0)
-							}
+							jumpInterval: moveStep.map(CGFloat.init),
+							useJumpInterval: { !NSEvent.modifierFlags.contains(.option) },
+							barWidth: max(1, min(2, 3 - geo.size.height / 20)) + 0.5
 						)
-							.id(state)
 						
 						if !isSecondary, geo.size.height >= 26, geo.size.width >= 200 {
 							PlayPositionLabelsView(duration: duration, playerState: state)
