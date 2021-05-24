@@ -87,9 +87,10 @@ struct PlayPositionView: View {
 				let state = isCurrent ? tstate.state : .init(isPlaying: false, currentTime: nil)
 
 				ZStack {
-					ResamplingWaveformView(
+					WaveformView(
 						colorLUT: Gradients.pitchCG,
-						waveform: snapshot.waveform
+						waveform: snapshot.waveform,
+						resample: ResampleToSize.best
 					)
 						.allowsHitTesting(false)
 						.frame(height: geo.size.height * 0.7, alignment: .bottom)
@@ -124,7 +125,6 @@ struct PlayPositionView: View {
 				}
 			}
 		}
-		.id(track?.id) // Required because sometimes bars don't reset :<
         // TODO hugging / compression resistance:
         // setting min height always compressed down to min height :<
     }

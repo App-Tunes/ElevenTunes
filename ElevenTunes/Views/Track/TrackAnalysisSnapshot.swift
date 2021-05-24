@@ -17,7 +17,7 @@ class TrackAnalysisSnapshot: ObservableObject {
 	@Published var duration: TimeInterval? = nil
 	@Published var tempo: Tempo? = nil
 
-	let waveform = ResamplingWaveform(debounce: 0.1, resample: ResampleToSize.best)
+	@Published var waveform: Waveform? = nil
 
 	private var trackObserver: AnyCancellable?
 	private var attributesObserver: AnyCancellable?
@@ -37,7 +37,7 @@ class TrackAnalysisSnapshot: ObservableObject {
 				
 				setIfDifferent(self, \.duration, attributes?[TrackAttribute.duration].value)
 				setIfDifferent(self, \.tempo, attributes?[TrackAttribute.tempo].value)
-				setIfDifferent(self.waveform, \.source, attributes?[TrackAttribute.waveform].value)
+				setIfDifferent(self, \.waveform, attributes?[TrackAttribute.waveform].value)
 			}
 	}
 }
