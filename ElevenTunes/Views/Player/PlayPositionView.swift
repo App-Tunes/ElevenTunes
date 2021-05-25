@@ -100,7 +100,7 @@ struct PlayPositionView: View {
 						PositionControlView(
 							locationProvider: { audio?.currentTime.map(CGFloat.init) },
 							range: 0...CGFloat(duration),
-							fps: state.isPlaying ? 5 : nil,
+							fps: state.isPlaying ? 10 : nil,
 							action: {
 								switch $0 {
 								case .relative(let movement):
