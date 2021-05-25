@@ -42,8 +42,8 @@
         "repositoryURL": "https://github.com/Peter-Schorn/RegularExpressions.git",
         "state": {
           "branch": null,
-          "revision": "0bd4269744f621931721a833b8ad228639d681f3",
-          "version": "2.1.3"
+          "revision": "07a355880611405e31b6a71b7786c1575dfb3533",
+          "version": "2.1.4"
         }
       },
       {
@@ -51,7 +51,7 @@
         "repositoryURL": "https://github.com/Peter-Schorn/SpotifyAPI",
         "state": {
           "branch": "master",
-          "revision": "0114e0acefff64742b926c545123fe381802a5f8",
+          "revision": "edb0e19de4788a5973f46b730566ae55d08cf8ed",
           "version": null
         }
       },
@@ -87,7 +87,7 @@
         "repositoryURL": "https://github.com/App-Tunes/TunesUI",
         "state": {
           "branch": "main",
-          "revision": "238ff4d8e26a87042e4a23e3ea685a4ec9358a12",
+          "revision": "4288ba236d0b1c1e4c16f8b3abaf287853d8a54f",
           "version": null
         }
       },
