@@ -89,8 +89,8 @@ struct PlayPositionView: View {
 				ZStack {
 					WaveformView(
 						colorLUT: Gradients.pitchCG,
-						waveform: snapshot.waveform,
-						resample: ResampleToSize.best
+						waveform: snapshot.waveform ?? .empty,
+						resample: ResampleToSize.bestOrZero
 					)
 						.allowsHitTesting(false)
 						.frame(height: geo.size.height * 0.7, alignment: .bottom)

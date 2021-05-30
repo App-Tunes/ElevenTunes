@@ -23,4 +23,8 @@ extension ResampleToSize {
 			return asArray
 		}
 	}
+	
+	static func bestOrZero(data: [Float], toSize count: Int) -> [Float] {
+		(try? best(data: data, toSize: count)) ?? Array(repeating: 0, count: count)
+	}
 }
