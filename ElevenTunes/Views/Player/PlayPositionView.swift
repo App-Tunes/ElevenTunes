@@ -73,11 +73,6 @@ struct PlayPositionView: View {
 	var isSecondary: Bool = false
 
 	@ObservedObject var snapshot: TrackAnalysisSnapshot
-
-	var moveStep: TimeInterval? {
-		// 16 beats = 4 bars = 1 phrase
-		snapshot.tempo.map { TimeInterval(1 / $0.bps) * 16 }
-	}
 	
     var body: some View {
 		PlayTrackingView(player: player) { tstate in
@@ -115,7 +110,7 @@ struct PlayPositionView: View {
 								}
 							}
 						)
-							.jumpInterval(moveStep.map(CGFloat.init)) {
+							.jumpInterval((snapshot.tempo?.phraseSeconds).map(CGFloat.init)) {
 								!NSEvent.modifierFlags.contains(.option)
 							}
 							.barWidth(max(1, min(2, 3 - geo.size.height / 20)) + 0.5)

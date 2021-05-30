@@ -125,8 +125,8 @@ extension TracksViewController: NSTableViewDelegate {
 	func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		let track = tracks[row]
 		
-		func makeView(for id: NSUserInterfaceItemIdentifier, fun: (AnyNSHostingView) -> Void) -> NSView? {
-			if let view = tableView.makeView(withIdentifier: id, owner: nil) as? AnyNSHostingView {
+		func makeView<T: NSView>(for id: NSUserInterfaceItemIdentifier, type: T.Type, fun: (T) -> Void) -> T? {
+			if let view = tableView.makeView(withIdentifier: id, owner: nil) as? T {
 				fun(view)
 				return view
 			}
@@ -151,11 +151,11 @@ extension TracksViewController: NSTableViewDelegate {
 		
 		switch tableColumn?.identifier {
 		case ColumnIdentifiers.Title:
-			return makeView(for: CellIdentifiers.TrackCell) {
+			return makeView(for: CellIdentifiers.TrackCell, type: AnyNSHostingView.self) {
 				$0.rootView = AnyView(TrackCellView(track: track))
 			}
 		case ColumnIdentifiers.Image:
-			return makeView(for: CellIdentifiers.ImageCell) {
+			return makeView(for: CellIdentifiers.ImageCell, type: AnyNSHostingView.self) {
 				$0.rootView = AnyView(
 					PlayTrackImageView(track: track, context: .playlist(playlist.backend, tracks: tracks.map(\.backend), track: track.backend))
 					.environment(\.library, library)
@@ -163,15 +163,17 @@ extension TracksViewController: NSTableViewDelegate {
 				)
 			}
 		case ColumnIdentifiers.Waveform:
-			return makeView(for: CellIdentifiers.WaveformCell) {
-				$0.rootView = AnyView(PlayPositionView(player: player, track: track.backend, isSecondary: true, snapshot: .init(track: Just(.some(track.backend)))))
+			return makeView(for: CellIdentifiers.WaveformCell, type: PlayPositionViewCocoa.self) {
+				$0.waveformView.reset(suppressAnimationsUntil: Date() + 1)
+				$0.player = player
+				$0.track = track.backend
 			}
 		case ColumnIdentifiers.Artists:
-			return makeView(for: CellIdentifiers.ArtistsCell) {
+			return makeView(for: CellIdentifiers.ArtistsCell, type: AnyNSHostingView.self) {
 				$0.rootView = AnyView(TrackArtistsView(track: track))
 			}
 		case ColumnIdentifiers.Album:
-			return makeView(for: CellIdentifiers.AlbumCell) {
+			return makeView(for: CellIdentifiers.AlbumCell, type: AnyNSHostingView.self) {
 				$0.rootView = AnyView(TrackAlbumView(track: track, withIcon: false))
 			}
 		case ColumnIdentifiers.Tempo:

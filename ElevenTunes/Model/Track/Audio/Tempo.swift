@@ -31,4 +31,8 @@ struct Tempo: Equatable {
 	}
 		
 	var bps: Double { bpm / 60 }
+	
+	var phraseSeconds: TimeInterval {
+		TimeInterval(1 / bps) * 16
+	}
 }
