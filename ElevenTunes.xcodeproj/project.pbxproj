@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		80022215266828B70059D274 /* libTunesAnalysis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80022214266828B70059D274 /* libTunesAnalysis.a */; };
 		8005082D25978E270055FB2D /* Library+Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8005082C25978E270055FB2D /* Library+Conversion.swift */; };
 		80050839259792000055FB2D /* CDPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80050838259792000055FB2D /* CDPublisher.swift */; };
 		8005083E2597F45B0055FB2D /* CodableRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8005083D2597F45B0055FB2D /* CodableRegistry.swift */; };
@@ -205,7 +206,6 @@
 		80AF40A4261904C500117F06 /* NSWorkspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AF40A3261904C500117F06 /* NSWorkspace.swift */; };
 		80AF40A82619091000117F06 /* TrackDurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AF40A72619091000117F06 /* TrackDurationView.swift */; };
 		80B357D225F6FAC400180A4A /* NSTableView+Synchronization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B357D125F6FAC400180A4A /* NSTableView+Synchronization.swift */; };
-		80BF6AA32611208D00CDCB2F /* libessentia-analysis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80BF6A7F26111BE500CDCB2F /* libessentia-analysis.a */; };
 		80C9A17D259F902D00A038CC /* MilkyCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C9A17C259F902D00A038CC /* MilkyCoverView.swift */; };
 		80C9A185259F916F00A038CC /* Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C9A184259F916F00A038CC /* Combine.swift */; };
 		80C9A18A259F9BDB00A038CC /* RemoteImageCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C9A189259F9BDB00A038CC /* RemoteImageCollection.swift */; };
@@ -244,12 +244,25 @@
 		80F66AB72606654700696EE5 /* AudioSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F66AB62606654700696EE5 /* AudioSetupView.swift */; };
 		80F66AC22606665C00696EE5 /* AudioProviderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F66AC12606665C00696EE5 /* AudioProviderView.swift */; };
 		80FB0C7C265A66FC009DC261 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80FB0C78265A66FC009DC261 /* AVFoundation.framework */; };
-		80FB0C83265A98EB009DC261 /* libtaglib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80F61B9B25FCF7F500AC4CF8 /* libtaglib.a */; };
 		80FB0C88265AA6B2009DC261 /* tag.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80FB0C87265AA6B2009DC261 /* tag.framework */; };
 		80FB0C8F265AA782009DC261 /* tag.framework in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 80FB0C87265AA6B2009DC261 /* tag.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		8002221F266829080059D274 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 80429DA02610D57C00B54ACA /* TunesAnalysis.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BB6A285A2006236900B8BB9A;
+			remoteInfo = TunesAnalysis;
+		};
+		80022221266829080059D274 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 80429DA02610D57C00B54ACA /* TunesAnalysis.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 80BF6A4A261117F200CDCB2F;
+			remoteInfo = "Essentia-Tests";
+		};
 		80AD6963258825FD00192BED /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 80AD6946258825FA00192BED /* Project object */;
@@ -263,27 +276,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 80AD694D258825FA00192BED;
 			remoteInfo = ElevenTunes;
-		};
-		80BF6A7E26111BE500CDCB2F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 80429DA02610D57C00B54ACA /* essentia-analysis.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BB6A285A2006236900B8BB9A;
-			remoteInfo = "essentia-analysis";
-		};
-		80BF6A8026111BE500CDCB2F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 80429DA02610D57C00B54ACA /* essentia-analysis.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 80BF6A4A261117F200CDCB2F;
-			remoteInfo = "Essentia-Tests";
-		};
-		80F61B9A25FCF7F500AC4CF8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 80F61B9525FCF7F500AC4CF8 /* taglib.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BB6A285A2006236900B8BB9A;
-			remoteInfo = taglib;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -303,6 +295,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		80022214266828B70059D274 /* libTunesAnalysis.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libTunesAnalysis.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8005082C25978E270055FB2D /* Library+Conversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Library+Conversion.swift"; sourceTree = "<group>"; };
 		80050838259792000055FB2D /* CDPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDPublisher.swift; sourceTree = "<group>"; };
 		8005083D2597F45B0055FB2D /* CodableRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableRegistry.swift; sourceTree = "<group>"; };
@@ -361,7 +354,7 @@
 		803A870325F54C9C00D7B9E1 /* NSTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTableView.swift; sourceTree = "<group>"; };
 		803A870825F554A700D7B9E1 /* NSTableView+Visibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTableView+Visibility.swift"; sourceTree = "<group>"; };
 		803BF16D25D0A05D006372F2 /* NewPlaylistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlaylistView.swift; sourceTree = "<group>"; };
-		80429DA02610D57C00B54ACA /* essentia-analysis.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "essentia-analysis.xcodeproj"; sourceTree = "<group>"; };
+		80429DA02610D57C00B54ACA /* TunesAnalysis.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = TunesAnalysis.xcodeproj; sourceTree = "<group>"; };
 		8043CA84261F2C3700DDE9D5 /* TrackAlbumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackAlbumView.swift; sourceTree = "<group>"; };
 		804D3BFF25D93A5E00705D42 /* PlaylistsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsViewController.swift; sourceTree = "<group>"; };
 		804D3C0025D93A5E00705D42 /* PlaylistsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaylistsViewController.xib; sourceTree = "<group>"; };
@@ -537,14 +530,13 @@
 		80F53EBB25D9BED0003A98B3 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		80F53EC025D9BF49003A98B3 /* PlaylistsViewController+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlaylistsViewController+Actions.swift"; sourceTree = "<group>"; };
 		80F53EC525D9D5B5003A98B3 /* StaticMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticMenu.swift; sourceTree = "<group>"; };
-		80F61B9525FCF7F500AC4CF8 /* taglib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = taglib.xcodeproj; sourceTree = "<group>"; };
 		80F61BAD25FD190600AC4CF8 /* NSRegularExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRegularExpression.swift; sourceTree = "<group>"; };
 		80F61BB225FE314E00AC4CF8 /* Navigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigator.swift; sourceTree = "<group>"; };
 		80F61BB725FE4AF700AC4CF8 /* DelayedAutoExpander.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayedAutoExpander.swift; sourceTree = "<group>"; };
 		80F66AB62606654700696EE5 /* AudioSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSetupView.swift; sourceTree = "<group>"; };
 		80F66AC12606665C00696EE5 /* AudioProviderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioProviderView.swift; sourceTree = "<group>"; };
 		80FB0C78265A66FC009DC261 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		80FB0C87265AA6B2009DC261 /* tag.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = tag.framework; path = ./TagLib/taglib/build/taglib/tag.framework; sourceTree = "<group>"; };
+		80FB0C87265AA6B2009DC261 /* tag.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = tag.framework; path = ./TunesAnalysis/taglib/build/taglib/tag.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -552,11 +544,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80022215266828B70059D274 /* libTunesAnalysis.a in Frameworks */,
 				80FB0C7C265A66FC009DC261 /* AVFoundation.framework in Frameworks */,
 				80FB0C88265AA6B2009DC261 /* tag.framework in Frameworks */,
-				80BF6AA32611208D00CDCB2F /* libessentia-analysis.a in Frameworks */,
 				80AF085F265AD25F0039458A /* TunesUI in Frameworks */,
-				80FB0C83265A98EB009DC261 /* libtaglib.a in Frameworks */,
 				806B28BB258F91E50091EA4D /* KeychainAccess in Frameworks */,
 				80D6DA83259CF23F00879BCF /* CombineExt in Frameworks */,
 				8069E450261A2F110086BBFB /* StickyEncoding in Frameworks */,
@@ -582,12 +573,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		800835B62610CD360094EA26 /* Essentia */ = {
+		8002221B266829080059D274 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				80429DA02610D57C00B54ACA /* essentia-analysis.xcodeproj */,
+				80022220266829080059D274 /* libTunesAnalysis.a */,
+				80022222266829080059D274 /* Essentia-Tests.xctest */,
 			);
-			path = Essentia;
+			name = Products;
+			sourceTree = "<group>";
+		};
+		800835B62610CD360094EA26 /* TunesAnalysis */ = {
+			isa = PBXGroup;
+			children = (
+				80429DA02610D57C00B54ACA /* TunesAnalysis.xcodeproj */,
+			);
+			path = TunesAnalysis;
 			sourceTree = "<group>";
 		};
 		8010009825D9B96500784E3A /* Outline */ = {
@@ -1210,15 +1210,6 @@
 			path = Algorithm;
 			sourceTree = "<group>";
 		};
-		80BF6A7A26111BE500CDCB2F /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				80BF6A7F26111BE500CDCB2F /* libessentia-analysis.a */,
-				80BF6A8126111BE500CDCB2F /* Essentia-Tests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		80D6DA92259DEE1300879BCF /* Artist */ = {
 			isa = PBXGroup;
 			children = (
@@ -1303,26 +1294,10 @@
 			children = (
 				80FB0C87265AA6B2009DC261 /* tag.framework */,
 				80FB0C78265A66FC009DC261 /* AVFoundation.framework */,
-				800835B62610CD360094EA26 /* Essentia */,
-				80F61A8D25FCF7F400AC4CF8 /* TagLib */,
+				80022214266828B70059D274 /* libTunesAnalysis.a */,
+				800835B62610CD360094EA26 /* TunesAnalysis */,
 			);
 			path = Frameworks;
-			sourceTree = "<group>";
-		};
-		80F61A8D25FCF7F400AC4CF8 /* TagLib */ = {
-			isa = PBXGroup;
-			children = (
-				80F61B9525FCF7F500AC4CF8 /* taglib.xcodeproj */,
-			);
-			path = TagLib;
-			sourceTree = "<group>";
-		};
-		80F61B9625FCF7F500AC4CF8 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				80F61B9B25FCF7F500AC4CF8 /* libtaglib.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		80F66ABD2606664D00696EE5 /* Audio */ = {
@@ -1445,12 +1420,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 80BF6A7A26111BE500CDCB2F /* Products */;
-					ProjectRef = 80429DA02610D57C00B54ACA /* essentia-analysis.xcodeproj */;
-				},
-				{
-					ProductGroup = 80F61B9625FCF7F500AC4CF8 /* Products */;
-					ProjectRef = 80F61B9525FCF7F500AC4CF8 /* taglib.xcodeproj */;
+					ProductGroup = 8002221B266829080059D274 /* Products */;
+					ProjectRef = 80429DA02610D57C00B54ACA /* TunesAnalysis.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -1463,25 +1434,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		80BF6A7F26111BE500CDCB2F /* libessentia-analysis.a */ = {
+		80022220266829080059D274 /* libTunesAnalysis.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = "libessentia-analysis.a";
-			remoteRef = 80BF6A7E26111BE500CDCB2F /* PBXContainerItemProxy */;
+			path = libTunesAnalysis.a;
+			remoteRef = 8002221F266829080059D274 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		80BF6A8126111BE500CDCB2F /* Essentia-Tests.xctest */ = {
+		80022222266829080059D274 /* Essentia-Tests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = "Essentia-Tests.xctest";
-			remoteRef = 80BF6A8026111BE500CDCB2F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		80F61B9B25FCF7F500AC4CF8 /* libtaglib.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libtaglib.a;
-			remoteRef = 80F61B9A25FCF7F500AC4CF8 /* PBXContainerItemProxy */;
+			remoteRef = 80022221266829080059D274 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -1813,10 +1777,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/Frameworks/Essentia",
-					"$(PROJECT_DIR)/Frameworks/TagLib",
-				);
+				FRAMEWORK_SEARCH_PATHS = "\"${SRCROOT}/Frameworks/TunesAnalysis/taglib/build/taglib\"";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1831,6 +1792,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "\"${SRCROOT}/Frameworks/TunesAnalysis/\"/**";
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -1878,10 +1840,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/Frameworks/Essentia",
-					"$(PROJECT_DIR)/Frameworks/TagLib",
-				);
+				FRAMEWORK_SEARCH_PATHS = "\"${SRCROOT}/Frameworks/TunesAnalysis/taglib/build/taglib\"";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1890,6 +1849,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "\"${SRCROOT}/Frameworks/TunesAnalysis/\"/**";
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -1914,19 +1874,10 @@
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
 				EXCLUDED_ARCHS = arm64;
-				FRAMEWORK_SEARCH_PATHS = "\"${SRCROOT}/Frameworks/TagLib/taglib/build/taglib\"";
-				HEADER_SEARCH_PATHS = (
-					"${SRCROOT}/Frameworks/TagLib",
-					"${SRCROOT}/Frameworks/Essentia",
-				);
 				INFOPLIST_FILE = ElevenTunes/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Frameworks/Essentia/essentia/build/src",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 0.1;
@@ -1957,19 +1908,10 @@
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
 				EXCLUDED_ARCHS = arm64;
-				FRAMEWORK_SEARCH_PATHS = "\"${SRCROOT}/Frameworks/TagLib/taglib/build/taglib\"";
-				HEADER_SEARCH_PATHS = (
-					"${SRCROOT}/Frameworks/TagLib",
-					"${SRCROOT}/Frameworks/Essentia",
-				);
 				INFOPLIST_FILE = ElevenTunes/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Frameworks/Essentia/essentia/build/src",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 0.1;

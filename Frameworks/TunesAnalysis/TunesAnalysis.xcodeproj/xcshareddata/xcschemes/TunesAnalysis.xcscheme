@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "BB6A28592006236900B8BB9A"
-               BuildableName = "libessentia-analysis.a"
-               BlueprintName = "essentia-analysis"
-               ReferencedContainer = "container:essentia-analysis.xcodeproj">
+               BuildableName = "libTunesAnalysis.a"
+               BlueprintName = "TunesAnalysis"
+               ReferencedContainer = "container:TunesAnalysis.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "BB6A28592006236900B8BB9A"
-            BuildableName = "libessentia-analysis.a"
-            BlueprintName = "essentia-analysis"
-            ReferencedContainer = "container:essentia-analysis.xcodeproj">
+            BuildableName = "libTunesAnalysis.a"
+            BlueprintName = "TunesAnalysis"
+            ReferencedContainer = "container:TunesAnalysis.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

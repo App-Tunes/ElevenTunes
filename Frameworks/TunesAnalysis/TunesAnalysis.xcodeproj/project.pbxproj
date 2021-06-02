@@ -7,13 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8002221A266829070059D274 /* TagLibFile.mm in Sources */ = {isa = PBXBuildFile; fileRef = 80022218266829070059D274 /* TagLibFile.mm */; };
+		800222252668294A0059D274 /* tag.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 800222242668294A0059D274 /* tag.framework */; };
+		8002222B266829CC0059D274 /* TagLibFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 80022219266829070059D274 /* TagLibFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8002222D266829E20059D274 /* taglib_config.h in Headers */ = {isa = PBXBuildFile; fileRef = 80022217266829070059D274 /* taglib_config.h */; };
 		8018AF802659891E0041A805 /* AVFoundationLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8018AF7E2659891E0041A805 /* AVFoundationLoader.cpp */; };
 		8018AF812659891E0041A805 /* AVFoundationLoader.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8018AF7F2659891E0041A805 /* AVFoundationLoader.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		8018AF8C265993680041A805 /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8018AF8B265993680041A805 /* libsamplerate.a */; };
 		8018AF9126599C500041A805 /* AVFoundationAudioFile.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8018AF8F26599C500041A805 /* AVFoundationAudioFile.mm */; };
-		8018AF9226599C500041A805 /* AVFoundationAudioFile.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8018AF9026599C500041A805 /* AVFoundationAudioFile.hpp */; };
+		8018AF9226599C500041A805 /* AVFoundationAudioFile.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8018AF9026599C500041A805 /* AVFoundationAudioFile.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		8018AF982659B0B50041A805 /* AVFoundationMonoLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8018AF962659B0B50041A805 /* AVFoundationMonoLoader.cpp */; };
-		8018AF992659B0B50041A805 /* AVFoundationMonoLoader.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8018AF972659B0B50041A805 /* AVFoundationMonoLoader.hpp */; };
+		8018AF992659B0B50041A805 /* AVFoundationMonoLoader.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8018AF972659B0B50041A805 /* AVFoundationMonoLoader.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		80602EC4261660F10044D614 /* ResampleToSize.h in Headers */ = {isa = PBXBuildFile; fileRef = 80602EC2261660F00044D614 /* ResampleToSize.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80602EC5261660F10044D614 /* ResampleToSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 80602EC3261660F10044D614 /* ResampleToSize.m */; };
 		8069E456261A324B0086BBFB /* Essentia.h in Headers */ = {isa = PBXBuildFile; fileRef = 8069E454261A324B0086BBFB /* Essentia.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -30,7 +34,7 @@
 		80A6BF2A2613E051001A151D /* RhythmAnalyzer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 80A6BF282613E051001A151D /* RhythmAnalyzer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		80BF69F72610F7D400CDCB2F /* EssentiaFile.mm in Sources */ = {isa = PBXBuildFile; fileRef = 80BF69F52610F7D400CDCB2F /* EssentiaFile.mm */; };
 		80BF6A362611024D00CDCB2F /* EssentiaFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF6A352611024C00CDCB2F /* EssentiaFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		80BF6A4F261117F200CDCB2F /* libessentia-analysis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB6A285A2006236900B8BB9A /* libessentia-analysis.a */; };
+		80BF6A4F261117F200CDCB2F /* libTunesAnalysis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB6A285A2006236900B8BB9A /* libTunesAnalysis.a */; };
 		80BF6AB1261123CC00CDCB2F /* 445632__djfroyd__c-major-scale.wav in Resources */ = {isa = PBXBuildFile; fileRef = 80BF6AB0261123CC00CDCB2F /* 445632__djfroyd__c-major-scale.wav */; };
 		80BF6AB52611244900CDCB2F /* AnalysisTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80BF6AB42611244900CDCB2F /* AnalysisTests.swift */; };
 		80E3003B261150EC006ED744 /* EssentiaAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 80BF6AB92611265200CDCB2F /* EssentiaAnalysis.m */; };
@@ -62,6 +66,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		80022217266829070059D274 /* taglib_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = taglib_config.h; sourceTree = "<group>"; };
+		80022218266829070059D274 /* TagLibFile.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TagLibFile.mm; sourceTree = "<group>"; };
+		80022219266829070059D274 /* TagLibFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagLibFile.h; sourceTree = "<group>"; };
+		800222242668294A0059D274 /* tag.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = tag.framework; path = ../TunesAnalysis/taglib/build/taglib/tag.framework; sourceTree = "<group>"; };
+		8002222E26682AFB0059D274 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		8018AF7E2659891E0041A805 /* AVFoundationLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AVFoundationLoader.cpp; sourceTree = "<group>"; };
 		8018AF7F2659891E0041A805 /* AVFoundationLoader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AVFoundationLoader.hpp; sourceTree = "<group>"; };
 		8018AF8B265993680041A805 /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsamplerate.a; path = ./libsamplerate/build/src/libsamplerate.a; sourceTree = "<group>"; };
@@ -94,7 +103,7 @@
 		80BF6AB92611265200CDCB2F /* EssentiaAnalysis.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EssentiaAnalysis.m; sourceTree = "<group>"; };
 		80E3003426113011006ED744 /* NSString+STD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+STD.h"; sourceTree = "<group>"; };
 		80FB0C93265AA9EB009DC261 /* essentia.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = essentia.xctestplan; sourceTree = "<group>"; };
-		BB6A285A2006236900B8BB9A /* libessentia-analysis.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libessentia-analysis.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB6A285A2006236900B8BB9A /* libTunesAnalysis.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libTunesAnalysis.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,7 +113,7 @@
 			files = (
 				80FB0C732659C1C0009DC261 /* AVFoundation.framework in Frameworks */,
 				80990F97265950D900D6B315 /* libessentia.a in Frameworks */,
-				80BF6A4F261117F200CDCB2F /* libessentia-analysis.a in Frameworks */,
+				80BF6A4F261117F200CDCB2F /* libTunesAnalysis.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,6 +123,7 @@
 			files = (
 				80990F9626594D8C00D6B315 /* libessentia.a in Frameworks */,
 				8018AF8C265993680041A805 /* libsamplerate.a in Frameworks */,
+				800222252668294A0059D274 /* tag.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,6 +161,7 @@
 		8028C691234E0711008EB762 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				800222242668294A0059D274 /* tag.framework */,
 				8018AF8D265999D40041A805 /* AVFoundation.framework */,
 				8018AF8B265993680041A805 /* libsamplerate.a */,
 				80990F9526594D8C00D6B315 /* libessentia.a */,
@@ -173,6 +184,7 @@
 		BB6A28512006236900B8BB9A = {
 			isa = PBXGroup;
 			children = (
+				8002222E26682AFB0059D274 /* README.md */,
 				80E3003426113011006ED744 /* NSString+STD.h */,
 				8069E454261A324B0086BBFB /* Essentia.h */,
 				8069E455261A324B0086BBFB /* Essentia.mm */,
@@ -182,6 +194,9 @@
 				80BF69F52610F7D400CDCB2F /* EssentiaFile.mm */,
 				80602EC2261660F00044D614 /* ResampleToSize.h */,
 				80602EC3261660F10044D614 /* ResampleToSize.m */,
+				80022217266829070059D274 /* taglib_config.h */,
+				80022219266829070059D274 /* TagLibFile.h */,
+				80022218266829070059D274 /* TagLibFile.mm */,
 				8018AF942659B0510041A805 /* Algorithm */,
 				8018AF952659B05D0041A805 /* AVFoundation */,
 				80BF6A4B261117F200CDCB2F /* Essentia-Tests */,
@@ -193,7 +208,7 @@
 		BB6A285B2006236900B8BB9A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BB6A285A2006236900B8BB9A /* libessentia-analysis.a */,
+				BB6A285A2006236900B8BB9A /* libTunesAnalysis.a */,
 				80BF6A4A261117F200CDCB2F /* Essentia-Tests.xctest */,
 			);
 			name = Products;
@@ -213,10 +228,12 @@
 				8086969026170BD20056ECC3 /* SpectralAnalyzer.hpp in Headers */,
 				807185212615BE370029E27B /* WaveformAnalyzer.hpp in Headers */,
 				80602EC4261660F10044D614 /* ResampleToSize.h in Headers */,
+				8002222B266829CC0059D274 /* TagLibFile.h in Headers */,
 				8018AF992659B0B50041A805 /* AVFoundationMonoLoader.hpp in Headers */,
 				8018AF9226599C500041A805 /* AVFoundationAudioFile.hpp in Headers */,
 				8018AF812659891E0041A805 /* AVFoundationLoader.hpp in Headers */,
 				80BF6A362611024D00CDCB2F /* EssentiaFile.h in Headers */,
+				8002222D266829E20059D274 /* taglib_config.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,11 +259,12 @@
 			productReference = 80BF6A4A261117F200CDCB2F /* Essentia-Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		BB6A28592006236900B8BB9A /* essentia-analysis */ = {
+		BB6A28592006236900B8BB9A /* TunesAnalysis */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BB6A28652006236900B8BB9A /* Build configuration list for PBXNativeTarget "essentia-analysis" */;
+			buildConfigurationList = BB6A28652006236900B8BB9A /* Build configuration list for PBXNativeTarget "TunesAnalysis" */;
 			buildPhases = (
 				8018AF8A2659924C0041A805 /* Build libsamplerate */,
+				80022223266829270059D274 /* Build TagLib */,
 				80BF56782610E35900CDCB2F /* Build Essentia */,
 				BB6A28562006236900B8BB9A /* Sources */,
 				BB6A28572006236900B8BB9A /* Frameworks */,
@@ -257,9 +275,9 @@
 			);
 			dependencies = (
 			);
-			name = "essentia-analysis";
+			name = TunesAnalysis;
 			productName = taglib;
-			productReference = BB6A285A2006236900B8BB9A /* libessentia-analysis.a */;
+			productReference = BB6A285A2006236900B8BB9A /* libTunesAnalysis.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -282,7 +300,7 @@
 					};
 				};
 			};
-			buildConfigurationList = BB6A28552006236900B8BB9A /* Build configuration list for PBXProject "essentia-analysis" */;
+			buildConfigurationList = BB6A28552006236900B8BB9A /* Build configuration list for PBXProject "TunesAnalysis" */;
 			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -295,7 +313,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				BB6A28592006236900B8BB9A /* essentia-analysis */,
+				BB6A28592006236900B8BB9A /* TunesAnalysis */,
 				80BF6A49261117F200CDCB2F /* Essentia-Tests */,
 			);
 		};
@@ -320,6 +338,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		80022223266829270059D274 /* Build TagLib */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build TagLib";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export MACOSX_DEPLOYMENT_TARGET=11.0\ncd taglib\nmkdir -p build\ncd build\ncmake .. -DCMAKE_BUILD_TYPE=Release \\\n  -DBUILD_TESTING=OFF \\\n  -DBUILD_FRAMEWORK=ON \\\n  -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 \\\n  -DCMAKE_OSX_ARCHITECTURES=\"arm64;x86_64\"\nmake\n";
+		};
 		8018AF8A2659924C0041A805 /* Build libsamplerate */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -354,7 +390,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export MACOSX_DEPLOYMENT_TARGET=11.0\ncd essentia\n./waf configure --fft=ACCELERATE --build-static --lightweight=libsamplerate\n./waf\n";
+			shellScript = "export MACOSX_DEPLOYMENT_TARGET=11.0\ncd essentia\n./waf configure --fft=ACCELERATE --build-static --lightweight=libsamplerate,taglib\n./waf\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -379,6 +415,7 @@
 				807185202615BE370029E27B /* WaveformAnalyzer.cpp in Sources */,
 				80A6BF0E26127D7F001A151D /* TonalAnalyzer.cpp in Sources */,
 				80602EC5261660F10044D614 /* ResampleToSize.m in Sources */,
+				8002221A266829070059D274 /* TagLibFile.mm in Sources */,
 				80E3003B261150EC006ED744 /* EssentiaAnalysis.m in Sources */,
 				8086968F26170BD20056ECC3 /* SpectralAnalyzer.cpp in Sources */,
 				8018AF982659B0B50041A805 /* AVFoundationMonoLoader.cpp in Sources */,
@@ -390,7 +427,7 @@
 /* Begin PBXTargetDependency section */
 		80BF6A51261117F200CDCB2F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = BB6A28592006236900B8BB9A /* essentia-analysis */;
+			target = BB6A28592006236900B8BB9A /* TunesAnalysis */;
 			targetProxy = 80BF6A50261117F200CDCB2F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -586,6 +623,7 @@
 					"\"$(PROJECT_DIR)/essentia/src\"/**",
 					/usr/local/include,
 					/usr/local/Cellar/libsamplerate/0.1.9_1/include,
+					"\"$(PROJECT_DIR)/taglib/taglib\"/**",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -615,6 +653,7 @@
 					"\"$(PROJECT_DIR)/essentia/src\"/**",
 					/usr/local/include,
 					/usr/local/Cellar/libsamplerate/0.1.9_1/include,
+					"\"$(PROJECT_DIR)/taglib/taglib\"/**",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -643,7 +682,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BB6A28552006236900B8BB9A /* Build configuration list for PBXProject "essentia-analysis" */ = {
+		BB6A28552006236900B8BB9A /* Build configuration list for PBXProject "TunesAnalysis" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BB6A28632006236900B8BB9A /* Debug */,
@@ -652,7 +691,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BB6A28652006236900B8BB9A /* Build configuration list for PBXNativeTarget "essentia-analysis" */ = {
+		BB6A28652006236900B8BB9A /* Build configuration list for PBXNativeTarget "TunesAnalysis" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BB6A28662006236900B8BB9A /* Debug */,

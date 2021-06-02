@@ -9,7 +9,7 @@ This media manager focuses on unifying representations of media into a simple, s
  * Place or symlink taglib to Frameworks/TagLib/taglib 
  * Place or symlink essentia to Frameworks/Essentia/essentia
  * Place or symlink libsamplerate to Frameworks/Essentia/libsamplerate
- * Install dependencies: brew install eigen libsamplerate
+ * Install dependencies: brew install eigen libsamplerate taglib
  * The rest is configured to build from the project!
 
  ## Backends
