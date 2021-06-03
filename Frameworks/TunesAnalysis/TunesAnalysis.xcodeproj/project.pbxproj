@@ -11,6 +11,7 @@
 		800222252668294A0059D274 /* tag.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 800222242668294A0059D274 /* tag.framework */; };
 		8002222B266829CC0059D274 /* TagLibFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 80022219266829070059D274 /* TagLibFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8002222D266829E20059D274 /* taglib_config.h in Headers */ = {isa = PBXBuildFile; fileRef = 80022217266829070059D274 /* taglib_config.h */; };
+		80022230266838F00059D274 /* tag.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 800222242668294A0059D274 /* tag.framework */; };
 		8018AF802659891E0041A805 /* AVFoundationLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8018AF7E2659891E0041A805 /* AVFoundationLoader.cpp */; };
 		8018AF812659891E0041A805 /* AVFoundationLoader.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8018AF7F2659891E0041A805 /* AVFoundationLoader.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		8018AF8C265993680041A805 /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8018AF8B265993680041A805 /* libsamplerate.a */; };
@@ -32,6 +33,7 @@
 		80A6BF0F26127D7F001A151D /* TonalAnalyzer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 80A6BF0D26127D7F001A151D /* TonalAnalyzer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		80A6BF292613E051001A151D /* RhythmAnalyzer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 80A6BF272613E051001A151D /* RhythmAnalyzer.cpp */; };
 		80A6BF2A2613E051001A151D /* RhythmAnalyzer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 80A6BF282613E051001A151D /* RhythmAnalyzer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		80BD5E372668D8A400B4735A /* tag.framework in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 800222242668294A0059D274 /* tag.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		80BF69F72610F7D400CDCB2F /* EssentiaFile.mm in Sources */ = {isa = PBXBuildFile; fileRef = 80BF69F52610F7D400CDCB2F /* EssentiaFile.mm */; };
 		80BF6A362611024D00CDCB2F /* EssentiaFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 80BF6A352611024C00CDCB2F /* EssentiaFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		80BF6A4F261117F200CDCB2F /* libTunesAnalysis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB6A285A2006236900B8BB9A /* libTunesAnalysis.a */; };
@@ -59,6 +61,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				80BD5E372668D8A400B4735A /* tag.framework in Embed Libraries */,
 			);
 			name = "Embed Libraries";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -94,15 +97,15 @@
 		80A6BF282613E051001A151D /* RhythmAnalyzer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RhythmAnalyzer.hpp; sourceTree = "<group>"; };
 		80BF69F52610F7D400CDCB2F /* EssentiaFile.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EssentiaFile.mm; sourceTree = "<group>"; };
 		80BF6A352611024C00CDCB2F /* EssentiaFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EssentiaFile.h; sourceTree = "<group>"; };
-		80BF6A4A261117F200CDCB2F /* Essentia-Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Essentia-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		80BF6A4A261117F200CDCB2F /* TunesAnalysis-Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TunesAnalysis-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		80BF6A4E261117F200CDCB2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		80BF6AB0261123CC00CDCB2F /* 445632__djfroyd__c-major-scale.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "445632__djfroyd__c-major-scale.wav"; sourceTree = "<group>"; };
-		80BF6AB32611244900CDCB2F /* Essentia-Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Essentia-Tests-Bridging-Header.h"; sourceTree = "<group>"; };
+		80BF6AB32611244900CDCB2F /* TunesAnalysis-Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TunesAnalysis-Tests-Bridging-Header.h"; sourceTree = "<group>"; };
 		80BF6AB42611244900CDCB2F /* AnalysisTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisTests.swift; sourceTree = "<group>"; };
 		80BF6AB82611265200CDCB2F /* EssentiaAnalysis.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EssentiaAnalysis.h; sourceTree = "<group>"; };
 		80BF6AB92611265200CDCB2F /* EssentiaAnalysis.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EssentiaAnalysis.m; sourceTree = "<group>"; };
 		80E3003426113011006ED744 /* NSString+STD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+STD.h"; sourceTree = "<group>"; };
-		80FB0C93265AA9EB009DC261 /* essentia.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = essentia.xctestplan; sourceTree = "<group>"; };
+		80FB0C93265AA9EB009DC261 /* Tests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tests.xctestplan; sourceTree = "<group>"; };
 		BB6A285A2006236900B8BB9A /* libTunesAnalysis.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libTunesAnalysis.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -112,6 +115,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				80FB0C732659C1C0009DC261 /* AVFoundation.framework in Frameworks */,
+				80022230266838F00059D274 /* tag.framework in Frameworks */,
 				80990F97265950D900D6B315 /* libessentia.a in Frameworks */,
 				80BF6A4F261117F200CDCB2F /* libTunesAnalysis.a in Frameworks */,
 			);
@@ -169,16 +173,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		80BF6A4B261117F200CDCB2F /* Essentia-Tests */ = {
+		80BF6A4B261117F200CDCB2F /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				80FB0C93265AA9EB009DC261 /* essentia.xctestplan */,
+				80FB0C93265AA9EB009DC261 /* Tests.xctestplan */,
 				80BF6AB0261123CC00CDCB2F /* 445632__djfroyd__c-major-scale.wav */,
 				80BF6AB42611244900CDCB2F /* AnalysisTests.swift */,
 				80BF6A4E261117F200CDCB2F /* Info.plist */,
-				80BF6AB32611244900CDCB2F /* Essentia-Tests-Bridging-Header.h */,
+				80BF6AB32611244900CDCB2F /* TunesAnalysis-Tests-Bridging-Header.h */,
 			);
-			path = "Essentia-Tests";
+			path = Tests;
 			sourceTree = "<group>";
 		};
 		BB6A28512006236900B8BB9A = {
@@ -199,7 +203,7 @@
 				80022218266829070059D274 /* TagLibFile.mm */,
 				8018AF942659B0510041A805 /* Algorithm */,
 				8018AF952659B05D0041A805 /* AVFoundation */,
-				80BF6A4B261117F200CDCB2F /* Essentia-Tests */,
+				80BF6A4B261117F200CDCB2F /* Tests */,
 				BB6A285B2006236900B8BB9A /* Products */,
 				8028C691234E0711008EB762 /* Frameworks */,
 			);
@@ -209,7 +213,7 @@
 			isa = PBXGroup;
 			children = (
 				BB6A285A2006236900B8BB9A /* libTunesAnalysis.a */,
-				80BF6A4A261117F200CDCB2F /* Essentia-Tests.xctest */,
+				80BF6A4A261117F200CDCB2F /* TunesAnalysis-Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -240,9 +244,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		80BF6A49261117F200CDCB2F /* Essentia-Tests */ = {
+		80BF6A49261117F200CDCB2F /* TunesAnalysis-Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 80BF6A52261117F200CDCB2F /* Build configuration list for PBXNativeTarget "Essentia-Tests" */;
+			buildConfigurationList = 80BF6A52261117F200CDCB2F /* Build configuration list for PBXNativeTarget "TunesAnalysis-Tests" */;
 			buildPhases = (
 				80BF6A46261117F200CDCB2F /* Sources */,
 				80BF6A47261117F200CDCB2F /* Frameworks */,
@@ -254,9 +258,9 @@
 			dependencies = (
 				80BF6A51261117F200CDCB2F /* PBXTargetDependency */,
 			);
-			name = "Essentia-Tests";
+			name = "TunesAnalysis-Tests";
 			productName = "Essentia-Tests";
-			productReference = 80BF6A4A261117F200CDCB2F /* Essentia-Tests.xctest */;
+			productReference = 80BF6A4A261117F200CDCB2F /* TunesAnalysis-Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		BB6A28592006236900B8BB9A /* TunesAnalysis */ = {
@@ -314,7 +318,7 @@
 			projectRoot = "";
 			targets = (
 				BB6A28592006236900B8BB9A /* TunesAnalysis */,
-				80BF6A49261117F200CDCB2F /* Essentia-Tests */,
+				80BF6A49261117F200CDCB2F /* TunesAnalysis-Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -441,12 +445,17 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 5GU22J823J;
+				DEVELOPMENT_TEAM = 8Y879P9TDW;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"${SRCROOT}/taglib/build/taglib\"",
+					"$(PROJECT_DIR)/taglib/build/taglib",
+				);
 				HEADER_SEARCH_PATHS = (
 					"\"$(PROJECT_DIR)/libsamplerate/src\"",
 					"\"$(PROJECT_DIR)/essentia/src\"/**",
+					"\"$(PROJECT_DIR)/taglib/taglib\"/**",
 				);
-				INFOPLIST_FILE = "Essentia-Tests/Info.plist";
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -456,9 +465,9 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "ivorius.Essentia-Tests";
+				PRODUCT_BUNDLE_IDENTIFIER = "ivorius.TunesAnalysis-Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "Essentia-Tests/Essentia-Tests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/TunesAnalysis-Tests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -472,12 +481,17 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 5GU22J823J;
+				DEVELOPMENT_TEAM = 8Y879P9TDW;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"${SRCROOT}/taglib/build/taglib\"",
+					"$(PROJECT_DIR)/taglib/build/taglib",
+				);
 				HEADER_SEARCH_PATHS = (
 					"\"$(PROJECT_DIR)/libsamplerate/src\"",
 					"\"$(PROJECT_DIR)/essentia/src\"/**",
+					"\"$(PROJECT_DIR)/taglib/taglib\"/**",
 				);
-				INFOPLIST_FILE = "Essentia-Tests/Info.plist";
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -486,9 +500,9 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.1;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "ivorius.Essentia-Tests";
+				PRODUCT_BUNDLE_IDENTIFIER = "ivorius.TunesAnalysis-Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "Essentia-Tests/Essentia-Tests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/TunesAnalysis-Tests-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -544,6 +558,17 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(PROJECT_DIR)/essentia/src\"/**",
+					/usr/local/include,
+					/usr/local/Cellar/libsamplerate/0.1.9_1/include,
+					"\"$(PROJECT_DIR)/taglib/taglib\"/**",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/essentia/build/src",
+					"$(PROJECT_DIR)",
+					/usr/local/Cellar/libsamplerate/0.1.9_1/lib,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -600,6 +625,17 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(PROJECT_DIR)/essentia/src\"/**",
+					/usr/local/include,
+					/usr/local/Cellar/libsamplerate/0.1.9_1/include,
+					"\"$(PROJECT_DIR)/taglib/taglib\"/**",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/essentia/build/src",
+					"$(PROJECT_DIR)",
+					/usr/local/Cellar/libsamplerate/0.1.9_1/lib,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
@@ -619,22 +655,6 @@
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
-				HEADER_SEARCH_PATHS = (
-					"\"$(PROJECT_DIR)/essentia/src\"/**",
-					/usr/local/include,
-					/usr/local/Cellar/libsamplerate/0.1.9_1/include,
-					"\"$(PROJECT_DIR)/taglib/taglib\"/**",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/essentia/build/src",
-					"$(PROJECT_DIR)",
-					/usr/local/Cellar/libsamplerate/0.1.9_1/lib,
-				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lc++",
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = "";
 			};
@@ -649,22 +669,6 @@
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
-				HEADER_SEARCH_PATHS = (
-					"\"$(PROJECT_DIR)/essentia/src\"/**",
-					/usr/local/include,
-					/usr/local/Cellar/libsamplerate/0.1.9_1/include,
-					"\"$(PROJECT_DIR)/taglib/taglib\"/**",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/essentia/build/src",
-					"$(PROJECT_DIR)",
-					/usr/local/Cellar/libsamplerate/0.1.9_1/lib,
-				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lc++",
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = "";
 			};
@@ -673,7 +677,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		80BF6A52261117F200CDCB2F /* Build configuration list for PBXNativeTarget "Essentia-Tests" */ = {
+		80BF6A52261117F200CDCB2F /* Build configuration list for PBXNativeTarget "TunesAnalysis-Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				80BF6A53261117F200CDCB2F /* Debug */,

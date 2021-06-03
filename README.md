@@ -6,9 +6,8 @@ This media manager focuses on unifying representations of media into a simple, s
  
  ## Setup
  
- * Place or symlink taglib to Frameworks/TagLib/taglib 
- * Place or symlink essentia to Frameworks/Essentia/essentia
- * Place or symlink libsamplerate to Frameworks/Essentia/libsamplerate
+ * Place or symlink, respectively, libraries to Frameworks/TunesAnalysis/
+	* essentia (./essentia), taglib (./taglib), libsamplerate (./libsamplerate) 
  * Install dependencies: brew install eigen libsamplerate taglib
  * The rest is configured to build from the project!
 

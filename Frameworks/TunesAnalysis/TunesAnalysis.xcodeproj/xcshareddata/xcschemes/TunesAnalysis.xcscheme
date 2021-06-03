@@ -29,7 +29,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:Essentia-Tests/essentia.xctestplan"
+            reference = "container:Tests/Tests.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
