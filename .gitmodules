@@ -1,0 +1,3 @@
+[submodule "Frameworks/TunesAnalysis"]
+	path = Frameworks/TunesAnalysis
+	url = git@github.com:App-Tunes/TunesAnalysis.git
