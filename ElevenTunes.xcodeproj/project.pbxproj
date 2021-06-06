@@ -16,6 +16,7 @@
 		8007F1FD26640C8400047359 /* PlayPositionViewCocoa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8007F1FC26640C8400047359 /* PlayPositionViewCocoa.swift */; };
 		80083D00266D1CC400F8C9DD /* ResampleToSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80083CFF266D1CC400F8C9DD /* ResampleToSize.swift */; };
 		80083D02266D3FBE00F8C9DD /* PlayTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80083D01266D3FBE00F8C9DD /* PlayTracking.swift */; };
+		80083D04266D480500F8C9DD /* NSRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80083D03266D480500F8C9DD /* NSRange.swift */; };
 		800C11FA259A378D0017A116 /* AVTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800C11F9259A378D0017A116 /* AVTrack.swift */; };
 		800C11FF259A3EF10017A116 /* TrackRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800C11FE259A3EF10017A116 /* TrackRowView.swift */; };
 		800C1204259A4AC10017A116 /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800C1203259A4AC10017A116 /* Set.swift */; };
@@ -305,6 +306,7 @@
 		8007F1FC26640C8400047359 /* PlayPositionViewCocoa.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayPositionViewCocoa.swift; sourceTree = "<group>"; };
 		80083CFF266D1CC400F8C9DD /* ResampleToSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResampleToSize.swift; sourceTree = "<group>"; };
 		80083D01266D3FBE00F8C9DD /* PlayTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTracking.swift; sourceTree = "<group>"; };
+		80083D03266D480500F8C9DD /* NSRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRange.swift; sourceTree = "<group>"; };
 		800C11F9259A378D0017A116 /* AVTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVTrack.swift; sourceTree = "<group>"; };
 		800C11FE259A3EF10017A116 /* TrackRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackRowView.swift; sourceTree = "<group>"; };
 		800C1203259A4AC10017A116 /* Set.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Set.swift; sourceTree = "<group>"; };
@@ -1267,6 +1269,7 @@
 				802376CA26095E0000A5E826 /* DispatchQueue.swift */,
 				806611442618BAFC00BFC40D /* DispatchSemaphore.swift */,
 				80AF40A3261904C500117F06 /* NSWorkspace.swift */,
+				80083D03266D480500F8C9DD /* NSRange.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -1702,6 +1705,7 @@
 				800508592597FEEB0055FB2D /* Library+Prune.swift in Sources */,
 				806B28A4258ED16C0091EA4D /* AVAudioPlayerEmitter.swift in Sources */,
 				80AD69AA258829EE00192BED /* FilterBarView.swift in Sources */,
+				80083D04266D480500F8C9DD /* NSRange.swift in Sources */,
 				800C121C259B580A0017A116 /* FeatureSet.swift in Sources */,
 				808D5480259F395C006F7435 /* Spotify+UI.swift in Sources */,
 				80AD698E2588287900192BED /* PlaylistView.swift in Sources */,

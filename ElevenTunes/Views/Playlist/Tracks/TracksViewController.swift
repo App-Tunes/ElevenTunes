@@ -7,6 +7,7 @@
 
 import Cocoa
 import Combine
+import TunesUI
 
 class TracksViewController: NSViewController {
 	@IBOutlet weak var tableView: NSTableViewContextSensitiveMenu! = nil
@@ -14,7 +15,11 @@ class TracksViewController: NSViewController {
 	var tableViewSynchronizer: NSTableView.ActiveSynchronizer!
 
 	var library: Library
-	var player: Player
+	var player: Player {
+		didSet {
+			updatePlayerObserver()
+		}
+	}
 
 	var playlist: Playlist {
 		didSet {
@@ -25,8 +30,9 @@ class TracksViewController: NSViewController {
 	private(set) var tracks: [Track] = []
 	private(set) var tracksState: TrackAttributes.State = .missing
 	
+	var playerObserver: AnyCancellable?
 	var playlistObserver: AnyCancellable?
-	
+
 	var cancellables = Set<AnyCancellable>()
 	
 	init(_ playlist: Playlist, library: Library, player: Player) {
@@ -35,6 +41,7 @@ class TracksViewController: NSViewController {
 		self.player = player
 		super.init(nibName: nil, bundle: .main)
 		updatePlaylistObserver()
+		updatePlayerObserver()
 	}
 	
 	required init?(coder: NSCoder) {
@@ -84,5 +91,25 @@ class TracksViewController: NSViewController {
 			self.updateTracks(snapshot.value?.map { Track($0) } ?? [], animate: self.tracksState.isKnown && snapshot.state.isKnown)
 			self.tracksState = snapshot.state
 		}
+	}
+	
+	private func updatePlayerObserver() {
+		playerObserver = PlayerTrackState.observing(player)
+			.sink{ [weak self] state in
+				guard let self = self, let tableView = self.tableView else { return }
+				
+				guard let column = tableView.column(withIdentifier: ColumnIdentifiers.Waveform).positiveOrNil else {
+					return
+				}
+				
+				for row in tableView.rows(in: tableView.visibleRect).asRange {
+					guard let view = tableView.view(atColumn: column, row: row, makeIfNecessary: false) as? PlayPositionViewCocoa else {
+						continue
+					}
+					
+					let viewState = state.viewedAs(view.track)
+					view.positionControl.timer.fps = viewState.state.isPlaying ? PlayPositionViewCocoa.activeFPS : nil
+				}
+			}
 	}
 }

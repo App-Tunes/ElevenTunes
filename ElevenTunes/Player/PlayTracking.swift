@@ -12,6 +12,10 @@ struct PlayerTrackState {
 	var audio: AudioTrack? = nil
 	var state: PlayerState = .init(isPlaying: false, currentTime: nil)
 
+	static func current(ofPlayer player: Player) -> PlayerTrackState {
+		PlayerTrackState(track: player.current, audio: player.singlePlayer.playing, state: player.singlePlayer.state)
+	}
+	
 	static func observing(_ player: Player) -> AnyPublisher<PlayerTrackState, Never> {
 		player.$current
 			.combineLatest(player.singlePlayer.$playing, player.singlePlayer.$state)

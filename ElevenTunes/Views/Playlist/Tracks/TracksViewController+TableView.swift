@@ -167,6 +167,8 @@ extension TracksViewController: NSTableViewDelegate {
 				$0.waveformView.reset(suppressAnimationsUntil: Date() + 1)
 				$0.player = player
 				$0.track = track.backend
+				$0.positionControl.timer.fps = PlayerTrackState.current(ofPlayer: player).viewedAs(track.backend).state.isPlaying
+					? PlayPositionViewCocoa.activeFPS : nil
 			}
 		case ColumnIdentifiers.Artists:
 			return makeView(for: CellIdentifiers.ArtistsCell, type: AnyNSHostingView.self) {

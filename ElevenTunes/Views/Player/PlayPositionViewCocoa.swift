@@ -9,6 +9,8 @@ import TunesUI
 import Combine
 
 class PlayPositionViewCocoa: WaveformPositionCocoa {
+	public static let activeFPS: Double = 10
+	
 	@Published public var track: AnyTrack? = nil
 	
 	@Published public var player: Player? = nil
@@ -17,7 +19,7 @@ class PlayPositionViewCocoa: WaveformPositionCocoa {
 		waveformView.colorLUT = Gradients.pitchCG
 		waveformView.resample = ResampleToSize.bestOrZero(data:toSize:)
 
-		positionControl.timer.fps = 10
+		positionControl.timer.fps = nil
 		positionControl.action = { [weak self] in
 			guard let track = self?.track, let player = self?.player else {
 				return
