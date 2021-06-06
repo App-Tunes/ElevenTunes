@@ -41,87 +41,63 @@ struct PlayPositionLabelsView: View {
 	}
 }
 
-struct PlayTrackingView<V: View>: View {
-	struct PlayerTrackState {
-		var track: AnyTrack? = nil
-		var audio: AudioTrack? = nil
-		var state: PlayerState = .init(isPlaying: false, currentTime: nil)
-	}
-	
-	var player: Player
-	var callback: (PlayerTrackState) -> V
-
-	@State var state: PlayerTrackState = .init()
-
-	var body: some View {
-		callback(state)
-			.onReceive(player.singlePlayer.$playing) {
-				self.state.audio = $0
-			}
-			.onReceive(player.$current) {
-				self.state.track = $0
-			}
-			.onReceive(player.singlePlayer.$state) {
-				self.state.state = $0
-			}
-	}
-}
-
 struct PlayPositionView: View {
     var player: Player
 	var track: AnyTrack?
 	var isSecondary: Bool = false
 
+	@State var state: PlayerTrackState = .init()
 	@ObservedObject var snapshot: TrackAnalysisSnapshot
 	
     var body: some View {
-		PlayTrackingView(player: player) { tstate in
-			GeometryReader { geo in
-				let isCurrent = tstate.track?.id == track?.id
-				let audio = isCurrent ? tstate.audio : nil
-				let state = isCurrent ? tstate.state : .init(isPlaying: false, currentTime: nil)
+		GeometryReader { geo in
+			let state = self.state.viewedAs(track)
 
-				ZStack {
-					WaveformView(
-						colorLUT: Gradients.pitchCG,
-						waveform: snapshot.waveform ?? .empty,
-						resample: ResampleToSize.bestOrZero
-					)
-						.allowsHitTesting(false)
-						.frame(height: geo.size.height * 0.7, alignment: .bottom)
-						.frame(height: geo.size.height, alignment: .bottom)
+			ZStack {
+				WaveformView(
+					colorLUT: Gradients.pitchCG,
+					waveform: snapshot.waveform ?? .empty,
+					resample: ResampleToSize.bestOrZero
+				)
+					.allowsHitTesting(false)
+					.frame(height: geo.size.height * 0.7, alignment: .bottom)
+					.frame(height: geo.size.height, alignment: .bottom)
 
-					if let duration = (isCurrent ? audio?.duration : snapshot.duration) {
-						PositionControlView(
-							locationProvider: { audio?.currentTime.map(CGFloat.init) },
-							range: 0...CGFloat(duration),
-							fps: state.isPlaying ? 10 : nil,
-							action: {
-								switch $0 {
-								case .relative(let movement):
-									try? audio?.move(by: TimeInterval(movement))
-								case .absolute(let position):
-									if let audio = audio {
-										try? audio.move(to: TimeInterval(position))
-									}
-									else {
-										player.play(track, at: TimeInterval(position))
-									}
+				if let duration = (state.audio?.duration ?? snapshot.duration) {
+					PositionControlView(
+						locationProvider: { () -> CGFloat? in
+							state.audio?.currentTime.map { CGFloat($0) }
+						},
+						range: 0...CGFloat(duration),
+						fps: state.state.isPlaying ? 10 : nil,
+						action: {
+							switch $0 {
+							case .relative(let movement):
+								try? state.audio?.move(by: TimeInterval(movement))
+							case .absolute(let position):
+								if let audio = state.audio {
+									try? audio.move(to: TimeInterval(position))
+								}
+								else {
+									player.play(track, at: TimeInterval(position))
 								}
 							}
-						)
-							.jumpInterval((snapshot.tempo?.phraseSeconds).map(CGFloat.init)) {
-								!NSEvent.modifierFlags.contains(.option)
-							}
-							.barWidth(max(1, min(2, 3 - geo.size.height / 20)) + 0.5)
-						
-						if !isSecondary, geo.size.height >= 26, geo.size.width >= 200 {
-							PlayPositionLabelsView(duration: duration, playerState: state)
-								.allowsHitTesting(false)
 						}
+					)
+						.jumpInterval((snapshot.tempo?.phraseSeconds).map(CGFloat.init)) {
+							!NSEvent.modifierFlags.contains(.option)
+						}
+						.barWidth(max(1, min(2, 3 - geo.size.height / 20)) + 0.5)
+					
+					if !isSecondary, geo.size.height >= 26, geo.size.width >= 200 {
+						PlayPositionLabelsView(duration: duration, playerState: state.state)
+							.allowsHitTesting(false)
 					}
 				}
 			}
+		}
+		.onReceive(PlayerTrackState.observing(player)) {
+			self.state = $0
 		}
         // TODO hugging / compression resistance:
         // setting min height always compressed down to min height :<
