@@ -13,7 +13,7 @@ struct TrackKeyView: View {
 	@State var key: MusicalKey?
 
     var body: some View {
-		Text(key?.title ?? "")
+		Text(key?.shortTitle ?? "")
 			.foregroundColor(key?.color ?? .clear)
 			.whileActive(track.backend.demand([.key]))
 			.onReceive(track.backend.attribute(TrackAttribute.key)) {

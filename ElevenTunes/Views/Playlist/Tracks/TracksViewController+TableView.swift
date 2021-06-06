@@ -185,7 +185,7 @@ extension TracksViewController: NSTableViewDelegate {
 			})
 		case ColumnIdentifiers.Key:
 			return makeTextView(for: CellIdentifiers.TextCell, attribute: TrackAttribute.key, update: { (view, value) in
-				view.stringValue = value?.title ?? ""
+				view.stringValue = value?.shortTitle ?? ""
 				view.textColor = value?.nscolor ?? .clear
 			})
 		case ColumnIdentifiers.Year:
