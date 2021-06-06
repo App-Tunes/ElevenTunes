@@ -5,7 +5,6 @@
 #import "BSManagedDocument.h"
 
 #import <TagLibFile.h>
-
 #import <Essentia.h>
 #import <EssentiaFile.h>
 #import <EssentiaAnalysis.h>

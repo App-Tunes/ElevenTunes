@@ -19,6 +19,9 @@ class EssentiaAnalyzer: TrackAlgorithm {
 		let url = track.url
 		
 		return Future.tryOnQueue(.global(qos: .default)) {
+			AppDelegate.essentiaWork.wait()
+			defer { AppDelegate.essentiaWork.signal() }
+			
 			let file = EssentiaFile(url: url)
 			let analysis = try AppDelegate.heavyWork.waitAndDo {
 				try file.analyze()

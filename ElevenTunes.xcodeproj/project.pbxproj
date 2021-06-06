@@ -149,7 +149,6 @@
 		8083E85725AA177200D4CE60 /* FilePlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8083E85625AA177200D4CE60 /* FilePlaylist.swift */; };
 		808445D525A663CC00E27EC8 /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808445D425A663CC00E27EC8 /* Alerts.swift */; };
 		808445DE25A7996200E27EC8 /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808445DD25A7996200E27EC8 /* Badge.swift */; };
-		80869687261688C60056ECC3 /* ResampleToSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80869686261688C60056ECC3 /* ResampleToSize.swift */; };
 		8086969426172E4A0056ECC3 /* Waveform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8086969326172E4A0056ECC3 /* Waveform.swift */; };
 		808696EA2617C1960056ECC3 /* TrackGenreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808696E92617C1960056ECC3 /* TrackGenreView.swift */; };
 		808696EE2617C1CE0056ECC3 /* TrackYearView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808696ED2617C1CE0056ECC3 /* TrackYearView.swift */; };
@@ -435,7 +434,6 @@
 		8083E85625AA177200D4CE60 /* FilePlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilePlaylist.swift; sourceTree = "<group>"; };
 		808445D425A663CC00E27EC8 /* Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
 		808445DD25A7996200E27EC8 /* Badge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
-		80869686261688C60056ECC3 /* ResampleToSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResampleToSize.swift; sourceTree = "<group>"; };
 		8086969326172E4A0056ECC3 /* Waveform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Waveform.swift; sourceTree = "<group>"; };
 		808696E92617C1960056ECC3 /* TrackGenreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackGenreView.swift; sourceTree = "<group>"; };
 		808696ED2617C1CE0056ECC3 /* TrackYearView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackYearView.swift; sourceTree = "<group>"; };
@@ -935,7 +933,6 @@
 				8082F11325A9BF3200B1D157 /* KeyedDemand.swift */,
 				806B0D2E25A9E47800603E64 /* VolatileAttributes.swift */,
 				806B0D4125A9FE3F00603E64 /* RequestMapper.swift */,
-				80869686261688C60056ECC3 /* ResampleToSize.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -1444,7 +1441,7 @@
 		80022222266829080059D274 /* Essentia-Tests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "Essentia-Tests.xctest";
+			path = "TunesAnalysis-Tests.xctest";
 			remoteRef = 80022221266829080059D274 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -1520,7 +1517,6 @@
 				804D3C1225D96E9300705D42 /* NSLayoutConstraint.swift in Sources */,
 				8005082D25978E270055FB2D /* Library+Conversion.swift in Sources */,
 				803A870425F54C9C00D7B9E1 /* NSTableView.swift in Sources */,
-				80869687261688C60056ECC3 /* ResampleToSize.swift in Sources */,
 				80D6DAA7259E2AE100879BCF /* SpotifyAlbum.swift in Sources */,
 				808174C6261B74C300A62097 /* LibraryViewController.swift in Sources */,
 				806E1FD32596A5FA003EEA83 /* Playlist+Attributes.swift in Sources */,

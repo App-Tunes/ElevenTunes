@@ -267,9 +267,11 @@ extension AVTrack: RequestMapperDelegate {
 		}
 		
 		let file = EssentiaFile(url: url)
-		let waveform = Waveform.from(try AppDelegate.heavyWork.waitAndDo {
-			try file.analyzeWaveform(256)
-		})
+		let waveform = try AppDelegate.heavyWork.waitAndDo {
+			AppDelegate.essentiaWork.waitAndDo {
+				Waveform.from(try file.analyzeWaveform(256))
+			}
+		}
 		
 		cache?.managedObjectContext!.withChildTaskTranslate(cache, { cache in
 			try? caches.avWaveforms.insert(waveform, for: cache.owner.uuid)

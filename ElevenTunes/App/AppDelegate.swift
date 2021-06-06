@@ -23,7 +23,9 @@ class GlobalSettingsLevel: SettingsLevel {
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
 	static let heavyWork = DispatchSemaphore(value: 2)
-	
+	/// Unfortunately, essentia seems not to be thread-safe right now
+	static let essentiaWork = DispatchSemaphore(value: 1)
+
     let spotify: Spotify
 
     let settingsWC: SettingsWindowController
