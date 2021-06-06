@@ -17,6 +17,7 @@
 		80083D00266D1CC400F8C9DD /* ResampleToSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80083CFF266D1CC400F8C9DD /* ResampleToSize.swift */; };
 		80083D02266D3FBE00F8C9DD /* PlayTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80083D01266D3FBE00F8C9DD /* PlayTracking.swift */; };
 		80083D04266D480500F8C9DD /* NSRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80083D03266D480500F8C9DD /* NSRange.swift */; };
+		80083D0C266D7AA500F8C9DD /* TunesLogic in Frameworks */ = {isa = PBXBuildFile; productRef = 80083D0B266D7AA500F8C9DD /* TunesLogic */; };
 		800C11FA259A378D0017A116 /* AVTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800C11F9259A378D0017A116 /* AVTrack.swift */; };
 		800C11FF259A3EF10017A116 /* TrackRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800C11FE259A3EF10017A116 /* TrackRowView.swift */; };
 		800C1204259A4AC10017A116 /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800C1203259A4AC10017A116 /* Set.swift */; };
@@ -551,6 +552,7 @@
 				80022215266828B70059D274 /* libTunesAnalysis.a in Frameworks */,
 				80FB0C7C265A66FC009DC261 /* AVFoundation.framework in Frameworks */,
 				80FB0C88265AA6B2009DC261 /* tag.framework in Frameworks */,
+				80083D0C266D7AA500F8C9DD /* TunesLogic in Frameworks */,
 				80AF085F265AD25F0039458A /* TunesUI in Frameworks */,
 				806B28BB258F91E50091EA4D /* KeychainAccess in Frameworks */,
 				80D6DA83259CF23F00879BCF /* CombineExt in Frameworks */,
@@ -1339,6 +1341,7 @@
 				8058C2CF261676BD0027DB8B /* SpotifyAPI */,
 				8069E44F261A2F110086BBFB /* StickyEncoding */,
 				80AF085E265AD25F0039458A /* TunesUI */,
+				80083D0B266D7AA500F8C9DD /* TunesLogic */,
 			);
 			productName = ElevenTunes;
 			productReference = 80AD694E258825FA00192BED /* ElevenTunes.app */;
@@ -1421,6 +1424,7 @@
 				80D6DA81259CF23F00879BCF /* XCRemoteSwiftPackageReference "CombineExt" */,
 				8069E44E261A2F110086BBFB /* XCRemoteSwiftPackageReference "sticky-encoding" */,
 				80AF085D265AD25F0039458A /* XCRemoteSwiftPackageReference "TunesUI" */,
+				80083D0A266D7AA500F8C9DD /* XCRemoteSwiftPackageReference "TunesLogic" */,
 			);
 			productRefGroup = 80AD694F258825FA00192BED /* Products */;
 			projectDirPath = "";
@@ -2060,6 +2064,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		80083D0A266D7AA500F8C9DD /* XCRemoteSwiftPackageReference "TunesLogic" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/App-Tunes/TunesLogic";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		8069E44E261A2F110086BBFB /* XCRemoteSwiftPackageReference "sticky-encoding" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/stickytools/sticky-encoding";
@@ -2103,6 +2115,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		80083D0B266D7AA500F8C9DD /* TunesLogic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 80083D0A266D7AA500F8C9DD /* XCRemoteSwiftPackageReference "TunesLogic" */;
+			productName = TunesLogic;
+		};
 		8058C2CF261676BD0027DB8B /* SpotifyAPI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 806B2868258E97260091EA4D /* XCRemoteSwiftPackageReference "SpotifyAPI" */;

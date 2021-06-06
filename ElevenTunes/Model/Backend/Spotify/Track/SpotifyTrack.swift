@@ -13,6 +13,8 @@ import SpotifyWebAPI
 import SwiftUI
 import Combine
 
+import TunesLogic
+
 struct MinimalSpotifyTrack: Codable, Hashable {
     static let filters = "id"
 
@@ -171,7 +173,7 @@ public final class SpotifyTrack: RemoteTrack {
     
 	func read(_ features: AudioFeatures) -> TrackAttributes.PartialGroupSnapshot {
 		.init(.unsafe([
-			.tempo: Tempo(bpm: features.tempo),
+			.tempo: Tempo(beatsPerMinute: features.tempo),
 			.key: MusicalNote(pitchClass: features.key).map { MusicalKey(note: $0, mode: features.mode == 1 ? .major : .minor) }
 		]), state: .valid)
     }

@@ -7,7 +7,9 @@
 
 import Foundation
 import Combine
+
 import TunesUI
+import TunesLogic
 
 class TrackAnalysisSnapshot: ObservableObject {
 	static let attributes: Set<TrackAttribute> = [.tempo, .waveform, .duration]

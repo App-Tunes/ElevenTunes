@@ -83,6 +83,15 @@
         }
       },
       {
+        "package": "TunesLogic",
+        "repositoryURL": "https://github.com/App-Tunes/TunesLogic",
+        "state": {
+          "branch": "main",
+          "revision": "22f29c4dc72e8219aee9ac16a35de9cbf44d47e3",
+          "version": null
+        }
+      },
+      {
         "package": "TunesUI",
         "repositoryURL": "https://github.com/App-Tunes/TunesUI",
         "state": {

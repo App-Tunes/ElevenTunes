@@ -9,7 +9,9 @@ import Foundation
 import AVFoundation
 import Combine
 import Cocoa
+
 import TunesUI
+import TunesLogic
 
 class LibraryMock {
     static func children(title: String = "Mock Directory") -> [TransientPlaylist] {
@@ -45,7 +47,7 @@ class LibraryMock {
 			.year: 2021,
 			.duration: 15.5121,
 			.key: MusicalKey(note: .D, mode: .major),
-			.tempo: Tempo(bpm: 123),
+			.tempo: Tempo(beatsPerMinute: 123),
 			.artists: [TransientArtist(attributes: .unsafe([.title: "Some Artist"])), TransientArtist(attributes: .unsafe([.title: "Some Other Artist"]))],
 			.album: TransientAlbum(attributes: .unsafe([.title: "Best Album"])),
 			.waveform: waveform()

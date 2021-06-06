@@ -11,7 +11,9 @@ import UniformTypeIdentifiers
 import Combine
 import AVFoundation
 import SwiftUI
+
 import TunesUI
+import TunesLogic
 
 public struct AVTrackToken: TrackToken {
 	enum InterpretationError: Error {
@@ -172,7 +174,7 @@ extension AVTrack: RequestMapperDelegate {
 				return .init(.unsafe([
 					.title: metadata.title,
 					.previewImage: try? caches.avPreviewImages.get(cache.owner.uuid),
-					.tempo: metadata.tempo.truePositiveOrNil.map { Tempo(bpm: $0) },
+					.tempo: metadata.tempo.truePositiveOrNil.map { Tempo(beatsPerMinute: $0) },
 					.key: metadata.key.flatMap { MusicalKey.parse($0) },
 					.album: metadata.album.map { TransientAlbum(attributes: .unsafe([
 						.title: $0
@@ -232,7 +234,7 @@ extension AVTrack: RequestMapperDelegate {
 		return .init(.unsafe([
 			.title: file.title,
 			.previewImage: image,
-			.tempo: bpm.flatMap { Double($0) }.map { Tempo(bpm: $0) },
+			.tempo: bpm.flatMap { Double($0) }.map { Tempo(beatsPerMinute: $0) },
 			.key: key.flatMap { MusicalKey.parse($0) },
 			.album: file.album.map { TransientAlbum(attributes: .unsafe([
 				.title: $0

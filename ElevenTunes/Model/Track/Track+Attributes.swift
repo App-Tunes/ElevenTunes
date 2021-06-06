@@ -7,6 +7,7 @@
 
 import Foundation
 import TunesUI
+import TunesLogic
 
 public typealias TrackVersion = String
 

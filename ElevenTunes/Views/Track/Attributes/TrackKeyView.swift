@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TunesLogic
 
 struct TrackKeyView: View {
 	let track: Track
