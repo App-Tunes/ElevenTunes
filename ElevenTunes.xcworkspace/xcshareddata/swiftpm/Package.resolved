@@ -42,8 +42,8 @@
         "repositoryURL": "https://github.com/Peter-Schorn/RegularExpressions.git",
         "state": {
           "branch": null,
-          "revision": "07a355880611405e31b6a71b7786c1575dfb3533",
-          "version": "2.1.4"
+          "revision": "b27140d0bd3a9a1e61f2324f644219be98eb3311",
+          "version": "2.2.0"
         }
       },
       {
@@ -87,7 +87,7 @@
         "repositoryURL": "https://github.com/App-Tunes/TunesUI",
         "state": {
           "branch": "main",
-          "revision": "36f6c4b577ed7081d51eb8e89b052be998fc6dde",
+          "revision": "c83df76c24f7b99fbb35e933abac8a55797a795d",
           "version": null
         }
       },

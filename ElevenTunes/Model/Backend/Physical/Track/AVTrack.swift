@@ -268,7 +268,7 @@ extension AVTrack: RequestMapperDelegate {
 		
 		let file = EssentiaFile(url: url)
 		let waveform = try AppDelegate.heavyWork.waitAndDo {
-			AppDelegate.essentiaWork.waitAndDo {
+			try AppDelegate.essentiaWork.waitAndDo {
 				Waveform.from(try file.analyzeWaveform(256))
 			}
 		}

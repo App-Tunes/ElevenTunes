@@ -14,6 +14,7 @@
 		800508592597FEEB0055FB2D /* Library+Prune.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800508582597FEEB0055FB2D /* Library+Prune.swift */; };
 		8005085E259802B60055FB2D /* RawRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8005085D259802B60055FB2D /* RawRepresentable.swift */; };
 		8007F1FD26640C8400047359 /* PlayPositionViewCocoa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8007F1FC26640C8400047359 /* PlayPositionViewCocoa.swift */; };
+		80083D00266D1CC400F8C9DD /* ResampleToSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80083CFF266D1CC400F8C9DD /* ResampleToSize.swift */; };
 		800C11FA259A378D0017A116 /* AVTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800C11F9259A378D0017A116 /* AVTrack.swift */; };
 		800C11FF259A3EF10017A116 /* TrackRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800C11FE259A3EF10017A116 /* TrackRowView.swift */; };
 		800C1204259A4AC10017A116 /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800C1203259A4AC10017A116 /* Set.swift */; };
@@ -301,6 +302,7 @@
 		800508582597FEEB0055FB2D /* Library+Prune.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Library+Prune.swift"; sourceTree = "<group>"; };
 		8005085D259802B60055FB2D /* RawRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawRepresentable.swift; sourceTree = "<group>"; };
 		8007F1FC26640C8400047359 /* PlayPositionViewCocoa.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayPositionViewCocoa.swift; sourceTree = "<group>"; };
+		80083CFF266D1CC400F8C9DD /* ResampleToSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResampleToSize.swift; sourceTree = "<group>"; };
 		800C11F9259A378D0017A116 /* AVTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVTrack.swift; sourceTree = "<group>"; };
 		800C11FE259A3EF10017A116 /* TrackRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackRowView.swift; sourceTree = "<group>"; };
 		800C1203259A4AC10017A116 /* Set.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Set.swift; sourceTree = "<group>"; };
@@ -575,7 +577,7 @@
 			isa = PBXGroup;
 			children = (
 				80022220266829080059D274 /* libTunesAnalysis.a */,
-				80022222266829080059D274 /* Essentia-Tests.xctest */,
+				80022222266829080059D274 /* TunesAnalysis-Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -933,6 +935,7 @@
 				8082F11325A9BF3200B1D157 /* KeyedDemand.swift */,
 				806B0D2E25A9E47800603E64 /* VolatileAttributes.swift */,
 				806B0D4125A9FE3F00603E64 /* RequestMapper.swift */,
+				80083CFF266D1CC400F8C9DD /* ResampleToSize.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -1438,7 +1441,7 @@
 			remoteRef = 8002221F266829080059D274 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		80022222266829080059D274 /* Essentia-Tests.xctest */ = {
+		80022222266829080059D274 /* TunesAnalysis-Tests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = "TunesAnalysis-Tests.xctest";
@@ -1532,6 +1535,7 @@
 				802E2DAB259643AE00CB91EC /* SpotifyPlaylist.swift in Sources */,
 				8054C00D259F6DE600A7035A /* PlayTrackView.swift in Sources */,
 				80CB8CB9261FC44600E9D5B8 /* AVImporter.swift in Sources */,
+				80083D00266D1CC400F8C9DD /* ResampleToSize.swift in Sources */,
 				806B2883258EA42D0091EA4D /* SpotifyAuthenticator.swift in Sources */,
 				80A8C84825BF5B5200F97EF0 /* DBSpotifyTrack.swift in Sources */,
 				802E2CD72596082E00CB91EC /* LibraryPlaylist.swift in Sources */,
