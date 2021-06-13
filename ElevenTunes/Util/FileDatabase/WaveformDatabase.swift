@@ -31,11 +31,11 @@ class WaveformDatabase<ID: CustomStringConvertible> {
 	}
 	
 	func toData(_ waveform: Waveform) throws -> Data {
-		Data(try BinaryEncoder().encode(waveform))
+		Data(try BinaryEncoder().encode(Waveform.ByteRepresentation(waveform)))
 	}
 	
 	func fromData(_ data: Data) throws -> Waveform {
-		try BinaryDecoder().decode(Waveform.self, from: Array(data))
+		(try BinaryDecoder().decode(Waveform.ByteRepresentation.self, from: Array(data))).asWaveform
 	}
 	
 	func get(_ id: ID) throws -> Waveform {

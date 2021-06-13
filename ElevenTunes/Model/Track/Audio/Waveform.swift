@@ -22,3 +22,24 @@ extension Waveform {
 		)
 	}
 }
+
+extension Waveform {
+	struct ByteRepresentation: Codable {
+		public var loudness: [UInt8]
+		public var pitch: [UInt8]
+		
+		public var count: Int { min(loudness.count, pitch.count) }
+		
+		public init(_ waveform: Waveform) {
+			loudness = waveform.loudness.map { UInt8(round($0 * 255)) }
+			pitch = waveform.pitch.map { UInt8(round($0 * 255)) }
+		}
+		
+		public var asWaveform: Waveform {
+			Waveform(
+				loudness: loudness.map { Float($0) / 255 },
+				pitch: pitch.map { Float($0) / 255 }
+			)
+		}
+	}
+}
