@@ -9,6 +9,8 @@ import Foundation
 import TunesUI
 
 extension Waveform {
+	static let desiredLength = 256
+	
 	static func from(_ waveform: EssentiaWaveform) -> Waveform {
 		let wmax = waveform.integratedLoudness + 6
 		let wmin = waveform.integratedLoudness - waveform.loudnessRange - 6

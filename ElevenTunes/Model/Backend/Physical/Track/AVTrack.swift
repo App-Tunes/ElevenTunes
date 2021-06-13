@@ -271,7 +271,7 @@ extension AVTrack: RequestMapperDelegate {
 		let file = EssentiaFile(url: url)
 		let waveform = try AppDelegate.heavyWork.waitAndDo {
 			try AppDelegate.essentiaWork.waitAndDo {
-				Waveform.from(try file.analyzeWaveform(256))
+				Waveform.from(try file.analyzeWaveform(Int32(Waveform.desiredLength)))
 			}
 		}
 		
