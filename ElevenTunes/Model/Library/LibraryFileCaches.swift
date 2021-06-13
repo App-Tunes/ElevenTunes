@@ -17,8 +17,11 @@ class LibraryFileCaches {
 
 		avPreviewImages = .init(
 			urlProvider: { imagesURL()?.appendingPathComponent("av-preview") },
-			size: (128, 128)
-		)
+			size: (128, 128),
+			fileExtension: "tiff"
+		) {
+			$0.tiffRepresentation(using: .lzw, factor: 0.6)
+		}
 		
 		avWaveforms = .init(
 			urlProvider: { waveformsURL()?.appendingPathComponent("av") }

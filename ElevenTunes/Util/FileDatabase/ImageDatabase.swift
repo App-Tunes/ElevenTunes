@@ -5,7 +5,7 @@
 //  Created by Lukas Tenbrink on 04.04.21.
 //
 
-import Foundation
+import Cocoa
 
 class ImageDatabase<ID: CustomStringConvertible> {
 	enum ReadError: Error {
@@ -18,10 +18,15 @@ class ImageDatabase<ID: CustomStringConvertible> {
 	// TODO Should be URL, and re-create DB on changes. Harder to implement tho
 	let urlProvider: () -> URL?
 	let size: (Int, Int)
-	
-	init(urlProvider: @escaping () -> URL?, size: (Int, Int)) {
+
+	let write: (NSBitmapImageRep) throws -> Data?
+	let fileExtension: String
+
+	init(urlProvider: @escaping () -> URL?, size: (Int, Int), fileExtension: String, write: @escaping (NSBitmapImageRep) throws -> Data?) {
 		self.urlProvider = urlProvider
 		self.size = size
+		self.write = write
+		self.fileExtension = fileExtension
 	}
 	
 	func url(for id: ID) throws -> URL {
@@ -30,7 +35,7 @@ class ImageDatabase<ID: CustomStringConvertible> {
 		
 		return baseURL
 			.appendingPathComponent(id.description)
-			.appendingPathExtension(".png")
+			.appendingPathExtension(fileExtension)
 	}
 	
 	func toData(_ image: NSImage) throws -> Data {
@@ -49,8 +54,7 @@ class ImageDatabase<ID: CustomStringConvertible> {
 		NSGraphicsContext.current = context
 		image.draw(in: NSRect(x: 0, y: 0, width: newSize.width, height: newSize.height), from: .zero, operation: .copy, fraction: 1.0)
 
-		return try bitmapRep.representation(using: .png, properties: [:])
-			.unwrap(orThrow: ReadError.cannotWrite)
+		return try write(bitmapRep).unwrap(orThrow: ReadError.cannotWrite)
 	}
 	
 	func fromData(_ data: Data) throws -> NSImage {
