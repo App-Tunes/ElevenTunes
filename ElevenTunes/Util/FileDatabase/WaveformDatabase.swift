@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import StickyEncoding
 import TunesUI
 
 class WaveformDatabase<ID: CustomStringConvertible> {
@@ -31,11 +30,11 @@ class WaveformDatabase<ID: CustomStringConvertible> {
 	}
 	
 	func toData(_ waveform: Waveform) throws -> Data {
-		Data(try BinaryEncoder().encode(Waveform.ByteRepresentation(waveform)))
+		Data(try ByteWaveform(waveform).serializedData())
 	}
 	
 	func fromData(_ data: Data) throws -> Waveform {
-		(try BinaryDecoder().decode(Waveform.ByteRepresentation.self, from: Array(data))).asWaveform
+		(try ByteWaveform(serializedData: data)).asWaveform
 	}
 	
 	func get(_ id: ID) throws -> Waveform {

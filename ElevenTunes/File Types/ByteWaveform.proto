@@ -1,0 +1,6 @@
+syntax = "proto3";
+
+message ByteWaveform {
+   bytes loudness = 1;
+   bytes pitch = 2;
+}

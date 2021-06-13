@@ -56,15 +56,6 @@
         }
       },
       {
-        "package": "StickyEncoding",
-        "repositoryURL": "https://github.com/stickytools/sticky-encoding",
-        "state": {
-          "branch": null,
-          "revision": "ba9ec3ffef7cd53a7a8b88b5af8332af0a0cfaec",
-          "version": "1.0.0-beta.5"
-        }
-      },
-      {
         "package": "swift-crypto",
         "repositoryURL": "https://github.com/apple/swift-crypto.git",
         "state": {
@@ -80,6 +71,15 @@
           "branch": null,
           "revision": "5d66f7ba25daf4f94100e7022febf3c75e37a6c7",
           "version": "1.4.2"
+        }
+      },
+      {
+        "package": "SwiftProtobuf",
+        "repositoryURL": "https://github.com/apple/swift-protobuf",
+        "state": {
+          "branch": null,
+          "revision": "1f62db409f2c9b0223a3f68567b4a01333aae778",
+          "version": "1.17.0"
         }
       },
       {

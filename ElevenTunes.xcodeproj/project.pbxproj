@@ -112,8 +112,6 @@
 		8069E43E261A14CA0086BBFB /* ImageDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8069E43D261A14CA0086BBFB /* ImageDatabase.swift */; };
 		8069E445261A1A010086BBFB /* LibraryFileCaches.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8069E444261A1A010086BBFB /* LibraryFileCaches.swift */; };
 		8069E44B261A2D080086BBFB /* WaveformDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8069E44A261A2D080086BBFB /* WaveformDatabase.swift */; };
-		8069E450261A2F110086BBFB /* StickyEncoding in Frameworks */ = {isa = PBXBuildFile; productRef = 8069E44F261A2F110086BBFB /* StickyEncoding */; };
-		8069E451261A2F110086BBFB /* StickyEncoding in Embed Libraries */ = {isa = PBXBuildFile; productRef = 8069E44F261A2F110086BBFB /* StickyEncoding */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		8069E45D261A535F0086BBFB /* AVSeekableAudioPlayerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8069E45C261A535F0086BBFB /* AVSeekableAudioPlayerNode.swift */; };
 		806B0D2F25A9E47800603E64 /* VolatileAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D2E25A9E47800603E64 /* VolatileAttributes.swift */; };
 		806B0D3425A9EF1400603E64 /* SetRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806B0D3325A9EF1400603E64 /* SetRelation.swift */; };
@@ -229,6 +227,8 @@
 		80D6DAAC259E2CBF00879BCF /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D6DAAB259E2CBF00879BCF /* Link.swift */; };
 		80D6DAB1259E31C800879BCF /* TrackActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D6DAB0259E31C800879BCF /* TrackActions.swift */; };
 		80D6DAB6259E389600879BCF /* PlaylistActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D6DAB5259E389600879BCF /* PlaylistActions.swift */; };
+		80D7CFEA267643FE00BEE26D /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 80D7CFE9267643FE00BEE26D /* SwiftProtobuf */; };
+		80D7CFF02676463400BEE26D /* ByteWaveform.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D7CFEF2676463400BEE26D /* ByteWaveform.pb.swift */; };
 		80DC5CEA25D9DAB900563A10 /* ContentInterpreter+Cocoa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DC5CE925D9DAB900563A10 /* ContentInterpreter+Cocoa.swift */; };
 		80DC5CEF25D9DC0800563A10 /* NSPasteboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DC5CEE25D9DC0800563A10 /* NSPasteboard.swift */; };
 		80E0AD7425AC5D3100274597 /* WhileActive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E0AD7325AC5D3100274597 /* WhileActive.swift */; };
@@ -290,7 +290,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				80FB0C8F265AA782009DC261 /* tag.framework in Embed Libraries */,
-				8069E451261A2F110086BBFB /* StickyEncoding in Embed Libraries */,
 			);
 			name = "Embed Libraries";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -522,6 +521,8 @@
 		80D6DAAB259E2CBF00879BCF /* Link.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Link.swift; sourceTree = "<group>"; };
 		80D6DAB0259E31C800879BCF /* TrackActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackActions.swift; sourceTree = "<group>"; };
 		80D6DAB5259E389600879BCF /* PlaylistActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistActions.swift; sourceTree = "<group>"; };
+		80D7CFEC267645F200BEE26D /* ByteWaveform.proto */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.protobuf; path = ByteWaveform.proto; sourceTree = "<group>"; };
+		80D7CFEF2676463400BEE26D /* ByteWaveform.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ByteWaveform.pb.swift; sourceTree = "<group>"; };
 		80DC5CE925D9DAB900563A10 /* ContentInterpreter+Cocoa.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentInterpreter+Cocoa.swift"; sourceTree = "<group>"; };
 		80DC5CEE25D9DC0800563A10 /* NSPasteboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSPasteboard.swift; sourceTree = "<group>"; };
 		80E0AD7325AC5D3100274597 /* WhileActive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhileActive.swift; sourceTree = "<group>"; };
@@ -556,8 +557,8 @@
 				80AF085F265AD25F0039458A /* TunesUI in Frameworks */,
 				806B28BB258F91E50091EA4D /* KeychainAccess in Frameworks */,
 				80D6DA83259CF23F00879BCF /* CombineExt in Frameworks */,
-				8069E450261A2F110086BBFB /* StickyEncoding in Frameworks */,
 				8058C2D0261676BD0027DB8B /* SpotifyAPI in Frameworks */,
+				80D7CFEA267643FE00BEE26D /* SwiftProtobuf in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1127,6 +1128,7 @@
 				806B284D258E93090091EA4D /* ElevenTunes-Bridging-Header.h */,
 				80AD695C258825FD00192BED /* Info.plist */,
 				80AD695D258825FD00192BED /* ElevenTunes.entitlements */,
+				80D7CFEB2676445A00BEE26D /* File Types */,
 				80AD6959258825FD00192BED /* Preview Content */,
 			);
 			path = ElevenTunes;
@@ -1231,6 +1233,15 @@
 				80D6DA9C259DEE3400879BCF /* AnyAlbum.swift */,
 			);
 			path = Album;
+			sourceTree = "<group>";
+		};
+		80D7CFEB2676445A00BEE26D /* File Types */ = {
+			isa = PBXGroup;
+			children = (
+				80D7CFEF2676463400BEE26D /* ByteWaveform.pb.swift */,
+				80D7CFEC267645F200BEE26D /* ByteWaveform.proto */,
+			);
+			path = "File Types";
 			sourceTree = "<group>";
 		};
 		80DC23572619EF7700ACC889 /* Swift */ = {
@@ -1339,9 +1350,9 @@
 				806B28BA258F91E50091EA4D /* KeychainAccess */,
 				80D6DA82259CF23F00879BCF /* CombineExt */,
 				8058C2CF261676BD0027DB8B /* SpotifyAPI */,
-				8069E44F261A2F110086BBFB /* StickyEncoding */,
 				80AF085E265AD25F0039458A /* TunesUI */,
 				80083D0B266D7AA500F8C9DD /* TunesLogic */,
+				80D7CFE9267643FE00BEE26D /* SwiftProtobuf */,
 			);
 			productName = ElevenTunes;
 			productReference = 80AD694E258825FA00192BED /* ElevenTunes.app */;
@@ -1422,9 +1433,9 @@
 				806B2868258E97260091EA4D /* XCRemoteSwiftPackageReference "SpotifyAPI" */,
 				806B28B9258F91E50091EA4D /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				80D6DA81259CF23F00879BCF /* XCRemoteSwiftPackageReference "CombineExt" */,
-				8069E44E261A2F110086BBFB /* XCRemoteSwiftPackageReference "sticky-encoding" */,
 				80AF085D265AD25F0039458A /* XCRemoteSwiftPackageReference "TunesUI" */,
 				80083D0A266D7AA500F8C9DD /* XCRemoteSwiftPackageReference "TunesLogic" */,
+				80D7CFE8267643FE00BEE26D /* XCRemoteSwiftPackageReference "swift-protobuf" */,
 			);
 			productRefGroup = 80AD694F258825FA00192BED /* Products */;
 			projectDirPath = "";
@@ -1609,6 +1620,7 @@
 				8082F10725A8905A00B1D157 /* Hasher.swift in Sources */,
 				80D653D825993CDC007221D5 /* PlaylistRowView.swift in Sources */,
 				8069E445261A1A010086BBFB /* LibraryFileCaches.swift in Sources */,
+				80D7CFF02676463400BEE26D /* ByteWaveform.pb.swift in Sources */,
 				802E2DAD259643AE00CB91EC /* SpotifyUser.swift in Sources */,
 				808445DE25A7996200E27EC8 /* Badge.swift in Sources */,
 				80CD393625A3C4D0002C5A56 /* SpotifyInterpretation.swift in Sources */,
@@ -2072,14 +2084,6 @@
 				kind = branch;
 			};
 		};
-		8069E44E261A2F110086BBFB /* XCRemoteSwiftPackageReference "sticky-encoding" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/stickytools/sticky-encoding";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = "1.0.0-beta.5";
-			};
-		};
 		806B2868258E97260091EA4D /* XCRemoteSwiftPackageReference "SpotifyAPI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Peter-Schorn/SpotifyAPI";
@@ -2112,6 +2116,14 @@
 				minimumVersion = 1.2.0;
 			};
 		};
+		80D7CFE8267643FE00BEE26D /* XCRemoteSwiftPackageReference "swift-protobuf" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-protobuf";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.17.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -2124,11 +2136,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 806B2868258E97260091EA4D /* XCRemoteSwiftPackageReference "SpotifyAPI" */;
 			productName = SpotifyAPI;
-		};
-		8069E44F261A2F110086BBFB /* StickyEncoding */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8069E44E261A2F110086BBFB /* XCRemoteSwiftPackageReference "sticky-encoding" */;
-			productName = StickyEncoding;
 		};
 		806B2869258E97260091EA4D /* _SpotifyAPITestUtilities */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2149,6 +2156,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 80D6DA81259CF23F00879BCF /* XCRemoteSwiftPackageReference "CombineExt" */;
 			productName = CombineExt;
+		};
+		80D7CFE9267643FE00BEE26D /* SwiftProtobuf */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 80D7CFE8267643FE00BEE26D /* XCRemoteSwiftPackageReference "swift-protobuf" */;
+			productName = SwiftProtobuf;
 		};
 /* End XCSwiftPackageProductDependency section */
 
