@@ -78,7 +78,7 @@ class Player {
 
 		previousEmitter = previous.flatMap { emitters[$0.id] } ?? prepare(previous)
 		currentEmitter = current.flatMap { emitters[$0.id] } ?? prepare(current)
-		previousEmitter = next.flatMap { emitters[$0.id] } ?? prepare(next)
+		nextEmitter = next.flatMap { emitters[$0.id] } ?? prepare(next)
 	}
             
     func toggle() {
@@ -93,13 +93,11 @@ class Player {
     
 	func play(_ track: AnyTrack?, at time: TimeInterval? = nil) {
 		history = PlayHistory(current: track)
-        forwards()
 		// TODO time is ignored; how to propagate? lol
     }
     
     func play(_ history: PlayHistory) {
         self.history = history
-        forwards()
     }
     
     private func load() {
@@ -146,8 +144,9 @@ class Player {
     
     @discardableResult
     func forwards() -> Bool {
-        currentEmitterTask?.cancel()
-        history.forwards()
+		history.forwards()
+
+		currentEmitterTask?.cancel()
 		if history.current == nil && repeatEnabled, let context = history.context {
 			play(context.fromStart.makeHistory())
 		}
