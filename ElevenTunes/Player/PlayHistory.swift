@@ -7,6 +7,9 @@
 
 import TunesLogic
 
+// TODO Diverging subclasses: This and AdaptiveHistory.
+// Either add functionality from this or from AdaptiveHistory to History itself
+// so that either one need not be a subclass.
 class PlayHistory: History<AnyTrack> {
 	typealias Item = AnyTrack
 	let context: PlayHistoryContext?
