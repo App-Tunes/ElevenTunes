@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 #if canImport(UIKit)
 import UIKit
 #elseif canImport(AppKit)

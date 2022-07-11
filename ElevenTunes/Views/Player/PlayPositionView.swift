@@ -84,7 +84,7 @@ struct PlayPositionView: View {
 							}
 						}
 					)
-						.jumpInterval((snapshot.tempo?.phraseSeconds).map(CGFloat.init)) {
+						.jumpInterval((snapshot.tempo?.secondsPerPhrase).map({ CGFloat($0) })) {
 							!NSEvent.modifierFlags.contains(.option)
 						}
 						.barWidth(max(1, min(2, 3 - geo.size.height / 20)) + 0.5)

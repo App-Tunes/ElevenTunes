@@ -78,7 +78,7 @@ class PlayPositionViewCocoa: WaveformPositionCocoa {
 
 		tempoObserver = observeAttribute(TrackAttribute.tempo)
 			.sink { [weak self] tempo in
-				self?.positionControl.jumpInterval = (tempo.value?.phraseSeconds).map { CGFloat($0) }
+				self?.positionControl.jumpInterval = (tempo.value?.secondsPerPhrase).map { CGFloat($0) }
 			}
 		
 		super.sharedInit()

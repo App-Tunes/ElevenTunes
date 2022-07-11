@@ -8,6 +8,7 @@
 import Cocoa
 import SwiftUI
 import Combine
+import TunesLogic
 
 class NSTableCellViewAttachedObject: NSTableCellView {
 	var representedObject: Any? = nil
@@ -185,7 +186,7 @@ extension TracksViewController: NSTableViewDelegate {
 			})
 		case ColumnIdentifiers.Key:
 			return makeTextView(for: CellIdentifiers.TextCell, attribute: TrackAttribute.key, update: { (view, value) in
-				view.stringValue = value?.shortTitle ?? ""
+				view.stringValue = value.map(MusicalKey.shortWriter.write) ?? ""
 				view.textColor = value?.nscolor ?? .clear
 			})
 		case ColumnIdentifiers.Year:

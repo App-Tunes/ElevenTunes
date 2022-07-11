@@ -11,35 +11,9 @@ import Combine
 class Player {
 	@Published var repeatEnabled: Bool = false
 
-    @Published private(set) var previous: AnyTrack? {
-        didSet {
-            // Re-use last played if possible
-            previousEmitter =
-                oldValue?.id == previous?.id ? previousEmitter
-                : previous?.id == current?.id ? currentEmitter
-                : prepare(previous)
-        }
-    }
-    
-    @Published private(set) var current: AnyTrack? {
-        didSet {
-            // If possible, use prepared caches
-            currentEmitter =
-                oldValue?.id == current?.id ? currentEmitter
-                : current?.id == next?.id ? nextEmitter
-                : current?.id == previous?.id ? previousEmitter
-                : prepare(current)
-        }
-    }
-    @Published private(set) var next: AnyTrack? {
-        didSet {
-            // Re-use last played if possible
-            nextEmitter =
-                oldValue?.id == next?.id ? nextEmitter
-                : next?.id == current?.id ? currentEmitter
-				: prepare(next)
-        }
-    }
+    @Published private(set) var previous: AnyTrack?
+    @Published private(set) var current: AnyTrack?
+    @Published private(set) var next: AnyTrack?
 	
 	let context: PlayContext
 	let singlePlayer = SinglePlayer()
@@ -82,19 +56,34 @@ class Player {
         didSet {
             historyObservers = []
             
-            // Assign current first, in the low offchance we can re-use a cache
-            history.$current.assignWeak(to: \Player.current, on: self)
-                .store(in: &historyObservers)
-            history.$next.assignWeak(to: \Player.next, on: self)
-                .store(in: &historyObservers)
-            history.$previous.assignWeak(to: \Player.previous, on: self)
-                .store(in: &historyObservers)
+			historyObservers.insert(
+				Publishers.Concatenate(prefix: Just(history), suffix: history.changePublisher)
+					.sink { [weak self] _ in
+						self?.updateFromHistory()
+					}
+			)
         }
     }
+	
+	private func updateFromHistory() {
+		// Re-use emitters if possible
+		var emitters: [String: AnyPublisher<AudioTrack, Error>] = .init()
+		if let previous = previous { emitters[previous.id] = previousEmitter }
+		if let current = current { emitters[current.id] = currentEmitter }
+		if let next = next { emitters[next.id] = nextEmitter }
+
+		previous = history.previous
+		current = history.current
+		next = history.next
+
+		previousEmitter = previous.flatMap { emitters[$0.id] } ?? prepare(previous)
+		currentEmitter = current.flatMap { emitters[$0.id] } ?? prepare(current)
+		previousEmitter = next.flatMap { emitters[$0.id] } ?? prepare(next)
+	}
             
     func toggle() {
 		if history.current == nil, let context = history.context {
-			play(PlayHistory(context: context.fromStart))
+			play(context.fromStart.makeHistory())
 			return
 		}
 		
@@ -103,7 +92,7 @@ class Player {
     }
     
 	func play(_ track: AnyTrack?, at time: TimeInterval? = nil) {
-        history = PlayHistory(track != nil ? [track!] : [])
+		history = PlayHistory(current: track)
         forwards()
 		// TODO time is ignored; how to propagate? lol
     }
@@ -160,7 +149,7 @@ class Player {
         currentEmitterTask?.cancel()
         history.forwards()
 		if history.current == nil && repeatEnabled, let context = history.context {
-			play(PlayHistory(context: context.fromStart))
+			play(context.fromStart.makeHistory())
 		}
         return true
     }

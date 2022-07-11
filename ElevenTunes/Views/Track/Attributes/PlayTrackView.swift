@@ -20,7 +20,7 @@ struct PlayTrackView: View {
     
     var body: some View {
         Button(action: {
-            player.play(PlayHistory(context: context))
+			player.play(context.makeHistory())
         }) {
             ZStack(alignment: .center) {
                 Rectangle()

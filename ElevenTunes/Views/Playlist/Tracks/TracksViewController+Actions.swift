@@ -6,6 +6,7 @@
 //
 
 import Cocoa
+import TunesLogic
 
 extension TracksViewController: NSTableViewContextSensitiveMenuDelegate {
 	@IBAction func didDoubleClick(_ sender: Any) {
@@ -27,7 +28,10 @@ extension TracksViewController: NSTableViewContextSensitiveMenuDelegate {
 			return
 		}
 
-		library.player.play(.init(context: .playlist(playlist.backend, tracks: self.tracks.map(\.backend), track: track.backend)))
+		library.player.play(
+			PlayHistoryContext.playlist(playlist.backend, tracks: self.tracks.map(\.backend), track: track.backend)
+				.makeHistory()
+		)
 	}
 	
 	func currentMenu(forTableView tableView: NSTableViewContextSensitiveMenu) -> NSMenu? {

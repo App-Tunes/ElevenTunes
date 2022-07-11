@@ -235,6 +235,7 @@
 		80E7D84E25A7AB1A00413630 /* SetIfDifferent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E7D84D25A7AB1A00413630 /* SetIfDifferent.swift */; };
 		80ED767B258FD5B600B8B9C3 /* PlaylistInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80ED767A258FD5B600B8B9C3 /* PlaylistInterpreter.swift */; };
 		80ED7691258FF41200B8B9C3 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80ED7690258FF41200B8B9C3 /* Array.swift */; };
+		80F294C9287CE73500163A6C /* MusicalKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F294C8287CE73500163A6C /* MusicalKey.swift */; };
 		80F53EAA25D9BE4C003A98B3 /* ContextSensitiveMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F53EA925D9BE4C003A98B3 /* ContextSensitiveMenu.swift */; };
 		80F53EAF25D9BE58003A98B3 /* ActionOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F53EAE25D9BE58003A98B3 /* ActionOutlineView.swift */; };
 		80F53EB725D9BE88003A98B3 /* Keycodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F53EB625D9BE88003A98B3 /* Keycodes.swift */; };
@@ -530,6 +531,7 @@
 		80ED767A258FD5B600B8B9C3 /* PlaylistInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistInterpreter.swift; sourceTree = "<group>"; };
 		80ED7688258FDFD700B8B9C3 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		80ED7690258FF41200B8B9C3 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
+		80F294C8287CE73500163A6C /* MusicalKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicalKey.swift; sourceTree = "<group>"; };
 		80F53EA925D9BE4C003A98B3 /* ContextSensitiveMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextSensitiveMenu.swift; sourceTree = "<group>"; };
 		80F53EAE25D9BE58003A98B3 /* ActionOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionOutlineView.swift; sourceTree = "<group>"; };
 		80F53EB625D9BE88003A98B3 /* Keycodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keycodes.swift; sourceTree = "<group>"; };
@@ -937,6 +939,7 @@
 				802E2DD325966C2B00CB91EC /* Coding */,
 				804D3C1025D96E8900705D42 /* Cocoa */,
 				8069E439261A14B10086BBFB /* FileDatabase */,
+				80F294C8287CE73500163A6C /* MusicalKey.swift */,
 				806B0D3325A9EF1400603E64 /* SetRelation.swift */,
 				806B27D0258D6ADB0091EA4D /* TypedDict.swift */,
 				8082F11325A9BF3200B1D157 /* KeyedDemand.swift */,
@@ -1622,6 +1625,7 @@
 				8069E445261A1A010086BBFB /* LibraryFileCaches.swift in Sources */,
 				80D7CFF02676463400BEE26D /* ByteWaveform.pb.swift in Sources */,
 				802E2DAD259643AE00CB91EC /* SpotifyUser.swift in Sources */,
+				80F294C9287CE73500163A6C /* MusicalKey.swift in Sources */,
 				808445DE25A7996200E27EC8 /* Badge.swift in Sources */,
 				80CD393625A3C4D0002C5A56 /* SpotifyInterpretation.swift in Sources */,
 				80D6DAA2259E28B300879BCF /* SpotifyArtist.swift in Sources */,
