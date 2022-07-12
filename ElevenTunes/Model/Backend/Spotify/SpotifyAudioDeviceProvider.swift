@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import TunesUI
 
 class SpotifyAudioDeviceProvider: AudioDeviceProvider {
 	let spotify: Spotify

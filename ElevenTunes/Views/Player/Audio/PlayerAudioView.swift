@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import TunesUI
 
 struct PlayerAudioView: View {
     let player: Player
@@ -14,15 +15,6 @@ struct PlayerAudioView: View {
 	@State var volume: Double = 1
 	@State var presents: Bool = false
 		
-	static func volumeImage(_ volume: Double) -> Image {
-		Image(systemName:
-			volume == 0 ? "speaker.fill" :
-			volume < 0.33 ? "speaker.wave.1.fill" :
-			volume < 0.66 ? "speaker.wave.2.fill" :
-			"speaker.wave.3.fill"
-		)
-	}
-	
     var body: some View {
         HStack {
 			Slider(value: Binding(
@@ -34,7 +26,7 @@ struct PlayerAudioView: View {
 			Button(action: {
 				presents.toggle()
 			}) {
-				Self.volumeImage(volume)
+				AudioUI.imageForVolume(volume)
 					.frame(width: 25, alignment: .leading)
 			}
 				.popover(isPresented: $presents) {

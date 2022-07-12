@@ -78,7 +78,7 @@
       "location" : "https://github.com/App-Tunes/TunesLogic",
       "state" : {
         "branch" : "main",
-        "revision" : "c259b2c36595d7e75848c30327668409c80d5551"
+        "revision" : "fffa9bc515bd0ac263d15ea18d34812b46d0a122"
       }
     },
     {
@@ -87,7 +87,7 @@
       "location" : "https://github.com/App-Tunes/TunesUI",
       "state" : {
         "branch" : "main",
-        "revision" : "c83df76c24f7b99fbb35e933abac8a55797a795d"
+        "revision" : "ccd2ae0b6cbe5fad446d08fb269f5e5bba440c3d"
       }
     }
   ],

@@ -8,6 +8,7 @@
 import Foundation
 import SpotifyWebAPI
 import SwiftUI
+import TunesUI
 
 public class SpotifyAudioDevice: AudioDevice {
 	let spotify: Spotify
