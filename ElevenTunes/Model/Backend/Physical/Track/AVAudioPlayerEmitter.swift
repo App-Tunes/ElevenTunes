@@ -35,12 +35,13 @@ class AVAudioPlayerEmitter: NSObject, AudioTrack {
 	}
 	
     func move(to time: TimeInterval) {
-		device.player.move(to: time)
+		// TODO Propagate error?
+		try? device.player.move(to: time)
 		delegate?.emitterUpdatedState(self)
     }
 	
 	func move(by time: TimeInterval) throws {
-		device.player.move(by: time)
+		try device.player.move(by: time)
 		delegate?.emitterUpdatedState(self)
 	}
 	    

@@ -7,6 +7,7 @@
 
 import AVFoundation
 import SwiftUI
+import TunesLogic
 
 public class AVAudioDevice: AudioDevice {
 	static let systemDefault = AVAudioDevice(deviceID: nil)
@@ -32,7 +33,7 @@ public class AVAudioDevice: AudioDevice {
 			)
 			
 			if error != .zero {
-				throw CoreAudioTT.OSError(code: error)
+				throw CoreAudioLogic.OSError(code: error)
 			}
 		}
 
@@ -61,7 +62,7 @@ public class AVAudioDevice: AudioDevice {
 			scope: kAudioDevicePropertyScopeOutput
 		)
 		
-		guard let count = try? CoreAudioTT.getObjectPropertyCount(
+		guard let count = try? CoreAudioLogic.getObjectPropertyCount(
 			object: deviceID,
 			address: address,
 			forType: (CFString?).self
@@ -69,7 +70,7 @@ public class AVAudioDevice: AudioDevice {
 			return false
 		}
 
-		return (try? CoreAudioTT.withObjectProperty(
+		return (try? CoreAudioLogic.withObjectProperty(
 			object: deviceID,
 			address: address,
 			type: AudioBufferList.self,
@@ -86,7 +87,7 @@ public class AVAudioDevice: AudioDevice {
 			return "System Default"
 		}
 
-		return try? CoreAudioTT.getObjectProperty(
+		return try? CoreAudioLogic.getObjectProperty(
 			object: deviceID,
 			address: .init(
 				selector: kAudioDevicePropertyDeviceUID,
@@ -102,7 +103,7 @@ public class AVAudioDevice: AudioDevice {
 			return "System Default"
 		}
 
-		return try? CoreAudioTT.getObjectProperty(
+		return try? CoreAudioLogic.getObjectProperty(
 			object: deviceID,
 			address: .init(
 				selector: kAudioDevicePropertyDeviceNameCFString,
@@ -113,11 +114,11 @@ public class AVAudioDevice: AudioDevice {
 	}
 	
 	var isHidden: Bool {
-		guard let id = deviceID ?? CoreAudioTT.defaultOutputDevice else {
+		guard let id = deviceID ?? CoreAudioLogic.defaultOutputDevice else {
 			return true
 		}
 		
-		return (try? CoreAudioTT.getObjectProperty(
+		return (try? CoreAudioLogic.getObjectProperty(
 			object: id,
 			address: .init(
 				selector: kAudioDevicePropertyIsHidden,
@@ -128,11 +129,11 @@ public class AVAudioDevice: AudioDevice {
 	}
 	
 	public var transportType: UInt32? {
-		guard let id = deviceID ?? CoreAudioTT.defaultOutputDevice else {
+		guard let id = deviceID ?? CoreAudioLogic.defaultOutputDevice else {
 			return nil
 		}
 
-		return try? CoreAudioTT.getObjectProperty(
+		return try? CoreAudioLogic.getObjectProperty(
 			object: id,
 			address: .init(
 				selector: kAudioDevicePropertyTransportType,
@@ -163,14 +164,14 @@ public class AVAudioDevice: AudioDevice {
 	
 	public var volume: Double {
 		get {
-			(deviceID ?? CoreAudioTT.defaultOutputDevice).flatMap {
-				CoreAudioTT.volume(ofDevice: UInt32($0))
+			(deviceID ?? CoreAudioLogic.defaultOutputDevice).flatMap {
+				CoreAudioLogic.volume(ofDevice: UInt32($0))
 			}.flatMap(Double.init) ?? 0
 		}
 		set {
 			objectWillChange.send()
-			(deviceID ?? CoreAudioTT.defaultOutputDevice).map {
-				CoreAudioTT.setVolume(ofDevice: UInt32($0), Float(newValue))
+			(deviceID ?? CoreAudioLogic.defaultOutputDevice).map {
+				CoreAudioLogic.setVolume(ofDevice: UInt32($0), Float(newValue))
 			}
 		}
 	}
@@ -179,7 +180,7 @@ public class AVAudioDevice: AudioDevice {
 class AudioDeviceFinder {
 	static func findDevices() -> [AVAudioDevice] {
 		do {
-			let deviceIDS = try CoreAudioTT.getObjectPropertyList(
+			let deviceIDS = try CoreAudioLogic.getObjectPropertyList(
 				object: AudioObjectID(kAudioObjectSystemObject),
 				address: .init(
 					selector: kAudioHardwarePropertyDevices,
