@@ -98,7 +98,6 @@
 		805FD8C225A12BA400F32BFB /* Tempo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805FD8C125A12BA400F32BFB /* Tempo.swift */; };
 		805FD8CF25A1348E00F32BFB /* PlayHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805FD8CE25A1348E00F32BFB /* PlayHistoryView.swift */; };
 		806185A225F4E6FA0062AAB3 /* NSOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185A125F4E6FA0062AAB3 /* NSOutlineView.swift */; };
-		806185A725F4E73D0062AAB3 /* ArrayDifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185A625F4E73D0062AAB3 /* ArrayDifference.swift */; };
 		806185AC25F5038F0062AAB3 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185AB25F5038F0062AAB3 /* Int.swift */; };
 		806185B725F51B030062AAB3 /* TracksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185B625F51B030062AAB3 /* TracksView.swift */; };
 		806185BD25F51B460062AAB3 /* TracksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806185BB25F51B460062AAB3 /* TracksViewController.swift */; };
@@ -386,7 +385,6 @@
 		805FD8C125A12BA400F32BFB /* Tempo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tempo.swift; sourceTree = "<group>"; };
 		805FD8CE25A1348E00F32BFB /* PlayHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayHistoryView.swift; sourceTree = "<group>"; };
 		806185A125F4E6FA0062AAB3 /* NSOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSOutlineView.swift; sourceTree = "<group>"; };
-		806185A625F4E73D0062AAB3 /* ArrayDifference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayDifference.swift; sourceTree = "<group>"; };
 		806185AB25F5038F0062AAB3 /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
 		806185B625F51B030062AAB3 /* TracksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksView.swift; sourceTree = "<group>"; };
 		806185BB25F51B460062AAB3 /* TracksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksViewController.swift; sourceTree = "<group>"; };
@@ -711,7 +709,6 @@
 				803A870325F54C9C00D7B9E1 /* NSTableView.swift */,
 				803A870825F554A700D7B9E1 /* NSTableView+Visibility.swift */,
 				80B357D125F6FAC400180A4A /* NSTableView+Synchronization.swift */,
-				806185A625F4E73D0062AAB3 /* ArrayDifference.swift */,
 				80F61BAD25FD190600AC4CF8 /* NSRegularExpression.swift */,
 			);
 			path = Cocoa;
@@ -1687,7 +1684,6 @@
 				802E2DA9259643AE00CB91EC /* SpotifyTrack.swift in Sources */,
 				80A8C82125BF556A00F97EF0 /* BranchingPlaylist.swift in Sources */,
 				808696EE2617C1CE0056ECC3 /* TrackYearView.swift in Sources */,
-				806185A725F4E73D0062AAB3 /* ArrayDifference.swift in Sources */,
 				802DBA32259FDA9900EA6DB7 /* Wrappers.swift in Sources */,
 				8054C000259F6DA000A7035A /* TrackCellView.swift in Sources */,
 				80083D02266D3FBE00F8C9DD /* PlayTracking.swift in Sources */,

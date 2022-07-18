@@ -66,7 +66,8 @@ class TracksViewController: NSViewController {
 		
 		self.tracks = tracks
 		if animate {
-			tableView?.animateDifference(from: oldValue, to: self.tracks)
+			ListTransition.findBest(before: oldValue, after: self.tracks)
+				.executeAnimationsInTableView(tableView)
 		}
 		else {
 			tableView?.reloadData()

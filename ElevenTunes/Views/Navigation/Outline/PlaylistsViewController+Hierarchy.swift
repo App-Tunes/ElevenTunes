@@ -7,11 +7,14 @@
 
 import Foundation
 import Combine
+import TunesUI
 
 extension PlaylistsViewController {
 	func childrenUpdated(ofItem item: Item, from: [Item]?, to: [Item]?) {
 		let item = item == directoryItem ? nil : item
-		outlineView?.animateDifference(childrenOf: item, from: from, to: to)
+		
+		ListTransition.findBest(before: from, after: to)
+			.executeAnimationsInOutlineView(outlineView, childrenOf: item)
 	}
 	
 	class Item: Identifiable, Hashable {

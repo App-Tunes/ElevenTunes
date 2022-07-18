@@ -12,40 +12,6 @@ extension NSOutlineView {
 		editColumn(0, row: row, with: event, select: select)
 	}
 	
-	func animateDifference<Element : Equatable>(childrenOf parent: Any?, from: [Element]?, to: [Element]?) {
-		let from = from ?? []
-		let to = to ?? []
-		
-		guard abs(from.count - to.count) < 100 else {
-			// Give up, this will look shite anyhow
-			reloadItem(parent, reloadChildren: true)
-			return
-		}
-		
-		if let editDiff = from.editDifference(from: to) {
-			guard editDiff.array.count < 100 else {
-				// Give up, this will look shite anyhow
-				reloadItem(parent, reloadChildren: true)
-				return
-			}
-			
-			switch editDiff {
-			case .remove(let removed):
-				removeItems(at: IndexSet(removed), inParent: parent, withAnimation: .slideDown)
-			case .add(let added):
-				insertItems(at: IndexSet(added), inParent: parent, withAnimation: .slideUp)
-			}
-		}
-		else if let movement = from.editMovement(to: to) {
-			for (src, dst) in movement {
-				moveItem(at: src, inParent: parent, to: dst, inParent: parent)
-			}
-		}
-		else {
-			reloadData()
-		}
-	}
-
 	func animateDelete(items: [Any]) {
 		guard items.count < 100 else {
 			reloadData()
