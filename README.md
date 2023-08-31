@@ -1,6 +1,6 @@
 #  Eleven Tunes
 
-Grand successor of Ten Tunes.
+Grand successor of [Ten Tunes](https://github.com/App-Tunes/TenTunes).
 
 This media manager focuses on unifying representations of media into a simple, streamlined UI. Supports for more backends, read-only and write compatible, will be added over time.
  
